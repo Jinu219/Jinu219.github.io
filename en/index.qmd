@@ -1,0 +1,58 @@
+---
+title: "PySDM Seeding Lab"
+lang: en
+page-layout: full
+title-block-style: none
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  page-size: 6
+  categories: true
+  feed:
+    title: "PySDM Seeding Lab"
+    description: "Notes on learning PySDM, building a reproducible lab, and cloud-seeding experiments"
+---
+
+::: {.home-intro}
+<div class="home-kicker">PySDM · Cloud microphysics · Open notebook</div>
+<h1>Computing clouds,<br><em>documenting experiments.</em></h1>
+<p class="home-deck">I learn PySDM and build reproducible experimental environments. Cloud-seeding hypotheses are tested with code and figures, while the questions, failures, and results are documented along the way.</p>
+<div class="home-actions">
+  <a href="learn-pysdm.html">Read the first note <span aria-hidden="true">↗</span></a>
+  <a href="projects.html">About the project <span aria-hidden="true">→</span></a>
+</div>
+:::
+
+## Three research tracks {.section-heading}
+
+:::: {.track-list}
+::: {.track-item}
+<div class="track-index">01</div>
+### Learn PySDM
+
+Build a foundation step by step, from the Super-Droplet Method to PySDM objects and official examples.
+
+[Browse learning notes](learn-pysdm.qmd)
+:::
+
+::: {.track-item}
+<div class="track-index">02</div>
+### Build the Lab
+
+Document environments, data, configurations, and validation rules so anyone can reproduce the same calculations.
+
+[Browse build notes](build-the-lab.qmd)
+:::
+
+::: {.track-item}
+<div class="track-index">03</div>
+### Experiments
+
+Use sensitivity studies and comparative figures to explore when and why seeding hypotheses lead to different outcomes.
+
+[Browse experiments](experiments.qmd)
+:::
+::::
+
+## Recent notes {.section-heading}

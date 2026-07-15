@@ -1,0 +1,18 @@
+---
+title: "Projects"
+description: "Research code and public outputs from the PySDM Seeding Lab"
+lang: en
+page-layout: article
+---
+
+## PySDM Seeding Lab
+
+A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.
+
+| Area | This blog | Code repository |
+|---|---|---|
+| Role | Questions, context, interpretation, and figures | Executable code, configurations, tests, and raw-data processing |
+| Unit of change | One research note | One reproducible run |
+| Connection | Records code versions and result links | Links back to related blog notes |
+
+[Open the PySDM-Seeding-Lab repository](https://github.com/Jinu219/PySDM-Seeding-Lab){.btn .btn-primary}

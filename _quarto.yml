@@ -4,6 +4,7 @@ project:
   render:
     - "*.qmd"
     - "posts/**/*.qmd"
+    - "en/**/*.qmd"
     - "!_templates/**"
 
 website:
@@ -33,6 +34,9 @@ website:
       - href: about.qmd
         text: 소개
     right:
+      - text: "EN"
+        href: en/index.qmd
+        aria-label: "Switch language"
       - icon: github
         href: "https://github.com/Jinu219"
         aria-label: Jinu219 GitHub
@@ -63,6 +67,7 @@ format:
     smooth-scroll: true
     citations-hover: true
     footnotes-hover: true
+    include-after-body: language-switch.html
 
 execute:
   freeze: auto

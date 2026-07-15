@@ -1,0 +1,77 @@
+---
+title: "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments"
+description: "Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
+date: 2026-07-15
+categories:
+  - Learn PySDM
+  - cloud microphysics
+  - super-droplet method
+citation: true
+---
+
+The best place to begin learning a numerical model is not “Which code should I run?” but “What am I trying to represent?” This first note outlines PySDM's role in cloud microphysics and maps the experimental path this blog will follow.
+
+## What does PySDM represent?
+
+PySDM is an open-source package for simulating the dynamics of particle populations. Its current development focuses on the microphysics of aerosols, cloud droplets, and raindrops in moist air. It uses the Super-Droplet Method (SDM) to represent a vast number of real particles with a smaller number of computational particles [@Shima2009SDM; @Bartman2022PySDM].
+
+Consider a super-droplet described by radius $r_i$ and multiplicity $\xi_i$. The $k$-th moment of the real particle population can be approximated by a sum over computational particles:
+
+$$
+M_k \approx \sum_i \xi_i r_i^k
+$$
+
+$k=0$ relates to number concentration, while $k=3$ relates to volume or mass. Decisions such as how many computational particles to use and how to sample the initial distribution are therefore not mere implementation details; they are experimental conditions that directly affect statistical quality.
+
+## First environment check
+
+The latest PySDM release can be installed with `pip`. Unless noted otherwise, code blocks on this blog are illustrative. The actual reproducible environment will follow the pinned dependency files in [PySDM-Seeding-Lab](https://github.com/Jinu219/PySDM-Seeding-Lab).
+
+```bash
+python -m pip install PySDM
+```
+
+After installation, the smallest useful check is whether the package imports in the current environment and which version was selected.
+
+```python
+from importlib.metadata import version
+
+import PySDM
+
+print("PySDM import: OK")
+print("PySDM version:", version("PySDM"))
+```
+
+::: {.callout-tip}
+Experiment notes will record the operating system, random seed, and repository commit alongside the Python and PySDM versions. It is a small habit that turns “it worked on my machine” into a research record.
+:::
+
+## Three stages ahead
+
+### 1. Learn PySDM
+
+After understanding SDM state variables and moments, we will examine how environments, dynamics, and products divide responsibilities. Instead of stopping after running official examples, each object will be annotated with the physical assumption it represents.
+
+### 2. Build the Lab
+
+We will establish an isolated Python environment and clear conventions for configuration files, data, and figures. Every experiment will include a command that reruns it and a minimal validation that checks the result.
+
+### 3. Experiments
+
+We will first create a baseline, then vary conditions such as seeding time, particle-size distribution, and dosage one at a time. Interpretable metrics such as water budget, number concentration, and spectral moments will take priority over differences in a single curve.
+
+## First checkpoint
+
+Before moving to the next note, there are four things to check:
+
+- [ ] PySDM can be imported in an isolated environment.
+- [ ] Python and PySDM versions can be recorded together.
+- [ ] The meaning of a super-droplet's multiplicity can be explained.
+- [ ] Fixed conditions can be distinguished between baseline and seeding experiments.
+
+Once these checkpoints are complete, the next step will dissect one official PySDM example by following the flow of inputs, dynamics, and products. The PySDM v2 paper is a useful map of the package structure and its extended capabilities [@deJong2023PySDM].
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

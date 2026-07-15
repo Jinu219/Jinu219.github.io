@@ -1,0 +1,14 @@
+---
+title: "Build the Lab"
+description: "Notes on reproducible research environments and experimental pipelines"
+lang: en
+page-layout: article
+---
+
+Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.
+
+::: {.callout-note}
+The implementation code for this track is connected to the [PySDM-Seeding-Lab repository](https://github.com/Jinu219/PySDM-Seeding-Lab).
+:::
+
+The first build note is in preparation.
