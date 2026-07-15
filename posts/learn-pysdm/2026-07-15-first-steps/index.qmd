@@ -7,6 +7,7 @@ categories:
   - cloud microphysics
   - super-droplet method
 citation: true
+sidebar: pysdm-ko
 ---
 
 수치 모델을 배우는 가장 좋은 출발점은 “어떤 코드를 실행할까?”보다 “무엇을 표현하려는가?”를 묻는 일이라고 생각합니다. 이 첫 글에서는 PySDM이 구름 미세물리 문제에서 맡는 역할을 정리하고, 이 블로그에서 따라갈 실험 경로를 세웁니다.

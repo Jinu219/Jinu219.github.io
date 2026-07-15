@@ -360,6 +360,65 @@ main.content {
   margin-left: auto;
 }
 
+/* PySDM section: persistent, editorial side navigation */
+.sidebar.sidebar-navigation {
+  background: color-mix(in srgb, var(--paper-raised) 82%, var(--paper)) !important;
+  border-right: 1px solid var(--line) !important;
+}
+
+.sidebar-navigation .sidebar-title {
+  color: var(--ink);
+  font-family: "Noto Serif KR", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.sidebar-navigation .sidebar-item-container .sidebar-item-text {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+}
+
+.sidebar-navigation .sidebar-item-container .active,
+.sidebar-navigation .sidebar-item-container a:hover {
+  color: var(--accent) !important;
+}
+
+.sidebar-navigation .sidebar-section > .sidebar-item-container .sidebar-item-text {
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.review-verdict {
+  margin: 1.5rem 0 2rem;
+  padding: 1.2rem 1.35rem;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-raised);
+}
+
+.review-verdict > p:last-child {
+  margin-bottom: 0;
+}
+
+.review-data {
+  margin: 1.5rem 0;
+  font-size: 0.92rem;
+}
+
+.review-data th {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.review-data td,
+.review-data th {
+  border-color: var(--line);
+}
+
 .page-layout-article main.content > *,
 .page-layout-article main.content .quarto-title-block,
 .page-layout-article main.content .quarto-listing-container-default,

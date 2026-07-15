@@ -34,6 +34,45 @@ website:
       - icon: github
         href: "https://github.com/Jinu219"
         aria-label: Jinu219 GitHub
+  sidebar:
+    - id: pysdm-ko
+      title: "PySDM Lab"
+      style: docked
+      background: light
+      border: true
+      collapse-level: 2
+      contents:
+        - href: pysdm.qmd
+          text: "PySDM 개요"
+        - section: "Learn PySDM"
+          contents:
+            - href: posts/learn-pysdm/2026-07-15-first-steps/index.qmd
+              text: "PySDM 시작하기"
+        - href: build-the-lab.qmd
+          text: "Build the Lab"
+        - href: experiments.qmd
+          text: "Experiments"
+        - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"
+          text: "실험 코드 ↗"
+    - id: pysdm-en
+      title: "PySDM Lab"
+      style: docked
+      background: light
+      border: true
+      collapse-level: 2
+      contents:
+        - href: en/pysdm.qmd
+          text: "PySDM overview"
+        - section: "Learn PySDM"
+          contents:
+            - href: en/posts/learn-pysdm/2026-07-15-first-steps/index.qmd
+              text: "Getting started"
+        - href: en/build-the-lab.qmd
+          text: "Build the Lab"
+        - href: en/experiments.qmd
+          text: "Experiments"
+        - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"
+          text: "Experiment code ↗"
   page-footer:
     border: true
     left: "© 2026 Jinu. Cloud seeding research notes."

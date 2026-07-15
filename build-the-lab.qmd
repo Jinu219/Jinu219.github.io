@@ -2,6 +2,7 @@
 title: "Build the Lab"
 description: "다시 실행할 수 있는 연구 환경과 실험 파이프라인 구축 기록"
 page-layout: article
+sidebar: pysdm-ko
 ---
 
 좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.

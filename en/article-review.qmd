@@ -7,6 +7,54 @@ page-layout: article
 
 Rather than summarizing conclusions alone, each review separates the research question, method, key assumptions, observations or model data, reproducible elements, and remaining limitations. Ideas found in the literature will feed back into PySDM or WRF experiments.
 
-::: {.callout-note}
-The first article review is in preparation.
+The collection currently covers six papers, from glaciogenic, hygroscopic, and negative-ion seeding to effect accounting and numerical evaluation. Each review separates **what the paper demonstrates** from **what remains unproven**.
+
+::: {.manual-post-list}
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-15 · Jinu</div>
+
+### [Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur](posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.qmd)
+
+Altitude, treated area, particle size, and the warm-rain process chain in a hybrid WDM6–CCN-bin model.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-15 · Jinu</div>
+
+### [Connecting Aerosol Hygroscopicity and CCN Activity with One κ](posts/article-review/2026-07-15-kappa-kohler/index.qmd)
+
+The κ-Köhler equation, mixture rule, limitations, and a direct connection to PySDM experiments.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-05-20 · Jinu</div>
+
+### [Can Negative Ions Enhance Rain? Revisiting China's First Field Trial](posts/article-review/2026-05-20-negative-ion-seeding/index.qmd)
+
+Separating evidence for device operation, cloud response, and rainfall causality.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-05-20 · Jinu</div>
+
+### [The Principle Behind Fifty Years of Cloud Seeding: Close the Physical Chain](posts/article-review/2026-05-20-cloud-seeding-review/index.qmd)
+
+Opportunity windows and failure modes for static, dynamic, and hygroscopic seeding.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-04-08 · Jinu</div>
+
+### [In Orographic Seeding, Overlap Matters More Than Dose](posts/article-review/2026-04-08-orographic-bin-seeding/index.qmd)
+
+How an AgI plume, supercooled liquid water, and growth time must overlap in 3-D terrain.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-04-08 · Jinu</div>
+
+### [How Much Additional Water Did Cloud Seeding Produce?](posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.qmd)
+
+An accounting framework for converting rainfall-depth estimates into total water mass.
+:::
 :::

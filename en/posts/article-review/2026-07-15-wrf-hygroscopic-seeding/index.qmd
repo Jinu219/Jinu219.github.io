@@ -1,0 +1,47 @@
+---
+title: "Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur"
+description: "Reviewing altitude, treated area, particle size, and warm-rain pathways in Lin et al. (2023)."
+date: 2026-07-15
+categories:
+  - Article Review
+  - WRF
+  - hygroscopic seeding
+  - warm rain
+  - hybrid microphysics
+citation: true
+---
+
+Lin et al. (2023) couple WDM6 bulk microphysics with 43 CCN size bins and apply the hybrid WDM6–NCU scheme to a real Taiwanese stratocumulus case [@Lin2023HygroscopicWRF]. The experiments ask where, over what area, and with which sizes hygroscopic particles should be released.
+
+::: {.review-verdict}
+**Verdict.** In this case, in-cloud seeding outperformed cloud-base release, the benefit saturated beyond roughly 40–60 km², and stronger rain–cloud-water accretion was the main pathway to added precipitation.
+:::
+
+[Read the paper](https://doi.org/10.5194/acp-23-10423-2023)
+
+## Hybrid microphysics
+
+Bulk schemes are efficient but cannot preserve a detailed seeding aerosol spectrum. Full bin schemes are expensive in high-resolution real-case WRF. WDM6–NCU retains bulk cloud and rain while resolving CCN radii from $0.001$ to $20\ \mu\mathrm{m}$ in 43 bins. A measured trimodal flare distribution is used rather than one mean size.
+
+The WRF 3.9.1 setup includes a 333 m inner LES domain. Sensitivity experiments vary release altitude (500, 1000, 1300, and 2200 m), treated area (1–100 km²), concentration, and particle-size range.
+
+## Three findings
+
+**Altitude.** Release at 1300 m, inside the cloud, was most effective. Particles encountered supersaturation and liquid water quickly. Cloud-base particles were diluted and less consistently overlapped the target. For this stratiform case, the authors recommend in-cloud regions above 0.5% supersaturation and $0.6\ \mathrm{g\,m^{-3}}$ liquid water; the latter is close to a $0.5\ \mathrm{g\,m^{-3}}$ threshold in earlier work.
+
+**Area.** Enhancement initially increased with treated area, then saturated around 40–60 km² because available cloud water became limiting. Total response and efficiency per unit material or area should therefore be reported together.
+
+**Process.** Cloud-base release sometimes strengthened autoconversion, but the added precipitation was most closely associated with stronger accretion of cloud water by rain ($P_{racw}$). Seeding particles larger than roughly $0.4\ \mu\mathrm{m}$ contributed most in these experiments.
+
+## Limits and next tests
+
+The thresholds come from one cloud case. The hybrid scheme loses some spectral information after activation, plume dispersion remains uncertain, and a model CTRL–SEED difference is not observational proof of field enhancement.
+
+WRF ensembles should test whether the area saturation persists across clouds, backgrounds, and physics options. PySDM can then resolve how each mode of the flare distribution changes activation and collision–coalescence along the same trajectories.
+
+The most useful operational product would overlay three maps: seeding-particle residence time, supersaturation plus liquid water, and accretion response. Their intersection—not the widest release area—is the physically meaningful target.
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

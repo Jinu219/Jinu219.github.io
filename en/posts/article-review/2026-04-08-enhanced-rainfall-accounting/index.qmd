@@ -1,0 +1,65 @@
+---
+title: "How Much Additional Water Did Cloud Seeding Produce?"
+description: "Reviewing the accounting framework used by Ro et al. (2023) for fire prevention, drought, and dust cases."
+date: 2026-04-08
+categories:
+  - Article Review
+  - field evaluation
+  - enhanced rainfall
+  - Korea
+citation: true
+---
+
+Ro et al. (2023) combine numerical winds, radar, and rain gauges to estimate cloud-seeding enhancement and convert millimeters of rain into total water mass [@Ro2023EnhancedRainfall]. This translation is useful for applications such as wildfire prevention and drought response, but it also magnifies every assumption made upstream.
+
+::: {.review-verdict}
+**Verdict.** The method is a clear accounting framework, not causal proof by itself. If the comparison area is a biased estimate of natural rainfall, multiplying by a large affected area multiplies the error too.
+:::
+
+[Read the paper](https://doi.org/10.1155/2023/5478666)
+
+## The calculation
+
+The study defines a seeding box (SB) along the estimated material trajectory and a non-seeding box (NB) intended to represent natural precipitation. Enhanced rainfall is
+
+$$
+ER=CAR_{SB}-CAR_{NB},
+$$
+
+where $CAR$ is area-mean cumulative rainfall. Total additional water is then
+
+$$
+TAER=ER\times ERA\times\rho_w,
+$$
+
+with $ERA$ the affected area and $\rho_w$ the density of water.
+
+| Case | Estimated enhancement | Total additional water |
+|---|---:|---:|
+| Wildfire prevention, AgI | 1.74 mm | 4.75 million t |
+| Drought mitigation, CaCl₂ | 0.84 mm | 1.30 million t |
+| Dust reduction, CaCl₂ | 2.78 mm | 24.44 million t |
+
+: Reported estimates for the three cases {.review-data}
+
+The dust case has the largest total mainly because its estimated effect area is wide. “Most effective” is therefore ambiguous unless the metric—rainfall depth, fractional change, affected area, total mass, or efficiency per unit material—is stated.
+
+## Strengths and limitations
+
+The framework exposes the treatment area, comparison area, and conversion into mass. It also uses spatial information rather than a single before–after gauge. That transparency is valuable.
+
+Its weak point is the counterfactual. Rainfall in NB may not equal the rainfall SB would have received without seeding. Terrain, moving rainbands, land–sea flow, radar errors, and uncertainty in modeled trajectories can all create SB–NB differences. Because $TAER$ is a product of depth and area, small biases can become millions of tonnes.
+
+A stronger analysis would repeat the calculation across multiple NB placements, effect-area boundaries, radar-error assumptions, and wind ensembles. It would report a distribution rather than one point estimate.
+
+Most importantly, two questions should remain separate:
+
+1. Did seeding cause a detectable precipitation change?
+2. Conditional on that conclusion, how large was the added water volume?
+
+Randomization, independent controls, physical tracers, or a complete microphysical response chain are needed for the first question. This paper provides a useful framework for the second.
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

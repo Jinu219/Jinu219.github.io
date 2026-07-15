@@ -1,0 +1,61 @@
+---
+title: "In Orographic Seeding, Overlap Matters More Than Dose"
+description: "Reading Geresdi et al. (2020) through the spatial overlap of an AgI plume and supercooled liquid water."
+date: 2026-04-08
+categories:
+  - Article Review
+  - glaciogenic seeding
+  - WRF
+  - bin microphysics
+citation: true
+---
+
+Geresdi et al. (2020) simulated four real Wyoming Weather Modification Pilot Project cases using three-dimensional WRF and bin microphysics [@Geresdi2020Orographic]. The practical question is not merely whether AgI can nucleate ice, but when that first response survives the full path to additional surface precipitation.
+
+::: {.review-verdict}
+**Verdict.** Releasing more AgI is insufficient. The plume must overlap supercooled liquid water for long enough that new ice can grow by vapor deposition and riming, become snow, and reach the ground.
+:::
+
+[Read the paper](https://doi.org/10.1175/JAMC-D-19-0278.1)
+
+## Why three dimensions matter
+
+In a two-dimensional cross-section, seeding material cannot disperse laterally. In three dimensions, terrain and boundary-layer turbulence spread the plume both horizontally and vertically. The peak AgI concentration can therefore be roughly an order of magnitude lower for the same release rate. A response that appears strong in 2-D may be diluted in a real mountain flow.
+
+Three-dimensional transport can also help by steering a plume into a liquid-water-rich region. Generator placement should therefore be evaluated by the trajectory from source to target, not by elevation alone.
+
+## Horizontal liquid water path
+
+The authors propose the horizontal liquid water path (h-LWP): liquid water integrated along the flow followed by the plume and growing particles.
+
+| Maximum h-LWP | Simulated tendency |
+|---|---|
+| $<0.1\ \mathrm{mm}$ | Negligible enhancement |
+| Around $0.5\ \mathrm{mm}$ or more | Enhancement near or above 5% becomes possible |
+| $>1.0\ \mathrm{mm}$ | More substantial enhancement if growth time is available |
+
+: Case-based interpretation of h-LWP {.review-data}
+
+These are not universal thresholds; they are diagnostic ranges from four cases. Their value is conceptual: “the cloud contains liquid water” becomes the testable question “how much liquid water lies along the plume trajectory?”
+
+## Following the microphysical chain
+
+Seeding first increased pristine ice and vapor deposition. Aggregation and riming then transferred mass into snow. Surface enhancement appeared only when diffusional growth and/or riming continued. Increasing ice number alone was not a success metric: early ice production could consume liquid water and leave too little for later growth.
+
+The paper therefore supports a process checklist:
+
+1. Did AgI reach the intended cloud volume?
+2. Was sufficient supercooled liquid water present there?
+3. Did ice grow through deposition, aggregation, or riming?
+4. Did the added mass survive transport and reach the surface?
+
+## What remains uncertain
+
+Four cases cannot establish a general effect size, and the CTRL–SEED difference depends on modeled natural precipitation and ice nucleation. The study is strongest as a physical explanation of success and failure, not as a universal percentage claim.
+
+For future PySDM and WRF experiments, the most useful outputs are plume–liquid-water overlap, residence time, ice and snow mass budgets, and the lag between nucleation and surface flux. The main lesson is simple: cloud seeding is a placement and timing problem before it is a dosage problem.
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

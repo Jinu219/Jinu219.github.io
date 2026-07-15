@@ -5,11 +5,12 @@ aliases:
   - learn-pysdm.html
 lang: en
 page-layout: article
+sidebar: pysdm-en
 ---
 
 These notes connect the Super-Droplet Method with PySDM objects, official examples, and numerical cloud-seeding experiments. Each note has one physical question, a minimal piece of code, and a checkpoint leading to the next experiment.
 
-The research environment and reproduction workflow are documented in [Build the Lab](build-the-lab.qmd), with hypothesis testing collected under [Experiments](experiments.qmd).
+The research environment and reproduction workflow are documented in [Build the Lab](build-the-lab.qmd), with hypothesis testing collected under [Experiments](experiments.qmd). The left navigation keeps all three tracks one click away.
 
 ::: {.manual-post-list}
 ::: {.manual-post}

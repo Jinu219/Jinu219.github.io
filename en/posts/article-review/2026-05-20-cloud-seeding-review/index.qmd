@@ -1,0 +1,55 @@
+---
+title: "The Principle Behind Fifty Years of Cloud Seeding: Close the Physical Chain"
+description: "Reading Bruintjes (1999) through the opportunity windows and failure modes of static, dynamic, and hygroscopic seeding."
+date: 2026-05-20
+categories:
+  - Article Review
+  - cloud seeding
+  - hygroscopic seeding
+  - research design
+citation: true
+---
+
+Bruintjes (1999) reviews decades of precipitation-enhancement experiments across static glaciogenic, dynamic, and hygroscopic seeding [@Bruintjes1999Review]. Its durable message is methodological: a statistical rainfall difference must be supported by evidence for the physical chain that produced it.
+
+::: {.review-verdict}
+**Verdict.** Track seeding material, nucleation, particle growth, cloud dynamics, and surface precipitation. A missing link cannot be replaced by a favorable final percentage.
+:::
+
+[Read the paper](https://doi.org/10.1175/1520-0477(1999)080%3C0805:AROCSE%3E2.0.CO;2)
+
+## Three strategies, three bottlenecks
+
+**Static glaciogenic seeding** adds ice nuclei to supercooled clouds. It requires sufficient liquid water, suitable temperature, limited natural ice, accurate plume delivery, and enough time for deposition and riming. Orographic experiments often failed because liquid water and plume transport varied rapidly.
+
+**Dynamic seeding** attempts rapid glaciation and latent-heating feedback:
+
+$$
+\text{seeding}\rightarrow\text{glaciation}\rightarrow\text{latent heat}
+\rightarrow\text{updraft}\rightarrow\text{cloud growth}\rightarrow\text{rain}
+$$
+
+The possible amplification is large, but every arrow must exceed the already large natural variability of convective clouds.
+
+**Hygroscopic seeding** introduces salt particles to broaden the initial droplet spectrum and accelerate collision–coalescence. Flare-generated submicron particles renewed interest after earlier delivery problems. Yet maritime clouds with abundant natural giant CCN may already be efficient, leaving little room for improvement.
+
+| Strategy | Intended bottleneck | Key failure mode |
+|---|---|---|
+| Static glaciogenic | Too few ice nuclei | Poor plume–liquid-water overlap |
+| Dynamic | Weak or short-lived convection | Long causal chain and large natural variance |
+| Hygroscopic | Slow warm-rain coalescence | Already-efficient clouds or poor particle delivery |
+
+: Comparing strategies by bottleneck rather than material {.review-data}
+
+## The “new prospects” that became standard tools
+
+The review highlighted multiparameter radar, lidar, satellite microphysics, aircraft observations, tracers such as SF₆ and chaff, and time-dependent 3-D models. These tools are now much more capable, but they still answer the same questions: Where did the material go? Was the cloud seedable? What changed first? Did that response reach the surface? Could natural variability produce the same signal?
+
+Bruintjes also warns against overselling early hygroscopic results. Cloud seeding had already lost credibility through claims that outran evidence. Negative cases are scientifically useful when the failed link is identified in advance.
+
+For numerical work, this means saving more than final precipitation. Plume position, activation, hydrometeor spectra, water budgets, process rates, and surface fluxes should form a traceable chain. Statistics and physics are complementary requirements, not substitutes.
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

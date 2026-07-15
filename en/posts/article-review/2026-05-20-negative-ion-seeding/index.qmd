@@ -1,0 +1,50 @@
+---
+title: "Can Negative Ions Enhance Rain? Revisiting China's First Field Trial"
+description: "Separating device operation, cloud response, and rainfall causality in Zheng et al. (2021)."
+date: 2026-05-20
+categories:
+  - Article Review
+  - negative ions
+  - field experiment
+  - causal inference
+citation: true
+---
+
+Zheng et al. (2021) evaluated high-voltage corona-discharge ion generators at Wushaoling and the Liupan Mountains from July to November 2020 [@Zheng2021NegativeIon]. Seven analyses were used to test whether charged aerosols transported from the ground altered clouds and rainfall.
+
+::: {.review-verdict}
+**Verdict.** Evidence that the device changed near-surface negative-ion concentrations—and some sky-image cloud metrics—is reasonably clear. Evidence that this change caused additional precipitation remains weak.
+:::
+
+[Read the paper](https://doi.org/10.3390/w13182473)
+
+## Three links the hypothesis must establish
+
+The proposed mechanism contains three distinct claims:
+
+1. **Device:** the generator produces a substantial ion perturbation.
+2. **Cloud:** ions or charged aerosols reach cloud level and alter microphysics.
+3. **Rainfall:** that cloud response exceeds natural variability and increases precipitation.
+
+Strong evidence for one link does not automatically establish the next.
+
+## Field design and evidence
+
+Wushaoling used 14 ON and 13 OFF days with random operation. Liupan operated more continuously and used network outages as controls, making its comparison weaker. The paper combined neural-network prediction, historical comparisons, ON/OFF days, spatial interpolation, upwind–downwind contrasts, ion measurements, and all-sky imagery.
+
+Ion concentrations near the generators changed with very small p-values, supporting the device link. Some monthly all-sky metrics also increased, with several comparisons below $p=0.02$. These are interesting intermediate observations, but the study did not directly measure the vertical profile of charged aerosols or cloud-droplet size distributions.
+
+Rainfall estimates generally pointed in the hypothesized direction. A machine-learning counterfactual was about 21% below observed mean rainfall, while downwind rainfall exceeded upwind rainfall by about 58% at Wushaoling and 19% at Liupan. Yet major rainfall comparisons had p-values around 0.29–0.46. The sample was too small and natural rainfall variance too large for a precise causal estimate.
+
+## Why seven methods are not seven independent experiments
+
+Most analyses reuse the same four-month weather record. A seasonal anomaly can therefore appear in several indicators at once. A well-fitting neural network also does not guarantee a valid counterfactual for unusual 2020 conditions. At Liupan, the lack of strict randomization creates additional confounding.
+
+A stronger follow-up would use preregistered randomized ON/OFF schedules over multiple seasons, blinded operation, direct vertical measurements by drones or aircraft, and simultaneous cloud-droplet spectra and liquid-water observations. The analysis should follow the mediation chain from device to transport, microphysics, and rainfall.
+
+The defensible conclusion is not “negative ions increase rain by 20%.” It is that the device and some cloud proxies changed, rainfall responses had a consistent direction, and the short, partially randomized trial could not yet isolate the rainfall effect from natural variability.
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

@@ -3,6 +3,7 @@ title: "Experiments"
 description: "Experimental notes that connect hypotheses, settings, results, and interpretation"
 lang: en
 page-layout: article
+sidebar: pysdm-en
 ---
 
 Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.

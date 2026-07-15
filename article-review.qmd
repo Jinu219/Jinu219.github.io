@@ -2,10 +2,17 @@
 title: "Article Review"
 description: "구름 씨뿌리기와 구름 미세물리 논문을 실험 관점에서 읽는 기록"
 page-layout: article
+listing:
+  contents: posts/article-review
+  sort: "date desc"
+  type: default
+  id: ko-article-review
+  exclude:
+    lang: en
+  categories: false
+  feed: true
 ---
 
 논문의 결론만 요약하지 않고, 연구 질문과 방법, 핵심 가정, 사용한 관측·모델 자료, 재현 가능한 부분과 남은 한계를 구분해 읽습니다. 리뷰에서 발견한 아이디어는 PySDM 또는 WRF 실험으로 다시 연결합니다.
 
-::: {.callout-note}
-첫 번째 논문 리뷰를 준비하고 있습니다.
-:::
+현재 리뷰는 빙정핵·흡습성 입자·음이온 씨뿌리기부터 효과량 산정과 수치모델 검증까지 여섯 편입니다. 발표 자료에 남긴 해석을 원 논문과 다시 대조해, **논문이 실제로 보여준 것**과 **아직 증명하지 못한 것**을 분리했습니다.

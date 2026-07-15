@@ -7,6 +7,7 @@ categories:
   - cloud microphysics
   - super-droplet method
 citation: true
+sidebar: pysdm-en
 ---
 
 The best place to begin learning a numerical model is not “Which code should I run?” but “What am I trying to represent?” This first note outlines PySDM's role in cloud microphysics and maps the experimental path this blog will follow.

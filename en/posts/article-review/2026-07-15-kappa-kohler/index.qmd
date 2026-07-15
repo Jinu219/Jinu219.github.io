@@ -1,0 +1,65 @@
+---
+title: "Connecting Aerosol Hygroscopicity and CCN Activity with One κ"
+description: "A practical reading of Petters & Kreidenweis (2007), from the κ-Köhler equation to PySDM experiments."
+date: 2026-07-15
+categories:
+  - Article Review
+  - aerosol
+  - CCN
+  - kappa-Köhler
+  - PySDM
+citation: true
+---
+
+Petters & Kreidenweis (2007) compress aerosol water uptake and cloud-condensation-nucleus activity into one hygroscopicity parameter, $\kappa$ [@Petters2007Kappa]. The result is not chemistry-free physics, but a practical bridge between subsaturated growth measurements and supersaturated activation.
+
+::: {.review-verdict}
+**Verdict.** $\kappa$ is a useful experimental coordinate: simple enough for models and sensitivity tests, yet explicit about the hygroscopic behavior that has been collapsed.
+:::
+
+[Read the paper](https://doi.org/10.5194/acp-7-1961-2007)
+
+## The κ-Köhler equation
+
+For dry diameter $D_d$ and wet diameter $D$,
+
+$$
+S(D)=\frac{D^3-D_d^3}{D^3-D_d^3(1-\kappa)}
+\exp\left(\frac{A}{D}\right),
+\qquad
+A=\frac{4\sigma_{s/a}M_w}{RT\rho_w}.
+$$
+
+The first factor represents the solute effect; the exponential is the Kelvin curvature term. Larger $\kappa$ implies stronger water uptake and activation at lower critical supersaturation. $\kappa=0$ approaches a non-hygroscopic particle.
+
+| Material class | Representative $\kappa$ range |
+|---|---:|
+| Non-hygroscopic | Near 0 |
+| Organics | 0.01–0.5 |
+| Atmospheric aerosol | 0.1–0.9 |
+| Inorganic salts | 0.5–1.4 |
+
+: Typical ranges summarized in the paper {.review-data}
+
+For an internally mixed particle, a simple volume-weighted rule is
+
+$$
+\kappa_{mix}=\sum_i\varepsilon_i\kappa_i.
+$$
+
+This turns composition into an activation parameter without a full activity model.
+
+## What one parameter misses
+
+A constant $\kappa$ cannot fully represent surfactant-driven surface-tension changes, limited solubility, crystallization and deliquescence hysteresis, liquid–liquid phase separation, size-dependent composition, or externally mixed populations. It is a baseline model, not a replacement for detailed thermodynamics when those effects control the question.
+
+## A PySDM experiment
+
+With a fixed dry-size distribution and number concentration, vary $\kappa$ across 0.1, 0.3, 0.6, and 1.0 under the same updraft. Record critical supersaturation, activated fraction, peak supersaturation, cloud-droplet number, mean radius, and time to collision–coalescence. Then vary size and $\kappa$ together.
+
+That second step matters because a large, moderately hygroscopic particle may activate more readily than a small, highly hygroscopic one. Hygroscopic-seeding performance depends on the combination of size, number, $\kappa$, and updraft—not on chemistry alone.
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

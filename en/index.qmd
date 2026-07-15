@@ -52,6 +52,22 @@ Read the questions, methods, assumptions, and limitations of cloud-seeding liter
 ::: {.manual-post}
 <div class="manual-post-meta">2026-07-15 · Jinu</div>
 
+### [Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur](posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.qmd)
+
+Reviewing altitude, treated area, particle size, and the warm-rain pathway in a hybrid microphysics model.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-15 · Jinu</div>
+
+### [Connecting Aerosol Hygroscopicity and CCN Activity with One κ](posts/article-review/2026-07-15-kappa-kohler/index.qmd)
+
+The κ-Köhler equation as a bridge between aerosol water uptake, CCN activation, and PySDM experiments.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-15 · Jinu</div>
+
 ### [Starting with PySDM: First Coordinates for Cloud Microphysics Experiments](posts/learn-pysdm/2026-07-15-first-steps/index.qmd)
 
 Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.

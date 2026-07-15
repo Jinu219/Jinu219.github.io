@@ -4,6 +4,7 @@ description: "입자 기반 구름 미세물리 모델을 배우고 실험하는
 aliases:
   - learn-pysdm.html
 page-layout: article
+sidebar: pysdm-ko
 listing:
   contents: posts/learn-pysdm
   sort: "date desc"
@@ -17,4 +18,4 @@ listing:
 
 Super-Droplet Method의 개념부터 PySDM 객체와 공식 예제, 구름 씨뿌리기 수치 실험까지 연결합니다. 각 글은 하나의 물리 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.
 
-연구 환경과 재현 과정은 [Build the Lab](build-the-lab.qmd), 실제 가설 검증은 [Experiments](experiments.qmd)에 함께 정리합니다.
+연구 환경과 재현 과정은 [Build the Lab](build-the-lab.qmd), 실제 가설 검증은 [Experiments](experiments.qmd)에 함께 정리합니다. 이 섹션에서는 왼쪽 탐색 메뉴로 세 트랙을 바로 오갈 수 있습니다.

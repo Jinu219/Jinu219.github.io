@@ -2,6 +2,7 @@
 title: "Experiments"
 description: "가설, 설정, 결과, 해석을 한 흐름으로 남기는 실험 노트"
 page-layout: article
+sidebar: pysdm-ko
 ---
 
 각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.
