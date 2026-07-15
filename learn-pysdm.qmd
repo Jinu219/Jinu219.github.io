@@ -1,12 +1,12 @@
 ---
 title: "Learn PySDM"
 description: "개념, API, 예제를 연결하는 PySDM 학습 노트"
-page-layout: full
+page-layout: article
 listing:
   contents: posts/learn-pysdm
   sort: "date desc"
   type: default
-  categories: true
+  categories: false
   feed: true
 ---
 
