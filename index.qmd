@@ -10,7 +10,7 @@ listing:
   exclude:
     lang: en
   page-size: 6
-  categories: true
+  categories: false
   feed:
     title: "Jinu's Cloud Seeding Blog"
     description: "PySDM, WRF, 논문 리뷰로 이어가는 구름 씨뿌리기 연구 기록"
