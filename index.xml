@@ -12,6 +12,130 @@
 <generator>quarto-1.9.38</generator>
 <lastBuildDate>Wed, 15 Jul 2026 00:00:00 GMT</lastBuildDate>
 <item>
+  <title>Starting with PySDM: First Coordinates for Cloud Microphysics Experiments</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>The best place to begin learning a numerical model is not “Which code should I run?” but “What am I trying to represent?” This first note outlines PySDM’s role in cloud microphysics and maps the experimental path this blog will follow.</p>
+<section id="what-does-pysdm-represent" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-pysdm-represent">What does PySDM represent?</h2>
+<p>PySDM is an open-source package for simulating the dynamics of particle populations. Its current development focuses on the microphysics of aerosols, cloud droplets, and raindrops in moist air. It uses the Super-Droplet Method (SDM) to represent a vast number of real particles with a smaller number of computational particles <span class="citation" data-cites="Shima2009SDM Bartman2022PySDM">(Shima et al. 2009; Bartman et al. 2022)</span>.</p>
+<p>Consider a super-droplet described by radius <img src="https://latex.codecogs.com/png.latex?r_i"> and multiplicity <img src="https://latex.codecogs.com/png.latex?%5Cxi_i">. The <img src="https://latex.codecogs.com/png.latex?k">-th moment of the real particle population can be approximated by a sum over computational particles:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AM_k%20%5Capprox%20%5Csum_i%20%5Cxi_i%20r_i%5Ek%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?k=0"> relates to number concentration, while <img src="https://latex.codecogs.com/png.latex?k=3"> relates to volume or mass. Decisions such as how many computational particles to use and how to sample the initial distribution are therefore not mere implementation details; they are experimental conditions that directly affect statistical quality.</p>
+</section>
+<section id="first-environment-check" class="level2">
+<h2 class="anchored" data-anchor-id="first-environment-check">First environment check</h2>
+<p>The latest PySDM release can be installed with <code>pip</code>. Unless noted otherwise, code blocks on this blog are illustrative. The actual reproducible environment will follow the pinned dependency files in <a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">python</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-m</span> pip install PySDM</span></code></pre></div></div>
+<p>After installation, the smallest useful check is whether the package imports in the current environment and which version was selected.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> importlib.metadata <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> version</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> PySDM</span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PySDM import: OK"</span>)</span>
+<span id="cb2-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PySDM version:"</span>, version(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PySDM"</span>))</span></code></pre></div></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Experiment notes will record the operating system, random seed, and repository commit alongside the Python and PySDM versions. It is a small habit that turns “it worked on my machine” into a research record.</p>
+</div>
+</div>
+</section>
+<section id="three-stages-ahead" class="level2">
+<h2 class="anchored" data-anchor-id="three-stages-ahead">Three stages ahead</h2>
+<section id="learn-pysdm" class="level3">
+<h3 class="anchored" data-anchor-id="learn-pysdm">1. Learn PySDM</h3>
+<p>After understanding SDM state variables and moments, we will examine how environments, dynamics, and products divide responsibilities. Instead of stopping after running official examples, each object will be annotated with the physical assumption it represents.</p>
+</section>
+<section id="build-the-lab" class="level3">
+<h3 class="anchored" data-anchor-id="build-the-lab">2. Build the Lab</h3>
+<p>We will establish an isolated Python environment and clear conventions for configuration files, data, and figures. Every experiment will include a command that reruns it and a minimal validation that checks the result.</p>
+</section>
+<section id="experiments" class="level3">
+<h3 class="anchored" data-anchor-id="experiments">3. Experiments</h3>
+<p>We will first create a baseline, then vary conditions such as seeding time, particle-size distribution, and dosage one at a time. Interpretable metrics such as water budget, number concentration, and spectral moments will take priority over differences in a single curve.</p>
+</section>
+</section>
+<section id="first-checkpoint" class="level2">
+<h2 class="anchored" data-anchor-id="first-checkpoint">First checkpoint</h2>
+<p>Before moving to the next note, there are four things to check:</p>
+<ul class="task-list">
+<li><label><input type="checkbox">PySDM can be imported in an isolated environment.</label></li>
+<li><label><input type="checkbox">Python and PySDM versions can be recorded together.</label></li>
+<li><label><input type="checkbox">The meaning of a super-droplet’s multiplicity can be explained.</label></li>
+<li><label><input type="checkbox">Fixed conditions can be distinguished between baseline and seeding experiments.</label></li>
+</ul>
+<p>Once these checkpoints are complete, the next step will dissect one official PySDM example by following the flow of inputs, dynamics, and products. The PySDM v2 paper is a useful map of the package structure and its extended capabilities <span class="citation" data-cites="deJong2023PySDM">(Jong et al. 2023)</span>.</p>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bartman2022PySDM" class="csl-entry">
+Bartman, Piotr, Oleg Bulenok, Tomasz Gierczak, et al. 2022. <span>“<span>PySDM</span> V1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry.”</span> <em>Journal of Open Source Software</em> 7 (72): 3219. <a href="https://doi.org/10.21105/joss.03219">https://doi.org/10.21105/joss.03219</a>.
+</div>
+<div id="ref-deJong2023PySDM" class="csl-entry">
+Jong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, and Sylwester Arabas. 2023. <span>“<span>PySDM</span> V2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry.”</span> <em>Journal of Open Source Software</em> 8 (84): 4968. <a href="https://doi.org/10.21105/joss.04968">https://doi.org/10.21105/joss.04968</a>.
+</div>
+<div id="ref-Shima2009SDM" class="csl-entry">
+Shima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, and Shintaro Kawahara. 2009. <span>“The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model.”</span> <em>Quarterly Journal of the Royal Meteorological Society</em> 135 (642): 1307–20. <a href="https://doi.org/10.1002/qj.441">https://doi.org/10.1002/qj.441</a>.
+</div>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {Starting with {PySDM:} {First} {Coordinates} for {Cloud}
+    {Microphysics} {Experiments}},
+  date = {2026-07-15},
+  url = {https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+Jinu. 2026. <span>“Starting with PySDM: First Coordinates for Cloud
+Microphysics Experiments.”</span> July 15. <a href="https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/">https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/</a>.
+</div></div></section></div> ]]></description>
+  <category>Learn PySDM</category>
+  <category>cloud microphysics</category>
+  <category>super-droplet method</category>
+  <guid>https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/</guid>
+  <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표</title>
   <dc:creator>Jinu </dc:creator>
   <link>https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/</link>

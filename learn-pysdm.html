@@ -46,9 +46,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-56a504effb4a8bdfb65d6ffd2c28e5d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-ae4431fc3b25e356f4807760d3fafb70.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-56a504effb4a8bdfb65d6ffd2c28e5d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-900a572c9452982c5b309ba5cc9161f8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -349,6 +349,10 @@ window.Quarto = {
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./en/index.html"> 
+<span class="menu-text">EN</span></a>
+  </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="https://github.com/Jinu219"> <i class="bi bi-github" role="img" aria-label="Jinu219 GitHub">
 </i> 
@@ -404,7 +408,32 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="TGVhcm4lMjBQeVNETSUyQ2Nsb3VkJTIwbWljcm9waHlzaWNzJTJDc3VwZXItZHJvcGxldCUyMG1ldGhvZA==" data-listing-date-sort="1784073600000" data-listing-file-modified-sort="1784085084351" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="350">
+<div class="quarto-post image-right" data-index="0" data-categories="TGVhcm4lMjBQeVNETSUyQ2Nsb3VkJTIwbWljcm9waHlzaWNzJTJDc3VwZXItZHJvcGxldCUyMG1ldGhvZA==" data-listing-date-sort="1784073600000" data-listing-file-modified-sort="1784085813632" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="477">
+<div class="thumbnail"><a href="./en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">Starting with PySDM: First Coordinates for Cloud Microphysics Experiments</a>
+</h3>
+<div class="delink listing-description"><a href="./en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
+<p>Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
+<div class="listing-date">
+2026-07-15
+</div>
+<div class="listing-author">
+Jinu
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="TGVhcm4lMjBQeVNETSUyQ2Nsb3VkJTIwbWljcm9waHlzaWNzJTJDc3VwZXItZHJvcGxldCUyMG1ldGhvZA==" data-listing-date-sort="1784073600000" data-listing-file-modified-sort="1784085813632" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="350">
 <div class="thumbnail"><a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
 
 <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
@@ -432,6 +461,76 @@ Jinu
 </div>
 <div class="listing-no-matching d-none">일치 없음</div>
 </div></main> <!-- /main -->
+<script>
+(() => {
+  const localizeNavigation = () => {
+    const path = window.location.pathname;
+    const isEnglish = path === "/en" || path.startsWith("/en/");
+    const switchLink =
+      document.querySelector('a[aria-label="Switch language"]') ||
+      [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
+        ["EN", "한국어"].includes(link.textContent.trim())
+      );
+
+    if (switchLink) {
+      const englishPath = path === "/" || path === "/index.html"
+        ? "/en/"
+        : `/en${path}`;
+      const koreanPath = path === "/en" || path === "/en/" || path === "/en/index.html"
+        ? "/"
+        : path.replace(/^\/en/, "");
+      const label = switchLink.querySelector(".menu-text") || switchLink;
+
+      label.textContent = isEnglish ? "한국어" : "EN";
+      switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
+      switchLink.setAttribute(
+        "aria-label",
+        isEnglish ? "한국어로 전환" : "Switch to English"
+      );
+      switchLink.classList.remove("active");
+      switchLink.removeAttribute("aria-current");
+    }
+
+    if (!isEnglish) return;
+
+    const brand = document.querySelector(".navbar-brand");
+    if (brand) brand.href = "/en/";
+
+    const menu = [
+      ["홈", "Home", "/en/"],
+      ["Learn PySDM", "Learn PySDM", "/en/learn-pysdm.html"],
+      ["Build the Lab", "Build the Lab", "/en/build-the-lab.html"],
+      ["Experiments", "Experiments", "/en/experiments.html"],
+      ["프로젝트", "Projects", "/en/projects.html"],
+      ["소개", "About", "/en/about.html"]
+    ];
+
+    document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
+      const label = link.querySelector(".menu-text") || link;
+      const item = menu.find(([korean]) => label.textContent.trim() === korean);
+      if (!item) return;
+      label.textContent = item[1];
+      link.href = item[2];
+
+      const isCurrent = path === item[2] ||
+        (item[2] === "/en/" && ["/en", "/en/", "/en/index.html"].includes(path));
+      link.classList.toggle("active", isCurrent);
+      if (isCurrent) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".nav-footer a").forEach((link) => {
+      if (link.textContent.trim() === "RSS") link.href = "/en/index.xml";
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", localizeNavigation);
+  } else {
+    localizeNavigation();
+  }
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

@@ -18,7 +18,7 @@
     "href": "learn-pysdm.html",
     "title": "Learn PySDM",
     "section": "",
-    "text": "PySDM을 처음 만나는 순간부터 문헌 속 실험을 읽을 수 있을 때까지의 학습 경로입니다. 각 글은 하나의 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
+    "text": "PySDM을 처음 만나는 순간부터 문헌 속 실험을 읽을 수 있을 때까지의 학습 경로입니다. 각 글은 하나의 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\n\n\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
   },
   {
     "objectID": "experiments.html",
@@ -26,6 +26,76 @@
     "title": "Experiments",
     "section": "",
     "text": "각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.\n첫 실험 기록을 준비하고 있습니다."
+  },
+  {
+    "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
+    "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
+    "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
+    "section": "",
+    "text": "The best place to begin learning a numerical model is not “Which code should I run?” but “What am I trying to represent?” This first note outlines PySDM’s role in cloud microphysics and maps the experimental path this blog will follow."
+  },
+  {
+    "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#what-does-pysdm-represent",
+    "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#what-does-pysdm-represent",
+    "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
+    "section": "What does PySDM represent?",
+    "text": "What does PySDM represent?\nPySDM is an open-source package for simulating the dynamics of particle populations. Its current development focuses on the microphysics of aerosols, cloud droplets, and raindrops in moist air. It uses the Super-Droplet Method (SDM) to represent a vast number of real particles with a smaller number of computational particles (Shima et al. 2009; Bartman et al. 2022).\nConsider a super-droplet described by radius \\(r_i\\) and multiplicity \\(\\xi_i\\). The \\(k\\)-th moment of the real particle population can be approximated by a sum over computational particles:\n\\[\nM_k \\approx \\sum_i \\xi_i r_i^k\n\\]\n\\(k=0\\) relates to number concentration, while \\(k=3\\) relates to volume or mass. Decisions such as how many computational particles to use and how to sample the initial distribution are therefore not mere implementation details; they are experimental conditions that directly affect statistical quality."
+  },
+  {
+    "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-environment-check",
+    "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-environment-check",
+    "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
+    "section": "First environment check",
+    "text": "First environment check\nThe latest PySDM release can be installed with pip. Unless noted otherwise, code blocks on this blog are illustrative. The actual reproducible environment will follow the pinned dependency files in PySDM-Seeding-Lab.\npython -m pip install PySDM\nAfter installation, the smallest useful check is whether the package imports in the current environment and which version was selected.\nfrom importlib.metadata import version\n\nimport PySDM\n\nprint(\"PySDM import: OK\")\nprint(\"PySDM version:\", version(\"PySDM\"))\n\n\n\n\n\n\nTip\n\n\n\nExperiment notes will record the operating system, random seed, and repository commit alongside the Python and PySDM versions. It is a small habit that turns “it worked on my machine” into a research record."
+  },
+  {
+    "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#three-stages-ahead",
+    "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#three-stages-ahead",
+    "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
+    "section": "Three stages ahead",
+    "text": "Three stages ahead\n\n1. Learn PySDM\nAfter understanding SDM state variables and moments, we will examine how environments, dynamics, and products divide responsibilities. Instead of stopping after running official examples, each object will be annotated with the physical assumption it represents.\n\n\n2. Build the Lab\nWe will establish an isolated Python environment and clear conventions for configuration files, data, and figures. Every experiment will include a command that reruns it and a minimal validation that checks the result.\n\n\n3. Experiments\nWe will first create a baseline, then vary conditions such as seeding time, particle-size distribution, and dosage one at a time. Interpretable metrics such as water budget, number concentration, and spectral moments will take priority over differences in a single curve."
+  },
+  {
+    "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-checkpoint",
+    "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-checkpoint",
+    "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
+    "section": "First checkpoint",
+    "text": "First checkpoint\nBefore moving to the next note, there are four things to check:\n\nPySDM can be imported in an isolated environment.\nPython and PySDM versions can be recorded together.\nThe meaning of a super-droplet’s multiplicity can be explained.\nFixed conditions can be distinguished between baseline and seeding experiments.\n\nOnce these checkpoints are complete, the next step will dissect one official PySDM example by following the flow of inputs, dynamics, and products. The PySDM v2 paper is a useful map of the package structure and its extended capabilities (Jong et al. 2023)."
+  },
+  {
+    "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#references",
+    "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#references",
+    "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
+    "section": "References",
+    "text": "References\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, et al. 2022. “PySDM V1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry.” Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, and Sylwester Arabas. 2023. “PySDM V2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry.” Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, and Shintaro Kawahara. 2009. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model.” Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441."
+  },
+  {
+    "objectID": "en/index.html#three-research-tracks",
+    "href": "en/index.html#three-research-tracks",
+    "title": "PySDM Seeding Lab",
+    "section": "Three research tracks",
+    "text": "Three research tracks\n\n\n\n01\n\n\nLearn PySDM\nBuild a foundation step by step, from the Super-Droplet Method to PySDM objects and official examples.\nBrowse learning notes\n\n\n\n\n02\n\n\nBuild the Lab\nDocument environments, data, configurations, and validation rules so anyone can reproduce the same calculations.\nBrowse build notes\n\n\n\n\n03\n\n\nExperiments\nUse sensitivity studies and comparative figures to explore when and why seeding hypotheses lead to different outcomes.\nBrowse experiments"
+  },
+  {
+    "objectID": "en/index.html#recent-notes",
+    "href": "en/index.html#recent-notes",
+    "title": "PySDM Seeding Lab",
+    "section": "Recent notes",
+    "text": "Recent notes"
+  },
+  {
+    "objectID": "en/build-the-lab.html",
+    "href": "en/build-the-lab.html",
+    "title": "Build the Lab",
+    "section": "",
+    "text": "Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.\n\n\n\n\n\n\nNote\n\n\n\nThe implementation code for this track is connected to the PySDM-Seeding-Lab repository.\n\n\nThe first build note is in preparation."
+  },
+  {
+    "objectID": "build-the-lab.html",
+    "href": "build-the-lab.html",
+    "title": "Build the Lab",
+    "section": "",
+    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다."
   },
   {
     "objectID": "about.html",
@@ -56,11 +126,60 @@
     "text": "연결\n\nGitHub · Jinu219\nPySDM 공식 저장소\nPySDM 공식 문서"
   },
   {
-    "objectID": "build-the-lab.html",
-    "href": "build-the-lab.html",
-    "title": "Build the Lab",
+    "objectID": "en/about.html",
+    "href": "en/about.html",
+    "title": "About",
     "section": "",
-    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다."
+    "text": "PySDM Seeding Lab is an open research notebook for learning PySDM, a particle-based cloud microphysics model, designing numerical experiments related to cloud seeding, and documenting the process in public.\nRather than presenting only finished conclusions, it records:\n\nthe physical question that started each experiment,\nthe assumptions and settings used,\nhow the code and results can be reproduced, and\nwhat was learned when results differed from expectations."
+  },
+  {
+    "objectID": "en/about.html#what-does-this-site-document",
+    "href": "en/about.html#what-does-this-site-document",
+    "title": "About",
+    "section": "",
+    "text": "PySDM Seeding Lab is an open research notebook for learning PySDM, a particle-based cloud microphysics model, designing numerical experiments related to cloud seeding, and documenting the process in public.\nRather than presenting only finished conclusions, it records:\n\nthe physical question that started each experiment,\nthe assumptions and settings used,\nhow the code and results can be reproduced, and\nwhat was learned when results differed from expectations."
+  },
+  {
+    "objectID": "en/about.html#how-the-notes-are-organized",
+    "href": "en/about.html#how-the-notes-are-organized",
+    "title": "About",
+    "section": "How the notes are organized",
+    "text": "How the notes are organized\nLearn PySDM covers concepts and tools, Build the Lab develops reproducible environments, and Experiments connects hypotheses with results. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository."
+  },
+  {
+    "objectID": "en/about.html#links",
+    "href": "en/about.html#links",
+    "title": "About",
+    "section": "Links",
+    "text": "Links\n\nGitHub · Jinu219\nOfficial PySDM repository\nOfficial PySDM documentation"
+  },
+  {
+    "objectID": "en/experiments.html",
+    "href": "en/experiments.html",
+    "title": "Experiments",
+    "section": "",
+    "text": "Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.\nThe first experiment note is in preparation."
+  },
+  {
+    "objectID": "en/learn-pysdm.html",
+    "href": "en/learn-pysdm.html",
+    "title": "Learn PySDM",
+    "section": "",
+    "text": "A learning path from the first encounter with PySDM to reading experiments in the literature. Each note has one question, a minimal piece of code, and a checkpoint leading to the next experiment.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\n\n\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "en/projects.html",
+    "href": "en/projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
+  },
+  {
+    "objectID": "en/projects.html#pysdm-seeding-lab",
+    "href": "en/projects.html#pysdm-seeding-lab",
+    "title": "Projects",
+    "section": "",
+    "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
   },
   {
     "objectID": "index.html#세-개의-연구-트랙",

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="PySDM Seeding Lab과 이 블로그를 소개합니다.">
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-07-15">
+<meta name="description" content="Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.">
 
-<title>소개 – PySDM Seeding Lab</title>
+<title>Starting with PySDM: First Coordinates for Cloud Microphysics Experiments – PySDM Seeding Lab</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,29 +26,83 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-900a572c9452982c5b309ba5cc9161f8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-900a572c9452982c5b309ba5cc9161f8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -60,27 +116,56 @@ ul.task-list li input[type="checkbox"] {
     "s"
   ],
   "language": {
-    "search-no-results-text": "일치 없음",
-    "search-matching-documents-text": "일치된 문서",
-    "search-copy-link-title": "검색 링크 복사",
-    "search-hide-matches-text": "추가 검색 결과 숨기기",
-    "search-more-match-text": "추가 검색결과",
-    "search-more-matches-text": "추가 검색결과",
-    "search-clear-button-title": "제거",
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "취소",
-    "search-submit-button-title": "검색",
-    "search-label": "검색"
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<meta property="og:title" content="소개 – PySDM Seeding Lab">
-<meta property="og:description" content="PySDM Seeding Lab과 이 블로그를 소개합니다.">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Starting with PySDM: First Coordinates for Cloud Microphysics Experiments – PySDM Seeding Lab">
+<meta property="og:description" content="Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.">
 <meta property="og:site_name" content="PySDM Seeding Lab">
-<meta name="twitter:title" content="소개 – PySDM Seeding Lab">
-<meta name="twitter:description" content="PySDM Seeding Lab과 이 블로그를 소개합니다.">
+<meta name="twitter:title" content="Starting with PySDM: First Coordinates for Cloud Microphysics Experiments – PySDM Seeding Lab">
+<meta name="twitter:description" content="Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -253,44 +338,44 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">PySDM Seeding Lab</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="검색"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../../../../index.html"> 
 <span class="menu-text">홈</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./learn-pysdm.html"> 
+    <a class="nav-link" href="../../../../learn-pysdm.html"> 
 <span class="menu-text">Learn PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./build-the-lab.html"> 
+    <a class="nav-link" href="../../../../build-the-lab.html"> 
 <span class="menu-text">Build the Lab</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./experiments.html"> 
+    <a class="nav-link" href="../../../../experiments.html"> 
 <span class="menu-text">Experiments</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./projects.html"> 
+    <a class="nav-link" href="../../../../projects.html"> 
 <span class="menu-text">프로젝트</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./about.html" aria-current="page"> 
+    <a class="nav-link" href="../../../../about.html"> 
 <span class="menu-text">소개</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./en/index.html"> 
+    <a class="nav-link" href="../../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -301,7 +386,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -312,14 +397,21 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">목차</h2>
+    <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#이곳은-무엇을-기록하나요" id="toc-이곳은-무엇을-기록하나요" class="nav-link active" data-scroll-target="#이곳은-무엇을-기록하나요">이곳은 무엇을 기록하나요?</a></li>
-  <li><a href="#글의-구성" id="toc-글의-구성" class="nav-link" data-scroll-target="#글의-구성">글의 구성</a></li>
-  <li><a href="#연결" id="toc-연결" class="nav-link" data-scroll-target="#연결">연결</a></li>
+  <li><a href="#what-does-pysdm-represent" id="toc-what-does-pysdm-represent" class="nav-link active" data-scroll-target="#what-does-pysdm-represent">What does PySDM represent?</a></li>
+  <li><a href="#first-environment-check" id="toc-first-environment-check" class="nav-link" data-scroll-target="#first-environment-check">First environment check</a></li>
+  <li><a href="#three-stages-ahead" id="toc-three-stages-ahead" class="nav-link" data-scroll-target="#three-stages-ahead">Three stages ahead</a>
+  <ul class="collapse">
+  <li><a href="#learn-pysdm" id="toc-learn-pysdm" class="nav-link" data-scroll-target="#learn-pysdm">1. Learn PySDM</a></li>
+  <li><a href="#build-the-lab" id="toc-build-the-lab" class="nav-link" data-scroll-target="#build-the-lab">2. Build the Lab</a></li>
+  <li><a href="#experiments" id="toc-experiments" class="nav-link" data-scroll-target="#experiments">3. Experiments</a></li>
+  </ul></li>
+  <li><a href="#first-checkpoint" id="toc-first-checkpoint" class="nav-link" data-scroll-target="#first-checkpoint">First checkpoint</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/about.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/learn-pysdm/2026-07-15-first-steps/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -327,19 +419,36 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">소개</h1>
-</div>
+<h1 class="title">Starting with PySDM: First Coordinates for Cloud Microphysics Experiments</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Learn PySDM</div>
+    <div class="quarto-category">cloud microphysics</div>
+    <div class="quarto-category">super-droplet method</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    PySDM Seeding Lab과 이 블로그를 소개합니다.
+    Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-07-15</p>
+    </div>
+  </div>
   
     
   </div>
@@ -349,33 +458,96 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="이곳은-무엇을-기록하나요" class="level2">
-<h2 class="anchored" data-anchor-id="이곳은-무엇을-기록하나요">이곳은 무엇을 기록하나요?</h2>
-<p>PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우고, 구름 씨뿌리기와 관련된 수치 실험을 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다.</p>
-<p>완성된 결론만 전시하기보다 다음을 함께 남깁니다.</p>
-<ul>
-<li>어떤 물리 질문에서 실험이 시작됐는지</li>
-<li>어떤 가정과 설정을 사용했는지</li>
-<li>코드와 결과를 어떻게 다시 만들 수 있는지</li>
-<li>결과가 예상과 달랐을 때 무엇을 배웠는지</li>
+<p>The best place to begin learning a numerical model is not “Which code should I run?” but “What am I trying to represent?” This first note outlines PySDM’s role in cloud microphysics and maps the experimental path this blog will follow.</p>
+<section id="what-does-pysdm-represent" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-pysdm-represent">What does PySDM represent?</h2>
+<p>PySDM is an open-source package for simulating the dynamics of particle populations. Its current development focuses on the microphysics of aerosols, cloud droplets, and raindrops in moist air. It uses the Super-Droplet Method (SDM) to represent a vast number of real particles with a smaller number of computational particles <span class="citation" data-cites="Shima2009SDM Bartman2022PySDM">(<a href="#ref-Shima2009SDM" role="doc-biblioref">Shima et al. 2009</a>; <a href="#ref-Bartman2022PySDM" role="doc-biblioref">Bartman et al. 2022</a>)</span>.</p>
+<p>Consider a super-droplet described by radius <span class="math inline">\(r_i\)</span> and multiplicity <span class="math inline">\(\xi_i\)</span>. The <span class="math inline">\(k\)</span>-th moment of the real particle population can be approximated by a sum over computational particles:</p>
+<p><span class="math display">\[
+M_k \approx \sum_i \xi_i r_i^k
+\]</span></p>
+<p><span class="math inline">\(k=0\)</span> relates to number concentration, while <span class="math inline">\(k=3\)</span> relates to volume or mass. Decisions such as how many computational particles to use and how to sample the initial distribution are therefore not mere implementation details; they are experimental conditions that directly affect statistical quality.</p>
+</section>
+<section id="first-environment-check" class="level2">
+<h2 class="anchored" data-anchor-id="first-environment-check">First environment check</h2>
+<p>The latest PySDM release can be installed with <code>pip</code>. Unless noted otherwise, code blocks on this blog are illustrative. The actual reproducible environment will follow the pinned dependency files in <a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> pip install PySDM</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>After installation, the smallest useful check is whether the package imports in the current environment and which version was selected.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> importlib.metadata <span class="im">import</span> version</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> PySDM</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PySDM import: OK"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"PySDM version:"</span>, version(<span class="st">"PySDM"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Experiment notes will record the operating system, random seed, and repository commit alongside the Python and PySDM versions. It is a small habit that turns “it worked on my machine” into a research record.</p>
+</div>
+</div>
+</section>
+<section id="three-stages-ahead" class="level2">
+<h2 class="anchored" data-anchor-id="three-stages-ahead">Three stages ahead</h2>
+<section id="learn-pysdm" class="level3">
+<h3 class="anchored" data-anchor-id="learn-pysdm">1. Learn PySDM</h3>
+<p>After understanding SDM state variables and moments, we will examine how environments, dynamics, and products divide responsibilities. Instead of stopping after running official examples, each object will be annotated with the physical assumption it represents.</p>
+</section>
+<section id="build-the-lab" class="level3">
+<h3 class="anchored" data-anchor-id="build-the-lab">2. Build the Lab</h3>
+<p>We will establish an isolated Python environment and clear conventions for configuration files, data, and figures. Every experiment will include a command that reruns it and a minimal validation that checks the result.</p>
+</section>
+<section id="experiments" class="level3">
+<h3 class="anchored" data-anchor-id="experiments">3. Experiments</h3>
+<p>We will first create a baseline, then vary conditions such as seeding time, particle-size distribution, and dosage one at a time. Interpretable metrics such as water budget, number concentration, and spectral moments will take priority over differences in a single curve.</p>
+</section>
+</section>
+<section id="first-checkpoint" class="level2">
+<h2 class="anchored" data-anchor-id="first-checkpoint">First checkpoint</h2>
+<p>Before moving to the next note, there are four things to check:</p>
+<ul class="task-list">
+<li><label><input type="checkbox">PySDM can be imported in an isolated environment.</label></li>
+<li><label><input type="checkbox">Python and PySDM versions can be recorded together.</label></li>
+<li><label><input type="checkbox">The meaning of a super-droplet’s multiplicity can be explained.</label></li>
+<li><label><input type="checkbox">Fixed conditions can be distinguished between baseline and seeding experiments.</label></li>
 </ul>
+<p>Once these checkpoints are complete, the next step will dissect one official PySDM example by following the flow of inputs, dynamics, and products. The PySDM v2 paper is a useful map of the package structure and its extended capabilities <span class="citation" data-cites="deJong2023PySDM">(<a href="#ref-deJong2023PySDM" role="doc-biblioref">Jong et al. 2023</a>)</span>.</p>
 </section>
-<section id="글의-구성" class="level2">
-<h2 class="anchored" data-anchor-id="글의-구성">글의 구성</h2>
-<p><strong>Learn PySDM</strong>은 개념과 도구를, <strong>Build the Lab</strong>은 재현 가능한 환경을, <strong>Experiments</strong>는 가설과 결과를 다룹니다. 논문과 소프트웨어는 인용으로 연결하고, 실험 코드는 별도 저장소의 고정된 버전으로 연결합니다.</p>
-</section>
-<section id="연결" class="level2">
-<h2 class="anchored" data-anchor-id="연결">연결</h2>
-<ul>
-<li><a href="https://github.com/Jinu219">GitHub · Jinu219</a></li>
-<li><a href="https://github.com/open-atmos/PySDM">PySDM 공식 저장소</a></li>
-<li><a href="https://open-atmos.github.io/PySDM/">PySDM 공식 문서</a></li>
-</ul>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Bartman2022PySDM" class="csl-entry" role="listitem">
+Bartman, Piotr, Oleg Bulenok, Tomasz Gierczak, et al. 2022. <span>“<span>PySDM</span> V1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry.”</span> <em>Journal of Open Source Software</em> 7 (72): 3219. <a href="https://doi.org/10.21105/joss.03219">https://doi.org/10.21105/joss.03219</a>.
+</div>
+<div id="ref-deJong2023PySDM" class="csl-entry" role="listitem">
+Jong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, and Sylwester Arabas. 2023. <span>“<span>PySDM</span> V2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry.”</span> <em>Journal of Open Source Software</em> 8 (84): 4968. <a href="https://doi.org/10.21105/joss.04968">https://doi.org/10.21105/joss.04968</a>.
+</div>
+<div id="ref-Shima2009SDM" class="csl-entry" role="listitem">
+Shima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, and Shintaro Kawahara. 2009. <span>“The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model.”</span> <em>Quarterly Journal of the Royal Meteorological Society</em> 135 (642): 1307–20. <a href="https://doi.org/10.1002/qj.441">https://doi.org/10.1002/qj.441</a>.
+</div>
+</div>
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {Starting with {PySDM:} {First} {Coordinates} for {Cloud}
+    {Microphysics} {Experiments}},
+  date = {2026-07-15},
+  url = {https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Jinu. 2026. <span>“Starting with PySDM: First Coordinates for Cloud
+Microphysics Experiments.”</span> July 15. <a href="https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/">https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script>
 (() => {
   const localizeNavigation = () => {
@@ -484,12 +656,12 @@ ul.task-list li input[type="checkbox"] {
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "복사완료!");
+      button.setAttribute("title", "Copied!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "복사완료!");
+        button.setAttribute("data-bs-title", "Copied!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -867,11 +1039,11 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/about.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/learn-pysdm/2026-07-15-first-steps/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="./index.xml">
+    <a class="nav-link" href="../../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -888,5 +1060,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

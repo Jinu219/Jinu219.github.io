@@ -2,30 +2,58 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jinu219.github.io/projects.html</loc>
-    <lastmod>2026-07-15T03:11:24.351Z</lastmod>
+    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
   </url>
   <url>
     <loc>https://jinu219.github.io/learn-pysdm.html</loc>
-    <lastmod>2026-07-15T03:11:24.350Z</lastmod>
+    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
   </url>
   <url>
     <loc>https://jinu219.github.io/experiments.html</loc>
-    <lastmod>2026-07-15T03:11:24.350Z</lastmod>
+    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
   </url>
   <url>
-    <loc>https://jinu219.github.io/about.html</loc>
-    <lastmod>2026-07-15T03:11:24.350Z</lastmod>
+    <loc>https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/index.html</loc>
+    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/index.html</loc>
+    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/build-the-lab.html</loc>
+    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
   </url>
   <url>
     <loc>https://jinu219.github.io/build-the-lab.html</loc>
-    <lastmod>2026-07-15T03:11:24.350Z</lastmod>
+    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/about.html</loc>
+    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/about.html</loc>
+    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/experiments.html</loc>
+    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/learn-pysdm.html</loc>
+    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/projects.html</loc>
+    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
   </url>
   <url>
     <loc>https://jinu219.github.io/index.html</loc>
-    <lastmod>2026-07-15T03:11:24.350Z</lastmod>
+    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
   </url>
   <url>
     <loc>https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/index.html</loc>
-    <lastmod>2026-07-15T03:11:24.351Z</lastmod>
+    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
   </url>
 </urlset>
