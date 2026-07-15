@@ -40,14 +40,14 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-20ec353053d2c7f81b21e37c4d6ef93e.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-bfe98210d9b6ae9e069cafb24cb1e9c0.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-20ec353053d2c7f81b21e37c4d6ef93e.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f77c04995204549389ee07d5bfa40c6b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-3debbfa46a9ff1d060d21154aab678de.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-f77c04995204549389ee07d5bfa40c6b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-c08420ac075dd2a421dccff7df322289.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-3091cc865f3ff4316463e045756b656e.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-c08420ac075dd2a421dccff7df322289.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -84,9 +84,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -383,72 +383,74 @@ window.Quarto = {
 </header>
 
 
-<div class="hero-lab">
-<div class="hero-eyebrow">
-Cloud microphysics · open lab notebook
+<div class="home-intro">
+<div class="home-kicker">
+PySDM · Cloud microphysics · Open notebook
 </div>
-<h1 class="hero-title">
-구름을 이해하는<br>작은 수치 실험들
+<h1>
+구름을 계산하고,<br><em>실험을 기록합니다.</em>
 </h1>
-<p class="hero-copy">
-PySDM을 배우고, 재현 가능한 실험실을 만들고, 구름 씨뿌리기 가설을 코드와 그림으로 검증합니다. 결과뿐 아니라 질문과 실패의 과정까지 남깁니다.
+<p class="home-deck">
+PySDM을 배우고 재현 가능한 실험 환경을 만듭니다. 구름 씨뿌리기 가설을 코드와 그림으로 검증하고, 결과뿐 아니라 질문과 실패의 과정까지 차분히 기록합니다.
 </p>
-<div class="hero-actions">
-<p><a class="lab-button" href="learn-pysdm.html">PySDM 시작하기</a> <a class="lab-button secondary" href="projects.html">프로젝트 보기</a></p>
+<div class="home-actions">
+<p><a href="learn-pysdm.html">첫 노트 읽기 <span aria-hidden="true">↗</span></a> <a href="projects.html">프로젝트 소개 <span aria-hidden="true">→</span></a></p>
 </div>
 </div>
-<section id="세-개의-연구-트랙" class="level2">
-<h2 class="anchored" data-anchor-id="세-개의-연구-트랙">세 개의 연구 트랙</h2>
-<div class="track-grid">
-<div class="track-card">
+<section id="세-개의-연구-트랙" class="level2 section-heading">
+<h2 class="section-heading anchored" data-anchor-id="세-개의-연구-트랙">세 개의 연구 트랙</h2>
+<div class="track-list">
+<div class="track-item">
 <div class="track-index">
-TRACK 01
+01
 </div>
 <section id="learn-pysdm" class="level3">
 <h3 class="anchored" data-anchor-id="learn-pysdm">Learn PySDM</h3>
-<p>Super-Droplet Method의 개념부터 PySDM 객체와 예제 해석까지, 학습의 발판을 차근차근 만듭니다.</p>
-<p><a href="./learn-pysdm.html">학습 노트 보기 →</a></p>
+<p>Super-Droplet Method의 개념부터 PySDM 객체와 공식 예제 해석까지, 학습의 발판을 하나씩 만듭니다.</p>
+<p><a href="./learn-pysdm.html">학습 노트 보기</a></p>
 </section>
 </div>
-<div class="track-card">
+<div class="track-item">
 <div class="track-index">
-TRACK 02
+02
 </div>
 <section id="build-the-lab" class="level3">
 <h3 class="anchored" data-anchor-id="build-the-lab">Build the Lab</h3>
-<p>환경, 데이터, 실험 설정, 검증 규칙을 기록해 누구나 같은 출발점에서 계산을 반복할 수 있게 합니다.</p>
-<p><a href="./build-the-lab.html">구축 기록 보기 →</a></p>
+<p>환경, 데이터, 실험 설정과 검증 규칙을 기록해 같은 계산을 누구나 다시 실행할 수 있게 합니다.</p>
+<p><a href="./build-the-lab.html">구축 기록 보기</a></p>
 </section>
 </div>
-<div class="track-card">
+<div class="track-item">
 <div class="track-index">
-TRACK 03
+03
 </div>
 <section id="experiments" class="level3">
 <h3 class="anchored" data-anchor-id="experiments">Experiments</h3>
 <p>민감도 실험과 비교 그림을 통해 seeding 가설이 언제, 왜 달라지는지 탐색합니다.</p>
-<p><a href="./experiments.html">실험 기록 보기 →</a></p>
+<p><a href="./experiments.html">실험 기록 보기</a></p>
 </section>
 </div>
 </div>
 </section>
-<section id="최근-글" class="level2">
-<h2 class="anchored" data-anchor-id="최근-글">최근 글</h2>
+<section id="최근-글" class="level2 section-heading">
+<h2 class="section-heading anchored" data-anchor-id="최근-글">최근 글</h2>
 
 
 
 </section>
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="TGVhcm4lMjBQeVNETSUyQ2Nsb3VkJTIwbWljcm9waHlzaWNzJTJDc3VwZXItZHJvcGxldCUyMG1ldGhvZA==" data-listing-date-sort="1784073600000" data-listing-file-modified-sort="1784083362272" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="350">
-<a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표
-</h5>
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="TGVhcm4lMjBQeVNETSUyQ2Nsb3VkJTIwbWljcm9waHlzaWNzJTJDc3VwZXItZHJvcGxldCUyMG1ldGhvZA==" data-listing-date-sort="1784073600000" data-listing-file-modified-sort="1784084692072" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="350">
+<div class="thumbnail"><a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표</a>
+</h3>
 <div class="listing-categories">
 
 <div class="listing-category" onclick="window.quartoListingCategory('TGVhcm4lMjBQeVNETQ=='); return false;">Learn PySDM</div>
@@ -458,19 +460,20 @@ PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표
 <div class="listing-category" onclick="window.quartoListingCategory('c3VwZXItZHJvcGxldCUyMG1ldGhvZA=='); return false;">super-droplet method</div>
 
 </div>
-<div class="card-text listing-description delink">
+<div class="delink listing-description"><a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
 <p>Super-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.</p>
+</a></div>
 </div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Jinu
-</div>
+<div class="metadata">
+<a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
 <div class="listing-date">
 2026-07-15
 </div>
+<div class="listing-author">
+Jinu
 </div>
+</a>
 </div>
-</div></a>
 </div>
 </div>
 <div class="listing-no-matching d-none">일치 없음</div>

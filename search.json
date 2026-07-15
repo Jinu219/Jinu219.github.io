@@ -74,7 +74,7 @@
     "href": "index.html#세-개의-연구-트랙",
     "title": "PySDM Seeding Lab",
     "section": "세 개의 연구 트랙",
-    "text": "세 개의 연구 트랙\n\n\n\nTRACK 01\n\n\nLearn PySDM\nSuper-Droplet Method의 개념부터 PySDM 객체와 예제 해석까지, 학습의 발판을 차근차근 만듭니다.\n학습 노트 보기 →\n\n\n\n\nTRACK 02\n\n\nBuild the Lab\n환경, 데이터, 실험 설정, 검증 규칙을 기록해 누구나 같은 출발점에서 계산을 반복할 수 있게 합니다.\n구축 기록 보기 →\n\n\n\n\nTRACK 03\n\n\nExperiments\n민감도 실험과 비교 그림을 통해 seeding 가설이 언제, 왜 달라지는지 탐색합니다.\n실험 기록 보기 →"
+    "text": "세 개의 연구 트랙\n\n\n\n01\n\n\nLearn PySDM\nSuper-Droplet Method의 개념부터 PySDM 객체와 공식 예제 해석까지, 학습의 발판을 하나씩 만듭니다.\n학습 노트 보기\n\n\n\n\n02\n\n\nBuild the Lab\n환경, 데이터, 실험 설정과 검증 규칙을 기록해 같은 계산을 누구나 다시 실행할 수 있게 합니다.\n구축 기록 보기\n\n\n\n\n03\n\n\nExperiments\n민감도 실험과 비교 그림을 통해 seeding 가설이 언제, 왜 달라지는지 탐색합니다.\n실험 기록 보기"
   },
   {
     "objectID": "index.html#최근-글",
