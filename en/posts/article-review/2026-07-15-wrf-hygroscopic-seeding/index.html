@@ -6,9 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-07-15">
+<meta name="description" content="Reviewing altitude, treated area, particle size, and warm-rain pathways in Lin et al.&nbsp;(2023).">
 
-<title>About – Jinu’s Cloud Seeding Blog</title>
+<title>Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,29 +26,48 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -75,12 +96,41 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<meta property="og:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="About Jinu’s Cloud Seeding Blog">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Reviewing altitude, treated area, particle size, and warm-rain pathways in Lin et al.&nbsp;(2023).">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="twitter:title" content="Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Reviewing altitude, treated area, particle size, and warm-rain pathways in Lin et al.&nbsp;(2023).">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -253,7 +303,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
@@ -264,21 +314,21 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../pysdm.html"> 
+    <a class="nav-link" href="../../../../pysdm.html"> 
 <span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../wrf.html"> 
+    <a class="nav-link" href="../../../../wrf.html"> 
 <span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../article-review.html"> 
+    <a class="nav-link" href="../../../../article-review.html"> 
 <span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../en/index.html"> 
+    <a class="nav-link" href="../../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -303,11 +353,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-does-this-site-document" id="toc-what-does-this-site-document" class="nav-link active" data-scroll-target="#what-does-this-site-document">What does this site document?</a></li>
-  <li><a href="#how-the-notes-are-organized" id="toc-how-the-notes-are-organized" class="nav-link" data-scroll-target="#how-the-notes-are-organized">How the notes are organized</a></li>
-  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#hybrid-microphysics" id="toc-hybrid-microphysics" class="nav-link active" data-scroll-target="#hybrid-microphysics">Hybrid microphysics</a></li>
+  <li><a href="#three-findings" id="toc-three-findings" class="nav-link" data-scroll-target="#three-findings">Three findings</a></li>
+  <li><a href="#limits-and-next-tests" id="toc-limits-and-next-tests" class="nav-link" data-scroll-target="#limits-and-next-tests">Limits and next tests</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -315,19 +366,38 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
-</div>
+<h1 class="title">Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Article Review</div>
+    <div class="quarto-category">WRF</div>
+    <div class="quarto-category">hygroscopic seeding</div>
+    <div class="quarto-category">warm rain</div>
+    <div class="quarto-category">hybrid microphysics</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    About Jinu’s Cloud Seeding Blog
+    Reviewing altitude, treated area, particle size, and warm-rain pathways in Lin et al.&nbsp;(2023).
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-07-15</p>
+    </div>
+  </div>
   
     
   </div>
@@ -337,33 +407,51 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="what-does-this-site-document" class="level2">
-<h2 class="anchored" data-anchor-id="what-does-this-site-document">What does this site document?</h2>
-<p>Jinu’s Cloud Seeding Blog is an open research notebook for learning and designing cloud-seeding research. It connects particle-based cloud microphysics with PySDM, mesoscale weather simulations with WRF, and reviews of the relevant literature in one research workflow.</p>
-<p>Rather than presenting only finished conclusions, it records:</p>
-<ul>
-<li>the physical question that started each experiment,</li>
-<li>the assumptions and settings used,</li>
-<li>how the code and results can be reproduced, and</li>
-<li>what was learned when results differed from expectations.</li>
-</ul>
+<p>Lin et al.&nbsp;(2023) couple WDM6 bulk microphysics with 43 CCN size bins and apply the hybrid WDM6–NCU scheme to a real Taiwanese stratocumulus case <span class="citation" data-cites="Lin2023HygroscopicWRF">(<a href="#ref-Lin2023HygroscopicWRF" role="doc-biblioref">Lin et al. 2023</a>)</span>. The experiments ask where, over what area, and with which sizes hygroscopic particles should be released.</p>
+<div class="review-verdict">
+<p><strong>Verdict.</strong> In this case, in-cloud seeding outperformed cloud-base release, the benefit saturated beyond roughly 40–60 km², and stronger rain–cloud-water accretion was the main pathway to added precipitation.</p>
+</div>
+<p><a href="https://doi.org/10.5194/acp-23-10423-2023">Read the paper</a></p>
+<section id="hybrid-microphysics" class="level2">
+<h2 class="anchored" data-anchor-id="hybrid-microphysics">Hybrid microphysics</h2>
+<p>Bulk schemes are efficient but cannot preserve a detailed seeding aerosol spectrum. Full bin schemes are expensive in high-resolution real-case WRF. WDM6–NCU retains bulk cloud and rain while resolving CCN radii from <span class="math inline">\(0.001\)</span> to <span class="math inline">\(20\ \mu\mathrm{m}\)</span> in 43 bins. A measured trimodal flare distribution is used rather than one mean size.</p>
+<p>The WRF 3.9.1 setup includes a 333 m inner LES domain. Sensitivity experiments vary release altitude (500, 1000, 1300, and 2200 m), treated area (1–100 km²), concentration, and particle-size range.</p>
 </section>
-<section id="how-the-notes-are-organized" class="level2">
-<h2 class="anchored" data-anchor-id="how-the-notes-are-organized">How the notes are organized</h2>
-<p><strong>PySDM</strong> covers particle-based microphysics and experiments, <strong>WRF</strong> covers weather fields and case simulations, and <strong>Article Review</strong> examines research questions and methods. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.</p>
+<section id="three-findings" class="level2">
+<h2 class="anchored" data-anchor-id="three-findings">Three findings</h2>
+<p><strong>Altitude.</strong> Release at 1300 m, inside the cloud, was most effective. Particles encountered supersaturation and liquid water quickly. Cloud-base particles were diluted and less consistently overlapped the target. For this stratiform case, the authors recommend in-cloud regions above 0.5% supersaturation and <span class="math inline">\(0.6\ \mathrm{g\,m^{-3}}\)</span> liquid water; the latter is close to a <span class="math inline">\(0.5\ \mathrm{g\,m^{-3}}\)</span> threshold in earlier work.</p>
+<p><strong>Area.</strong> Enhancement initially increased with treated area, then saturated around 40–60 km² because available cloud water became limiting. Total response and efficiency per unit material or area should therefore be reported together.</p>
+<p><strong>Process.</strong> Cloud-base release sometimes strengthened autoconversion, but the added precipitation was most closely associated with stronger accretion of cloud water by rain (<span class="math inline">\(P_{racw}\)</span>). Seeding particles larger than roughly <span class="math inline">\(0.4\ \mu\mathrm{m}\)</span> contributed most in these experiments.</p>
 </section>
-<section id="links" class="level2">
-<h2 class="anchored" data-anchor-id="links">Links</h2>
-<ul>
-<li><a href="https://github.com/Jinu219">GitHub · Jinu219</a></li>
-<li><a href="https://github.com/open-atmos/PySDM">Official PySDM repository</a></li>
-<li><a href="https://open-atmos.github.io/PySDM/">Official PySDM documentation</a></li>
-</ul>
+<section id="limits-and-next-tests" class="level2">
+<h2 class="anchored" data-anchor-id="limits-and-next-tests">Limits and next tests</h2>
+<p>The thresholds come from one cloud case. The hybrid scheme loses some spectral information after activation, plume dispersion remains uncertain, and a model CTRL–SEED difference is not observational proof of field enhancement.</p>
+<p>WRF ensembles should test whether the area saturation persists across clouds, backgrounds, and physics options. PySDM can then resolve how each mode of the flare distribution changes activation and collision–coalescence along the same trajectories.</p>
+<p>The most useful operational product would overlay three maps: seeding-particle residence time, supersaturation plus liquid water, and accretion response. Their intersection—not the widest release area—is the physically meaningful target.</p>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Lin2023HygroscopicWRF" class="csl-entry" role="listitem">
+Lin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, et al. 2023. <span>“Evaluation of Hygroscopic Cloud Seeding in Warm-Rain Processes by a Hybrid Microphysics Scheme Using a Weather Research and Forecasting (<span>WRF</span>) Model: A Real Case Study.”</span> <em>Atmospheric Chemistry and Physics</em> 23: 10423–38. <a href="https://doi.org/10.5194/acp-23-10423-2023">https://doi.org/10.5194/acp-23-10423-2023</a>.
+</div>
+</div>
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {Using {WRF} to {Ask} {Where} and {How} {Widely} {Hygroscopic}
+    {Seeding} {Should} {Occur}},
+  date = {2026-07-15},
+  url = {https://jinu219.github.io/en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Jinu. 2026. <span>“Using WRF to Ask Where and How Widely Hygroscopic
+Seeding Should Occur.”</span> July 15. <a href="https://jinu219.github.io/en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/">https://jinu219.github.io/en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script>
 (() => {
   const localizeNavigation = () => {
@@ -856,16 +944,16 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../about.html">
+    <a class="nav-link" href="../../../../about.html">
 <p>소개</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="../index.xml">
+    <a class="nav-link" href="../../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -882,5 +970,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

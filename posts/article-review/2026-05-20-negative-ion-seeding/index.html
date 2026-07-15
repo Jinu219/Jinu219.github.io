@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-05-20">
+<meta name="description" content="Zheng et al.&nbsp;(2021)의 다중 분석 결과를 장치 작동, 구름 변화, 강수 인과성의 세 단계로 나눠 검토합니다.">
 
-<title>About – Jinu’s Cloud Seeding Blog</title>
+<title>음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기 – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,29 +26,48 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -60,27 +81,56 @@ ul.task-list li input[type="checkbox"] {
     "s"
   ],
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "일치 없음",
+    "search-matching-documents-text": "일치된 문서",
+    "search-copy-link-title": "검색 링크 복사",
+    "search-hide-matches-text": "추가 검색 결과 숨기기",
+    "search-more-match-text": "추가 검색결과",
+    "search-more-matches-text": "추가 검색결과",
+    "search-clear-button-title": "제거",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "취소",
+    "search-submit-button-title": "검색",
+    "search-label": "검색"
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<meta property="og:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="About Jinu’s Cloud Seeding Blog">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기 – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Zheng et al.&nbsp;(2021)의 다중 분석 결과를 장치 작동, 구름 변화, 강수 인과성의 세 단계로 나눠 검토합니다.">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="twitter:title" content="음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기 – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Zheng et al.&nbsp;(2021)의 다중 분석 결과를 장치 작동, 구름 변화, 강수 인과성의 세 단계로 나눠 검토합니다.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -253,32 +303,32 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="검색"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../pysdm.html"> 
+    <a class="nav-link" href="../../../pysdm.html"> 
 <span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../wrf.html"> 
+    <a class="nav-link" href="../../../wrf.html"> 
 <span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../article-review.html"> 
+    <a class="nav-link" href="../../../article-review.html"> 
 <span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../en/index.html"> 
+    <a class="nav-link" href="../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -289,7 +339,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -300,14 +350,22 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">목차</h2>
    
   <ul>
-  <li><a href="#what-does-this-site-document" id="toc-what-does-this-site-document" class="nav-link active" data-scroll-target="#what-does-this-site-document">What does this site document?</a></li>
-  <li><a href="#how-the-notes-are-organized" id="toc-how-the-notes-are-organized" class="nav-link" data-scroll-target="#how-the-notes-are-organized">How the notes are organized</a></li>
-  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#제안된-물리-가설" id="toc-제안된-물리-가설" class="nav-link active" data-scroll-target="#제안된-물리-가설">제안된 물리 가설</a></li>
+  <li><a href="#현장-설계와-일곱-분석" id="toc-현장-설계와-일곱-분석" class="nav-link" data-scroll-target="#현장-설계와-일곱-분석">현장 설계와 일곱 분석</a></li>
+  <li><a href="#결과를-증거의-강도로-나누기" id="toc-결과를-증거의-강도로-나누기" class="nav-link" data-scroll-target="#결과를-증거의-강도로-나누기">결과를 증거의 강도로 나누기</a>
+  <ul class="collapse">
+  <li><a href="#장치가-작동했다는-증거" id="toc-장치가-작동했다는-증거" class="nav-link" data-scroll-target="#장치가-작동했다는-증거">1. 장치가 작동했다는 증거</a></li>
+  <li><a href="#구름이-달라졌다는-간접-증거" id="toc-구름이-달라졌다는-간접-증거" class="nav-link" data-scroll-target="#구름이-달라졌다는-간접-증거">2. 구름이 달라졌다는 간접 증거</a></li>
+  <li><a href="#비가-늘었다는-증거" id="toc-비가-늘었다는-증거" class="nav-link" data-scroll-target="#비가-늘었다는-증거">3. 비가 늘었다는 증거</a></li>
+  </ul></li>
+  <li><a href="#여러-분석이-자동으로-강한-증거가-되지는-않는다" id="toc-여러-분석이-자동으로-강한-증거가-되지는-않는다" class="nav-link" data-scroll-target="#여러-분석이-자동으로-강한-증거가-되지는-않는다">여러 분석이 자동으로 강한 증거가 되지는 않는다</a></li>
+  <li><a href="#더-강한-다음-실험" id="toc-더-강한-다음-실험" class="nav-link" data-scroll-target="#더-강한-다음-실험">더 강한 다음 실험</a></li>
+  <li><a href="#참고문헌" id="toc-참고문헌" class="nav-link" data-scroll-target="#참고문헌">참고문헌</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/article-review/2026-05-20-negative-ion-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -315,19 +373,37 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
-</div>
+<h1 class="title">음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Article Review</div>
+    <div class="quarto-category">negative ions</div>
+    <div class="quarto-category">field experiment</div>
+    <div class="quarto-category">causal inference</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    About Jinu’s Cloud Seeding Blog
+    Zheng et al.&nbsp;(2021)의 다중 분석 결과를 장치 작동, 구름 변화, 강수 인과성의 세 단계로 나눠 검토합니다.
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">저자</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">공개</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-05-20</p>
+    </div>
+  </div>
   
     
   </div>
@@ -337,33 +413,89 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="what-does-this-site-document" class="level2">
-<h2 class="anchored" data-anchor-id="what-does-this-site-document">What does this site document?</h2>
-<p>Jinu’s Cloud Seeding Blog is an open research notebook for learning and designing cloud-seeding research. It connects particle-based cloud microphysics with PySDM, mesoscale weather simulations with WRF, and reviews of the relevant literature in one research workflow.</p>
-<p>Rather than presenting only finished conclusions, it records:</p>
+<p>Zheng et al.&nbsp;(2021)은 중국 Wushaoling과 Liupan Mountains에서 고전압 코로나 방전으로 음이온을 발생시킨 뒤 강수와 구름 변화를 평가했다 <span class="citation" data-cites="Zheng2021NegativeIon">(<a href="#ref-Zheng2021NegativeIon" role="doc-biblioref">Zheng 기타 2021년</a>)</span>. 논문은 중국 최초의 음이온 기반 야외 강우 증강 시험이라는 점과, 서로 다른 일곱 분석을 한꺼번에 사용했다는 점에서 눈에 띈다.</p>
+<div class="review-verdict">
+<p><strong>한 문장 결론.</strong> 장치가 지상 부근 음이온 농도와 일부 하늘영상 지표를 바꿨다는 증거는 비교적 분명하지만, 그 변화가 강수 증가의 원인이었다는 통계적 증거는 아직 약하다.</p>
+</div>
+<p><a href="https://doi.org/10.3390/w13182473">원문 보기</a></p>
+<section id="제안된-물리-가설" class="level2">
+<h2 class="anchored" data-anchor-id="제안된-물리-가설">제안된 물리 가설</h2>
+<p>장치는 지상에서 고전압 코로나 방전으로 많은 음이온을 만든다. 주변 에어로졸이 음전하를 띠고, 바람과 상승류를 따라 구름으로 이동해 응결핵 또는 충돌·병합 과정에 영향을 준다는 가설이다. AgI나 흡습성 염을 직접 살포하는 방식과 달리, 생성 지점과 실제 구름 반응 지점 사이의 수송과 전하 유지가 핵심 연결고리다.</p>
+<p>논문이 성공을 주장하려면 최소한 세 단계가 모두 확인되어야 한다.</p>
+<ol type="1">
+<li><strong>장치 단계:</strong> 발전기가 충분한 음이온을 만들었는가?</li>
+<li><strong>구름 단계:</strong> 이온 또는 대전 입자가 구름에 도달해 미세물리를 바꿨는가?</li>
+<li><strong>강수 단계:</strong> 그 변화가 자연 변동을 넘어 강수 증가로 이어졌는가?</li>
+</ol>
+</section>
+<section id="현장-설계와-일곱-분석" class="level2">
+<h2 class="anchored" data-anchor-id="현장-설계와-일곱-분석">현장 설계와 일곱 분석</h2>
+<p>Wushaoling에서는 2020년 7–11월 중 14일 ON, 13일 OFF를 무작위로 운영했다. Liupan에서는 장치를 주로 연속 가동했고 네트워크 장애 기간을 비교 자료로 사용해 대조 설계가 더 약하다. 저자들은 짧은 자료의 한계를 보완하기 위해 다음 분석을 함께 제시했다.</p>
 <ul>
-<li>the physical question that started each experiment,</li>
-<li>the assumptions and settings used,</li>
-<li>how the code and results can be reproduced, and</li>
-<li>what was learned when results differed from expectations.</li>
+<li>신경망으로 예측한 무처리 강수와 실제 강수 비교</li>
+<li>과거 기후자료의 전·후반기 강수비 비교</li>
+<li>ON/OFF 무작위 일자 비교</li>
+<li>주변 관측소의 지리적 보간</li>
+<li>풍상·풍하측 강수 비교</li>
+<li>발전기 주변 음이온 농도 비교</li>
+<li>전천카메라의 구름량·구름두께 비교</li>
 </ul>
 </section>
-<section id="how-the-notes-are-organized" class="level2">
-<h2 class="anchored" data-anchor-id="how-the-notes-are-organized">How the notes are organized</h2>
-<p><strong>PySDM</strong> covers particle-based microphysics and experiments, <strong>WRF</strong> covers weather fields and case simulations, and <strong>Article Review</strong> examines research questions and methods. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.</p>
+<section id="결과를-증거의-강도로-나누기" class="level2">
+<h2 class="anchored" data-anchor-id="결과를-증거의-강도로-나누기">결과를 증거의 강도로 나누기</h2>
+<section id="장치가-작동했다는-증거" class="level3">
+<h3 class="anchored" data-anchor-id="장치가-작동했다는-증거">1. 장치가 작동했다는 증거</h3>
+<p>발전기 가동 시 주변 음이온 농도 차이는 매우 작은 p값으로 나타났다. 이 결과는 장치가 지상 관측 지점의 전기적 환경을 바꿨다는 강한 증거다. 그러나 지상 음이온 증가가 곧 구름 내부 농도 증가를 뜻하지는 않는다.</p>
 </section>
-<section id="links" class="level2">
-<h2 class="anchored" data-anchor-id="links">Links</h2>
-<ul>
-<li><a href="https://github.com/Jinu219">GitHub · Jinu219</a></li>
-<li><a href="https://github.com/open-atmos/PySDM">Official PySDM repository</a></li>
-<li><a href="https://open-atmos.github.io/PySDM/">Official PySDM documentation</a></li>
-</ul>
+<section id="구름이-달라졌다는-간접-증거" class="level3">
+<h3 class="anchored" data-anchor-id="구름이-달라졌다는-간접-증거">2. 구름이 달라졌다는 간접 증거</h3>
+<p>전천카메라 분석에서는 일부 월의 총운량과 얇은·두꺼운 구름 비율이 증가했고, 몇 비교에서 <span class="math inline">\(p&lt;0.02\)</span>가 보고됐다. 이는 흥미로운 중간 증거지만, 대전 입자의 연직 분포와 구름방울 크기분포를 직접 측정하지 않았기 때문에 미세물리 경로는 여전히 추론이다.</p>
+</section>
+<section id="비가-늘었다는-증거" class="level3">
+<h3 class="anchored" data-anchor-id="비가-늘었다는-증거">3. 비가 늘었다는 증거</h3>
+<p>기계학습 비교에서는 실제 평균 강수가 예측값보다 약 21% 많았다. 풍하측 강수는 풍상측보다 Wushaoling에서 약 58%, Liupan에서 약 19% 높게 계산됐다. 그러나 주요 강수 비교의 p값은 각각 약 0.29–0.46 범위로, 일반적인 유의수준에서 귀무가설을 기각하지 못했다. 과거 계절성 비교도 같은 문제를 갖는다.</p>
+<p>즉, 관측된 방향은 연구 가설과 일치하지만 표본이 작고 자연 강수 변동이 커서 효과 크기의 불확실성이 넓다.</p>
+</section>
+</section>
+<section id="여러-분석이-자동으로-강한-증거가-되지는-않는다" class="level2">
+<h2 class="anchored" data-anchor-id="여러-분석이-자동으로-강한-증거가-되지는-않는다">여러 분석이 자동으로 강한 증거가 되지는 않는다</h2>
+<p>일곱 방법이 모두 비슷한 방향을 가리킨다는 점은 장점이다. 하지만 분석들이 같은 4개월 자료와 같은 기상 사건을 공유하므로 서로 완전히 독립적이지 않다. 같은 자연 변동이 여러 지표에 반복해서 나타날 수 있다. 2020년의 특이한 기후 상태, 관측소 위치, 장치 가동 시기의 차이도 결과를 설명할 수 있다.</p>
+<p>특히 신경망의 높은 적합도는 반사실적 강수, 즉 “그날 장치를 끄면 얼마가 왔을까”를 정확히 안다는 보장이 아니다. 예측 모형이 학습하지 못한 2020년의 기상 편향이 효과로 흡수될 수 있다.</p>
+</section>
+<section id="더-강한-다음-실험" class="level2">
+<h2 class="anchored" data-anchor-id="더-강한-다음-실험">더 강한 다음 실험</h2>
+<p>후속 연구라면 다음을 우선하고 싶다.</p>
+<ol type="1">
+<li>여러 시즌에 걸친 사전등록 무작위 ON/OFF 설계</li>
+<li>운영자도 모르는 블라인드 스케줄과 독립 분석</li>
+<li>라디오존데·드론·항공기로 이온과 대전 에어로졸의 연직 수송 직접 관측</li>
+<li>구름방울 수농도와 크기분포, 액체수량의 동시 측정</li>
+<li>강수량 하나가 아니라 장치→수송→미세물리→강수의 매개 경로 분석</li>
+</ol>
+<p>이 논문을 “음이온 씨뿌리기가 20% 효과가 있다”로 요약하면 과도하다. 더 정확한 독해는 이렇다. <strong>장치 작동과 일부 구름 지표 변화는 관측됐고, 강수 증가 방향도 나타났지만, 짧은 기간과 약한 대조 설계 때문에 강수 인과효과는 아직 확정되지 않았다.</strong></p>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Zheng2021NegativeIon" class="csl-entry" role="listitem">
+Zheng, Wei, Hengben Ma, Ming Zhang, 기타. 2021년. <span>“Evaluation of the First Negative Ion-Based Cloud Seeding and Rain Enhancement Trial in China”</span>. <em>Water</em> 13 (18): 2473. <a href="https://doi.org/10.3390/w13182473">https://doi.org/10.3390/w13182473</a>.
+</div>
+</div>
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기},
+  date = {2026-05-20},
+  url = {https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/},
+  langid = {ko}
+}
+</code><button title="클립보드 복사" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Jinu. 2026. <span>“음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시
+읽기.”</span> May 20. <a href="https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/">https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script>
 (() => {
   const localizeNavigation = () => {
@@ -473,12 +605,12 @@ ul.task-list li input[type="checkbox"] {
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "복사완료!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "복사완료!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -856,16 +988,16 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/article-review/2026-05-20-negative-ion-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../about.html">
+    <a class="nav-link" href="../../../about.html">
 <p>소개</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="../index.xml">
+    <a class="nav-link" href="../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -882,5 +1014,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

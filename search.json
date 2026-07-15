@@ -21,6 +21,174 @@
     "text": "구름 미세물리와 seeding 문제를 PySDM 기반 수치 실험으로 탐색하는 연구 프로젝트입니다.\n\n\n\n\n\n\n\n\n영역\n이 블로그\n코드 저장소\n\n\n\n\n역할\n질문, 배경, 실험 해석, 그림\n실행 코드, 설정, 테스트, 원자료 처리\n\n\n변경 단위\n한 편의 연구 노트\n재현 가능한 실행 단위\n\n\n연결 방식\n실행 버전과 결과 링크 기록\n관련 블로그 글 링크 기록\n\n\n\nPySDM-Seeding-Lab 저장소 열기"
   },
   {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "",
+    "text": "Lin et al. (2023)은 WRF의 WDM6 bulk 미세물리에 43개 CCN 크기 bin을 결합한 WDM6–NCU 모형을 개발하고, 2020년 10월 대만의 층적운 사례에서 흡습성 씨뿌리기 민감도를 계산했다 (Lin 기타 2023년). “입자를 많이 뿌리면 비가 늘어난다”가 아니라, 어디에·얼마나 넓게·어떤 크기로 뿌려야 하는가를 묻는 연구다.\n원문 보기"
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#왜-혼합-미세물리인가",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#왜-혼합-미세물리인가",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "왜 혼합 미세물리인가",
+    "text": "왜 혼합 미세물리인가\nbulk 모형은 계산이 빠르지만 씨뿌리기 입자의 세밀한 크기분포를 직접 추적하기 어렵다. 완전한 bin 모형은 풍부한 정보를 주지만 실사례 고해상도 WRF에서 비용이 크다. 저자들은 WDM6의 구름·비 과정은 유지하고, CCN 반지름 \\(0.001\\)–\\(20\\ \\mu\\mathrm{m}\\)를 43개 bin으로 나눠 활성화를 계산했다.\n초기 살포입자 분포는 실제 cloud seeding rocket device(CSRD) flare의 삼봉형 분포를 사용했다. 따라서 단일 평균반지름으로 처리하는 것보다 큰 입자와 작은 입자의 역할을 나누어 볼 수 있다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#실험-구성",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#실험-구성",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "실험 구성",
+    "text": "실험 구성\nWRF 3.9.1의 중첩 격자를 사용했고, 가장 안쪽 영역은 333 m 간격의 LES 설정이다. 실제 구름 사례를 재현한 뒤 다음 조건을 바꿨다.\n\n살포 고도: 500, 1000, 1300, 2200 m\n살포 면적: 1, 10, 36, 64, 100 km²\n입자 농도와 크기 구간\n씨뿌리기 유무\n\n1300 m는 구름 내부, 500 m는 구름 밑 조건을 대표한다. 각 실험에서 강수량뿐 아니라 CCN 활성화, 구름방울과 빗방울 수·질량, 미세물리 생성률을 비교했다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#결과-1-구름-안-살포가-유리했다",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#결과-1-구름-안-살포가-유리했다",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "결과 1: 구름 안 살포가 유리했다",
+    "text": "결과 1: 구름 안 살포가 유리했다\n이 사례에서는 1300 m 살포가 가장 효과적이었다. 구름 내부의 높은 과포화도와 액체수 때문에 입자가 빠르게 활성화되고 방울 성장에 참여할 수 있었다. 500 m 살포에서는 입자가 구름 밑에서 이동하는 동안 희석되고, 구름에 들어가더라도 최적 영역과의 겹침이 약했다.\n저자들은 이 층운 사례의 목표 영역으로 과포화도 0.5% 초과, 액체수량 \\(0.6\\ \\mathrm{g\\,m^{-3}}\\) 초과인 구름 내부를 제안한다. 액체수 기준은 선행연구의 \\(0.5\\ \\mathrm{g\\,m^{-3}}\\)와 비슷하지만, 한 사례에서 얻은 값이므로 다른 구름 체계에 그대로 적용하기보다 탐색 지표로 사용해야 한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#결과-2-면적-효과는-포화된다",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#결과-2-면적-효과는-포화된다",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "결과 2: 면적 효과는 포화된다",
+    "text": "결과 2: 면적 효과는 포화된다\n살포 면적을 넓히면 초기에는 증가 강수량도 커지지만 약 40–60 km² 이후 추가 이득이 작아졌다. 씨뿌리기 입자는 늘어도 사용할 수 있는 구름물이 제한되어 있기 때문이다. 100 km²로 넓히는 것이 항상 50 km²의 두 배 효과를 내지 않는다.\n이 결과는 효율을 다음처럼 정의해야 함을 보여준다.\n\\[\n\\text{seeding efficiency}\n=\\frac{\\text{additional precipitation mass}}\n{\\text{released seeding material or treated area}}\n\\]\n총 강수 증가와 단위 투입량당 효율을 함께 봐야 비용–효과의 최적점을 찾을 수 있다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#결과-3-핵심-과정은-accretion이었다",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#결과-3-핵심-과정은-accretion이었다",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "결과 3: 핵심 과정은 accretion이었다",
+    "text": "결과 3: 핵심 과정은 accretion이었다\n흡습성 입자는 CCN으로 활성화되어 방울 스펙트럼을 바꿨다. 구름 밑 살포에서는 autoconversion 증가가 일부 보였지만, 전체 강수 증가를 가장 잘 설명한 과정은 빗방울이 구름방울을 쓸어 모으는 accretion(\\(P_{racw}\\)) 강화였다. 이미 형성된 빗방울이 충분한 구름물을 만날 때 질량 증가가 가속된 것이다.\n입자 크기별로는 반지름 약 \\(0.4\\ \\mu\\mathrm{m}\\)보다 큰 살포입자의 기여가 컸다. 그러나 큰 입자만 무한히 늘리면 giant CCN 경쟁과 제한된 액체수 때문에 다른 반응이 나타날 수 있다. 실제 최적 분포는 구름의 배경 CCN과 상승류에 의존한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#연구의-한계",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#연구의-한계",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "연구의 한계",
+    "text": "연구의 한계\n\n실제 한 층적운 사례에 대한 결과라 보편성이 없다.\nbin CCN이 활성화된 뒤 bulk 수상체로 합쳐져 세부 크기분포 정보가 일부 사라진다.\n살포 플룸의 실제 난류 확산과 입자 성장 가정에 불확실성이 있다.\n모의 CTRL–SEED 차이는 물리 가설의 가능성을 보이지만 현장 강수 증강을 입증하는 관측은 아니다.\n최적 고도·면적은 구름 깊이, 배경 에어로졸, LWC, 상승류가 달라지면 함께 변한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#다음-wrfpysdm-실험",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#다음-wrfpysdm-실험",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "다음 WRF·PySDM 실험",
+    "text": "다음 WRF·PySDM 실험\nWRF에서는 여러 구름 사례와 물리 조합으로 40–60 km² 포화가 유지되는지 앙상블을 만들 수 있다. PySDM에서는 같은 상승류 궤적을 사용해 CSRD 크기분포의 각 모드가 활성화와 충돌·병합에 기여하는 정도를 더 세밀하게 분리할 수 있다.\n특히 다음 세 지도를 함께 만들고 싶다.\n\n씨뿌리기 입자 농도와 체류시간\n과포화도·액체수량의 목표 가능 영역\naccretion 증가와 지상 강수 반응\n\n세 지도가 겹치는 위치가 실제 살포 목표가 된다. 이 논문의 가장 좋은 점은 “많이 뿌리기”를 최적화 문제가 아니라 구름물이 있는 곳에서 성장 과정을 여는 배치 문제로 바꾼 데 있다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#참고문헌",
+    "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#참고문헌",
+    "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
+    "section": "참고문헌",
+    "text": "참고문헌\n\n\nLin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, 기타. 2023년. “Evaluation of Hygroscopic Cloud Seeding in Warm-Rain Processes by a Hybrid Microphysics Scheme Using a Weather Research and Forecasting (WRF) Model: A Real Case Study”. Atmospheric Chemistry and Physics 23: 10423–38. https://doi.org/10.5194/acp-23-10423-2023."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-negative-ion-seeding/index.html",
+    "href": "posts/article-review/2026-05-20-negative-ion-seeding/index.html",
+    "title": "음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기",
+    "section": "",
+    "text": "Zheng et al. (2021)은 중국 Wushaoling과 Liupan Mountains에서 고전압 코로나 방전으로 음이온을 발생시킨 뒤 강수와 구름 변화를 평가했다 (Zheng 기타 2021년). 논문은 중국 최초의 음이온 기반 야외 강우 증강 시험이라는 점과, 서로 다른 일곱 분석을 한꺼번에 사용했다는 점에서 눈에 띈다.\n원문 보기"
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#제안된-물리-가설",
+    "href": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#제안된-물리-가설",
+    "title": "음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기",
+    "section": "제안된 물리 가설",
+    "text": "제안된 물리 가설\n장치는 지상에서 고전압 코로나 방전으로 많은 음이온을 만든다. 주변 에어로졸이 음전하를 띠고, 바람과 상승류를 따라 구름으로 이동해 응결핵 또는 충돌·병합 과정에 영향을 준다는 가설이다. AgI나 흡습성 염을 직접 살포하는 방식과 달리, 생성 지점과 실제 구름 반응 지점 사이의 수송과 전하 유지가 핵심 연결고리다.\n논문이 성공을 주장하려면 최소한 세 단계가 모두 확인되어야 한다.\n\n장치 단계: 발전기가 충분한 음이온을 만들었는가?\n구름 단계: 이온 또는 대전 입자가 구름에 도달해 미세물리를 바꿨는가?\n강수 단계: 그 변화가 자연 변동을 넘어 강수 증가로 이어졌는가?"
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#현장-설계와-일곱-분석",
+    "href": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#현장-설계와-일곱-분석",
+    "title": "음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기",
+    "section": "현장 설계와 일곱 분석",
+    "text": "현장 설계와 일곱 분석\nWushaoling에서는 2020년 7–11월 중 14일 ON, 13일 OFF를 무작위로 운영했다. Liupan에서는 장치를 주로 연속 가동했고 네트워크 장애 기간을 비교 자료로 사용해 대조 설계가 더 약하다. 저자들은 짧은 자료의 한계를 보완하기 위해 다음 분석을 함께 제시했다.\n\n신경망으로 예측한 무처리 강수와 실제 강수 비교\n과거 기후자료의 전·후반기 강수비 비교\nON/OFF 무작위 일자 비교\n주변 관측소의 지리적 보간\n풍상·풍하측 강수 비교\n발전기 주변 음이온 농도 비교\n전천카메라의 구름량·구름두께 비교"
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#결과를-증거의-강도로-나누기",
+    "href": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#결과를-증거의-강도로-나누기",
+    "title": "음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기",
+    "section": "결과를 증거의 강도로 나누기",
+    "text": "결과를 증거의 강도로 나누기\n\n1. 장치가 작동했다는 증거\n발전기 가동 시 주변 음이온 농도 차이는 매우 작은 p값으로 나타났다. 이 결과는 장치가 지상 관측 지점의 전기적 환경을 바꿨다는 강한 증거다. 그러나 지상 음이온 증가가 곧 구름 내부 농도 증가를 뜻하지는 않는다.\n\n\n2. 구름이 달라졌다는 간접 증거\n전천카메라 분석에서는 일부 월의 총운량과 얇은·두꺼운 구름 비율이 증가했고, 몇 비교에서 \\(p&lt;0.02\\)가 보고됐다. 이는 흥미로운 중간 증거지만, 대전 입자의 연직 분포와 구름방울 크기분포를 직접 측정하지 않았기 때문에 미세물리 경로는 여전히 추론이다.\n\n\n3. 비가 늘었다는 증거\n기계학습 비교에서는 실제 평균 강수가 예측값보다 약 21% 많았다. 풍하측 강수는 풍상측보다 Wushaoling에서 약 58%, Liupan에서 약 19% 높게 계산됐다. 그러나 주요 강수 비교의 p값은 각각 약 0.29–0.46 범위로, 일반적인 유의수준에서 귀무가설을 기각하지 못했다. 과거 계절성 비교도 같은 문제를 갖는다.\n즉, 관측된 방향은 연구 가설과 일치하지만 표본이 작고 자연 강수 변동이 커서 효과 크기의 불확실성이 넓다."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#여러-분석이-자동으로-강한-증거가-되지는-않는다",
+    "href": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#여러-분석이-자동으로-강한-증거가-되지는-않는다",
+    "title": "음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기",
+    "section": "여러 분석이 자동으로 강한 증거가 되지는 않는다",
+    "text": "여러 분석이 자동으로 강한 증거가 되지는 않는다\n일곱 방법이 모두 비슷한 방향을 가리킨다는 점은 장점이다. 하지만 분석들이 같은 4개월 자료와 같은 기상 사건을 공유하므로 서로 완전히 독립적이지 않다. 같은 자연 변동이 여러 지표에 반복해서 나타날 수 있다. 2020년의 특이한 기후 상태, 관측소 위치, 장치 가동 시기의 차이도 결과를 설명할 수 있다.\n특히 신경망의 높은 적합도는 반사실적 강수, 즉 “그날 장치를 끄면 얼마가 왔을까”를 정확히 안다는 보장이 아니다. 예측 모형이 학습하지 못한 2020년의 기상 편향이 효과로 흡수될 수 있다."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#더-강한-다음-실험",
+    "href": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#더-강한-다음-실험",
+    "title": "음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기",
+    "section": "더 강한 다음 실험",
+    "text": "더 강한 다음 실험\n후속 연구라면 다음을 우선하고 싶다.\n\n여러 시즌에 걸친 사전등록 무작위 ON/OFF 설계\n운영자도 모르는 블라인드 스케줄과 독립 분석\n라디오존데·드론·항공기로 이온과 대전 에어로졸의 연직 수송 직접 관측\n구름방울 수농도와 크기분포, 액체수량의 동시 측정\n강수량 하나가 아니라 장치→수송→미세물리→강수의 매개 경로 분석\n\n이 논문을 “음이온 씨뿌리기가 20% 효과가 있다”로 요약하면 과도하다. 더 정확한 독해는 이렇다. 장치 작동과 일부 구름 지표 변화는 관측됐고, 강수 증가 방향도 나타났지만, 짧은 기간과 약한 대조 설계 때문에 강수 인과효과는 아직 확정되지 않았다."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#참고문헌",
+    "href": "posts/article-review/2026-05-20-negative-ion-seeding/index.html#참고문헌",
+    "title": "음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기",
+    "section": "참고문헌",
+    "text": "참고문헌\n\n\nZheng, Wei, Hengben Ma, Ming Zhang, 기타. 2021년. “Evaluation of the First Negative Ion-Based Cloud Seeding and Rain Enhancement Trial in China”. Water 13 (18): 2473. https://doi.org/10.3390/w13182473."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "",
+    "text": "Geresdi et al. (2020)은 Wyoming Weather Modification Pilot Project의 실제 네 사례를 3차원 WRF와 bin 미세물리 모형으로 다시 계산했다 (Geresdi 기타 2020년). 질문은 단순하다. 지상에서 방출한 AgI가 산악 구름 안으로 들어갔을 때, 어떤 조건에서 실제 지상 강수 증가까지 이어지는가?\n원문 보기"
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#연구가-풀려는-문제",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#연구가-풀려는-문제",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "연구가 풀려는 문제",
+    "text": "연구가 풀려는 문제\n빙정핵 씨뿌리기의 개념적 사슬은 익숙하다. AgI가 얼음핵으로 활성화되고, 빙정 수가 늘고, 수증기 증착과 착빙으로 입자가 성장해 눈이나 비가 된다. 그러나 실제 산악 지형에서는 바람, 경계층 난류, 지형에 따른 상승류가 AgI 플룸을 계속 변형한다. 구름 속 액체수도 균일하지 않다. 사슬의 한 단계라도 끊기면 지상 강수 증가는 나타나지 않는다.\n이 연구는 네 실험 단위(RSE023, RSE077, RSE114, RSE149)에 대해 자연 구름을 모의한 CTRL과 AgI를 투입한 SEED를 비교했다. 실제 지형과 지상 발생기 위치를 사용하고, University of Pécs–NCAR bin 미세물리 모형으로 수상체 스펙트럼과 미세물리 전환을 추적했다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#왜-3차원-계산이-필요한가",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#왜-3차원-계산이-필요한가",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "왜 3차원 계산이 필요한가",
+    "text": "왜 3차원 계산이 필요한가\n2차원 단면 모의에서는 물질이 옆 방향으로 빠져나갈 수 없다. 3차원에서는 지형과 난류가 AgI를 수평·연직으로 동시에 퍼뜨린다. 같은 방출률이어도 3차원 플룸의 최대 농도가 2차원보다 대략 한 자릿수 낮아질 수 있다는 것이 핵심이다. 즉, 2차원에서 효과가 커 보였던 설정이 실제 산악 지형에서는 희석될 수 있다.\n반대로 3차원 지형은 단순히 효과를 약화시키기만 하는 것이 아니다. 계곡과 사면을 따라 형성된 흐름이 플룸을 과냉각 구름으로 운반할 수도 있다. 따라서 발생기 위치는 “산 위인가 아래인가”보다 방출된 입자가 어느 유선을 따라 액체수 영역과 만나는가로 평가해야 한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#핵심-진단량-수평-액체수-경로",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#핵심-진단량-수평-액체수-경로",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "핵심 진단량: 수평 액체수 경로",
+    "text": "핵심 진단량: 수평 액체수 경로\n저자들은 바람 방향을 따라 구름 속 액체수를 적분한 수평 액체수 경로(horizontal liquid water path, h-LWP)를 제안한다. 비행기가 연직으로 측정하는 LWP와 달리, 씨뿌리기 물질과 성장 중인 입자가 실제로 지나가는 경로에 얼마나 많은 액체수가 있는지를 나타낸다.\n\n연구가 제안한 h-LWP 해석 범위\n\n\n최대 h-LWP\n모의에서 나타난 경향\n\n\n\n\n\\(&lt;0.1\\ \\mathrm{mm}\\)\n강수 증강이 거의 없음\n\n\n약 \\(0.5\\ \\mathrm{mm}\\) 이상\n5% 안팎의 유의미한 증강이 가능해짐\n\n\n\\(&gt;1.0\\ \\mathrm{mm}\\)\n성장 시간이 확보되면 더 뚜렷한 증강 가능\n\n\n\n이 수치는 보편적인 임계값이라기보다 네 사례에서 얻은 경험적 진단 기준이다. 그럼에도 “구름에 액체수가 있다”는 정성적 설명을 “플룸이 따라가는 경로에 성장 가능한 물이 얼마나 있는가”라는 검증 가능한 질문으로 바꿔 준다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#미세물리-사슬을-따라-읽기",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#미세물리-사슬을-따라-읽기",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "미세물리 사슬을 따라 읽기",
+    "text": "미세물리 사슬을 따라 읽기\nSEED 실험에서는 먼저 pristine ice가 늘고 수증기 증착이 강해졌다. 이후 응집과 착빙이 작동하면서 눈 입자가 커졌다. 지상 강수 증가와 가장 일관되게 연결된 과정은 눈의 확산 성장과 착빙이었다.\n하지만 초기에 새 빙정이 너무 많은 액체수를 빠르게 소모하면 이후 성장에 필요한 물이 부족해질 수 있다. “빙정 수 증가” 자체는 성공 지표가 아니다. 최종적으로 큰 입자가 되어 지표에 도달했는지, 그리고 그 과정에서 구름의 물 수지가 어떻게 바뀌었는지를 함께 봐야 한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#이-논문이-보여준-것과-보여주지-못한-것",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#이-논문이-보여준-것과-보여주지-못한-것",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "이 논문이 보여준 것과 보여주지 못한 것",
+    "text": "이 논문이 보여준 것과 보여주지 못한 것\n보여준 것은 실제 지형, 플룸 수송, 과냉각 액체수, 미세물리 성장 과정이 하나의 연쇄로 연결되어야 한다는 점이다. 발생기 재배치만으로 효과가 달라진 사례도 있어 공간적 겹침의 중요성이 분명하다.\n아직 보여주지 못한 것은 통계적으로 일반화 가능한 효과 크기다. 사례가 네 개뿐이고 결과가 사례별 구름 구조에 민감하다. 모형의 자연 강수 오차와 빙정핵 활성화 가정도 CTRL–SEED 차이에 영향을 준다. 이 논문은 “몇 퍼센트 늘어난다”는 보편식을 주기보다, 성공과 실패를 판별할 물리적 체크리스트를 준다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#pysdmwrf-실험으로-가져갈-질문",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#pysdmwrf-실험으로-가져갈-질문",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "PySDM·WRF 실험으로 가져갈 질문",
+    "text": "PySDM·WRF 실험으로 가져갈 질문\n\n투입 입자 수를 고정하고 액체수 경로와 체류시간만 바꾸면 성장 스펙트럼은 어떻게 달라지는가?\nAgI 플룸과 과냉각 액체수의 겹침을 하나의 지표로 만들 수 있는가?\n빙정 수 증가, 눈 질량 증가, 지상 강수 증가 사이의 시간 지연을 어떻게 추적할 것인가?\n2차원과 3차원 수송 차이가 씨뿌리기 효율을 얼마나 과대평가하게 만드는가?\n\n가장 중요한 교훈은 효과량보다 과정의 폐쇄성이다. 씨뿌리기 물질이 구름에 들어갔다는 사실과 지상 강수가 늘었다는 결론 사이를, 수송–핵생성–성장–낙하의 증거로 채워야 한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#참고문헌",
+    "href": "posts/article-review/2026-04-08-orographic-bin-seeding/index.html#참고문헌",
+    "title": "산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다",
+    "section": "참고문헌",
+    "text": "참고문헌\n\n\nGeresdi, István, Lulin Xue, Noémi Sarkadi, 와/과 Roy Rasmussen. 2020년. “Evaluation of Orographic Cloud Seeding Using a Bin Microphysics Scheme: Three-Dimensional Simulation of Real Cases”. Journal of Applied Meteorology and Climatology 59 (9): 1537–53. https://doi.org/10.1175/JAMC-D-19-0278.1."
+  },
+  {
     "objectID": "index.html#세-개의-연구-트랙",
     "href": "index.html#세-개의-연구-트랙",
     "title": "Jinu’s Cloud Seeding Blog",
@@ -56,6 +224,118 @@
     "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
   },
   {
+    "objectID": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
+    "href": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
+    "title": "Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur",
+    "section": "",
+    "text": "Lin et al. (2023) couple WDM6 bulk microphysics with 43 CCN size bins and apply the hybrid WDM6–NCU scheme to a real Taiwanese stratocumulus case (Lin et al. 2023). The experiments ask where, over what area, and with which sizes hygroscopic particles should be released.\nRead the paper"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#hybrid-microphysics",
+    "href": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#hybrid-microphysics",
+    "title": "Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur",
+    "section": "Hybrid microphysics",
+    "text": "Hybrid microphysics\nBulk schemes are efficient but cannot preserve a detailed seeding aerosol spectrum. Full bin schemes are expensive in high-resolution real-case WRF. WDM6–NCU retains bulk cloud and rain while resolving CCN radii from \\(0.001\\) to \\(20\\ \\mu\\mathrm{m}\\) in 43 bins. A measured trimodal flare distribution is used rather than one mean size.\nThe WRF 3.9.1 setup includes a 333 m inner LES domain. Sensitivity experiments vary release altitude (500, 1000, 1300, and 2200 m), treated area (1–100 km²), concentration, and particle-size range."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#three-findings",
+    "href": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#three-findings",
+    "title": "Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur",
+    "section": "Three findings",
+    "text": "Three findings\nAltitude. Release at 1300 m, inside the cloud, was most effective. Particles encountered supersaturation and liquid water quickly. Cloud-base particles were diluted and less consistently overlapped the target. For this stratiform case, the authors recommend in-cloud regions above 0.5% supersaturation and \\(0.6\\ \\mathrm{g\\,m^{-3}}\\) liquid water; the latter is close to a \\(0.5\\ \\mathrm{g\\,m^{-3}}\\) threshold in earlier work.\nArea. Enhancement initially increased with treated area, then saturated around 40–60 km² because available cloud water became limiting. Total response and efficiency per unit material or area should therefore be reported together.\nProcess. Cloud-base release sometimes strengthened autoconversion, but the added precipitation was most closely associated with stronger accretion of cloud water by rain (\\(P_{racw}\\)). Seeding particles larger than roughly \\(0.4\\ \\mu\\mathrm{m}\\) contributed most in these experiments."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#limits-and-next-tests",
+    "href": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#limits-and-next-tests",
+    "title": "Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur",
+    "section": "Limits and next tests",
+    "text": "Limits and next tests\nThe thresholds come from one cloud case. The hybrid scheme loses some spectral information after activation, plume dispersion remains uncertain, and a model CTRL–SEED difference is not observational proof of field enhancement.\nWRF ensembles should test whether the area saturation persists across clouds, backgrounds, and physics options. PySDM can then resolve how each mode of the flare distribution changes activation and collision–coalescence along the same trajectories.\nThe most useful operational product would overlay three maps: seeding-particle residence time, supersaturation plus liquid water, and accretion response. Their intersection—not the widest release area—is the physically meaningful target."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#references",
+    "href": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html#references",
+    "title": "Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur",
+    "section": "References",
+    "text": "References\n\n\nLin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, et al. 2023. “Evaluation of Hygroscopic Cloud Seeding in Warm-Rain Processes by a Hybrid Microphysics Scheme Using a Weather Research and Forecasting (WRF) Model: A Real Case Study.” Atmospheric Chemistry and Physics 23: 10423–38. https://doi.org/10.5194/acp-23-10423-2023."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html",
+    "href": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html",
+    "title": "Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial",
+    "section": "",
+    "text": "Zheng et al. (2021) evaluated high-voltage corona-discharge ion generators at Wushaoling and the Liupan Mountains from July to November 2020 (Zheng et al. 2021). Seven analyses were used to test whether charged aerosols transported from the ground altered clouds and rainfall.\nRead the paper"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#three-links-the-hypothesis-must-establish",
+    "href": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#three-links-the-hypothesis-must-establish",
+    "title": "Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial",
+    "section": "Three links the hypothesis must establish",
+    "text": "Three links the hypothesis must establish\nThe proposed mechanism contains three distinct claims:\n\nDevice: the generator produces a substantial ion perturbation.\nCloud: ions or charged aerosols reach cloud level and alter microphysics.\nRainfall: that cloud response exceeds natural variability and increases precipitation.\n\nStrong evidence for one link does not automatically establish the next."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#field-design-and-evidence",
+    "href": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#field-design-and-evidence",
+    "title": "Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial",
+    "section": "Field design and evidence",
+    "text": "Field design and evidence\nWushaoling used 14 ON and 13 OFF days with random operation. Liupan operated more continuously and used network outages as controls, making its comparison weaker. The paper combined neural-network prediction, historical comparisons, ON/OFF days, spatial interpolation, upwind–downwind contrasts, ion measurements, and all-sky imagery.\nIon concentrations near the generators changed with very small p-values, supporting the device link. Some monthly all-sky metrics also increased, with several comparisons below \\(p=0.02\\). These are interesting intermediate observations, but the study did not directly measure the vertical profile of charged aerosols or cloud-droplet size distributions.\nRainfall estimates generally pointed in the hypothesized direction. A machine-learning counterfactual was about 21% below observed mean rainfall, while downwind rainfall exceeded upwind rainfall by about 58% at Wushaoling and 19% at Liupan. Yet major rainfall comparisons had p-values around 0.29–0.46. The sample was too small and natural rainfall variance too large for a precise causal estimate."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#why-seven-methods-are-not-seven-independent-experiments",
+    "href": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#why-seven-methods-are-not-seven-independent-experiments",
+    "title": "Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial",
+    "section": "Why seven methods are not seven independent experiments",
+    "text": "Why seven methods are not seven independent experiments\nMost analyses reuse the same four-month weather record. A seasonal anomaly can therefore appear in several indicators at once. A well-fitting neural network also does not guarantee a valid counterfactual for unusual 2020 conditions. At Liupan, the lack of strict randomization creates additional confounding.\nA stronger follow-up would use preregistered randomized ON/OFF schedules over multiple seasons, blinded operation, direct vertical measurements by drones or aircraft, and simultaneous cloud-droplet spectra and liquid-water observations. The analysis should follow the mediation chain from device to transport, microphysics, and rainfall.\nThe defensible conclusion is not “negative ions increase rain by 20%.” It is that the device and some cloud proxies changed, rainfall responses had a consistent direction, and the short, partially randomized trial could not yet isolate the rainfall effect from natural variability."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#references",
+    "href": "en/posts/article-review/2026-05-20-negative-ion-seeding/index.html#references",
+    "title": "Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial",
+    "section": "References",
+    "text": "References\n\n\nZheng, Wei, Hengben Ma, Ming Zhang, et al. 2021. “Evaluation of the First Negative Ion-Based Cloud Seeding and Rain Enhancement Trial in China.” Water 13 (18): 2473. https://doi.org/10.3390/w13182473."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html",
+    "href": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html",
+    "title": "In Orographic Seeding, Overlap Matters More Than Dose",
+    "section": "",
+    "text": "Geresdi et al. (2020) simulated four real Wyoming Weather Modification Pilot Project cases using three-dimensional WRF and bin microphysics (Geresdi et al. 2020). The practical question is not merely whether AgI can nucleate ice, but when that first response survives the full path to additional surface precipitation.\nRead the paper"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#why-three-dimensions-matter",
+    "href": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#why-three-dimensions-matter",
+    "title": "In Orographic Seeding, Overlap Matters More Than Dose",
+    "section": "Why three dimensions matter",
+    "text": "Why three dimensions matter\nIn a two-dimensional cross-section, seeding material cannot disperse laterally. In three dimensions, terrain and boundary-layer turbulence spread the plume both horizontally and vertically. The peak AgI concentration can therefore be roughly an order of magnitude lower for the same release rate. A response that appears strong in 2-D may be diluted in a real mountain flow.\nThree-dimensional transport can also help by steering a plume into a liquid-water-rich region. Generator placement should therefore be evaluated by the trajectory from source to target, not by elevation alone."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#horizontal-liquid-water-path",
+    "href": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#horizontal-liquid-water-path",
+    "title": "In Orographic Seeding, Overlap Matters More Than Dose",
+    "section": "Horizontal liquid water path",
+    "text": "Horizontal liquid water path\nThe authors propose the horizontal liquid water path (h-LWP): liquid water integrated along the flow followed by the plume and growing particles.\n\nCase-based interpretation of h-LWP\n\n\n\n\n\n\nMaximum h-LWP\nSimulated tendency\n\n\n\n\n\\(&lt;0.1\\ \\mathrm{mm}\\)\nNegligible enhancement\n\n\nAround \\(0.5\\ \\mathrm{mm}\\) or more\nEnhancement near or above 5% becomes possible\n\n\n\\(&gt;1.0\\ \\mathrm{mm}\\)\nMore substantial enhancement if growth time is available\n\n\n\nThese are not universal thresholds; they are diagnostic ranges from four cases. Their value is conceptual: “the cloud contains liquid water” becomes the testable question “how much liquid water lies along the plume trajectory?”"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#following-the-microphysical-chain",
+    "href": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#following-the-microphysical-chain",
+    "title": "In Orographic Seeding, Overlap Matters More Than Dose",
+    "section": "Following the microphysical chain",
+    "text": "Following the microphysical chain\nSeeding first increased pristine ice and vapor deposition. Aggregation and riming then transferred mass into snow. Surface enhancement appeared only when diffusional growth and/or riming continued. Increasing ice number alone was not a success metric: early ice production could consume liquid water and leave too little for later growth.\nThe paper therefore supports a process checklist:\n\nDid AgI reach the intended cloud volume?\nWas sufficient supercooled liquid water present there?\nDid ice grow through deposition, aggregation, or riming?\nDid the added mass survive transport and reach the surface?"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#what-remains-uncertain",
+    "href": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#what-remains-uncertain",
+    "title": "In Orographic Seeding, Overlap Matters More Than Dose",
+    "section": "What remains uncertain",
+    "text": "What remains uncertain\nFour cases cannot establish a general effect size, and the CTRL–SEED difference depends on modeled natural precipitation and ice nucleation. The study is strongest as a physical explanation of success and failure, not as a universal percentage claim.\nFor future PySDM and WRF experiments, the most useful outputs are plume–liquid-water overlap, residence time, ice and snow mass budgets, and the lag between nucleation and surface flux. The main lesson is simple: cloud seeding is a placement and timing problem before it is a dosage problem."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#references",
+    "href": "en/posts/article-review/2026-04-08-orographic-bin-seeding/index.html#references",
+    "title": "In Orographic Seeding, Overlap Matters More Than Dose",
+    "section": "References",
+    "text": "References\n\n\nGeresdi, István, Lulin Xue, Noémi Sarkadi, and Roy Rasmussen. 2020. “Evaluation of Orographic Cloud Seeding Using a Bin Microphysics Scheme: Three-Dimensional Simulation of Real Cases.” Journal of Applied Meteorology and Climatology 59 (9): 1537–53. https://doi.org/10.1175/JAMC-D-19-0278.1."
+  },
+  {
     "objectID": "en/index.html#three-research-tracks",
     "href": "en/index.html#three-research-tracks",
     "title": "Jinu’s Cloud Seeding Blog",
@@ -67,14 +347,18 @@
     "href": "en/index.html#recent-notes",
     "title": "Jinu’s Cloud Seeding Blog",
     "section": "Recent notes",
-    "text": "Recent notes\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
+    "text": "Recent notes\n\n\n\n2026-07-15 · Jinu\n\n\nUsing WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur\nReviewing altitude, treated area, particle size, and the warm-rain pathway in a hybrid microphysics model.\n\n\n\n\n2026-07-15 · Jinu\n\n\nConnecting Aerosol Hygroscopicity and CCN Activity with One κ\nThe κ-Köhler equation as a bridge between aerosol water uptake, CCN activation, and PySDM experiments.\n\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
   },
   {
     "objectID": "en/build-the-lab.html",
     "href": "en/build-the-lab.html",
     "title": "Build the Lab",
     "section": "",
-    "text": "Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.\n\n\n\n\n\n\nNote\n\n\n\nThe implementation code for this track is connected to the PySDM-Seeding-Lab repository.\n\n\nThe first build note is in preparation."
+    "text": "Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.\n\n\n\n\n\n\nNote\n\n\n\nThe implementation code for this track is connected to the PySDM-Seeding-Lab repository.\n\n\nThe first build note is in preparation.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab"
+    ]
   },
   {
     "objectID": "en/about.html",
@@ -109,7 +393,7 @@
     "href": "article-review.html",
     "title": "Article Review",
     "section": "",
-    "text": "논문의 결론만 요약하지 않고, 연구 질문과 방법, 핵심 가정, 사용한 관측·모델 자료, 재현 가능한 부분과 남은 한계를 구분해 읽습니다. 리뷰에서 발견한 아이디어는 PySDM 또는 WRF 실험으로 다시 연결합니다.\n\n\n\n\n\n\n노트\n\n\n\n첫 번째 논문 리뷰를 준비하고 있습니다."
+    "text": "논문의 결론만 요약하지 않고, 연구 질문과 방법, 핵심 가정, 사용한 관측·모델 자료, 재현 가능한 부분과 남은 한계를 구분해 읽습니다. 리뷰에서 발견한 아이디어는 PySDM 또는 WRF 실험으로 다시 연결합니다.\n현재 리뷰는 빙정핵·흡습성 입자·음이온 씨뿌리기부터 효과량 산정과 수치모델 검증까지 여섯 편입니다. 발표 자료에 남긴 해석을 원 논문과 다시 대조해, 논문이 실제로 보여준 것과 아직 증명하지 못한 것을 분리했습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nκ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기\n\n\nPetters & Kreidenweis (2007)의 κ-Köhler 이론을 식, 범위, 혼합 규칙과 PySDM 적용 관점에서 정리합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\nWRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적\n\n\nLin et al. (2023)의 WDM6–CCN bin 혼합 모형으로 살포 고도, 면적, 입자 크기와 warm-rain 반응을 검토합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\n구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬\n\n\nBruintjes (1999)의 고전적 리뷰를 정적·동적·흡습성 씨뿌리기의 기회와 실패 조건 중심으로 읽습니다.\n\n\n\n\n\n2026-05-20\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\n음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기\n\n\nZheng et al. (2021)의 다중 분석 결과를 장치 작동, 구름 변화, 강수 인과성의 세 단계로 나눠 검토합니다.\n\n\n\n\n\n2026-05-20\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\n씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까\n\n\nRo et al. (2023)의 산불·가뭄·미세먼지 사례를 통해 증강 강우량을 면적과 질량으로 환산하는 방법을 검토합니다.\n\n\n\n\n\n2026-04-08\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\n산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다\n\n\nGeresdi et al. (2020)의 3차원 bin 미세물리 모의를 통해 AgI 플룸과 과냉각 액체수의 공간적 겹침을 읽습니다.\n\n\n\n\n\n2026-04-08\n\n\nJinu\n\n\n\n\n\n일치 없음"
   },
   {
     "objectID": "about.html",
@@ -144,125 +428,450 @@
     "href": "build-the-lab.html",
     "title": "Build the Lab",
     "section": "",
-    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다."
+    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab"
+    ]
   },
   {
     "objectID": "en/article-review.html",
     "href": "en/article-review.html",
     "title": "Article Review",
     "section": "",
-    "text": "Rather than summarizing conclusions alone, each review separates the research question, method, key assumptions, observations or model data, reproducible elements, and remaining limitations. Ideas found in the literature will feed back into PySDM or WRF experiments.\n\n\n\n\n\n\nNote\n\n\n\nThe first article review is in preparation."
+    "text": "Rather than summarizing conclusions alone, each review separates the research question, method, key assumptions, observations or model data, reproducible elements, and remaining limitations. Ideas found in the literature will feed back into PySDM or WRF experiments.\nThe collection currently covers six papers, from glaciogenic, hygroscopic, and negative-ion seeding to effect accounting and numerical evaluation. Each review separates what the paper demonstrates from what remains unproven.\n\n\n\n2026-07-15 · Jinu\n\n\nUsing WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur\nAltitude, treated area, particle size, and the warm-rain process chain in a hybrid WDM6–CCN-bin model.\n\n\n\n\n2026-07-15 · Jinu\n\n\nConnecting Aerosol Hygroscopicity and CCN Activity with One κ\nThe κ-Köhler equation, mixture rule, limitations, and a direct connection to PySDM experiments.\n\n\n\n\n2026-05-20 · Jinu\n\n\nCan Negative Ions Enhance Rain? Revisiting China’s First Field Trial\nSeparating evidence for device operation, cloud response, and rainfall causality.\n\n\n\n\n2026-05-20 · Jinu\n\n\nThe Principle Behind Fifty Years of Cloud Seeding: Close the Physical Chain\nOpportunity windows and failure modes for static, dynamic, and hygroscopic seeding.\n\n\n\n\n2026-04-08 · Jinu\n\n\nIn Orographic Seeding, Overlap Matters More Than Dose\nHow an AgI plume, supercooled liquid water, and growth time must overlap in 3-D terrain.\n\n\n\n\n2026-04-08 · Jinu\n\n\nHow Much Additional Water Did Cloud Seeding Produce?\nAn accounting framework for converting rainfall-depth estimates into total water mass."
   },
   {
     "objectID": "en/experiments.html",
     "href": "en/experiments.html",
     "title": "Experiments",
     "section": "",
-    "text": "Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.\nThe first experiment note is in preparation."
+    "text": "Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.\nThe first experiment note is in preparation.",
+    "crumbs": [
+      "PySDM",
+      "Experiments"
+    ]
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
+    "href": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
+    "title": "How Much Additional Water Did Cloud Seeding Produce?",
+    "section": "",
+    "text": "Ro et al. (2023) combine numerical winds, radar, and rain gauges to estimate cloud-seeding enhancement and convert millimeters of rain into total water mass (Ro et al. 2023). This translation is useful for applications such as wildfire prevention and drought response, but it also magnifies every assumption made upstream.\nRead the paper"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#the-calculation",
+    "href": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#the-calculation",
+    "title": "How Much Additional Water Did Cloud Seeding Produce?",
+    "section": "The calculation",
+    "text": "The calculation\nThe study defines a seeding box (SB) along the estimated material trajectory and a non-seeding box (NB) intended to represent natural precipitation. Enhanced rainfall is\n\\[\nER=CAR_{SB}-CAR_{NB},\n\\]\nwhere \\(CAR\\) is area-mean cumulative rainfall. Total additional water is then\n\\[\nTAER=ER\\times ERA\\times\\rho_w,\n\\]\nwith \\(ERA\\) the affected area and \\(\\rho_w\\) the density of water.\n\nReported estimates for the three cases\n\n\nCase\nEstimated enhancement\nTotal additional water\n\n\n\n\nWildfire prevention, AgI\n1.74 mm\n4.75 million t\n\n\nDrought mitigation, CaCl₂\n0.84 mm\n1.30 million t\n\n\nDust reduction, CaCl₂\n2.78 mm\n24.44 million t\n\n\n\nThe dust case has the largest total mainly because its estimated effect area is wide. “Most effective” is therefore ambiguous unless the metric—rainfall depth, fractional change, affected area, total mass, or efficiency per unit material—is stated."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#strengths-and-limitations",
+    "href": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#strengths-and-limitations",
+    "title": "How Much Additional Water Did Cloud Seeding Produce?",
+    "section": "Strengths and limitations",
+    "text": "Strengths and limitations\nThe framework exposes the treatment area, comparison area, and conversion into mass. It also uses spatial information rather than a single before–after gauge. That transparency is valuable.\nIts weak point is the counterfactual. Rainfall in NB may not equal the rainfall SB would have received without seeding. Terrain, moving rainbands, land–sea flow, radar errors, and uncertainty in modeled trajectories can all create SB–NB differences. Because \\(TAER\\) is a product of depth and area, small biases can become millions of tonnes.\nA stronger analysis would repeat the calculation across multiple NB placements, effect-area boundaries, radar-error assumptions, and wind ensembles. It would report a distribution rather than one point estimate.\nMost importantly, two questions should remain separate:\n\nDid seeding cause a detectable precipitation change?\nConditional on that conclusion, how large was the added water volume?\n\nRandomization, independent controls, physical tracers, or a complete microphysical response chain are needed for the first question. This paper provides a useful framework for the second."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#references",
+    "href": "en/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#references",
+    "title": "How Much Additional Water Did Cloud Seeding Produce?",
+    "section": "References",
+    "text": "References\n\n\nRo, Yonghun, Ki-Ho Chang, Sanghee Chae, Yun-Kyu Lim, Jung Mo Ku, and Woonseon Jung. 2023. “Estimation of the Total Amount of Enhanced Rainfall for a Cloud Seeding Experiment: Case Studies of Preventing Forest Fire, Drought, and Dust.” Advances in Meteorology 2023: 5478666. https://doi.org/10.1155/2023/5478666."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html",
+    "href": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html",
+    "title": "The Principle Behind Fifty Years of Cloud Seeding: Close the Physical Chain",
+    "section": "",
+    "text": "Bruintjes (1999) reviews decades of precipitation-enhancement experiments across static glaciogenic, dynamic, and hygroscopic seeding (Bruintjes 1999). Its durable message is methodological: a statistical rainfall difference must be supported by evidence for the physical chain that produced it.\nRead the paper"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html#three-strategies-three-bottlenecks",
+    "href": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html#three-strategies-three-bottlenecks",
+    "title": "The Principle Behind Fifty Years of Cloud Seeding: Close the Physical Chain",
+    "section": "Three strategies, three bottlenecks",
+    "text": "Three strategies, three bottlenecks\nStatic glaciogenic seeding adds ice nuclei to supercooled clouds. It requires sufficient liquid water, suitable temperature, limited natural ice, accurate plume delivery, and enough time for deposition and riming. Orographic experiments often failed because liquid water and plume transport varied rapidly.\nDynamic seeding attempts rapid glaciation and latent-heating feedback:\n\\[\n\\text{seeding}\\rightarrow\\text{glaciation}\\rightarrow\\text{latent heat}\n\\rightarrow\\text{updraft}\\rightarrow\\text{cloud growth}\\rightarrow\\text{rain}\n\\]\nThe possible amplification is large, but every arrow must exceed the already large natural variability of convective clouds.\nHygroscopic seeding introduces salt particles to broaden the initial droplet spectrum and accelerate collision–coalescence. Flare-generated submicron particles renewed interest after earlier delivery problems. Yet maritime clouds with abundant natural giant CCN may already be efficient, leaving little room for improvement.\n\nComparing strategies by bottleneck rather than material\n\n\n\n\n\n\n\nStrategy\nIntended bottleneck\nKey failure mode\n\n\n\n\nStatic glaciogenic\nToo few ice nuclei\nPoor plume–liquid-water overlap\n\n\nDynamic\nWeak or short-lived convection\nLong causal chain and large natural variance\n\n\nHygroscopic\nSlow warm-rain coalescence\nAlready-efficient clouds or poor particle delivery"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html#the-new-prospects-that-became-standard-tools",
+    "href": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html#the-new-prospects-that-became-standard-tools",
+    "title": "The Principle Behind Fifty Years of Cloud Seeding: Close the Physical Chain",
+    "section": "The “new prospects” that became standard tools",
+    "text": "The “new prospects” that became standard tools\nThe review highlighted multiparameter radar, lidar, satellite microphysics, aircraft observations, tracers such as SF₆ and chaff, and time-dependent 3-D models. These tools are now much more capable, but they still answer the same questions: Where did the material go? Was the cloud seedable? What changed first? Did that response reach the surface? Could natural variability produce the same signal?\nBruintjes also warns against overselling early hygroscopic results. Cloud seeding had already lost credibility through claims that outran evidence. Negative cases are scientifically useful when the failed link is identified in advance.\nFor numerical work, this means saving more than final precipitation. Plume position, activation, hydrometeor spectra, water budgets, process rates, and surface fluxes should form a traceable chain. Statistics and physics are complementary requirements, not substitutes."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html#references",
+    "href": "en/posts/article-review/2026-05-20-cloud-seeding-review/index.html#references",
+    "title": "The Principle Behind Fifty Years of Cloud Seeding: Close the Physical Chain",
+    "section": "References",
+    "text": "References\n\n\nBruintjes, Roelof T. 1999. “A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects.” Bulletin of the American Meteorological Society 80 (5): 805–20. https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-kappa-kohler/index.html",
+    "href": "en/posts/article-review/2026-07-15-kappa-kohler/index.html",
+    "title": "Connecting Aerosol Hygroscopicity and CCN Activity with One κ",
+    "section": "",
+    "text": "Petters & Kreidenweis (2007) compress aerosol water uptake and cloud-condensation-nucleus activity into one hygroscopicity parameter, \\(\\kappa\\) (Petters and Kreidenweis 2007). The result is not chemistry-free physics, but a practical bridge between subsaturated growth measurements and supersaturated activation.\nRead the paper"
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#the-κ-köhler-equation",
+    "href": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#the-κ-köhler-equation",
+    "title": "Connecting Aerosol Hygroscopicity and CCN Activity with One κ",
+    "section": "The κ-Köhler equation",
+    "text": "The κ-Köhler equation\nFor dry diameter \\(D_d\\) and wet diameter \\(D\\),\n\\[\nS(D)=\\frac{D^3-D_d^3}{D^3-D_d^3(1-\\kappa)}\n\\exp\\left(\\frac{A}{D}\\right),\n\\qquad\nA=\\frac{4\\sigma_{s/a}M_w}{RT\\rho_w}.\n\\]\nThe first factor represents the solute effect; the exponential is the Kelvin curvature term. Larger \\(\\kappa\\) implies stronger water uptake and activation at lower critical supersaturation. \\(\\kappa=0\\) approaches a non-hygroscopic particle.\n\nTypical ranges summarized in the paper\n\n\nMaterial class\nRepresentative \\(\\kappa\\) range\n\n\n\n\nNon-hygroscopic\nNear 0\n\n\nOrganics\n0.01–0.5\n\n\nAtmospheric aerosol\n0.1–0.9\n\n\nInorganic salts\n0.5–1.4\n\n\n\nFor an internally mixed particle, a simple volume-weighted rule is\n\\[\n\\kappa_{mix}=\\sum_i\\varepsilon_i\\kappa_i.\n\\]\nThis turns composition into an activation parameter without a full activity model."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#what-one-parameter-misses",
+    "href": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#what-one-parameter-misses",
+    "title": "Connecting Aerosol Hygroscopicity and CCN Activity with One κ",
+    "section": "What one parameter misses",
+    "text": "What one parameter misses\nA constant \\(\\kappa\\) cannot fully represent surfactant-driven surface-tension changes, limited solubility, crystallization and deliquescence hysteresis, liquid–liquid phase separation, size-dependent composition, or externally mixed populations. It is a baseline model, not a replacement for detailed thermodynamics when those effects control the question."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#a-pysdm-experiment",
+    "href": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#a-pysdm-experiment",
+    "title": "Connecting Aerosol Hygroscopicity and CCN Activity with One κ",
+    "section": "A PySDM experiment",
+    "text": "A PySDM experiment\nWith a fixed dry-size distribution and number concentration, vary \\(\\kappa\\) across 0.1, 0.3, 0.6, and 1.0 under the same updraft. Record critical supersaturation, activated fraction, peak supersaturation, cloud-droplet number, mean radius, and time to collision–coalescence. Then vary size and \\(\\kappa\\) together.\nThat second step matters because a large, moderately hygroscopic particle may activate more readily than a small, highly hygroscopic one. Hygroscopic-seeding performance depends on the combination of size, number, \\(\\kappa\\), and updraft—not on chemistry alone."
+  },
+  {
+    "objectID": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#references",
+    "href": "en/posts/article-review/2026-07-15-kappa-kohler/index.html#references",
+    "title": "Connecting Aerosol Hygroscopicity and CCN Activity with One κ",
+    "section": "References",
+    "text": "References\n\n\nPetters, M. D., and S. M. Kreidenweis. 2007. “A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity.” Atmospheric Chemistry and Physics 7: 1961–71. https://doi.org/10.5194/acp-7-1961-2007."
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
     "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
     "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
     "section": "",
-    "text": "The best place to begin learning a numerical model is not “Which code should I run?” but “What am I trying to represent?” This first note outlines PySDM’s role in cloud microphysics and maps the experimental path this blog will follow."
+    "text": "The best place to begin learning a numerical model is not “Which code should I run?” but “What am I trying to represent?” This first note outlines PySDM’s role in cloud microphysics and maps the experimental path this blog will follow.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "Getting started"
+    ]
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#what-does-pysdm-represent",
     "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#what-does-pysdm-represent",
     "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
     "section": "What does PySDM represent?",
-    "text": "What does PySDM represent?\nPySDM is an open-source package for simulating the dynamics of particle populations. Its current development focuses on the microphysics of aerosols, cloud droplets, and raindrops in moist air. It uses the Super-Droplet Method (SDM) to represent a vast number of real particles with a smaller number of computational particles (Shima et al. 2009; Bartman et al. 2022).\nConsider a super-droplet described by radius \\(r_i\\) and multiplicity \\(\\xi_i\\). The \\(k\\)-th moment of the real particle population can be approximated by a sum over computational particles:\n\\[\nM_k \\approx \\sum_i \\xi_i r_i^k\n\\]\n\\(k=0\\) relates to number concentration, while \\(k=3\\) relates to volume or mass. Decisions such as how many computational particles to use and how to sample the initial distribution are therefore not mere implementation details; they are experimental conditions that directly affect statistical quality."
+    "text": "What does PySDM represent?\nPySDM is an open-source package for simulating the dynamics of particle populations. Its current development focuses on the microphysics of aerosols, cloud droplets, and raindrops in moist air. It uses the Super-Droplet Method (SDM) to represent a vast number of real particles with a smaller number of computational particles (Shima et al. 2009; Bartman et al. 2022).\nConsider a super-droplet described by radius \\(r_i\\) and multiplicity \\(\\xi_i\\). The \\(k\\)-th moment of the real particle population can be approximated by a sum over computational particles:\n\\[\nM_k \\approx \\sum_i \\xi_i r_i^k\n\\]\n\\(k=0\\) relates to number concentration, while \\(k=3\\) relates to volume or mass. Decisions such as how many computational particles to use and how to sample the initial distribution are therefore not mere implementation details; they are experimental conditions that directly affect statistical quality.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "Getting started"
+    ]
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-environment-check",
     "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-environment-check",
     "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
     "section": "First environment check",
-    "text": "First environment check\nThe latest PySDM release can be installed with pip. Unless noted otherwise, code blocks on this blog are illustrative. The actual reproducible environment will follow the pinned dependency files in PySDM-Seeding-Lab.\npython -m pip install PySDM\nAfter installation, the smallest useful check is whether the package imports in the current environment and which version was selected.\nfrom importlib.metadata import version\n\nimport PySDM\n\nprint(\"PySDM import: OK\")\nprint(\"PySDM version:\", version(\"PySDM\"))\n\n\n\n\n\n\nTip\n\n\n\nExperiment notes will record the operating system, random seed, and repository commit alongside the Python and PySDM versions. It is a small habit that turns “it worked on my machine” into a research record."
+    "text": "First environment check\nThe latest PySDM release can be installed with pip. Unless noted otherwise, code blocks on this blog are illustrative. The actual reproducible environment will follow the pinned dependency files in PySDM-Seeding-Lab.\npython -m pip install PySDM\nAfter installation, the smallest useful check is whether the package imports in the current environment and which version was selected.\nfrom importlib.metadata import version\n\nimport PySDM\n\nprint(\"PySDM import: OK\")\nprint(\"PySDM version:\", version(\"PySDM\"))\n\n\n\n\n\n\nTip\n\n\n\nExperiment notes will record the operating system, random seed, and repository commit alongside the Python and PySDM versions. It is a small habit that turns “it worked on my machine” into a research record.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "Getting started"
+    ]
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#three-stages-ahead",
     "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#three-stages-ahead",
     "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
     "section": "Three stages ahead",
-    "text": "Three stages ahead\n\n1. Learn PySDM\nAfter understanding SDM state variables and moments, we will examine how environments, dynamics, and products divide responsibilities. Instead of stopping after running official examples, each object will be annotated with the physical assumption it represents.\n\n\n2. Build the Lab\nWe will establish an isolated Python environment and clear conventions for configuration files, data, and figures. Every experiment will include a command that reruns it and a minimal validation that checks the result.\n\n\n3. Experiments\nWe will first create a baseline, then vary conditions such as seeding time, particle-size distribution, and dosage one at a time. Interpretable metrics such as water budget, number concentration, and spectral moments will take priority over differences in a single curve."
+    "text": "Three stages ahead\n\n1. Learn PySDM\nAfter understanding SDM state variables and moments, we will examine how environments, dynamics, and products divide responsibilities. Instead of stopping after running official examples, each object will be annotated with the physical assumption it represents.\n\n\n2. Build the Lab\nWe will establish an isolated Python environment and clear conventions for configuration files, data, and figures. Every experiment will include a command that reruns it and a minimal validation that checks the result.\n\n\n3. Experiments\nWe will first create a baseline, then vary conditions such as seeding time, particle-size distribution, and dosage one at a time. Interpretable metrics such as water budget, number concentration, and spectral moments will take priority over differences in a single curve.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "Getting started"
+    ]
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-checkpoint",
     "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#first-checkpoint",
     "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
     "section": "First checkpoint",
-    "text": "First checkpoint\nBefore moving to the next note, there are four things to check:\n\nPySDM can be imported in an isolated environment.\nPython and PySDM versions can be recorded together.\nThe meaning of a super-droplet’s multiplicity can be explained.\nFixed conditions can be distinguished between baseline and seeding experiments.\n\nOnce these checkpoints are complete, the next step will dissect one official PySDM example by following the flow of inputs, dynamics, and products. The PySDM v2 paper is a useful map of the package structure and its extended capabilities (Jong et al. 2023)."
+    "text": "First checkpoint\nBefore moving to the next note, there are four things to check:\n\nPySDM can be imported in an isolated environment.\nPython and PySDM versions can be recorded together.\nThe meaning of a super-droplet’s multiplicity can be explained.\nFixed conditions can be distinguished between baseline and seeding experiments.\n\nOnce these checkpoints are complete, the next step will dissect one official PySDM example by following the flow of inputs, dynamics, and products. The PySDM v2 paper is a useful map of the package structure and its extended capabilities (Jong et al. 2023).",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "Getting started"
+    ]
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#references",
     "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html#references",
     "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
     "section": "References",
-    "text": "References\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, et al. 2022. “PySDM V1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry.” Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, and Sylwester Arabas. 2023. “PySDM V2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry.” Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, and Shintaro Kawahara. 2009. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model.” Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441."
+    "text": "References\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, et al. 2022. “PySDM V1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry.” Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, and Sylwester Arabas. 2023. “PySDM V2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry.” Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, and Shintaro Kawahara. 2009. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model.” Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "Getting started"
+    ]
   },
   {
     "objectID": "en/pysdm.html",
     "href": "en/pysdm.html",
     "title": "PySDM",
     "section": "",
-    "text": "These notes connect the Super-Droplet Method with PySDM objects, official examples, and numerical cloud-seeding experiments. Each note has one physical question, a minimal piece of code, and a checkpoint leading to the next experiment.\nThe research environment and reproduction workflow are documented in Build the Lab, with hypothesis testing collected under Experiments.\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
+    "text": "These notes connect the Super-Droplet Method with PySDM objects, official examples, and numerical cloud-seeding experiments. Each note has one physical question, a minimal piece of code, and a checkpoint leading to the next experiment.\nThe research environment and reproduction workflow are documented in Build the Lab, with hypothesis testing collected under Experiments. The left navigation keeps all three tracks one click away.\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.",
+    "crumbs": [
+      "PySDM",
+      "PySDM overview"
+    ]
   },
   {
     "objectID": "experiments.html",
     "href": "experiments.html",
     "title": "Experiments",
     "section": "",
-    "text": "각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.\n첫 실험 기록을 준비하고 있습니다."
+    "text": "각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.\n첫 실험 기록을 준비하고 있습니다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments"
+    ]
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
+    "href": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
+    "title": "씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까",
+    "section": "",
+    "text": "구름 씨뿌리기 효과를 설명할 때 “비가 몇 mm 늘었다”는 표현만으로는 사업 규모를 이해하기 어렵다. Ro et al. (2023)은 수치모의, 바람장, 레이더와 우량계 자료를 결합해 증가 강수량을 산정하고, 이를 영향 면적과 물의 질량으로 환산하는 절차를 제안했다 (Ro 기타 2023년).\n원문 보기"
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#연구-설계",
+    "href": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#연구-설계",
+    "title": "씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까",
+    "section": "연구 설계",
+    "text": "연구 설계\n저자들은 씨뿌리기 물질이 이동한 영역을 seeding box(SB), 영향을 받지 않았다고 판단한 비교 영역을 non-seeding box(NB)로 나눴다. 수치모의 바람장으로 살포 물질의 이동 경로를 추정하고, 레이더와 지상 우량계로 두 영역의 누적 강수를 비교했다.\n핵심 계산은 두 단계다.\n\\[\nER = CAR_{SB} - CAR_{NB}\n\\]\n여기서 \\(ER\\)은 증가 강우량, \\(CAR\\)은 영역 평균 누적 강수량이다. 이어서 증가 강우량에 효과 면적을 곱해 총 물의 질량을 구한다.\n\\[\nTAER = ER \\times ERA \\times \\rho_w\n\\]\n\\(ERA\\)는 강수 증강 영향 면적, \\(\\rho_w\\)는 물의 밀도다. 단위만 일관되게 맞추면 1 mm의 비가 넓은 영역에서 몇 톤의 물에 해당하는지 계산할 수 있다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#세-사례의-결과",
+    "href": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#세-사례의-결과",
+    "title": "씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까",
+    "section": "세 사례의 결과",
+    "text": "세 사례의 결과\n\n논문이 보고한 세 사례의 추정치\n\n\n목적·살포물질\n추정 증가 강우량\n총 증가 강수량\n\n\n\n\n산불 예방·AgI\n1.74 mm\n475만 톤\n\n\n가뭄 완화·CaCl₂\n0.84 mm\n130만 톤\n\n\n미세먼지 저감·CaCl₂\n2.78 mm\n2,444만 톤\n\n\n\n총량 차이는 mm 차이만으로 설명되지 않는다. 미세먼지 저감 사례는 추정 영향 면적이 넓어 총량이 크게 계산됐다. 따라서 “가장 효과적인 사례”를 말하려면 강우 증가율, 증가 강우량, 영향 면적, 총량 중 어느 지표를 비교하는지 먼저 밝혀야 한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#이-방법의-강점",
+    "href": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#이-방법의-강점",
+    "title": "씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까",
+    "section": "이 방법의 강점",
+    "text": "이 방법의 강점\n첫째, 현장에서 이해하기 쉬운 단위를 제공한다. 산불 예방이나 가뭄 대응에서는 총 물량이 의사결정에 직접 연결된다. 둘째, 바람장과 레이더를 사용해 고정된 한 지점의 전후 비교보다 공간적 구조를 반영한다. 셋째, SB와 NB를 명시함으로써 “효과가 있었던 영역”과 “자연 강수의 기준”을 계산 과정에 드러낸다.\n이 투명성은 중요하다. 효과량 산정에서 가장 위험한 부분은 복잡한 계산식이 아니라, 어떤 영역을 처리구와 대조구로 정했는지가 숨겨지는 경우이기 때문이다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#가장-큰-한계는-비교구역이다",
+    "href": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#가장-큰-한계는-비교구역이다",
+    "title": "씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까",
+    "section": "가장 큰 한계는 비교구역이다",
+    "text": "가장 큰 한계는 비교구역이다\nNB의 강수가 씨뿌리기가 없었을 때 SB에 내렸을 자연 강수를 정확히 대표한다는 보장은 없다. 강수대가 비균질하거나 산악 지형과 해륙풍이 다르면 두 상자의 차이는 원래부터 존재했을 수 있다. 수치모의 바람 오차는 살포 물질 경로와 효과 면적을 동시에 바꾼다. 레이더 강수 추정과 성긴 지상 관측망의 불확실성도 남는다.\n특히 \\(TAER\\)은 \\(ER\\)과 \\(ERA\\)의 곱이다. 작은 강우 편향도 넓은 면적을 곱하면 큰 질량 오차가 된다. 따라서 백만 톤 단위 숫자는 점추정치 하나보다 다음과 같은 불확실성 범위와 함께 제시하는 편이 낫다.\n\nNB 위치를 바꾼 민감도 실험\n효과 면적 경계의 여러 정의\n레이더 강수 오차 범위\n바람장과 살포 궤적의 앙상블"
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#인과-추론과-회계-계산을-구분하기",
+    "href": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#인과-추론과-회계-계산을-구분하기",
+    "title": "씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까",
+    "section": "인과 추론과 회계 계산을 구분하기",
+    "text": "인과 추론과 회계 계산을 구분하기\n이 논문이 제안한 계산은 효과가 있었다고 판단했을 때 그 규모를 정량화하는 방법에 가깝다. SB–NB 차이 하나만으로 씨뿌리기가 원인이었다고 확정할 수는 없다. 무작위화, 독립 대조구, 물리적 추적자, 미세물리 반응 같은 별도의 인과 증거가 필요하다.\n그럼에도 계산 틀은 유용하다. 향후 실험에서는 다음 순서로 확장할 수 있다.\n\nCTRL–SEED 앙상블로 자연 변동의 분포를 만든다.\n각 구성원에서 SB와 NB를 여러 방식으로 배치한다.\n\\(ER\\), \\(ERA\\), \\(TAER\\)의 분포를 계산한다.\n중앙값과 신뢰구간을 관측 기반 추정치와 비교한다.\n\n이렇게 하면 “비가 늘었는가?”와 “늘었다면 총량은 얼마인가?”를 분리해 답할 수 있다. 좋은 효과량 산정은 큰 숫자를 만드는 기술이 아니라, 그 숫자가 어떤 가정에 민감한지를 공개하는 과정이다."
+  },
+  {
+    "objectID": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#참고문헌",
+    "href": "posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html#참고문헌",
+    "title": "씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까",
+    "section": "참고문헌",
+    "text": "참고문헌\n\n\nRo, Yonghun, Ki-Ho Chang, Sanghee Chae, Yun-Kyu Lim, Jung Mo Ku, 와/과 Woonseon Jung. 2023년. “Estimation of the Total Amount of Enhanced Rainfall for a Cloud Seeding Experiment: Case Studies of Preventing Forest Fire, Drought, and Dust”. Advances in Meteorology 2023: 5478666. https://doi.org/10.1155/2023/5478666."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "",
+    "text": "Bruintjes (1999)는 수십 년간 진행된 강수 증강 실험을 정적 빙정핵 씨뿌리기, 동적 씨뿌리기, 흡습성 씨뿌리기로 나누어 검토한다 (Bruintjes 1999년). 1999년 논문이지만, “효과가 몇 퍼센트인가”보다 “효과가 생기는 물리 사슬을 얼마나 닫았는가”를 묻는 태도는 지금도 유효하다.\n원문 보기"
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#정적-빙정핵-씨뿌리기",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#정적-빙정핵-씨뿌리기",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "1. 정적 빙정핵 씨뿌리기",
+    "text": "1. 정적 빙정핵 씨뿌리기\n정적 방법은 AgI나 드라이아이스로 과냉각 구름의 얼음핵 수를 늘린다. 새 빙정은 수증기 증착과 착빙으로 성장해 눈이나 비가 된다. 개념은 명확하지만 기회의 창이 좁다.\n\n씨뿌리기 전에 충분한 과냉각 액체수가 있어야 한다.\n자연 빙정 수가 너무 많지 않아야 한다.\n구름 온도는 물질의 활성화와 성장에 적합해야 한다.\n새 입자가 성장하고 낙하할 수 있는 깊이와 시간이 필요하다.\n살포 물질이 실제 목표 부피에 도달해야 한다.\n\n산악 구름에서는 액체수의 시공간 변동과 플룸의 수송·분산 불확실성이 특히 크다. 한 시점의 항공기 관측으로 과냉각 액체수를 확인했더라도 발생기 플룸이 도달할 때 같은 상태가 유지된다는 보장은 없다."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#동적-씨뿌리기",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#동적-씨뿌리기",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "2. 동적 씨뿌리기",
+    "text": "2. 동적 씨뿌리기\n동적 방법은 많은 빙정을 빠르게 만들어 잠열 방출을 키우고 상승류와 구름 성장을 강화하려는 접근이다. 성공한다면 단순한 미세물리 변화보다 큰 동역학적 증폭을 기대할 수 있다. 그러나 인과 사슬이 길어진다.\n\\[\n\\text{seeding} \\rightarrow \\text{rapid glaciation} \\rightarrow \\text{latent heating}\n\\rightarrow \\text{stronger updraft} \\rightarrow \\text{larger cloud} \\rightarrow \\text{more rain}\n\\]\n각 화살표가 구름의 자연 변동보다 커야 한다. 대류운은 본래 수명, 병합, 조직화가 크게 달라져 소수 사례의 처리–비처리 차이를 씨뿌리기 효과로 분리하기 어렵다. 동적 방법의 매력은 큰 잠재효과지만, 바로 그 복잡성 때문에 증명이 더 어렵다."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#흡습성-씨뿌리기",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#흡습성-씨뿌리기",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "3. 흡습성 씨뿌리기",
+    "text": "3. 흡습성 씨뿌리기\n흡습성 방법은 큰 염입자를 넣어 초기 구름방울 스펙트럼을 넓히고 충돌·병합을 앞당긴다. 초기 물 분무와 분말 살포는 적절한 크기의 입자를 구름에 균일하게 전달하기 어려웠다. 이후 연소형 flare가 대략 마이크로미터 이하의 많은 흡습성 입자를 제공하면서 다시 주목받았다.\n남아프리카의 일부 실험은 유망한 통계 결과와 레이더 신호를 보였다. 하지만 해양성 구름처럼 자연적으로 큰 해염입자가 많아 이미 강수 효율이 높은 환경에서는 추가 효과가 작을 수 있다. “흡습성 입자는 따뜻한 구름에 좋다”가 아니라, 배경 에어로졸과 구름방울 스펙트럼에 성장 병목이 실제로 존재하는가를 먼저 확인해야 한다."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#방법별-기회와-실패-조건",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#방법별-기회와-실패-조건",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "방법별 기회와 실패 조건",
+    "text": "방법별 기회와 실패 조건\n\n씨뿌리기 방법을 병목과 실패 조건으로 비교\n\n\n\n\n\n\n\n\n방법\n목표 병목\n필요한 조건\n대표 실패 원인\n\n\n\n\n정적 빙정핵\n얼음핵 부족\n과냉각 액체수, 적절한 온도·체류시간\n자연 빙정 과다, 플룸 불일치\n\n\n동적\n약한 상승·짧은 구름 수명\n잠열 피드백이 가능한 대류 구조\n큰 자연 변동, 긴 인과 사슬\n\n\n흡습성\n느린 충돌·병합\n좁은 초기 방울 스펙트럼, 충분한 LWC\n이미 효율적인 해양성 구름, 입자 전달 실패"
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#년에-제안한-새로운-전망",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#년에-제안한-새로운-전망",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "1999년에 제안한 ‘새로운 전망’",
+    "text": "1999년에 제안한 ‘새로운 전망’\n저자는 다중 매개변수 레이더, 라이더, 위성 미세물리 산출물, 항공기 관측, SF₆·chaff 같은 추적자, 3차원 시간의존 수치모형을 강조했다. 지금은 이 도구들이 훨씬 정교해졌지만 질문은 같다.\n\n살포 물질이 어디로 갔는가?\n목표 구름은 실제로 처리 가능한 상태였는가?\n첫 미세물리 반응은 무엇이었는가?\n그 반응이 구름 규모와 지상 강수로 이어졌는가?\n자연 변동만으로 같은 신호가 나올 확률은 얼마인가?"
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#이-리뷰가-남긴-경고",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#이-리뷰가-남긴-경고",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "이 리뷰가 남긴 경고",
+    "text": "이 리뷰가 남긴 경고\n구름 씨뿌리기 분야는 과도한 홍보 때문에 과학적 신뢰를 잃은 경험이 있다. Bruintjes는 흡습성 씨뿌리기의 초기 성공도 같은 방식으로 과장하지 말아야 한다고 경고한다. 긍정적 사례를 반복 제시하는 것보다 실패 조건을 미리 정의하고, 실패했을 때 어느 고리가 끊겼는지 설명하는 편이 더 큰 과학적 진전이다.\n내 실험 노트에 적용하면 기준은 명확하다. 결과 그림의 마지막 강수 차이만 보지 않고, 씨뿌리기 입자의 위치, 활성화율, 방울·빙정 스펙트럼, 물 수지, 성장률, 낙하 플럭스를 순서대로 저장해야 한다. 통계는 물리 증거의 대체물이 아니라, 물리 가설과 함께 닫혀야 하는 또 하나의 고리다."
+  },
+  {
+    "objectID": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#참고문헌",
+    "href": "posts/article-review/2026-05-20-cloud-seeding-review/index.html#참고문헌",
+    "title": "구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬",
+    "section": "참고문헌",
+    "text": "참고문헌\n\n\nBruintjes, Roelof T. 1999년. “A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects”. Bulletin of the American Meteorological Society 80 (5): 805–20. https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-kappa-kohler/index.html",
+    "href": "posts/article-review/2026-07-15-kappa-kohler/index.html",
+    "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
+    "section": "",
+    "text": "에어로졸이 물을 얼마나 흡수하고 어떤 과포화도에서 구름응결핵(CCN)으로 활성화되는지를 계산하려면 조성, 활동도, 용해도, 표면장력 같은 정보가 필요하다. Petters & Kreidenweis (2007)는 이 복잡성을 하나의 흡습성 매개변수 \\(\\kappa\\)로 묶었다 (Petters 와/과 Kreidenweis 2007년).\n원문 보기"
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-kappa-kohler/index.html#κ-köhler-식",
+    "href": "posts/article-review/2026-07-15-kappa-kohler/index.html#κ-köhler-식",
+    "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
+    "section": "κ-Köhler 식",
+    "text": "κ-Köhler 식\n건조 직경 \\(D_d\\)인 입자가 습윤 직경 \\(D\\)로 성장할 때 물 위 포화도 \\(S\\)는 다음처럼 쓸 수 있다.\n\\[\nS(D)=\n\\frac{D^3-D_d^3}{D^3-D_d^3(1-\\kappa)}\n\\exp\\left(\\frac{A}{D}\\right),\n\\qquad\nA=\\frac{4\\sigma_{s/a}M_w}{RT\\rho_w}\n\\]\n첫 항은 용질 효과, 지수항은 곡률에 따른 Kelvin 효과다. \\(\\kappa\\)가 클수록 같은 건조 크기의 입자가 물을 더 잘 흡수하고 더 낮은 임계 과포화도에서 활성화된다. \\(\\kappa=0\\)은 비흡습성 입자에 가깝다.\n이 식의 장점은 상대습도 100% 아래에서 측정한 성장인자와 100% 위에서 측정한 CCN 활성화를 같은 매개변수로 비교할 수 있다는 것이다. 저자들은 대부분의 시험 물질에서 두 영역의 예측이 대략 30% 안에서 일치함을 보였다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-kappa-kohler/index.html#값의-범위를-어떻게-읽을까",
+    "href": "posts/article-review/2026-07-15-kappa-kohler/index.html#값의-범위를-어떻게-읽을까",
+    "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
+    "section": "값의 범위를 어떻게 읽을까",
+    "text": "값의 범위를 어떻게 읽을까\n\n논문이 정리한 κ의 대표 범위\n\n\n물질군\n대표적인 \\(\\kappa\\) 범위\n해석\n\n\n\n\n비흡습성 성분\n0 부근\n물 흡수와 CCN 활성에 거의 기여하지 않음\n\n\n유기물\n0.01–0.5\n조성과 산화도에 따라 매우 다양\n\n\n대기 에어로졸\n0.1–0.9\n혼합된 실제 입자의 일반적 범위\n\n\n무기염\n0.5–1.4\n강한 흡습성과 높은 CCN 활성\n\n\n\n숫자 하나를 물질의 영구한 고유값으로 외우기보다 측정 조건과 혼합 상태를 함께 기록해야 한다. 같은 유기물도 상대습도, 온도, 상 상태, 크기에 따라 유효 \\(\\kappa\\)가 달라질 수 있다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-kappa-kohler/index.html#혼합물은-부피분율로-연결한다",
+    "href": "posts/article-review/2026-07-15-kappa-kohler/index.html#혼합물은-부피분율로-연결한다",
+    "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
+    "section": "혼합물은 부피분율로 연결한다",
+    "text": "혼합물은 부피분율로 연결한다\n입자가 여러 성분으로 이루어졌고 각 성분의 부피분율이 \\(\\varepsilon_i\\)라면, 가장 단순한 내부혼합 규칙은 다음과 같다.\n\\[\n\\kappa_{mix}=\\sum_i \\varepsilon_i\\kappa_i\n\\]\n이 선형 규칙은 복잡한 활동도 모형 없이 조성 자료를 CCN 계산으로 연결한다. 예를 들어 비흡습성 성분이 늘면 \\(\\kappa_{mix}\\)가 낮아지고, 염 성분이 늘면 높아진다. 대기모형에서 에어로졸 종별 질량을 부피로 변환한 뒤 활성화 매개변수를 만드는 데 특히 편리하다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-kappa-kohler/index.html#무엇을-단순화했는가",
+    "href": "posts/article-review/2026-07-15-kappa-kohler/index.html#무엇을-단순화했는가",
+    "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
+    "section": "무엇을 단순화했는가",
+    "text": "무엇을 단순화했는가\n\\(\\kappa\\) 하나가 모든 화학을 완벽히 표현하지는 않는다.\n\n표면장력: 계면활성 유기물이 표면장력을 낮추면 임계 과포화도가 달라진다.\n제한 용해도: 입자가 완전히 녹지 않으면 일정한 \\(\\kappa\\) 가정이 깨질 수 있다.\n상태와 이력: 결정화·조해 히스테리시스와 액–액 상분리는 한 값으로 표현하기 어렵다.\n크기 의존성: 작은 입자와 큰 입자의 조성이 다르면 크기별 \\(\\kappa\\)가 필요하다.\n외부혼합: 평균 \\(\\kappa\\)만 사용하면 서로 다른 입자군의 활성화 스펙트럼을 가린다.\n\n따라서 \\(\\kappa\\)는 상세 열역학이 필요한 문제의 대체물이 아니라, 데이터와 계산비용이 제한된 상황의 기준 모형이다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-kappa-kohler/index.html#pysdm에서-왜-중요한가",
+    "href": "posts/article-review/2026-07-15-kappa-kohler/index.html#pysdm에서-왜-중요한가",
+    "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
+    "section": "PySDM에서 왜 중요한가",
+    "text": "PySDM에서 왜 중요한가\nPySDM 실험에서 건조 크기분포와 \\(\\kappa\\)를 지정하면 각 super-droplet의 평형 성장과 활성화 문턱을 계산할 수 있다. 흡습성 씨뿌리기 실험에서는 살포입자의 크기만 바꾸는 것과 화학적 흡습성을 바꾸는 것을 분리할 수 있다.\n첫 민감도 실험은 다음처럼 설계할 수 있다.\n\n동일한 건조 크기분포와 수농도를 고정한다.\n\\(\\kappa=0.1, 0.3, 0.6, 1.0\\)만 바꾼다.\n같은 상승류에서 임계 과포화도와 활성화 분율을 비교한다.\n최대 과포화도, 구름방울 수농도, 평균 반지름, 충돌·병합 시작 시간을 기록한다.\n\n그다음 크기분포와 \\(\\kappa\\)를 동시에 바꿔 상호작용을 본다. 큰 입자는 낮은 \\(\\kappa\\)여도 쉽게 활성화될 수 있고, 작은 입자는 높은 \\(\\kappa\\)여도 강한 과포화도가 필요할 수 있다. 씨뿌리기 성능은 “흡습성이 좋은 물질” 하나가 아니라 크기–수농도–\\(\\kappa\\)–상승류의 조합으로 결정된다."
+  },
+  {
+    "objectID": "posts/article-review/2026-07-15-kappa-kohler/index.html#참고문헌",
+    "href": "posts/article-review/2026-07-15-kappa-kohler/index.html#참고문헌",
+    "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
+    "section": "참고문헌",
+    "text": "참고문헌\n\n\nPetters, M. D., 와/과 S. M. Kreidenweis. 2007년. “A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”. Atmospheric Chemistry and Physics 7: 1961–71. https://doi.org/10.5194/acp-7-1961-2007."
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html",
     "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html",
     "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
     "section": "",
-    "text": "수치 모델을 배우는 가장 좋은 출발점은 “어떤 코드를 실행할까?”보다 “무엇을 표현하려는가?”를 묻는 일이라고 생각합니다. 이 첫 글에서는 PySDM이 구름 미세물리 문제에서 맡는 역할을 정리하고, 이 블로그에서 따라갈 실험 경로를 세웁니다."
+    "text": "수치 모델을 배우는 가장 좋은 출발점은 “어떤 코드를 실행할까?”보다 “무엇을 표현하려는가?”를 묻는 일이라고 생각합니다. 이 첫 글에서는 PySDM이 구름 미세물리 문제에서 맡는 역할을 정리하고, 이 블로그에서 따라갈 실험 경로를 세웁니다.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "PySDM 시작하기"
+    ]
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#pysdm은-무엇을-표현하나",
     "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#pysdm은-무엇을-표현하나",
     "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
     "section": "PySDM은 무엇을 표현하나",
-    "text": "PySDM은 무엇을 표현하나\nPySDM은 입자 집단의 동역학을 모사하는 오픈소스 패키지입니다. 현재 개발의 중심은 습윤 공기 속 에어로졸·구름방울·빗방울의 미세물리이며, Super-Droplet Method(SDM)를 사용해 매우 많은 실제 입자를 더 적은 수의 계산 입자로 표현합니다 (Shima 기타 2009년; Bartman 기타 2022년).\n하나의 super-droplet을 반지름 \\(r_i\\)와 multiplicity \\(\\xi_i\\)로 나타낸다고 생각해 봅시다. 실제 입자 집단의 \\(k\\)차 모멘트는 계산 입자들의 합으로 근사할 수 있습니다.\n\\[\nM_k \\approx \\sum_i \\xi_i r_i^k\n\\]\n\\(k=0\\)은 수농도, \\(k=3\\)은 부피 또는 질량과 연결됩니다. 따라서 “몇 개의 계산 입자를 쓸 것인가”, “초기 분포를 어떻게 표본화할 것인가”는 단순한 구현 선택이 아니라 결과의 통계적 품질과 직접 이어지는 실험 조건입니다."
+    "text": "PySDM은 무엇을 표현하나\nPySDM은 입자 집단의 동역학을 모사하는 오픈소스 패키지입니다. 현재 개발의 중심은 습윤 공기 속 에어로졸·구름방울·빗방울의 미세물리이며, Super-Droplet Method(SDM)를 사용해 매우 많은 실제 입자를 더 적은 수의 계산 입자로 표현합니다 (Shima 기타 2009년; Bartman 기타 2022년).\n하나의 super-droplet을 반지름 \\(r_i\\)와 multiplicity \\(\\xi_i\\)로 나타낸다고 생각해 봅시다. 실제 입자 집단의 \\(k\\)차 모멘트는 계산 입자들의 합으로 근사할 수 있습니다.\n\\[\nM_k \\approx \\sum_i \\xi_i r_i^k\n\\]\n\\(k=0\\)은 수농도, \\(k=3\\)은 부피 또는 질량과 연결됩니다. 따라서 “몇 개의 계산 입자를 쓸 것인가”, “초기 분포를 어떻게 표본화할 것인가”는 단순한 구현 선택이 아니라 결과의 통계적 품질과 직접 이어지는 실험 조건입니다.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "PySDM 시작하기"
+    ]
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-번째-환경-점검",
     "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-번째-환경-점검",
     "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
     "section": "첫 번째 환경 점검",
-    "text": "첫 번째 환경 점검\nPySDM의 최신 릴리스는 pip로 설치할 수 있습니다. 이 블로그의 코드 블록은 별도 표시가 없는 한 설명용이며, 실제 재현 환경은 PySDM-Seeding-Lab의 고정된 의존성 파일을 기준으로 삼을 예정입니다.\npython -m pip install PySDM\n설치 후 가장 작은 점검은 패키지가 현재 환경에서 import되는지, 어떤 버전이 선택되었는지 확인하는 것입니다.\nfrom importlib.metadata import version\n\nimport PySDM\n\nprint(\"PySDM import: OK\")\nprint(\"PySDM version:\", version(\"PySDM\"))\n\n\n\n\n\n\n힌트\n\n\n\n실험 노트에는 Python과 PySDM 버전뿐 아니라 운영체제, 난수 시드, 실행한 저장소 커밋도 함께 남기겠습니다. “내 컴퓨터에서는 됐다”를 연구 기록으로 바꾸는 가장 작은 습관입니다."
+    "text": "첫 번째 환경 점검\nPySDM의 최신 릴리스는 pip로 설치할 수 있습니다. 이 블로그의 코드 블록은 별도 표시가 없는 한 설명용이며, 실제 재현 환경은 PySDM-Seeding-Lab의 고정된 의존성 파일을 기준으로 삼을 예정입니다.\npython -m pip install PySDM\n설치 후 가장 작은 점검은 패키지가 현재 환경에서 import되는지, 어떤 버전이 선택되었는지 확인하는 것입니다.\nfrom importlib.metadata import version\n\nimport PySDM\n\nprint(\"PySDM import: OK\")\nprint(\"PySDM version:\", version(\"PySDM\"))\n\n\n\n\n\n\n힌트\n\n\n\n실험 노트에는 Python과 PySDM 버전뿐 아니라 운영체제, 난수 시드, 실행한 저장소 커밋도 함께 남기겠습니다. “내 컴퓨터에서는 됐다”를 연구 기록으로 바꾸는 가장 작은 습관입니다.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "PySDM 시작하기"
+    ]
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#블로그에서-따라갈-세-단계",
     "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#블로그에서-따라갈-세-단계",
     "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
     "section": "블로그에서 따라갈 세 단계",
-    "text": "블로그에서 따라갈 세 단계\n\n1. Learn PySDM\nSDM의 상태 변수와 모멘트를 이해한 뒤, environment, dynamics, products가 어떤 책임을 나누는지 살펴봅니다. 공식 예제를 그대로 실행하는 데서 멈추지 않고, 각 객체가 물리 가정과 어떻게 연결되는지 주석을 붙일 것입니다.\n\n\n2. Build the Lab\n독립된 Python 환경, 설정 파일, 데이터와 그림의 저장 규칙을 세웁니다. 실험 한 번을 다시 실행하는 명령과, 같은 결과를 확인하는 최소 검증을 함께 둡니다.\n\n\n3. Experiments\n기준 실험을 먼저 만들고, seeding 시점·입자 크기 분포·투입량 같은 조건을 하나씩 바꿉니다. 단일 곡선의 차이보다 물 수지, 수농도, 스펙트럼 모멘트처럼 해석 가능한 지표를 우선합니다."
+    "text": "블로그에서 따라갈 세 단계\n\n1. Learn PySDM\nSDM의 상태 변수와 모멘트를 이해한 뒤, environment, dynamics, products가 어떤 책임을 나누는지 살펴봅니다. 공식 예제를 그대로 실행하는 데서 멈추지 않고, 각 객체가 물리 가정과 어떻게 연결되는지 주석을 붙일 것입니다.\n\n\n2. Build the Lab\n독립된 Python 환경, 설정 파일, 데이터와 그림의 저장 규칙을 세웁니다. 실험 한 번을 다시 실행하는 명령과, 같은 결과를 확인하는 최소 검증을 함께 둡니다.\n\n\n3. Experiments\n기준 실험을 먼저 만들고, seeding 시점·입자 크기 분포·투입량 같은 조건을 하나씩 바꿉니다. 단일 곡선의 차이보다 물 수지, 수농도, 스펙트럼 모멘트처럼 해석 가능한 지표를 우선합니다.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "PySDM 시작하기"
+    ]
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-체크포인트",
     "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-체크포인트",
     "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
     "section": "첫 체크포인트",
-    "text": "첫 체크포인트\n다음 글로 넘어가기 전에 확인할 항목은 네 가지입니다.\n\n격리된 환경에서 PySDM을 import할 수 있다.\nPython과 PySDM 버전을 한 번에 기록할 수 있다.\n한 super-droplet의 multiplicity가 무엇을 뜻하는지 설명할 수 있다.\n기준 실험과 seeding 실험에서 고정할 조건을 구분할 수 있다.\n\n이 체크포인트를 통과하면 다음 단계에서는 PySDM 공식 예제 하나를 골라 입력, dynamics, products의 흐름을 해부하겠습니다. PySDM v2 논문은 패키지의 구조와 확장된 기능을 살펴볼 좋은 지도입니다 (Jong 기타 2023년)."
+    "text": "첫 체크포인트\n다음 글로 넘어가기 전에 확인할 항목은 네 가지입니다.\n\n격리된 환경에서 PySDM을 import할 수 있다.\nPython과 PySDM 버전을 한 번에 기록할 수 있다.\n한 super-droplet의 multiplicity가 무엇을 뜻하는지 설명할 수 있다.\n기준 실험과 seeding 실험에서 고정할 조건을 구분할 수 있다.\n\n이 체크포인트를 통과하면 다음 단계에서는 PySDM 공식 예제 하나를 골라 입력, dynamics, products의 흐름을 해부하겠습니다. PySDM v2 논문은 패키지의 구조와 확장된 기능을 살펴볼 좋은 지도입니다 (Jong 기타 2023년).",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "PySDM 시작하기"
+    ]
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#참고문헌",
     "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#참고문헌",
     "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
     "section": "참고문헌",
-    "text": "참고문헌\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, 기타. 2022년. “PySDM v1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry”. Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, 와/과 Sylwester Arabas. 2023년. “PySDM v2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry”. Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintaro Kawahara. 2009년. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model”. Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441."
+    "text": "참고문헌\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, 기타. 2022년. “PySDM v1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry”. Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, 와/과 Sylwester Arabas. 2023년. “PySDM v2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry”. Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintaro Kawahara. 2009년. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model”. Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441.",
+    "crumbs": [
+      "PySDM",
+      "Learn PySDM",
+      "PySDM 시작하기"
+    ]
   },
   {
     "objectID": "pysdm.html",
     "href": "pysdm.html",
     "title": "PySDM",
     "section": "",
-    "text": "Super-Droplet Method의 개념부터 PySDM 객체와 공식 예제, 구름 씨뿌리기 수치 실험까지 연결합니다. 각 글은 하나의 물리 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n연구 환경과 재현 과정은 Build the Lab, 실제 가설 검증은 Experiments에 함께 정리합니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
+    "text": "Super-Droplet Method의 개념부터 PySDM 객체와 공식 예제, 구름 씨뿌리기 수치 실험까지 연결합니다. 각 글은 하나의 물리 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n연구 환경과 재현 과정은 Build the Lab, 실제 가설 검증은 Experiments에 함께 정리합니다. 이 섹션에서는 왼쪽 탐색 메뉴로 세 트랙을 바로 오갈 수 있습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음",
+    "crumbs": [
+      "PySDM",
+      "PySDM 개요"
+    ]
   }
 ]

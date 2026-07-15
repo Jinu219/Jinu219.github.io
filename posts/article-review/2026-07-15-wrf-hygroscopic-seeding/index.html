@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-07-15">
+<meta name="description" content="Lin et al.&nbsp;(2023)의 WDM6–CCN bin 혼합 모형으로 살포 고도, 면적, 입자 크기와 warm-rain 반응을 검토합니다.">
 
-<title>About – Jinu’s Cloud Seeding Blog</title>
+<title>WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적 – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,29 +26,48 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -60,27 +81,56 @@ ul.task-list li input[type="checkbox"] {
     "s"
   ],
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "일치 없음",
+    "search-matching-documents-text": "일치된 문서",
+    "search-copy-link-title": "검색 링크 복사",
+    "search-hide-matches-text": "추가 검색 결과 숨기기",
+    "search-more-match-text": "추가 검색결과",
+    "search-more-matches-text": "추가 검색결과",
+    "search-clear-button-title": "제거",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "취소",
+    "search-submit-button-title": "검색",
+    "search-label": "검색"
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<meta property="og:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="About Jinu’s Cloud Seeding Blog">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적 – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Lin et al.&nbsp;(2023)의 WDM6–CCN bin 혼합 모형으로 살포 고도, 면적, 입자 크기와 warm-rain 반응을 검토합니다.">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="twitter:title" content="WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적 – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Lin et al.&nbsp;(2023)의 WDM6–CCN bin 혼합 모형으로 살포 고도, 면적, 입자 크기와 warm-rain 반응을 검토합니다.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -253,32 +303,32 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="검색"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../pysdm.html"> 
+    <a class="nav-link" href="../../../pysdm.html"> 
 <span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../wrf.html"> 
+    <a class="nav-link" href="../../../wrf.html"> 
 <span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../article-review.html"> 
+    <a class="nav-link" href="../../../article-review.html"> 
 <span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../en/index.html"> 
+    <a class="nav-link" href="../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -289,7 +339,7 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -300,14 +350,19 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">목차</h2>
    
   <ul>
-  <li><a href="#what-does-this-site-document" id="toc-what-does-this-site-document" class="nav-link active" data-scroll-target="#what-does-this-site-document">What does this site document?</a></li>
-  <li><a href="#how-the-notes-are-organized" id="toc-how-the-notes-are-organized" class="nav-link" data-scroll-target="#how-the-notes-are-organized">How the notes are organized</a></li>
-  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#왜-혼합-미세물리인가" id="toc-왜-혼합-미세물리인가" class="nav-link active" data-scroll-target="#왜-혼합-미세물리인가">왜 혼합 미세물리인가</a></li>
+  <li><a href="#실험-구성" id="toc-실험-구성" class="nav-link" data-scroll-target="#실험-구성">실험 구성</a></li>
+  <li><a href="#결과-1-구름-안-살포가-유리했다" id="toc-결과-1-구름-안-살포가-유리했다" class="nav-link" data-scroll-target="#결과-1-구름-안-살포가-유리했다">결과 1: 구름 안 살포가 유리했다</a></li>
+  <li><a href="#결과-2-면적-효과는-포화된다" id="toc-결과-2-면적-효과는-포화된다" class="nav-link" data-scroll-target="#결과-2-면적-효과는-포화된다">결과 2: 면적 효과는 포화된다</a></li>
+  <li><a href="#결과-3-핵심-과정은-accretion이었다" id="toc-결과-3-핵심-과정은-accretion이었다" class="nav-link" data-scroll-target="#결과-3-핵심-과정은-accretion이었다">결과 3: 핵심 과정은 accretion이었다</a></li>
+  <li><a href="#연구의-한계" id="toc-연구의-한계" class="nav-link" data-scroll-target="#연구의-한계">연구의 한계</a></li>
+  <li><a href="#다음-wrfpysdm-실험" id="toc-다음-wrfpysdm-실험" class="nav-link" data-scroll-target="#다음-wrfpysdm-실험">다음 WRF·PySDM 실험</a></li>
+  <li><a href="#참고문헌" id="toc-참고문헌" class="nav-link" data-scroll-target="#참고문헌">참고문헌</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -315,19 +370,38 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
-</div>
+<h1 class="title">WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Article Review</div>
+    <div class="quarto-category">WRF</div>
+    <div class="quarto-category">hygroscopic seeding</div>
+    <div class="quarto-category">warm rain</div>
+    <div class="quarto-category">hybrid microphysics</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    About Jinu’s Cloud Seeding Blog
+    Lin et al.&nbsp;(2023)의 WDM6–CCN bin 혼합 모형으로 살포 고도, 면적, 입자 크기와 warm-rain 반응을 검토합니다.
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">저자</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">공개</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-07-15</p>
+    </div>
+  </div>
   
     
   </div>
@@ -337,33 +411,91 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="what-does-this-site-document" class="level2">
-<h2 class="anchored" data-anchor-id="what-does-this-site-document">What does this site document?</h2>
-<p>Jinu’s Cloud Seeding Blog is an open research notebook for learning and designing cloud-seeding research. It connects particle-based cloud microphysics with PySDM, mesoscale weather simulations with WRF, and reviews of the relevant literature in one research workflow.</p>
-<p>Rather than presenting only finished conclusions, it records:</p>
+<p>Lin et al.&nbsp;(2023)은 WRF의 WDM6 bulk 미세물리에 43개 CCN 크기 bin을 결합한 WDM6–NCU 모형을 개발하고, 2020년 10월 대만의 층적운 사례에서 흡습성 씨뿌리기 민감도를 계산했다 <span class="citation" data-cites="Lin2023HygroscopicWRF">(<a href="#ref-Lin2023HygroscopicWRF" role="doc-biblioref">Lin 기타 2023년</a>)</span>. “입자를 많이 뿌리면 비가 늘어난다”가 아니라, <strong>어디에·얼마나 넓게·어떤 크기로 뿌려야 하는가</strong>를 묻는 연구다.</p>
+<div class="review-verdict">
+<p><strong>한 문장 결론.</strong> 이 사례에서는 구름 밑보다 구름 안 살포가 효율적이었고, 효과는 약 40–60 km² 이후 포화됐으며, 강화된 빗방울–구름방울 accretion이 강수 증가의 핵심 경로였다.</p>
+</div>
+<p><a href="https://doi.org/10.5194/acp-23-10423-2023">원문 보기</a></p>
+<section id="왜-혼합-미세물리인가" class="level2">
+<h2 class="anchored" data-anchor-id="왜-혼합-미세물리인가">왜 혼합 미세물리인가</h2>
+<p>bulk 모형은 계산이 빠르지만 씨뿌리기 입자의 세밀한 크기분포를 직접 추적하기 어렵다. 완전한 bin 모형은 풍부한 정보를 주지만 실사례 고해상도 WRF에서 비용이 크다. 저자들은 WDM6의 구름·비 과정은 유지하고, CCN 반지름 <span class="math inline">\(0.001\)</span>–<span class="math inline">\(20\ \mu\mathrm{m}\)</span>를 43개 bin으로 나눠 활성화를 계산했다.</p>
+<p>초기 살포입자 분포는 실제 cloud seeding rocket device(CSRD) flare의 삼봉형 분포를 사용했다. 따라서 단일 평균반지름으로 처리하는 것보다 큰 입자와 작은 입자의 역할을 나누어 볼 수 있다.</p>
+</section>
+<section id="실험-구성" class="level2">
+<h2 class="anchored" data-anchor-id="실험-구성">실험 구성</h2>
+<p>WRF 3.9.1의 중첩 격자를 사용했고, 가장 안쪽 영역은 333 m 간격의 LES 설정이다. 실제 구름 사례를 재현한 뒤 다음 조건을 바꿨다.</p>
 <ul>
-<li>the physical question that started each experiment,</li>
-<li>the assumptions and settings used,</li>
-<li>how the code and results can be reproduced, and</li>
-<li>what was learned when results differed from expectations.</li>
+<li>살포 고도: 500, 1000, 1300, 2200 m</li>
+<li>살포 면적: 1, 10, 36, 64, 100 km²</li>
+<li>입자 농도와 크기 구간</li>
+<li>씨뿌리기 유무</li>
+</ul>
+<p>1300 m는 구름 내부, 500 m는 구름 밑 조건을 대표한다. 각 실험에서 강수량뿐 아니라 CCN 활성화, 구름방울과 빗방울 수·질량, 미세물리 생성률을 비교했다.</p>
+</section>
+<section id="결과-1-구름-안-살포가-유리했다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-1-구름-안-살포가-유리했다">결과 1: 구름 안 살포가 유리했다</h2>
+<p>이 사례에서는 1300 m 살포가 가장 효과적이었다. 구름 내부의 높은 과포화도와 액체수 때문에 입자가 빠르게 활성화되고 방울 성장에 참여할 수 있었다. 500 m 살포에서는 입자가 구름 밑에서 이동하는 동안 희석되고, 구름에 들어가더라도 최적 영역과의 겹침이 약했다.</p>
+<p>저자들은 이 층운 사례의 목표 영역으로 과포화도 0.5% 초과, 액체수량 <span class="math inline">\(0.6\ \mathrm{g\,m^{-3}}\)</span> 초과인 구름 내부를 제안한다. 액체수 기준은 선행연구의 <span class="math inline">\(0.5\ \mathrm{g\,m^{-3}}\)</span>와 비슷하지만, 한 사례에서 얻은 값이므로 다른 구름 체계에 그대로 적용하기보다 탐색 지표로 사용해야 한다.</p>
+</section>
+<section id="결과-2-면적-효과는-포화된다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-2-면적-효과는-포화된다">결과 2: 면적 효과는 포화된다</h2>
+<p>살포 면적을 넓히면 초기에는 증가 강수량도 커지지만 약 40–60 km² 이후 추가 이득이 작아졌다. 씨뿌리기 입자는 늘어도 사용할 수 있는 구름물이 제한되어 있기 때문이다. 100 km²로 넓히는 것이 항상 50 km²의 두 배 효과를 내지 않는다.</p>
+<p>이 결과는 효율을 다음처럼 정의해야 함을 보여준다.</p>
+<p><span class="math display">\[
+\text{seeding efficiency}
+=\frac{\text{additional precipitation mass}}
+{\text{released seeding material or treated area}}
+\]</span></p>
+<p>총 강수 증가와 단위 투입량당 효율을 함께 봐야 비용–효과의 최적점을 찾을 수 있다.</p>
+</section>
+<section id="결과-3-핵심-과정은-accretion이었다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-3-핵심-과정은-accretion이었다">결과 3: 핵심 과정은 accretion이었다</h2>
+<p>흡습성 입자는 CCN으로 활성화되어 방울 스펙트럼을 바꿨다. 구름 밑 살포에서는 autoconversion 증가가 일부 보였지만, 전체 강수 증가를 가장 잘 설명한 과정은 빗방울이 구름방울을 쓸어 모으는 accretion(<span class="math inline">\(P_{racw}\)</span>) 강화였다. 이미 형성된 빗방울이 충분한 구름물을 만날 때 질량 증가가 가속된 것이다.</p>
+<p>입자 크기별로는 반지름 약 <span class="math inline">\(0.4\ \mu\mathrm{m}\)</span>보다 큰 살포입자의 기여가 컸다. 그러나 큰 입자만 무한히 늘리면 giant CCN 경쟁과 제한된 액체수 때문에 다른 반응이 나타날 수 있다. 실제 최적 분포는 구름의 배경 CCN과 상승류에 의존한다.</p>
+</section>
+<section id="연구의-한계" class="level2">
+<h2 class="anchored" data-anchor-id="연구의-한계">연구의 한계</h2>
+<ul>
+<li>실제 한 층적운 사례에 대한 결과라 보편성이 없다.</li>
+<li>bin CCN이 활성화된 뒤 bulk 수상체로 합쳐져 세부 크기분포 정보가 일부 사라진다.</li>
+<li>살포 플룸의 실제 난류 확산과 입자 성장 가정에 불확실성이 있다.</li>
+<li>모의 CTRL–SEED 차이는 물리 가설의 가능성을 보이지만 현장 강수 증강을 입증하는 관측은 아니다.</li>
+<li>최적 고도·면적은 구름 깊이, 배경 에어로졸, LWC, 상승류가 달라지면 함께 변한다.</li>
 </ul>
 </section>
-<section id="how-the-notes-are-organized" class="level2">
-<h2 class="anchored" data-anchor-id="how-the-notes-are-organized">How the notes are organized</h2>
-<p><strong>PySDM</strong> covers particle-based microphysics and experiments, <strong>WRF</strong> covers weather fields and case simulations, and <strong>Article Review</strong> examines research questions and methods. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.</p>
+<section id="다음-wrfpysdm-실험" class="level2">
+<h2 class="anchored" data-anchor-id="다음-wrfpysdm-실험">다음 WRF·PySDM 실험</h2>
+<p>WRF에서는 여러 구름 사례와 물리 조합으로 40–60 km² 포화가 유지되는지 앙상블을 만들 수 있다. PySDM에서는 같은 상승류 궤적을 사용해 CSRD 크기분포의 각 모드가 활성화와 충돌·병합에 기여하는 정도를 더 세밀하게 분리할 수 있다.</p>
+<p>특히 다음 세 지도를 함께 만들고 싶다.</p>
+<ol type="1">
+<li>씨뿌리기 입자 농도와 체류시간</li>
+<li>과포화도·액체수량의 목표 가능 영역</li>
+<li>accretion 증가와 지상 강수 반응</li>
+</ol>
+<p>세 지도가 겹치는 위치가 실제 살포 목표가 된다. 이 논문의 가장 좋은 점은 “많이 뿌리기”를 최적화 문제가 아니라 <strong>구름물이 있는 곳에서 성장 과정을 여는 배치 문제</strong>로 바꾼 데 있다.</p>
 </section>
-<section id="links" class="level2">
-<h2 class="anchored" data-anchor-id="links">Links</h2>
-<ul>
-<li><a href="https://github.com/Jinu219">GitHub · Jinu219</a></li>
-<li><a href="https://github.com/open-atmos/PySDM">Official PySDM repository</a></li>
-<li><a href="https://open-atmos.github.io/PySDM/">Official PySDM documentation</a></li>
-</ul>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Lin2023HygroscopicWRF" class="csl-entry" role="listitem">
+Lin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, 기타. 2023년. <span>“Evaluation of Hygroscopic Cloud Seeding in Warm-Rain Processes by a Hybrid Microphysics Scheme Using a Weather Research and Forecasting (<span>WRF</span>) Model: A Real Case Study”</span>. <em>Atmospheric Chemistry and Physics</em> 23: 10423–38. <a href="https://doi.org/10.5194/acp-23-10423-2023">https://doi.org/10.5194/acp-23-10423-2023</a>.
+</div>
+</div>
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적},
+  date = {2026-07-15},
+  url = {https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/},
+  langid = {ko}
+}
+</code><button title="클립보드 복사" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Jinu. 2026. <span>“WRF로 묻는 흡습성 씨뿌리기의 최적 고도와
+면적.”</span> July 15. <a href="https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/">https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script>
 (() => {
   const localizeNavigation = () => {
@@ -473,12 +605,12 @@ ul.task-list li input[type="checkbox"] {
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "복사완료!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "복사완료!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -856,16 +988,16 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../about.html">
+    <a class="nav-link" href="../../../about.html">
 <p>소개</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="../index.xml">
+    <a class="nav-link" href="../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -882,5 +1014,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

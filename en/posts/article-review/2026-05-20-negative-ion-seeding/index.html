@@ -6,9 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-05-20">
+<meta name="description" content="Separating device operation, cloud response, and rainfall causality in Zheng et al.&nbsp;(2021).">
 
-<title>About – Jinu’s Cloud Seeding Blog</title>
+<title>Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial – Jinu's Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -24,29 +26,48 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-f2028a91b8ae17c8a650d82aaee9bede.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-231ec69390d9fe3a85052a15aaf13fd9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -75,12 +96,41 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<meta property="og:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="About Jinu’s Cloud Seeding Blog">
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Separating device operation, cloud response, and rainfall causality in Zheng et al.&nbsp;(2021).">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="About – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="About Jinu’s Cloud Seeding Blog">
+<meta name="twitter:title" content="Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Separating device operation, cloud response, and rainfall causality in Zheng et al.&nbsp;(2021).">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -253,7 +303,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
@@ -264,21 +314,21 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../pysdm.html"> 
+    <a class="nav-link" href="../../../../pysdm.html"> 
 <span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../wrf.html"> 
+    <a class="nav-link" href="../../../../wrf.html"> 
 <span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../article-review.html"> 
+    <a class="nav-link" href="../../../../article-review.html"> 
 <span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../en/index.html"> 
+    <a class="nav-link" href="../../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -303,11 +353,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#what-does-this-site-document" id="toc-what-does-this-site-document" class="nav-link active" data-scroll-target="#what-does-this-site-document">What does this site document?</a></li>
-  <li><a href="#how-the-notes-are-organized" id="toc-how-the-notes-are-organized" class="nav-link" data-scroll-target="#how-the-notes-are-organized">How the notes are organized</a></li>
-  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#three-links-the-hypothesis-must-establish" id="toc-three-links-the-hypothesis-must-establish" class="nav-link active" data-scroll-target="#three-links-the-hypothesis-must-establish">Three links the hypothesis must establish</a></li>
+  <li><a href="#field-design-and-evidence" id="toc-field-design-and-evidence" class="nav-link" data-scroll-target="#field-design-and-evidence">Field design and evidence</a></li>
+  <li><a href="#why-seven-methods-are-not-seven-independent-experiments" id="toc-why-seven-methods-are-not-seven-independent-experiments" class="nav-link" data-scroll-target="#why-seven-methods-are-not-seven-independent-experiments">Why seven methods are not seven independent experiments</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/article-review/2026-05-20-negative-ion-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -315,19 +366,37 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
-</div>
+<h1 class="title">Can Negative Ions Enhance Rain? Revisiting China’s First Field Trial</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Article Review</div>
+    <div class="quarto-category">negative ions</div>
+    <div class="quarto-category">field experiment</div>
+    <div class="quarto-category">causal inference</div>
+  </div>
+  </div>
 
 <div>
   <div class="description">
-    About Jinu’s Cloud Seeding Blog
+    Separating device operation, cloud response, and rainfall causality in Zheng et al.&nbsp;(2021).
   </div>
 </div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-05-20</p>
+    </div>
+  </div>
   
     
   </div>
@@ -337,33 +406,56 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="what-does-this-site-document" class="level2">
-<h2 class="anchored" data-anchor-id="what-does-this-site-document">What does this site document?</h2>
-<p>Jinu’s Cloud Seeding Blog is an open research notebook for learning and designing cloud-seeding research. It connects particle-based cloud microphysics with PySDM, mesoscale weather simulations with WRF, and reviews of the relevant literature in one research workflow.</p>
-<p>Rather than presenting only finished conclusions, it records:</p>
-<ul>
-<li>the physical question that started each experiment,</li>
-<li>the assumptions and settings used,</li>
-<li>how the code and results can be reproduced, and</li>
-<li>what was learned when results differed from expectations.</li>
-</ul>
+<p>Zheng et al.&nbsp;(2021) evaluated high-voltage corona-discharge ion generators at Wushaoling and the Liupan Mountains from July to November 2020 <span class="citation" data-cites="Zheng2021NegativeIon">(<a href="#ref-Zheng2021NegativeIon" role="doc-biblioref">Zheng et al. 2021</a>)</span>. Seven analyses were used to test whether charged aerosols transported from the ground altered clouds and rainfall.</p>
+<div class="review-verdict">
+<p><strong>Verdict.</strong> Evidence that the device changed near-surface negative-ion concentrations—and some sky-image cloud metrics—is reasonably clear. Evidence that this change caused additional precipitation remains weak.</p>
+</div>
+<p><a href="https://doi.org/10.3390/w13182473">Read the paper</a></p>
+<section id="three-links-the-hypothesis-must-establish" class="level2">
+<h2 class="anchored" data-anchor-id="three-links-the-hypothesis-must-establish">Three links the hypothesis must establish</h2>
+<p>The proposed mechanism contains three distinct claims:</p>
+<ol type="1">
+<li><strong>Device:</strong> the generator produces a substantial ion perturbation.</li>
+<li><strong>Cloud:</strong> ions or charged aerosols reach cloud level and alter microphysics.</li>
+<li><strong>Rainfall:</strong> that cloud response exceeds natural variability and increases precipitation.</li>
+</ol>
+<p>Strong evidence for one link does not automatically establish the next.</p>
 </section>
-<section id="how-the-notes-are-organized" class="level2">
-<h2 class="anchored" data-anchor-id="how-the-notes-are-organized">How the notes are organized</h2>
-<p><strong>PySDM</strong> covers particle-based microphysics and experiments, <strong>WRF</strong> covers weather fields and case simulations, and <strong>Article Review</strong> examines research questions and methods. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.</p>
+<section id="field-design-and-evidence" class="level2">
+<h2 class="anchored" data-anchor-id="field-design-and-evidence">Field design and evidence</h2>
+<p>Wushaoling used 14 ON and 13 OFF days with random operation. Liupan operated more continuously and used network outages as controls, making its comparison weaker. The paper combined neural-network prediction, historical comparisons, ON/OFF days, spatial interpolation, upwind–downwind contrasts, ion measurements, and all-sky imagery.</p>
+<p>Ion concentrations near the generators changed with very small p-values, supporting the device link. Some monthly all-sky metrics also increased, with several comparisons below <span class="math inline">\(p=0.02\)</span>. These are interesting intermediate observations, but the study did not directly measure the vertical profile of charged aerosols or cloud-droplet size distributions.</p>
+<p>Rainfall estimates generally pointed in the hypothesized direction. A machine-learning counterfactual was about 21% below observed mean rainfall, while downwind rainfall exceeded upwind rainfall by about 58% at Wushaoling and 19% at Liupan. Yet major rainfall comparisons had p-values around 0.29–0.46. The sample was too small and natural rainfall variance too large for a precise causal estimate.</p>
 </section>
-<section id="links" class="level2">
-<h2 class="anchored" data-anchor-id="links">Links</h2>
-<ul>
-<li><a href="https://github.com/Jinu219">GitHub · Jinu219</a></li>
-<li><a href="https://github.com/open-atmos/PySDM">Official PySDM repository</a></li>
-<li><a href="https://open-atmos.github.io/PySDM/">Official PySDM documentation</a></li>
-</ul>
+<section id="why-seven-methods-are-not-seven-independent-experiments" class="level2">
+<h2 class="anchored" data-anchor-id="why-seven-methods-are-not-seven-independent-experiments">Why seven methods are not seven independent experiments</h2>
+<p>Most analyses reuse the same four-month weather record. A seasonal anomaly can therefore appear in several indicators at once. A well-fitting neural network also does not guarantee a valid counterfactual for unusual 2020 conditions. At Liupan, the lack of strict randomization creates additional confounding.</p>
+<p>A stronger follow-up would use preregistered randomized ON/OFF schedules over multiple seasons, blinded operation, direct vertical measurements by drones or aircraft, and simultaneous cloud-droplet spectra and liquid-water observations. The analysis should follow the mediation chain from device to transport, microphysics, and rainfall.</p>
+<p>The defensible conclusion is not “negative ions increase rain by 20%.” It is that the device and some cloud proxies changed, rainfall responses had a consistent direction, and the short, partially randomized trial could not yet isolate the rainfall effect from natural variability.</p>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Zheng2021NegativeIon" class="csl-entry" role="listitem">
+Zheng, Wei, Hengben Ma, Ming Zhang, et al. 2021. <span>“Evaluation of the First Negative Ion-Based Cloud Seeding and Rain Enhancement Trial in China.”</span> <em>Water</em> 13 (18): 2473. <a href="https://doi.org/10.3390/w13182473">https://doi.org/10.3390/w13182473</a>.
+</div>
+</div>
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {Can {Negative} {Ions} {Enhance} {Rain?} {Revisiting}
+    {China’s} {First} {Field} {Trial}},
+  date = {2026-05-20},
+  url = {https://jinu219.github.io/en/posts/article-review/2026-05-20-negative-ion-seeding/},
+  langid = {en}
+}
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Jinu. 2026. <span>“Can Negative Ions Enhance Rain? Revisiting China’s
+First Field Trial.”</span> May 20. <a href="https://jinu219.github.io/en/posts/article-review/2026-05-20-negative-ion-seeding/">https://jinu219.github.io/en/posts/article-review/2026-05-20-negative-ion-seeding/</a>.
+</div></div></section></div></main> <!-- /main -->
 <script>
 (() => {
   const localizeNavigation = () => {
@@ -856,16 +948,16 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/about.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/article-review/2026-05-20-negative-ion-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../about.html">
+    <a class="nav-link" href="../../../../about.html">
 <p>소개</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="../index.xml">
+    <a class="nav-link" href="../../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -882,5 +974,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
