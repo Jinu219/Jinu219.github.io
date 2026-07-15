@@ -14,18 +14,11 @@
     "text": "구름 미세물리와 seeding 문제를 PySDM 기반 수치 실험으로 탐색하는 연구 프로젝트입니다.\n\n\n\n\n\n\n\n\n영역\n이 블로그\n코드 저장소\n\n\n\n\n역할\n질문, 배경, 실험 해석, 그림\n실행 코드, 설정, 테스트, 원자료 처리\n\n\n변경 단위\n한 편의 연구 노트\n재현 가능한 실행 단위\n\n\n연결 방식\n실행 버전과 결과 링크 기록\n관련 블로그 글 링크 기록\n\n\n\nPySDM-Seeding-Lab 저장소 열기"
   },
   {
-    "objectID": "projects.html#공개-원칙",
-    "href": "projects.html#공개-원칙",
-    "title": "프로젝트",
-    "section": "공개 원칙",
-    "text": "공개 원칙\n\n질문을 먼저 씁니다. 결과에 맞춰 가설을 뒤늦게 만들지 않습니다.\n기준 실험을 둡니다. 바뀐 조건과 고정한 조건을 분리합니다.\n버전을 남깁니다. 코드 커밋, 패키지 버전, 난수 시드를 기록합니다.\n그림을 추적 가능하게 만듭니다. 그림이 어떤 데이터와 스크립트에서 왔는지 연결합니다."
-  },
-  {
     "objectID": "learn-pysdm.html",
     "href": "learn-pysdm.html",
     "title": "Learn PySDM",
     "section": "",
-    "text": "PySDM을 처음 만나는 순간부터 문헌 속 실험을 읽을 수 있을 때까지의 학습 경로입니다. 각 글은 하나의 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\n\nLearn PySDM\n\ncloud microphysics\n\nsuper-droplet method\n\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
+    "text": "PySDM을 처음 만나는 순간부터 문헌 속 실험을 읽을 수 있을 때까지의 학습 경로입니다. 각 글은 하나의 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
   },
   {
     "objectID": "experiments.html",

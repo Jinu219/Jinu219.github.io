@@ -85,9 +85,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -363,14 +363,14 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
-    <h5 class="quarto-listing-category-title">분류</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">전체 <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y2xvdWQlMjBtaWNyb3BoeXNpY3M=">cloud microphysics <span class="quarto-category-count">(1)</span></div><div class="category" data-category="TGVhcm4lMjBQeVNETQ==">Learn PySDM <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c3VwZXItZHJvcGxldCUyMG1ldGhvZA==">super-droplet method <span class="quarto-category-count">(1)</span></div></div></div>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -385,7 +385,7 @@ window.Quarto = {
 </div>
 
 
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta">
 
     
   
@@ -404,7 +404,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="TGVhcm4lMjBQeVNETSUyQ2Nsb3VkJTIwbWljcm9waHlzaWNzJTJDc3VwZXItZHJvcGxldCUyMG1ldGhvZA==" data-listing-date-sort="1784073600000" data-listing-file-modified-sort="1784084692072" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="350">
+<div class="quarto-post image-right" data-index="0" data-categories="TGVhcm4lMjBQeVNETSUyQ2Nsb3VkJTIwbWljcm9waHlzaWNzJTJDc3VwZXItZHJvcGxldCUyMG1ldGhvZA==" data-listing-date-sort="1784073600000" data-listing-file-modified-sort="1784085084351" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="350">
 <div class="thumbnail"><a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
 
 <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
@@ -414,15 +414,6 @@ window.Quarto = {
 <h3 class="no-anchor listing-title">
 <a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표</a>
 </h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('TGVhcm4lMjBQeVNETQ=='); return false;">Learn PySDM</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y2xvdWQlMjBtaWNyb3BoeXNpY3M='); return false;">cloud microphysics</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c3VwZXItZHJvcGxldCUyMG1ldGhvZA=='); return false;">super-droplet method</div>
-
-</div>
 <div class="delink listing-description"><a href="./posts/learn-pysdm/2026-07-15-first-steps/index.html" class="no-external">
 <p>Super-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.</p>
 </a></div>
