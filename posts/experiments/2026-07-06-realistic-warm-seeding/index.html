@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jinu">
-<meta name="dcterms.date" content="2026-07-13">
-<meta name="description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta name="dcterms.date" content="2026-07-06">
+<meta name="description" content="Clean marine, polluted continental, warm orographic 환경에서 fixed-number와 fixed-mass 시딩 반응을 50-member ensemble로 비교합니다.">
 
-<title>Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog</title>
+<title>Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -29,26 +29,26 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../../">
-<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-8d22c88bea664cdf7be1942262d459ac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-8d22c88bea664cdf7be1942262d459ac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -62,57 +62,34 @@ ul.task-list li input[type="checkbox"] {
     "s"
   ],
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "일치 없음",
+    "search-matching-documents-text": "일치된 문서",
+    "search-copy-link-title": "검색 링크 복사",
+    "search-hide-matches-text": "추가 검색 결과 숨기기",
+    "search-more-match-text": "추가 검색결과",
+    "search-more-matches-text": "추가 검색결과",
+    "search-clear-button-title": "제거",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "취소",
+    "search-submit-button-title": "검색",
+    "search-label": "검색"
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta property="og:title" content="Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Clean marine, polluted continental, warm orographic 환경에서 fixed-number와 fixed-mass 시딩 반응을 50-member ensemble로 비교합니다.">
+<meta property="og:image" content="https://jinu219.github.io/posts/experiments/2026-07-06-realistic-warm-seeding/images/fixed-number-mechanism.png">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image:height" content="900">
+<meta property="og:image:width" content="1600">
+<meta name="twitter:title" content="Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Clean marine, polluted continental, warm orographic 환경에서 fixed-number와 fixed-mass 시딩 반응을 50-member ensemble로 비교합니다.">
+<meta name="twitter:image" content="https://jinu219.github.io/posts/experiments/2026-07-06-realistic-warm-seeding/images/fixed-number-mechanism.png">
+<meta name="twitter:image-height" content="900">
+<meta name="twitter:image-width" content="1600">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -284,32 +261,32 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../../../index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="검색"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../pysdm.html"> 
+    <a class="nav-link active" href="../../../pysdm.html" aria-current="page"> 
 <span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../wrf.html"> 
+    <a class="nav-link" href="../../../wrf.html"> 
 <span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../article-review.html"> 
+    <a class="nav-link" href="../../../article-review.html"> 
 <span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../en/index.html"> 
+    <a class="nav-link" href="../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -320,17 +297,17 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="사이드바 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html">3. 현실 배경환경</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="사이드바 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
@@ -343,80 +320,80 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/pysdm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">PySDM overview</span></a>
+  <a href="../../../pysdm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PySDM 개요</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Learn PySDM</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="토글 섹션">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Getting started</span></a>
+  <a href="../../../posts/learn-pysdm/2026-07-15-first-steps/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PySDM 시작하기</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../../en/build-the-lab.html" class="sidebar-item-text sidebar-link">
+            <a href="../../../build-the-lab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Build the Lab</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="토글 섹션">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">From scripts to a lab</span></a>
+  <a href="../../../posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">스크립트에서 실험실로</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Making results trustworthy</span></a>
+  <a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">결과를 믿을 수 있는 코드</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../../en/experiments.html" class="sidebar-item-text sidebar-link">
+            <a href="../../../experiments.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Experiments</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="토글 섹션">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1. Numerical representation</span></a>
+  <a href="../../../posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. 수치 표현 민감도</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2. Seeding sensitivity</span></a>
+  <a href="../../../posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. 시딩 조건 민감도</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3. Realistic backgrounds</span></a>
+  <a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">3. 현실 배경환경</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4. Response surface</span></a>
   </div>
 </li>
@@ -425,7 +402,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="https://github.com/Jinu219/PySDM-Seeding-Lab" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Seeding Lab code ↗</span></a>
+ <span class="menu-text">Seeding Lab 코드 ↗</span></a>
   </div>
 </li>
     </ul>
@@ -435,36 +412,37 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">목차</h2>
    
   <ul>
-  <li><a href="#the-starting-problem" id="toc-the-starting-problem" class="nav-link active" data-scroll-target="#the-starting-problem">The starting problem</a></li>
-  <li><a href="#scenario-as-the-experimental-unit" id="toc-scenario-as-the-experimental-unit" class="nav-link" data-scroll-target="#scenario-as-the-experimental-unit">Scenario as the experimental unit</a></li>
-  <li><a href="#control-seeding-sweep-and-ensemble" id="toc-control-seeding-sweep-and-ensemble" class="nav-link" data-scroll-target="#control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</a></li>
-  <li><a href="#failures-that-changed-the-design" id="toc-failures-that-changed-the-design" class="nav-link" data-scroll-target="#failures-that-changed-the-design">Failures that changed the design</a></li>
-  <li><a href="#what-this-stage-achievedand-what-it-did-not" id="toc-what-this-stage-achievedand-what-it-did-not" class="nav-link" data-scroll-target="#what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</a></li>
-  <li><a href="#related-material" id="toc-related-material" class="nav-link" data-scroll-target="#related-material">Related material</a></li>
+  <li><a href="#왜-현실적인-배경-환경이-필요한가" id="toc-왜-현실적인-배경-환경이-필요한가" class="nav-link active" data-scroll-target="#왜-현실적인-배경-환경이-필요한가">왜 현실적인 배경 환경이 필요한가</a></li>
+  <li><a href="#세-개의-background와-두-개의-주입-규칙" id="toc-세-개의-background와-두-개의-주입-규칙" class="nav-link" data-scroll-target="#세-개의-background와-두-개의-주입-규칙">세 개의 background와 두 개의 주입 규칙</a></li>
+  <li><a href="#성장-경로는-세-환경에서-모두-유지됐다" id="toc-성장-경로는-세-환경에서-모두-유지됐다" class="nav-link" data-scroll-target="#성장-경로는-세-환경에서-모두-유지됐다">성장 경로는 세 환경에서 모두 유지됐다</a></li>
+  <li><a href="#heatmap과-ranking은-서로-다른-질문에-답한다" id="toc-heatmap과-ranking은-서로-다른-질문에-답한다" class="nav-link" data-scroll-target="#heatmap과-ranking은-서로-다른-질문에-답한다">Heatmap과 ranking은 서로 다른 질문에 답한다</a></li>
+  <li><a href="#미세물리-response와-실제-운영-적합성은-다르다" id="toc-미세물리-response와-실제-운영-적합성은-다르다" class="nav-link" data-scroll-target="#미세물리-response와-실제-운영-적합성은-다르다">미세물리 response와 실제 운영 적합성은 다르다</a></li>
+  <li><a href="#남은-검증" id="toc-남은-검증" class="nav-link" data-scroll-target="#남은-검증">남은 검증</a></li>
+  <li><a href="#연결-자료" id="toc-연결-자료" class="nav-link" data-scroll-target="#연결-자료">연결 자료</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/experiments/2026-07-06-realistic-warm-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html">3. 현실 배경환경</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Turning PySDM Experiment Scripts into a Seeding Lab</h1>
+<h1 class="title">Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Build the Lab</div>
+    <div class="quarto-category">Experiments</div>
     <div class="quarto-category">PySDM</div>
-    <div class="quarto-category">Streamlit</div>
-    <div class="quarto-category">reproducible research</div>
+    <div class="quarto-category">hygroscopic seeding</div>
+    <div class="quarto-category">aerosol environment</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.
+    Clean marine, polluted continental, warm orographic 환경에서 fixed-number와 fixed-mass 시딩 반응을 50-member ensemble로 비교합니다.
   </div>
 </div>
 
@@ -472,16 +450,16 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">저자</div>
     <div class="quarto-title-meta-contents">
              <p>Jinu </p>
           </div>
   </div>
     
     <div>
-    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-heading">공개</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-07-13</p>
+      <p class="date">2026-07-06</p>
     </div>
   </div>
   
@@ -493,115 +471,118 @@ window.Quarto = {
 </header>
 
 
-<p>The first obstacle in building PySDM cloud-seeding sensitivity experiments was not a microphysical equation. Every change in conditions required editing Python, remembering which configuration produced which result directory, and reconstructing how a figure had been made. The simulations ran, but the experimental history was fragile.</p>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">PySDM-Seeding-Lab PR #2</a>, merged on 13 July 2026, was the first attempt to turn those scripts into a scenario-based experimental platform. Across 31 commits and 66 changed files, the goal was to keep the question, configuration, execution, and result connected.</p>
-<div class="review-verdict">
-<p><strong>Core decision.</strong> Before adding more physics, build an experimental path that can be traced from a saved question to its outputs.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="실험 출처">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<section id="the-starting-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-starting-problem">The starting problem</h2>
-<p>Manual scripts worked for one or two tests. They became unreliable as dry radius, hygroscopicity, injection timing, updraft, and random seeds multiplied.</p>
-<ul>
-<li>Results did not identify the configuration that created them.</li>
-<li>Control and seeding settings had to be synchronized by hand.</li>
-<li>A small sweep change could silently create hundreds of model executions.</li>
-<li>Long runs gave little indication of the current case or member.</li>
-<li>Dashboard figures could outlive the context needed to interpret them.</li>
-</ul>
-<p>The project target therefore became more specific than “build a GUI”: <strong>preserve one scientific question as one scenario</strong>.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>실험 출처
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 실험은 <strong>PySDM-Seeding-Lab 외부</strong>에서 수행했다. 연구실 서버의 20-core 병렬 실행과 Visual Studio Code 기반 스크립트를 사용한 독립 PySDM 연구이며, Seeding Lab 결과로 표기하지 않는다.</p>
+</div>
+</div>
+<section id="왜-현실적인-배경-환경이-필요한가" class="level2">
+<h2 class="anchored" data-anchor-id="왜-현실적인-배경-환경이-필요한가">왜 현실적인 배경 환경이 필요한가</h2>
+<p><a href="../../../posts/experiments/2026-07-03-parameter-sensitivity/index.html">Experiment 2</a>는 큰 dry radius, 높은 κ, 늦은 injection이 강한 response를 만드는 경향을 보였다. 그러나 하나의 이상화된 background와 fixed-number 주입만 사용했다. 실제로는 배경 에어로졸 수와 흡습성이 수증기 경쟁을 바꾸고, 같은 입자 수를 넣는 것과 같은 건조질량을 넣는 것은 전혀 다른 질문이다.</p>
+<p>이번 실험은 네 가지를 묻는다.</p>
+<ol type="1">
+<li>배경 환경이 달라도 warm hygroscopic seeding pathway가 유지되는가?</li>
+<li>Clean, polluted, orographic 환경의 반응 속도와 강도는 어떻게 다른가?</li>
+<li>총 시딩 질량을 고정해도 큰 입자가 항상 유리한가?</li>
+<li>최적 injection timing은 환경마다 달라지는가?</li>
+</ol>
 </section>
-<section id="scenario-as-the-experimental-unit" class="level2">
-<h2 class="anchored" data-anchor-id="scenario-as-the-experimental-unit">Scenario as the experimental unit</h2>
-<p>The new workflow follows a deliberate sequence:</p>
-<pre class="text"><code>Create scenario
-→ configure environment / aerosol / seeding / dynamics
-→ configure parameter sweep
-→ run simulation
-→ inspect results through dashboard</code></pre>
-<p>A YAML scenario stores a name, slug, memo, timestamp, and complete configuration. Settings pages can update the working configuration or a selected saved scenario. Result directories include the scenario slug, making it possible to navigate from output back to experimental intent.</p>
-<pre class="text"><code>results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/</code></pre>
-<p>The Streamlit pages were reordered to match the research process:</p>
-<pre class="text"><code>00. Experiment Scenarios
-01. Atmospheric Environment
-02. Background Aerosol Settings
-03. Seeding Particle Settings
-04. Dynamic Parameters
-05. Parameter Sweep
-06. Run Simulation
-07. Results Dashboard</code></pre>
-<p>The UI became a checklist: define the environment and background first, then seeding and dynamics, and only then choose what to vary.</p>
-</section>
-<section id="control-seeding-sweep-and-ensemble" class="level2">
-<h2 class="anchored" data-anchor-id="control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</h2>
-<p>Seeding cannot be interpreted from a treatment run alone. Comparison mode creates matched control and seeding outputs:</p>
-<pre class="text"><code>control/
-seeding/
-comparison.csv
-summary.json
-metadata.json
-config.yaml</code></pre>
-<p>For each variable, the result stores control, seeding, difference, and relative change. The first sweep catalog covered dry radius, <span class="math inline">\(\kappa\)</span>, injection start and duration, updraft velocity, and collision ON/OFF. Before execution, the app estimates</p>
-<pre class="text"><code>parameter combinations × ensemble members × control/seeding.</code></pre>
-<p>This is both a planning feature and a safety check against accidentally launching an oversized workload.</p>
-<p>The Results Dashboard connects single, comparison, sweep, and ensemble results. Growth Pathway Diagnostics follows</p>
-<pre class="text"><code>vapour / supersaturation
-→ cloud water
-→ activated particles
-→ size growth
-→ rain water.</code></pre>
-<p>Sweep filters, full-range case sampling, and injection-relative time alignment were added so later parameter values would not disappear merely because a plot had a maximum case count.</p>
-</section>
-<section id="failures-that-changed-the-design" class="level2">
-<h2 class="anchored" data-anchor-id="failures-that-changed-the-design">Failures that changed the design</h2>
-<p>Renaming Streamlit pages left duplicate files and caused <code>Multiple Pages specified with URL pathname run</code>. A cleanup script and integrity check were added instead of relying on manual deletion.</p>
-<p>During long sweeps, the dashboard sometimes read a CSV while it was still being written, producing <code>EmptyDataError</code>. Safe reading and incomplete-result filtering separated “directory exists” from “result is complete.” A subsequent regression made <code>safe_read_csv()</code> call itself recursively. The repair changed it back to <code>pd.read_csv(path)</code> and strengthened the integrity check to reject the pattern in future.</p>
-<p>The lesson was larger than exception handling: dashboard stability comes from making known failures testable.</p>
-</section>
-<section id="what-this-stage-achievedand-what-it-did-not" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</h2>
+<section id="세-개의-background와-두-개의-주입-규칙" class="level2">
+<h2 class="anchored" data-anchor-id="세-개의-background와-두-개의-주입-규칙">세 개의 background와 두 개의 주입 규칙</h2>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Before</th>
-<th>After PR #2</th>
+<th>Environment</th>
+<th style="text-align: right;">Background dry radius</th>
+<th style="text-align: right;">κ</th>
+<th style="text-align: right;">Number concentration</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Edit scripts for each condition</td>
-<td>Preserve question and configuration in YAML scenarios</td>
+<td>Clean marine</td>
+<td style="text-align: right;">0.10 µm</td>
+<td style="text-align: right;">0.70</td>
+<td style="text-align: right;">100 cm⁻³</td>
 </tr>
 <tr class="even">
-<td>Manually track result folders</td>
-<td>Link folders to scenario slugs and metadata</td>
+<td>Polluted urban/continental</td>
+<td style="text-align: right;">0.07 µm</td>
+<td style="text-align: right;">0.30</td>
+<td style="text-align: right;">1,000 cm⁻³</td>
 </tr>
 <tr class="odd">
-<td>Focus on single runs</td>
-<td>Support comparison, sweep, and ensemble workflows</td>
-</tr>
-<tr class="even">
-<td>Inspect final curves</td>
-<td>Follow process pathways and uncertainty</td>
-</tr>
-<tr class="odd">
-<td>Wait without context</td>
-<td>Report case- and member-level progress</td>
+<td>Warm orographic</td>
+<td style="text-align: right;">0.08 µm</td>
+<td style="text-align: right;">0.45</td>
+<td style="text-align: right;">300 cm⁻³</td>
 </tr>
 </tbody>
 </table>
-<p>One important limitation remained. Some Growth Pathway columns were proxies inferred when the adapter did not expose native PySDM products. They were useful for validating the workflow, but they were not yet safe to interpret as direct physical output.</p>
-<p>That limitation defined the next development question: how can every plotted diagnostic disclose whether it is native, derived, proxied, or missing?</p>
+<p>Seeding dry radius는 0.5, 1.0, 1.5, 2.0, 3.0 µm, κ는 0.8, 1.0, 1.2, injection window는 10–15, 15–20, 20–25, 25–30분으로 구성했다. Main simulation은 collision ON이며 대표 control만 collision OFF로 실행했다. 각 조건은 50-member ensemble로 계산했다.</p>
+<p><code>fixed number</code>는 dry radius가 달라도 같은 수의 시딩 입자를 넣는다. 입자 크기 효과와 총 투입 질량 효과가 함께 바뀐다. <code>fixed mass</code>는 전체 dry material mass를 고정하므로 입자가 커질수록 주입되는 입자 수가 줄어든다. 실제 재료가 제한된 상황의 efficiency를 묻는 데 더 적합하다.</p>
 </section>
-<section id="related-material" class="level2">
-<h2 class="anchored" data-anchor-id="related-material">Related material</h2>
+<section id="성장-경로는-세-환경에서-모두-유지됐다" class="level2">
+<h2 class="anchored" data-anchor-id="성장-경로는-세-환경에서-모두-유지됐다">성장 경로는 세 환경에서 모두 유지됐다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fixed-number-mechanism.png" class="img-fluid figure-img" alt="Mechanism time series for clean marine, polluted continental, and warm orographic environments"></p>
+<figcaption>Fixed-number 대표 조건에서 세 환경의 수증기, RH, 온도, cloud/all-activated water, rain-water response.</figcaption>
+</figure>
+</div>
+<p>시딩 뒤 water vapour와 RH/supersaturation이 감소하고 temperature가 증가했다. 흡수된 수증기는 cloud water와 all-activated water로 이동했고, collision/coalescence와 결합해 rain water 증가로 이어졌다. 이 방향은 세 background에서 공통으로 나타났다.</p>
+<p>대표 fixed-number 조건에서는 clean marine 반응이 가장 빠르고 강했다. 배경 입자 수가 적어 수증기 경쟁이 약하고 시딩 입자가 빠르게 성장한 것으로 해석했다. Polluted 환경은 많은 background aerosol 때문에 조건 의존성이 컸다.</p>
+<p>Fixed-mass에서는 같은 mechanism 방향이 유지됐지만 response가 전반적으로 작아졌다. 큰 입자의 activation advantage와 줄어든 particle number 사이에 trade-off가 생겼기 때문이다. 따라서 “입자가 클수록 항상 좋다”는 결론은 fixed-number에 한정된다.</p>
+</section>
+<section id="heatmap과-ranking은-서로-다른-질문에-답한다" class="level2">
+<h2 class="anchored" data-anchor-id="heatmap과-ranking은-서로-다른-질문에-답한다">Heatmap과 ranking은 서로 다른 질문에 답한다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/integrated-response-heatmaps.png" class="img-fluid figure-img" alt="Integrated positive rain-water response heatmaps across environments and seeding designs"></p>
+<figcaption>환경·질량 규칙·κ별 dry-radius × injection-time integrated positive response heatmap.</figcaption>
+</figure>
+</div>
+<p><code>integrated_positive_mean</code>은 양의 rain-water difference가 시간에 걸쳐 얼마나 누적됐는지 보여준다. 이 값은 response의 강도와 지속시간을 함께 담지만, early injection은 적분 시간이 길어 유리해질 수 있다. 그래서 simulation이 유효했던 마지막 시점의 <code>last_finite_mean</code>도 함께 비교했다.</p>
+<p>일부 collision ON member는 매우 큰 입자 성장으로 조기 종료될 수 있다. 단순 final value 대신 last finite response, integrated response, median/IQR, finite fraction을 함께 보는 이유다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ranked-response.png" class="img-fluid figure-img" alt="Ranked seeding conditions by integrated and last-finite rain-water response"></p>
+<figcaption>전체 parameter grid에서 integrated positive response와 last-finite response가 큰 조건의 순위.</figcaption>
+</figure>
+</div>
+<p>대표 time series에서는 clean marine이 가장 빠르지만, 전체 grid의 top-ranked conditions에는 warm orographic이 많이 나타났다. 모순이 아니다. 첫 그림은 한 대표 조건의 <strong>반응 속도</strong>를, ranking은 모든 조합 중 <strong>가장 강한 조건</strong>을 본다.</p>
 <ul>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">Pull Request #2</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a></li>
-<li><a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html">Next log: From Code That Produces Results to Code That Makes Them Trustworthy</a></li>
+<li>Clean marine: 대표 조건에서 빠른 반응형</li>
+<li>Warm orographic: large dry radius와 late injection이 맞으면 강하게 증폭되는 조건형</li>
+<li>Polluted urban/continental: 높은 배경 입자 수 때문에 parameter dependence가 큰 환경</li>
+</ul>
+<p>Clean marine은 20–25분 조건에서 빠른 반응을 보였고, warm orographic은 25–30분 late injection에서 강한 조건이 나타났다. 최적 시점은 단순히 “늦을수록”이 아니라 각 환경의 cloud development stage와 연결된다.</p>
+</section>
+<section id="미세물리-response와-실제-운영-적합성은-다르다" class="level2">
+<h2 class="anchored" data-anchor-id="미세물리-response와-실제-운영-적합성은-다르다">미세물리 response와 실제 운영 적합성은 다르다</h2>
+<p>이 실험은 parcel 내부의 microphysical rain-water response를 비교한다. 실제 시딩 대상 선정에는 구름의 위치 예측 가능성, 수명, 강수 전달 위치, 수자원 가치가 추가로 필요하다. Clean marine의 빠른 반응이 곧 운영상 최적 대상이라는 뜻은 아니다. 또한 실제 orographic seeding에는 warm hygroscopic이 아닌 mixed-phase/glaciogenic 방식도 많으므로 이 결과를 모든 지형성 시딩에 확장할 수 없다.</p>
+<div class="review-verdict">
+<p><strong>결론.</strong> Warm hygroscopic pathway는 세 background에서 유지됐지만 강도와 최적 timing은 환경 의존적이었다. Fixed-number에서는 큰 입자가 강했지만 fixed-mass에서는 크기–개수 trade-off가 나타나, efficiency를 particle size 하나로 설명할 수 없었다.</p>
+</div>
+</section>
+<section id="남은-검증" class="level2">
+<h2 class="anchored" data-anchor-id="남은-검증">남은 검증</h2>
+<p>Top-ranked condition이 일부 seed에 좌우되지 않는지 median, IQR, finite/early-stop fraction을 더 엄격히 확인해야 한다. 다음 실험에서는 환경을 하나로 고정한 채 κ, dry radius, timing의 상호작용을 조밀한 response surface로 만들고, “시험 범위 안의 최대”와 “보편적 최적”을 구분한다.</p>
+<p><a href="../../../posts/experiments/2026-07-08-efficiency-response-surface/index.html">Experiment 4로 이어서 읽기</a></p>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
+<ul>
+<li><a href="https://chatgpt.com/share/6a572246-27b4-83e8-98e9-a077a40ecb7c">Experiment 3 설계·해석 대화</a></li>
+<li><a href="../../../experiments.html">Experiments 목록</a></li>
 </ul>
 
 
@@ -717,12 +698,12 @@ config.yaml</code></pre>
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "복사완료!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "복사완료!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -1100,16 +1081,16 @@ config.yaml</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/experiments/2026-07-06-realistic-warm-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../../../../about.html">
+    <a class="nav-link" href="../../../about.html">
 <p>소개</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="../../../../index.xml">
+    <a class="nav-link" href="../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -1126,5 +1107,5 @@ config.yaml</code></pre>
 
 
 
-<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

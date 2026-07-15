@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jinu">
-<meta name="dcterms.date" content="2026-07-13">
-<meta name="description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta name="dcterms.date" content="2026-07-03">
+<meta name="description" content="Dry radius, κ, injection timing을 바꾸고 후속 진단에서 수증기 소모부터 rain-size 질량 증가까지 성장 경로를 추적합니다.">
 
-<title>Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog</title>
+<title>Experiment 2. 시딩 입자와 주입 시점의 민감도 – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -29,26 +29,26 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../../">
-<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-8d22c88bea664cdf7be1942262d459ac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-8d22c88bea664cdf7be1942262d459ac.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-3586efc5f0b9a0aefa2ed9f9d8f9a9f6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -62,17 +62,17 @@ ul.task-list li input[type="checkbox"] {
     "s"
   ],
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "일치 없음",
+    "search-matching-documents-text": "일치된 문서",
+    "search-copy-link-title": "검색 링크 복사",
+    "search-hide-matches-text": "추가 검색 결과 숨기기",
+    "search-more-match-text": "추가 검색결과",
+    "search-more-matches-text": "추가 검색결과",
+    "search-clear-button-title": "제거",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "취소",
+    "search-submit-button-title": "검색",
+    "search-label": "검색"
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
@@ -107,12 +107,18 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta property="og:title" content="Experiment 2. 시딩 입자와 주입 시점의 민감도 – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Dry radius, κ, injection timing을 바꾸고 후속 진단에서 수증기 소모부터 rain-size 질량 증가까지 성장 경로를 추적합니다.">
+<meta property="og:image" content="https://jinu219.github.io/posts/experiments/2026-07-03-parameter-sensitivity/images/injection-timing.png">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image:height" content="900">
+<meta property="og:image:width" content="1600">
+<meta name="twitter:title" content="Experiment 2. 시딩 입자와 주입 시점의 민감도 – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Dry radius, κ, injection timing을 바꾸고 후속 진단에서 수증기 소모부터 rain-size 질량 증가까지 성장 경로를 추적합니다.">
+<meta name="twitter:image" content="https://jinu219.github.io/posts/experiments/2026-07-03-parameter-sensitivity/images/injection-timing.png">
+<meta name="twitter:image-height" content="900">
+<meta name="twitter:image-width" content="1600">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -284,32 +290,32 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../../../index.html">
+    <a class="navbar-brand" href="../../../index.html">
     <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="검색"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../pysdm.html"> 
+    <a class="nav-link active" href="../../../pysdm.html" aria-current="page"> 
 <span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../wrf.html"> 
+    <a class="nav-link" href="../../../wrf.html"> 
 <span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../../article-review.html"> 
+    <a class="nav-link" href="../../../article-review.html"> 
 <span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../../en/index.html"> 
+    <a class="nav-link" href="../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -320,17 +326,17 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="사이드바 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../posts/experiments/2026-07-03-parameter-sensitivity/index.html">2. 시딩 조건 민감도</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="사이드바 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
@@ -343,80 +349,80 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/pysdm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">PySDM overview</span></a>
+  <a href="../../../pysdm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PySDM 개요</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Learn PySDM</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="토글 섹션">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Getting started</span></a>
+  <a href="../../../posts/learn-pysdm/2026-07-15-first-steps/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PySDM 시작하기</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../../en/build-the-lab.html" class="sidebar-item-text sidebar-link">
+            <a href="../../../build-the-lab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Build the Lab</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="토글 섹션">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">From scripts to a lab</span></a>
+  <a href="../../../posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">스크립트에서 실험실로</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Making results trustworthy</span></a>
+  <a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">결과를 믿을 수 있는 코드</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../../en/experiments.html" class="sidebar-item-text sidebar-link">
+            <a href="../../../experiments.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Experiments</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="토글 섹션">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1. Numerical representation</span></a>
+  <a href="../../../posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. 수치 표현 민감도</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2. Seeding sensitivity</span></a>
+  <a href="../../../posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">2. 시딩 조건 민감도</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3. Realistic backgrounds</span></a>
+  <a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. 현실 배경환경</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4. Response surface</span></a>
   </div>
 </li>
@@ -425,7 +431,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="https://github.com/Jinu219/PySDM-Seeding-Lab" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Seeding Lab code ↗</span></a>
+ <span class="menu-text">Seeding Lab 코드 ↗</span></a>
   </div>
 </li>
     </ul>
@@ -435,36 +441,38 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">목차</h2>
    
   <ul>
-  <li><a href="#the-starting-problem" id="toc-the-starting-problem" class="nav-link active" data-scroll-target="#the-starting-problem">The starting problem</a></li>
-  <li><a href="#scenario-as-the-experimental-unit" id="toc-scenario-as-the-experimental-unit" class="nav-link" data-scroll-target="#scenario-as-the-experimental-unit">Scenario as the experimental unit</a></li>
-  <li><a href="#control-seeding-sweep-and-ensemble" id="toc-control-seeding-sweep-and-ensemble" class="nav-link" data-scroll-target="#control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</a></li>
-  <li><a href="#failures-that-changed-the-design" id="toc-failures-that-changed-the-design" class="nav-link" data-scroll-target="#failures-that-changed-the-design">Failures that changed the design</a></li>
-  <li><a href="#what-this-stage-achievedand-what-it-did-not" id="toc-what-this-stage-achievedand-what-it-did-not" class="nav-link" data-scroll-target="#what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</a></li>
-  <li><a href="#related-material" id="toc-related-material" class="nav-link" data-scroll-target="#related-material">Related material</a></li>
+  <li><a href="#질문-어떤-입자를-언제-넣어야-하는가" id="toc-질문-어떤-입자를-언제-넣어야-하는가" class="nav-link active" data-scroll-target="#질문-어떤-입자를-언제-넣어야-하는가">질문: 어떤 입자를 언제 넣어야 하는가</a></li>
+  <li><a href="#실험-설계" id="toc-실험-설계" class="nav-link" data-scroll-target="#실험-설계">실험 설계</a></li>
+  <li><a href="#dry-radius-큰-입자가-더-강했지만-질량-효과도-섞여-있다" id="toc-dry-radius-큰-입자가-더-강했지만-질량-효과도-섞여-있다" class="nav-link" data-scroll-target="#dry-radius-큰-입자가-더-강했지만-질량-효과도-섞여-있다">Dry radius: 큰 입자가 더 강했지만, 질량 효과도 섞여 있다</a></li>
+  <li><a href="#κ-흡습성이-높을수록-response가-커졌다" id="toc-κ-흡습성이-높을수록-response가-커졌다" class="nav-link" data-scroll-target="#κ-흡습성이-높을수록-response가-커졌다">κ: 흡습성이 높을수록 response가 커졌다</a></li>
+  <li><a href="#injection-timing-가장-큰-차이를-만든-축" id="toc-injection-timing-가장-큰-차이를-만든-축" class="nav-link" data-scroll-target="#injection-timing-가장-큰-차이를-만든-축">Injection timing: 가장 큰 차이를 만든 축</a></li>
+  <li><a href="#follow-up-study-rain-water-하나에서-성장-경로로" id="toc-follow-up-study-rain-water-하나에서-성장-경로로" class="nav-link" data-scroll-target="#follow-up-study-rain-water-하나에서-성장-경로로">Follow-Up Study: rain water 하나에서 성장 경로로</a></li>
+  <li><a href="#다음-실험으로" id="toc-다음-실험으로" class="nav-link" data-scroll-target="#다음-실험으로">다음 실험으로</a></li>
+  <li><a href="#연결-자료" id="toc-연결-자료" class="nav-link" data-scroll-target="#연결-자료">연결 자료</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/experiments/2026-07-03-parameter-sensitivity/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../posts/experiments/2026-07-03-parameter-sensitivity/index.html">2. 시딩 조건 민감도</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Turning PySDM Experiment Scripts into a Seeding Lab</h1>
+<h1 class="title">Experiment 2. 시딩 입자와 주입 시점의 민감도</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Build the Lab</div>
+    <div class="quarto-category">Experiments</div>
     <div class="quarto-category">PySDM</div>
-    <div class="quarto-category">Streamlit</div>
-    <div class="quarto-category">reproducible research</div>
+    <div class="quarto-category">hygroscopic seeding</div>
+    <div class="quarto-category">sensitivity</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.
+    Dry radius, κ, injection timing을 바꾸고 후속 진단에서 수증기 소모부터 rain-size 질량 증가까지 성장 경로를 추적합니다.
   </div>
 </div>
 
@@ -472,16 +480,16 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">저자</div>
     <div class="quarto-title-meta-contents">
              <p>Jinu </p>
           </div>
   </div>
     
     <div>
-    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-heading">공개</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-07-13</p>
+      <p class="date">2026-07-03</p>
     </div>
   </div>
   
@@ -493,115 +501,124 @@ window.Quarto = {
 </header>
 
 
-<p>The first obstacle in building PySDM cloud-seeding sensitivity experiments was not a microphysical equation. Every change in conditions required editing Python, remembering which configuration produced which result directory, and reconstructing how a figure had been made. The simulations ran, but the experimental history was fragile.</p>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">PySDM-Seeding-Lab PR #2</a>, merged on 13 July 2026, was the first attempt to turn those scripts into a scenario-based experimental platform. Across 31 commits and 66 changed files, the goal was to keep the question, configuration, execution, and result connected.</p>
-<div class="review-verdict">
-<p><strong>Core decision.</strong> Before adding more physics, build an experimental path that can be traced from a saved question to its outputs.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="실험 출처">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<section id="the-starting-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-starting-problem">The starting problem</h2>
-<p>Manual scripts worked for one or two tests. They became unreliable as dry radius, hygroscopicity, injection timing, updraft, and random seeds multiplied.</p>
-<ul>
-<li>Results did not identify the configuration that created them.</li>
-<li>Control and seeding settings had to be synchronized by hand.</li>
-<li>A small sweep change could silently create hundreds of model executions.</li>
-<li>Long runs gave little indication of the current case or member.</li>
-<li>Dashboard figures could outlive the context needed to interpret them.</li>
-</ul>
-<p>The project target therefore became more specific than “build a GUI”: <strong>preserve one scientific question as one scenario</strong>.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>실험 출처
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>본편과 Follow-Up Study 모두 <strong>PySDM-Seeding-Lab을 사용하지 않았다.</strong> 연구실 서버와 Visual Studio Code에서 수행한 독립 PySDM parcel 실험이다. 본문은 2026-07-02 민감도 실험과 2026-07-03 후속 진단을 한 흐름으로 합쳤다.</p>
+</div>
+</div>
+<section id="질문-어떤-입자를-언제-넣어야-하는가" class="level2">
+<h2 class="anchored" data-anchor-id="질문-어떤-입자를-언제-넣어야-하는가">질문: 어떤 입자를 언제 넣어야 하는가</h2>
+<p><a href="../../../posts/experiments/2026-06-30-numerical-representation/index.html">Experiment 1</a>은 rain-water response가 수치 표현과 random seed에 민감하다는 점을 보여줬다. 이번에는 <code>n_sd_initial = n_sd_seeding = 1,000</code>으로 고정하고, 시딩 입자의 물리적 성질과 주입 시점만 바꿨다.</p>
+<p>질문은 세 가지다.</p>
+<ol type="1">
+<li>Dry radius가 큰 입자는 25 µm 이상 rain-size 질량을 더 많이 만드는가?</li>
+<li>흡습성 κ가 커질수록 수증기 흡수와 rain response가 강해지는가?</li>
+<li>같은 입자라도 cloud parcel의 어느 성장 단계에 주입하는지가 결과를 바꾸는가?</li>
+</ol>
 </section>
-<section id="scenario-as-the-experimental-unit" class="level2">
-<h2 class="anchored" data-anchor-id="scenario-as-the-experimental-unit">Scenario as the experimental unit</h2>
-<p>The new workflow follows a deliberate sequence:</p>
-<pre class="text"><code>Create scenario
-→ configure environment / aerosol / seeding / dynamics
-→ configure parameter sweep
-→ run simulation
-→ inspect results through dashboard</code></pre>
-<p>A YAML scenario stores a name, slug, memo, timestamp, and complete configuration. Settings pages can update the working configuration or a selected saved scenario. Result directories include the scenario slug, making it possible to navigate from output back to experimental intent.</p>
-<pre class="text"><code>results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/</code></pre>
-<p>The Streamlit pages were reordered to match the research process:</p>
-<pre class="text"><code>00. Experiment Scenarios
-01. Atmospheric Environment
-02. Background Aerosol Settings
-03. Seeding Particle Settings
-04. Dynamic Parameters
-05. Parameter Sweep
-06. Run Simulation
-07. Results Dashboard</code></pre>
-<p>The UI became a checklist: define the environment and background first, then seeding and dynamics, and only then choose what to vary.</p>
-</section>
-<section id="control-seeding-sweep-and-ensemble" class="level2">
-<h2 class="anchored" data-anchor-id="control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</h2>
-<p>Seeding cannot be interpreted from a treatment run alone. Comparison mode creates matched control and seeding outputs:</p>
-<pre class="text"><code>control/
-seeding/
-comparison.csv
-summary.json
-metadata.json
-config.yaml</code></pre>
-<p>For each variable, the result stores control, seeding, difference, and relative change. The first sweep catalog covered dry radius, <span class="math inline">\(\kappa\)</span>, injection start and duration, updraft velocity, and collision ON/OFF. Before execution, the app estimates</p>
-<pre class="text"><code>parameter combinations × ensemble members × control/seeding.</code></pre>
-<p>This is both a planning feature and a safety check against accidentally launching an oversized workload.</p>
-<p>The Results Dashboard connects single, comparison, sweep, and ensemble results. Growth Pathway Diagnostics follows</p>
-<pre class="text"><code>vapour / supersaturation
-→ cloud water
-→ activated particles
-→ size growth
-→ rain water.</code></pre>
-<p>Sweep filters, full-range case sampling, and injection-relative time alignment were added so later parameter values would not disappear merely because a plot had a maximum case count.</p>
-</section>
-<section id="failures-that-changed-the-design" class="level2">
-<h2 class="anchored" data-anchor-id="failures-that-changed-the-design">Failures that changed the design</h2>
-<p>Renaming Streamlit pages left duplicate files and caused <code>Multiple Pages specified with URL pathname run</code>. A cleanup script and integrity check were added instead of relying on manual deletion.</p>
-<p>During long sweeps, the dashboard sometimes read a CSV while it was still being written, producing <code>EmptyDataError</code>. Safe reading and incomplete-result filtering separated “directory exists” from “result is complete.” A subsequent regression made <code>safe_read_csv()</code> call itself recursively. The repair changed it back to <code>pd.read_csv(path)</code> and strengthened the integrity check to reject the pattern in future.</p>
-<p>The lesson was larger than exception handling: dashboard stability comes from making known failures testable.</p>
-</section>
-<section id="what-this-stage-achievedand-what-it-did-not" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</h2>
+<section id="실험-설계" class="level2">
+<h2 class="anchored" data-anchor-id="실험-설계">실험 설계</h2>
+<p>PySDM <code>seeding_no_collisions</code> 예제의 adiabatic parcel 구조를 확장했다. 각 조건마다 <code>no seeding + collision ON</code>, <code>seeding + collision ON</code>, <code>no seeding + collision OFF</code>, <code>seeding + collision OFF</code>의 네 case를 실행하고 seeding에서 no-seeding을 뺀 차이를 계산했다.</p>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Before</th>
-<th>After PR #2</th>
+<th>민감도 축</th>
+<th>조건</th>
+<th>고정 조건</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Edit scripts for each condition</td>
-<td>Preserve question and configuration in YAML scenarios</td>
+<td>Dry radius</td>
+<td>0.5, 1.0, 2.0 µm</td>
+<td>κ = 0.8, 15–20 min</td>
 </tr>
 <tr class="even">
-<td>Manually track result folders</td>
-<td>Link folders to scenario slugs and metadata</td>
+<td>κ</td>
+<td>0.3, 0.5, 0.8, 1.0</td>
+<td>dry radius = 1 µm, 15–20 min</td>
 </tr>
 <tr class="odd">
-<td>Focus on single runs</td>
-<td>Support comparison, sweep, and ensemble workflows</td>
-</tr>
-<tr class="even">
-<td>Inspect final curves</td>
-<td>Follow process pathways and uncertainty</td>
-</tr>
-<tr class="odd">
-<td>Wait without context</td>
-<td>Report case- and member-level progress</td>
+<td>Injection timing</td>
+<td>10–15, 15–20, 20–25 min</td>
+<td>dry radius = 1 µm, κ = 0.8</td>
 </tr>
 </tbody>
 </table>
-<p>One important limitation remained. Some Growth Pathway columns were proxies inferred when the adapter did not expose native PySDM products. They were useful for validating the workflow, but they were not yet safe to interpret as direct physical output.</p>
-<p>That limitation defined the next development question: how can every plotted diagnostic disclose whether it is native, derived, proxied, or missing?</p>
+<p>본편은 Formulae seed 100–109의 10-member ensemble을 사용했다. Rain water는 wet radius 25 µm 이상 입자의 water mixing ratio로 정의했다.</p>
 </section>
-<section id="related-material" class="level2">
-<h2 class="anchored" data-anchor-id="related-material">Related material</h2>
+<section id="dry-radius-큰-입자가-더-강했지만-질량-효과도-섞여-있다" class="level2">
+<h2 class="anchored" data-anchor-id="dry-radius-큰-입자가-더-강했지만-질량-효과도-섞여-있다">Dry radius: 큰 입자가 더 강했지만, 질량 효과도 섞여 있다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dry-radius-sensitivity.png" class="img-fluid figure-img" alt="Rain-water response for three dry-radius conditions with collision on and off"></p>
+<figcaption>Dry radius 0.5, 1, 2 µm 조건의 collision ON/OFF rain-water response.</figcaption>
+</figure>
+</div>
+<p>Collision ON에서 최종 rain-water response는 plot scale 기준으로 대략 <code>2 µm &gt; 1 µm &gt; 0.5 µm</code> 순이었다. 2 µm는 약 <span class="math inline">\(2.1\times10^{-5}\)</span>, 1 µm는 약 <span class="math inline">\(0.9\times10^{-5}\)</span>, 0.5 µm는 약 <span class="math inline">\(0.4\)</span>–<span class="math inline">\(0.5\times10^{-5}\)</span> 수준이었다.</p>
+<p>큰 dry particle은 같은 κ에서 더 큰 wet particle로 성장하고 collision/coalescence에 참여하기 쉽다. 다만 이 실험은 같은 <strong>입자 수</strong>를 주입했기 때문에 dry radius를 키우면 총 dry material mass도 함께 커진다. 따라서 이 결과를 입자 크기만의 순수 효과로 볼 수는 없다. 이 한계가 Experiment 3의 fixed-mass 설계로 이어졌다.</p>
+</section>
+<section id="κ-흡습성이-높을수록-response가-커졌다" class="level2">
+<h2 class="anchored" data-anchor-id="κ-흡습성이-높을수록-response가-커졌다">κ: 흡습성이 높을수록 response가 커졌다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/kappa-sensitivity.png" class="img-fluid figure-img" alt="Rain-water sensitivity to particle hygroscopicity kappa"></p>
+<figcaption>κ 0.3–1.0 조건의 rain-water response와 collision OFF control.</figcaption>
+</figure>
+</div>
+<p>Collision ON에서 후반부 response는 <code>κ = 1.0 &gt; 0.8 &gt; 0.5 &gt; 0.3</code> 순으로 커졌다. 최종 값은 plot scale 기준 약 <span class="math inline">\(1.0\)</span>, <span class="math inline">\(0.9\)</span>, <span class="math inline">\(0.75\)</span>, <span class="math inline">\(0.65\times10^{-5}\)</span>였다. κ가 큰 입자는 더 낮은 activation barrier와 빠른 수분 흡수로 성장하고, 이후 collision pathway에 더 효과적으로 들어간 것으로 해석했다.</p>
+<p>Collision OFF에서는 κ가 달라도 rain water가 거의 0이었다. 이것은 시딩 효과 자체가 없다는 뜻이 아니다. Water vapour, droplet number, effective radius 같은 cloud-size diagnostic은 변할 수 있지만, 이 parcel과 시간 범위에서는 응결 성장만으로 25 µm threshold를 넘지 못했다는 뜻이다.</p>
+</section>
+<section id="injection-timing-가장-큰-차이를-만든-축" class="level2">
+<h2 class="anchored" data-anchor-id="injection-timing-가장-큰-차이를-만든-축">Injection timing: 가장 큰 차이를 만든 축</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/injection-timing.png" class="img-fluid figure-img" alt="Rain-water response for three injection windows"></p>
+<figcaption>10–15, 15–20, 20–25분 주입 조건의 rain-water response.</figcaption>
+</figure>
+</div>
+<p>10–15분 주입은 짧은 양의 spike 뒤 약 <span class="math inline">\(-3.8\times10^{-5}\)</span>까지 내려가는 음의 response를 보였고 최종 값은 0에 가까웠다. 초기 단계에서 작은 입자 수와 수증기 경쟁이 늘어 개별 입자의 rain-size 성장을 늦췄을 가능성이 있다.</p>
+<p>15–20분은 급격한 spike보다 안정적인 양의 증가를 보였고 최종 약 <span class="math inline">\(0.9\times10^{-5}\)</span>에 도달했다. 20–25분은 22–23분 이후 빠르게 증가해 최종 약 <span class="math inline">\(2.7\times10^{-5}\)</span>로 가장 컸다. 그러나 이 window는 simulation 종료 시점에 가깝다. <strong>후반부 값이 크다는 사실과 장시간 지속된다는 사실은 다르며</strong>, 장기 지속성은 더 긴 integration으로 확인해야 한다.</p>
+</section>
+<section id="follow-up-study-rain-water-하나에서-성장-경로로" class="level2">
+<h2 class="anchored" data-anchor-id="follow-up-study-rain-water-하나에서-성장-경로로">Follow-Up Study: rain water 하나에서 성장 경로로</h2>
+<p>본편의 rain-water 곡선만으로는 수증기가 어디로 갔고, cloud-size 입자가 어떻게 rain-size 질량으로 바뀌었는지 설명하기 어려웠다. 일부 concentration/effective-radius product에는 유효 자료가 부족하거나 NaN 구간이 있었다.</p>
+<p>후속 연구에서는 입자 범위를 <code>cloud-size (0.5–25 µm)</code>, <code>rain-size (≥25 µm)</code>, <code>all activated (≥0.5 µm)</code>로 분리했다. Ensemble 통계도 mean뿐 아니라 standard deviation, median, q25, q75, <code>n_success</code>, finite fraction으로 확장했다. Rain-size 입자가 아직 없는 시간의 effective radius NaN은 계산 실패가 아니라 정의상 자연스러운 빈 구간일 수 있으므로 health check와 함께 해석했다.</p>
+<p>진단을 연결하면 다음 경로가 나타났다.</p>
+<pre class="text"><code>seeding particle injection
+→ water vapour consumption
+→ RH / supersaturation depletion
+→ condensational growth + latent heating
+→ cloud-size water redistribution
+→ collision/coalescence (collision ON)
+→ rain-size mass increase</code></pre>
+<p>Collision OFF에서도 수증기 소모와 cloud-size 입자 변화는 나타날 수 있었다. 그러나 rain water는 거의 증가하지 않았다. Collision ON에서는 water vapour와 RH/supersaturation이 감소하고 temperature와 all-activated water가 증가한 뒤 rain water 증가로 연결됐다. 입자 수가 늘지 않거나 줄어도 개별 입자 질량과 effective radius가 커질 수 있으므로, <strong>number response와 mass response를 함께 봐야 한다.</strong></p>
+<div class="review-verdict">
+<p><strong>결론.</strong> 시험 범위에서는 큰 dry radius, 높은 κ, 20–25분 주입이 더 큰 후반부 rain-water response를 보였다. 다만 dry radius에는 투입 질량 효과가 섞였고, 늦은 주입은 종료 시점 효과가 있으므로 보편적 최적값이 아니라 다음 실험의 가설이다.</p>
+</div>
+</section>
+<section id="다음-실험으로" class="level2">
+<h2 class="anchored" data-anchor-id="다음-실험으로">다음 실험으로</h2>
+<p>다음 단계는 이상화된 한 환경을 벗어나 clean marine, polluted continental, warm orographic 배경을 비교하고, fixed-number와 fixed-mass를 분리하는 것이다. <a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html">Experiment 3</a>에서 이어진다.</p>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
 <ul>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">Pull Request #2</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a></li>
-<li><a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html">Next log: From Code That Produces Results to Code That Makes Them Trustworthy</a></li>
+<li><a href="https://chatgpt.com/share/6a57222e-4844-83ee-95f9-91bf36f3cfe7">Experiment 2 및 Follow-Up Study 설계·해석 대화</a></li>
+<li><a href="../../../experiments.html">Experiments 목록</a></li>
 </ul>
 
 
@@ -717,12 +734,12 @@ config.yaml</code></pre>
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "복사완료!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "복사완료!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -1100,16 +1117,16 @@ config.yaml</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/experiments/2026-07-03-parameter-sensitivity/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../../../../about.html">
+    <a class="nav-link" href="../../../about.html">
 <p>소개</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="../../../../index.xml">
+    <a class="nav-link" href="../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -1126,5 +1143,5 @@ config.yaml</code></pre>
 
 
 
-<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

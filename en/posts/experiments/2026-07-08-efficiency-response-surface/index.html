@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jinu">
-<meta name="dcterms.date" content="2026-07-13">
-<meta name="description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta name="dcterms.date" content="2026-07-08">
+<meta name="description" content="Building an empirical rain-water response surface from 2,016 conditions and 20-member ensembles.">
 
-<title>Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog</title>
+<title>Experiment 4. A κ–Radius–Timing Response Surface – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -107,12 +107,18 @@ window.Quarto = {
 };
 </script>
 
-<meta property="og:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta property="og:title" content="Experiment 4. A κ–Radius–Timing Response Surface – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Building an empirical rain-water response surface from 2,016 conditions and 20-member ensembles.">
+<meta property="og:image" content="https://jinu219.github.io/en/posts/experiments/2026-07-08-efficiency-response-surface/images/response-surface-heatmaps.png">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image:height" content="900">
+<meta property="og:image:width" content="1600">
+<meta name="twitter:title" content="Experiment 4. A κ–Radius–Timing Response Surface – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Building an empirical rain-water response surface from 2,016 conditions and 20-member ensembles.">
+<meta name="twitter:image" content="https://jinu219.github.io/en/posts/experiments/2026-07-08-efficiency-response-surface/images/response-surface-heatmaps.png">
+<meta name="twitter:image-height" content="900">
+<meta name="twitter:image-width" content="1600">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -329,7 +335,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html">4. Response surface</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -375,7 +381,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">From scripts to a lab</span></a>
   </div>
 </li>
@@ -416,7 +422,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">4. Response surface</span></a>
   </div>
 </li>
@@ -438,33 +444,33 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-starting-problem" id="toc-the-starting-problem" class="nav-link active" data-scroll-target="#the-starting-problem">The starting problem</a></li>
-  <li><a href="#scenario-as-the-experimental-unit" id="toc-scenario-as-the-experimental-unit" class="nav-link" data-scroll-target="#scenario-as-the-experimental-unit">Scenario as the experimental unit</a></li>
-  <li><a href="#control-seeding-sweep-and-ensemble" id="toc-control-seeding-sweep-and-ensemble" class="nav-link" data-scroll-target="#control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</a></li>
-  <li><a href="#failures-that-changed-the-design" id="toc-failures-that-changed-the-design" class="nav-link" data-scroll-target="#failures-that-changed-the-design">Failures that changed the design</a></li>
-  <li><a href="#what-this-stage-achievedand-what-it-did-not" id="toc-what-this-stage-achievedand-what-it-did-not" class="nav-link" data-scroll-target="#what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</a></li>
+  <li><a href="#can-seeding-response-be-compressed-into-an-empirical-law" id="toc-can-seeding-response-be-compressed-into-an-empirical-law" class="nav-link active" data-scroll-target="#can-seeding-response-be-compressed-into-an-empirical-law">Can seeding response be compressed into an empirical law?</a></li>
+  <li><a href="#from-preliminary-tests-to-experiment-4-3" id="toc-from-preliminary-tests-to-experiment-4-3" class="nav-link" data-scroll-target="#from-preliminary-tests-to-experiment-4-3">From preliminary tests to Experiment 4-3</a></li>
+  <li><a href="#monotonic-response-toward-larger-κ-and-radius" id="toc-monotonic-response-toward-larger-κ-and-radius" class="nav-link" data-scroll-target="#monotonic-response-toward-larger-κ-and-radius">Monotonic response toward larger κ and radius</a></li>
+  <li><a href="#activation-strength-and-timing" id="toc-activation-strength-and-timing" class="nav-link" data-scroll-target="#activation-strength-and-timing">Activation strength and timing</a></li>
+  <li><a href="#next-research" id="toc-next-research" class="nav-link" data-scroll-target="#next-research">Next research</a></li>
   <li><a href="#related-material" id="toc-related-material" class="nav-link" data-scroll-target="#related-material">Related material</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/experiments/2026-07-08-efficiency-response-surface/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html">4. Response surface</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Turning PySDM Experiment Scripts into a Seeding Lab</h1>
+<h1 class="title">Experiment 4. A κ–Radius–Timing Response Surface</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Build the Lab</div>
+    <div class="quarto-category">Experiments</div>
     <div class="quarto-category">PySDM</div>
-    <div class="quarto-category">Streamlit</div>
-    <div class="quarto-category">reproducible research</div>
+    <div class="quarto-category">response surface</div>
+    <div class="quarto-category">optimization</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.
+    Building an empirical rain-water response surface from 2,016 conditions and 20-member ensembles.
   </div>
 </div>
 
@@ -481,7 +487,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-07-13</p>
+      <p class="date">2026-07-08</p>
     </div>
   </div>
   
@@ -493,115 +499,121 @@ window.Quarto = {
 </header>
 
 
-<p>The first obstacle in building PySDM cloud-seeding sensitivity experiments was not a microphysical equation. Every change in conditions required editing Python, remembering which configuration produced which result directory, and reconstructing how a figure had been made. The simulations ran, but the experimental history was fragile.</p>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">PySDM-Seeding-Lab PR #2</a>, merged on 13 July 2026, was the first attempt to turn those scripts into a scenario-based experimental platform. Across 31 commits and 66 changed files, the goal was to keep the question, configuration, execution, and result connected.</p>
-<div class="review-verdict">
-<p><strong>Core decision.</strong> Before adding more physics, build an experimental path that can be traced from a saved question to its outputs.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Provenance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<section id="the-starting-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-starting-problem">The starting problem</h2>
-<p>Manual scripts worked for one or two tests. They became unreliable as dry radius, hygroscopicity, injection timing, updraft, and random seeds multiplied.</p>
-<ul>
-<li>Results did not identify the configuration that created them.</li>
-<li>Control and seeding settings had to be synchronized by hand.</li>
-<li>A small sweep change could silently create hundreds of model executions.</li>
-<li>Long runs gave little indication of the current case or member.</li>
-<li>Dashboard figures could outlive the context needed to interpret them.</li>
-</ul>
-<p>The project target therefore became more specific than “build a GUI”: <strong>preserve one scientific question as one scenario</strong>.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Provenance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This experiment was <strong>not executed in PySDM-Seeding-Lab</strong>. It used separate PySDM scripts in Visual Studio Code on the laboratory server. Every “maximum” below is limited to the tested parameter range and is not an operational optimum.</p>
+</div>
+</div>
+<section id="can-seeding-response-be-compressed-into-an-empirical-law" class="level2">
+<h2 class="anchored" data-anchor-id="can-seeding-response-be-compressed-into-an-empirical-law">Can seeding response be compressed into an empirical law?</h2>
+<p>Previous experiments varied dry radius, κ, and injection timing one axis at a time. Yet κ and radius are coupled through activation, while injection timing changes both available growth time and cloud maturity.</p>
+<p>Experiment 4 asks whether dry radius or κ dominates, whether they can be combined as <span class="math inline">\(kappa r_{dry}^3\)</span>, whether timing interacts with activation strength, and whether final rain-water response can be represented by an empirical surface.</p>
 </section>
-<section id="scenario-as-the-experimental-unit" class="level2">
-<h2 class="anchored" data-anchor-id="scenario-as-the-experimental-unit">Scenario as the experimental unit</h2>
-<p>The new workflow follows a deliberate sequence:</p>
-<pre class="text"><code>Create scenario
-→ configure environment / aerosol / seeding / dynamics
-→ configure parameter sweep
-→ run simulation
-→ inspect results through dashboard</code></pre>
-<p>A YAML scenario stores a name, slug, memo, timestamp, and complete configuration. Settings pages can update the working configuration or a selected saved scenario. Result directories include the scenario slug, making it possible to navigate from output back to experimental intent.</p>
-<pre class="text"><code>results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/</code></pre>
-<p>The Streamlit pages were reordered to match the research process:</p>
-<pre class="text"><code>00. Experiment Scenarios
-01. Atmospheric Environment
-02. Background Aerosol Settings
-03. Seeding Particle Settings
-04. Dynamic Parameters
-05. Parameter Sweep
-06. Run Simulation
-07. Results Dashboard</code></pre>
-<p>The UI became a checklist: define the environment and background first, then seeding and dynamics, and only then choose what to vary.</p>
+<section id="from-preliminary-tests-to-experiment-4-3" class="level2">
+<h2 class="anchored" data-anchor-id="from-preliminary-tests-to-experiment-4-3">From preliminary tests to Experiment 4-3</h2>
+<p>Experiment 4-1 established an initial surface. Experiment 4-2 extended radius to 10 µm, but direct crossing of the 25 µm rain threshold by very large seeds began to dominate interpretation. These were diagnostic steps, not failures.</p>
+<p>Experiment 4-3 narrowed the interpretable radius range to 0.5–6.0 µm and sampled it at 0.1 µm spacing. It became the main dataset.</p>
+<pre class="text"><code>collision = ON
+terminal velocity = RogersYau
+κ = 0.3–2.0, step 0.1       → 18 values
+dry radius = 0.5–6.0 µm     → 56 values
+injection = 15–20 / 20–25 min
+ensemble seeds = 20
+t_max = 30 min</code></pre>
+<p>The grid contains <span class="math inline">\(18\times56\times2=2{,}016\)</span> conditions. Each used 20 ensemble seeds and the same no-seeding baseline. The main objective was final rain-water difference <span class="math inline">\(J_{final}\)</span>; integrated positive and maximum responses were secondary metrics.</p>
 </section>
-<section id="control-seeding-sweep-and-ensemble" class="level2">
-<h2 class="anchored" data-anchor-id="control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</h2>
-<p>Seeding cannot be interpreted from a treatment run alone. Comparison mode creates matched control and seeding outputs:</p>
-<pre class="text"><code>control/
-seeding/
-comparison.csv
-summary.json
-metadata.json
-config.yaml</code></pre>
-<p>For each variable, the result stores control, seeding, difference, and relative change. The first sweep catalog covered dry radius, <span class="math inline">\(\kappa\)</span>, injection start and duration, updraft velocity, and collision ON/OFF. Before execution, the app estimates</p>
-<pre class="text"><code>parameter combinations × ensemble members × control/seeding.</code></pre>
-<p>This is both a planning feature and a safety check against accidentally launching an oversized workload.</p>
-<p>The Results Dashboard connects single, comparison, sweep, and ensemble results. Growth Pathway Diagnostics follows</p>
-<pre class="text"><code>vapour / supersaturation
-→ cloud water
-→ activated particles
-→ size growth
-→ rain water.</code></pre>
-<p>Sweep filters, full-range case sampling, and injection-relative time alignment were added so later parameter values would not disappear merely because a plot had a maximum case count.</p>
+<section id="monotonic-response-toward-larger-κ-and-radius" class="level2">
+<h2 class="anchored" data-anchor-id="monotonic-response-toward-larger-κ-and-radius">Monotonic response toward larger κ and radius</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/response-surface-heatmaps.png" class="img-fluid figure-img" alt="Response surface heatmaps over kappa and dry radius for two injection windows"></p>
+<figcaption>Final response surfaces for the two injection windows.</figcaption>
+</figure>
+</div>
+<p>Both windows increased toward larger κ and dry radius. Radius showed the stronger, nearly monotonic effect; κ was weaker but consistently positive. Only one decreasing case occurred among 1,904 adjacent κ comparisons.</p>
+<p>The 20–25 min window exceeded the 15–20 min window across every tested condition. The late/early <span class="math inline">\(J_{final}\)</span> ratio averaged about 1.36 and ranged from 1.29 to 1.46.</p>
+<p>The maximum occurred at the upper boundary: <code>κ = 2.0</code>, <code>dry radius = 6.0 µm</code>, and <code>20–25 min</code>. Because it lies on a boundary, it is only the maximum inside this grid—not a universal optimum.</p>
 </section>
-<section id="failures-that-changed-the-design" class="level2">
-<h2 class="anchored" data-anchor-id="failures-that-changed-the-design">Failures that changed the design</h2>
-<p>Renaming Streamlit pages left duplicate files and caused <code>Multiple Pages specified with URL pathname run</code>. A cleanup script and integrity check were added instead of relying on manual deletion.</p>
-<p>During long sweeps, the dashboard sometimes read a CSV while it was still being written, producing <code>EmptyDataError</code>. Safe reading and incomplete-result filtering separated “directory exists” from “result is complete.” A subsequent regression made <code>safe_read_csv()</code> call itself recursively. The repair changed it back to <code>pd.read_csv(path)</code> and strengthened the integrity check to reject the pattern in future.</p>
-<p>The lesson was larger than exception handling: dashboard stability comes from making known failures testable.</p>
-</section>
-<section id="what-this-stage-achievedand-what-it-did-not" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</h2>
+<section id="activation-strength-and-timing" class="level2">
+<h2 class="anchored" data-anchor-id="activation-strength-and-timing">Activation strength and timing</h2>
+<p>Define a Köhler-like activation coordinate:</p>
+<p><span class="math display">\[
+A=\log\!\left(\kappa r_{dry}^{3}\right).
+\]</span></p>
+<p>The final response was fitted with a quadratic function of activation coordinate <span class="math inline">\(A\)</span> and injection coordinate <span class="math inline">\(\tau\)</span>:</p>
+<p><span class="math display">\[
+J_{final}=\beta_0+\beta_1A+\beta_2\tau+\beta_3A^2+\beta_4\tau^2+\beta_5A\tau+\epsilon.
+\]</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/activation-strength-collapse.png" class="img-fluid figure-img" alt="Activation-strength collapse showing separated curves for two injection windows"></p>
+<figcaption>Activation-strength collapse for the two injection windows.</figcaption>
+</figure>
+</div>
+<p>The two injection windows formed separated curves. Timing is therefore not merely a constant offset; it interacts with particle strength. The positive interaction coefficient indicates that strong particles and later injection reinforced one another within this model configuration.</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Before</th>
-<th>After PR #2</th>
+<th>Term</th>
+<th style="text-align: right;">Coefficient</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Edit scripts for each condition</td>
-<td>Preserve question and configuration in YAML scenarios</td>
+<td><span class="math inline">\(\beta_0\)</span> intercept</td>
+<td style="text-align: right;"><span class="math inline">\(1.59\times10^{-6}\)</span></td>
 </tr>
 <tr class="even">
-<td>Manually track result folders</td>
-<td>Link folders to scenario slugs and metadata</td>
+<td><span class="math inline">\(\beta_1\)</span> activation linear</td>
+<td style="text-align: right;"><span class="math inline">\(-3.16\times10^{-5}\)</span></td>
 </tr>
 <tr class="odd">
-<td>Focus on single runs</td>
-<td>Support comparison, sweep, and ensemble workflows</td>
+<td><span class="math inline">\(\beta_2\)</span> timing linear</td>
+<td style="text-align: right;"><span class="math inline">\(2.90\times10^{-5}\)</span></td>
 </tr>
 <tr class="even">
-<td>Inspect final curves</td>
-<td>Follow process pathways and uncertainty</td>
+<td><span class="math inline">\(\beta_3\)</span> activation curvature</td>
+<td style="text-align: right;"><span class="math inline">\(6.73\times10^{-6}\)</span></td>
 </tr>
 <tr class="odd">
-<td>Wait without context</td>
-<td>Report case- and member-level progress</td>
+<td><span class="math inline">\(\beta_4\)</span> timing curvature</td>
+<td style="text-align: right;"><span class="math inline">\(3.80\times10^{-5}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\beta_5\)</span> activation × timing</td>
+<td style="text-align: right;"><span class="math inline">\(4.69\times10^{-5}\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>One important limitation remained. Some Growth Pathway columns were proxies inferred when the adapter did not expose native PySDM products. They were useful for validating the workflow, but they were not yet safe to interpret as direct physical output.</p>
-<p>That limitation defined the next development question: how can every plotted diagnostic disclose whether it is native, derived, proxied, or missing?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fitted-relationship.png" class="img-fluid figure-img" alt="Fitted empirical response relationship with coefficients and fit statistics"></p>
+<figcaption>Fitted empirical relationship and reported coefficients.</figcaption>
+</figure>
+</div>
+<p>The fit achieved <span class="math inline">\(R^2=0.970\)</span>, RMSE <span class="math inline">\(=1.23\times10^{-5}\)</span>, and <span class="math inline">\(n=2{,}016\)</span>. This is an empirical compression of one fixed background, collision model, threshold, timing definition, and parameter normalization. It is not a universal physical law.</p>
+<p>Radius enters activation strength through a cubic volume term and dominated κ over this range. Higher κ consistently supported activation and water uptake. Later injection allowed seeded particles to interact with a more mature parcel state.</p>
+<div class="review-verdict">
+<p><strong>Conclusion.</strong> Within the tested range, <span class="math inline">\(J_{final}\)</span> was well organized by <span class="math inline">\(\log(\kappa r_{dry}^3)\)</span> and injection timing. Dry radius supplied the dominant main effect, while late injection reinforced strong particles. The upper-boundary maximum is a direction for the next grid, not a final optimum.</p>
+</div>
+</section>
+<section id="next-research" class="level2">
+<h2 class="anchored" data-anchor-id="next-research">Next research</h2>
+<p>A generalized response law should add fixed-number versus fixed-mass dose normalization, background aerosol sensitivity, a cloud-maturity/updraft coordinate instead of absolute time, and joint dependence on particle property, dose, background, and cloud state.</p>
 </section>
 <section id="related-material" class="level2">
 <h2 class="anchored" data-anchor-id="related-material">Related material</h2>
 <ul>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">Pull Request #2</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a></li>
-<li><a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html">Next log: From Code That Produces Results to Code That Makes Them Trustworthy</a></li>
+<li><a href="https://chatgpt.com/share/6a5721de-e4bc-83ee-9d0d-21b6caf6b0fa">Experiment 4 design and interpretation conversation</a></li>
+<li><a href="../../../../en/experiments.html">All experiments</a></li>
 </ul>
 
 
@@ -1100,7 +1112,7 @@ config.yaml</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/experiments/2026-07-08-efficiency-response-surface/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">

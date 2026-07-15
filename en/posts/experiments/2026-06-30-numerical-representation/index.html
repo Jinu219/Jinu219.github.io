@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jinu">
-<meta name="dcterms.date" content="2026-07-13">
-<meta name="description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta name="dcterms.date" content="2026-06-30">
+<meta name="description" content="Separating background and seeded-particle representation and testing rain-water stability with a 50-seed ensemble.">
 
-<title>Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog</title>
+<title>Experiment 1. How Much Does Super-Droplet Resolution Change the Result? – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,42 +77,19 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta property="og:title" content="Experiment 1. How Much Does Super-Droplet Resolution Change the Result? – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Separating background and seeded-particle representation and testing rain-water stability with a 50-seed ensemble.">
+<meta property="og:image" content="https://jinu219.github.io/en/posts/experiments/2026-06-30-numerical-representation/images/ensemble-time-series.png">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image:height" content="900">
+<meta property="og:image:width" content="1600">
+<meta name="twitter:title" content="Experiment 1. How Much Does Super-Droplet Resolution Change the Result? – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Separating background and seeded-particle representation and testing rain-water stability with a 50-seed ensemble.">
+<meta name="twitter:image" content="https://jinu219.github.io/en/posts/experiments/2026-06-30-numerical-representation/images/ensemble-time-series.png">
+<meta name="twitter:image-height" content="900">
+<meta name="twitter:image-width" content="1600">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -329,7 +306,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html">1. Numerical representation</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -375,7 +352,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">From scripts to a lab</span></a>
   </div>
 </li>
@@ -398,7 +375,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">1. Numerical representation</span></a>
   </div>
 </li>
@@ -438,33 +415,33 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-starting-problem" id="toc-the-starting-problem" class="nav-link active" data-scroll-target="#the-starting-problem">The starting problem</a></li>
-  <li><a href="#scenario-as-the-experimental-unit" id="toc-scenario-as-the-experimental-unit" class="nav-link" data-scroll-target="#scenario-as-the-experimental-unit">Scenario as the experimental unit</a></li>
-  <li><a href="#control-seeding-sweep-and-ensemble" id="toc-control-seeding-sweep-and-ensemble" class="nav-link" data-scroll-target="#control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</a></li>
-  <li><a href="#failures-that-changed-the-design" id="toc-failures-that-changed-the-design" class="nav-link" data-scroll-target="#failures-that-changed-the-design">Failures that changed the design</a></li>
-  <li><a href="#what-this-stage-achievedand-what-it-did-not" id="toc-what-this-stage-achievedand-what-it-did-not" class="nav-link" data-scroll-target="#what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</a></li>
+  <li><a href="#question-is-one-large-response-a-physical-signal" id="toc-question-is-one-large-response-a-physical-signal" class="nav-link active" data-scroll-target="#question-is-one-large-response-a-physical-signal">Question: is one large response a physical signal?</a></li>
+  <li><a href="#design" id="toc-design" class="nav-link" data-scroll-target="#design">Design</a></li>
+  <li><a href="#collision-off-produced-no-rain-size-response" id="toc-collision-off-produced-no-rain-size-response" class="nav-link" data-scroll-target="#collision-off-produced-no-rain-size-response">Collision OFF produced no rain-size response</a></li>
+  <li><a href="#background-representation-controlled-the-variability" id="toc-background-representation-controlled-the-variability" class="nav-link" data-scroll-target="#background-representation-controlled-the-variability">Background representation controlled the variability</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
   <li><a href="#related-material" id="toc-related-material" class="nav-link" data-scroll-target="#related-material">Related material</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/experiments/2026-06-30-numerical-representation/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html">1. Numerical representation</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Turning PySDM Experiment Scripts into a Seeding Lab</h1>
+<h1 class="title">Experiment 1. How Much Does Super-Droplet Resolution Change the Result?</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Build the Lab</div>
+    <div class="quarto-category">Experiments</div>
     <div class="quarto-category">PySDM</div>
-    <div class="quarto-category">Streamlit</div>
-    <div class="quarto-category">reproducible research</div>
+    <div class="quarto-category">numerical representation</div>
+    <div class="quarto-category">ensemble</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.
+    Separating background and seeded-particle representation and testing rain-water stability with a 50-seed ensemble.
   </div>
 </div>
 
@@ -481,7 +458,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-07-13</p>
+      <p class="date">2026-06-30</p>
     </div>
   </div>
   
@@ -493,115 +470,70 @@ window.Quarto = {
 </header>
 
 
-<p>The first obstacle in building PySDM cloud-seeding sensitivity experiments was not a microphysical equation. Every change in conditions required editing Python, remembering which configuration produced which result directory, and reconstructing how a figure had been made. The simulations ran, but the experimental history was fragile.</p>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">PySDM-Seeding-Lab PR #2</a>, merged on 13 July 2026, was the first attempt to turn those scripts into a scenario-based experimental platform. Across 31 commits and 66 changed files, the goal was to keep the question, configuration, execution, and result connected.</p>
-<div class="review-verdict">
-<p><strong>Core decision.</strong> Before adding more physics, build an experimental path that can be traced from a saved question to its outputs.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Provenance">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<section id="the-starting-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-starting-problem">The starting problem</h2>
-<p>Manual scripts worked for one or two tests. They became unreliable as dry radius, hygroscopicity, injection timing, updraft, and random seeds multiplied.</p>
-<ul>
-<li>Results did not identify the configuration that created them.</li>
-<li>Control and seeding settings had to be synchronized by hand.</li>
-<li>A small sweep change could silently create hundreds of model executions.</li>
-<li>Long runs gave little indication of the current case or member.</li>
-<li>Dashboard figures could outlive the context needed to interpret them.</li>
-</ul>
-<p>The project target therefore became more specific than “build a GUI”: <strong>preserve one scientific question as one scenario</strong>.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Provenance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This experiment was <strong>not run in PySDM-Seeding-Lab</strong>. It was an independent PySDM study developed in Visual Studio Code and executed on the laboratory server. It later informed the numerical-qualification design of the Seeding Lab.</p>
+</div>
+</div>
+<section id="question-is-one-large-response-a-physical-signal" class="level2">
+<h2 class="anchored" data-anchor-id="question-is-one-large-response-a-physical-signal">Question: is one large response a physical signal?</h2>
+<p>PySDM represents populations of real particles with super-droplets. <code>n_sd_initial</code> and <code>n_sd_seeding</code> therefore control more than runtime: they determine how finely the background aerosol distribution, seeded-particle distribution, and stochastic collision pairing are represented.</p>
+<p>The first collision ON/OFF comparison used 1,000 for both counts. A single resolution and random seed could not tell us whether a rain-water spike was reproducible or merely a coarse-sampling event. This experiment varies <strong>numerical representation</strong>, not physical seeding dose.</p>
 </section>
-<section id="scenario-as-the-experimental-unit" class="level2">
-<h2 class="anchored" data-anchor-id="scenario-as-the-experimental-unit">Scenario as the experimental unit</h2>
-<p>The new workflow follows a deliberate sequence:</p>
-<pre class="text"><code>Create scenario
-→ configure environment / aerosol / seeding / dynamics
-→ configure parameter sweep
-→ run simulation
-→ inspect results through dashboard</code></pre>
-<p>A YAML scenario stores a name, slug, memo, timestamp, and complete configuration. Settings pages can update the working configuration or a selected saved scenario. Result directories include the scenario slug, making it possible to navigate from output back to experimental intent.</p>
-<pre class="text"><code>results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/</code></pre>
-<p>The Streamlit pages were reordered to match the research process:</p>
-<pre class="text"><code>00. Experiment Scenarios
-01. Atmospheric Environment
-02. Background Aerosol Settings
-03. Seeding Particle Settings
-04. Dynamic Parameters
-05. Parameter Sweep
-06. Run Simulation
-07. Results Dashboard</code></pre>
-<p>The UI became a checklist: define the environment and background first, then seeding and dynamics, and only then choose what to vary.</p>
+<section id="design" class="level2">
+<h2 class="anchored" data-anchor-id="design">Design</h2>
+<pre class="text"><code>n_sd_initial = 1,000 / 2,500 / 5,000 / 10,000
+n_sd_seeding = 1,000 / 2,500 / 5,000 / 10,000
+Formulae seed = 100–149
+rain-size threshold = wet radius 25 µm</code></pre>
+<p>The 4 × 4 grid was repeated with 50 random seeds. Seeding-minus-no-seeding differences were evaluated separately with collision ON and OFF. Instead of selecting one curve, the analysis compared ensemble mean and standard deviation, final/maximum/minimum response, positive and negative integrated area, and the full time series.</p>
+<p>An early version increased both super-droplet counts together. That mixed changes in background sampling, seeded-particle sampling, and collision-pair sampling. Crossing the two axes independently was the essential correction.</p>
 </section>
-<section id="control-seeding-sweep-and-ensemble" class="level2">
-<h2 class="anchored" data-anchor-id="control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</h2>
-<p>Seeding cannot be interpreted from a treatment run alone. Comparison mode creates matched control and seeding outputs:</p>
-<pre class="text"><code>control/
-seeding/
-comparison.csv
-summary.json
-metadata.json
-config.yaml</code></pre>
-<p>For each variable, the result stores control, seeding, difference, and relative change. The first sweep catalog covered dry radius, <span class="math inline">\(\kappa\)</span>, injection start and duration, updraft velocity, and collision ON/OFF. Before execution, the app estimates</p>
-<pre class="text"><code>parameter combinations × ensemble members × control/seeding.</code></pre>
-<p>This is both a planning feature and a safety check against accidentally launching an oversized workload.</p>
-<p>The Results Dashboard connects single, comparison, sweep, and ensemble results. Growth Pathway Diagnostics follows</p>
-<pre class="text"><code>vapour / supersaturation
-→ cloud water
-→ activated particles
-→ size growth
-→ rain water.</code></pre>
-<p>Sweep filters, full-range case sampling, and injection-relative time alignment were added so later parameter values would not disappear merely because a plot had a maximum case count.</p>
+<section id="collision-off-produced-no-rain-size-response" class="level2">
+<h2 class="anchored" data-anchor-id="collision-off-produced-no-rain-size-response">Collision OFF produced no rain-size response</h2>
+<p>Rain-water difference remained nearly zero across every collision-OFF combination. Seeded particles could still take up vapour, but condensation alone did not create a measurable increase above the 25 µm wet-radius threshold in this parcel and time window.</p>
+<p>With collision ON, both positive spikes and negative responses appeared just after injection. The perturbation was transient rather than a one-way enhancement. Final values and post-20-minute means were generally close to zero, so this experiment does not establish persistent rain-water enhancement.</p>
 </section>
-<section id="failures-that-changed-the-design" class="level2">
-<h2 class="anchored" data-anchor-id="failures-that-changed-the-design">Failures that changed the design</h2>
-<p>Renaming Streamlit pages left duplicate files and caused <code>Multiple Pages specified with URL pathname run</code>. A cleanup script and integrity check were added instead of relying on manual deletion.</p>
-<p>During long sweeps, the dashboard sometimes read a CSV while it was still being written, producing <code>EmptyDataError</code>. Safe reading and incomplete-result filtering separated “directory exists” from “result is complete.” A subsequent regression made <code>safe_read_csv()</code> call itself recursively. The repair changed it back to <code>pd.read_csv(path)</code> and strengthened the integrity check to reject the pattern in future.</p>
-<p>The lesson was larger than exception handling: dashboard stability comes from making known failures testable.</p>
+<section id="background-representation-controlled-the-variability" class="level2">
+<h2 class="anchored" data-anchor-id="background-representation-controlled-the-variability">Background representation controlled the variability</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/max-min-response.png" class="img-fluid figure-img" alt="Maximum and minimum rain-water response heatmaps across initial and seeded super-droplet counts"></p>
+<figcaption>Maximum and minimum rain-water response across the two representation axes.</figcaption>
+</figure>
+</div>
+<p>The largest ensemble response and spread occurred at <code>n_sd_initial = 1,000</code>. When the background distribution is represented by fewer computational particles, each super-droplet carries more real-particle weight and an individual collision event can dominate a threshold-based diagnostic.</p>
+<p>Increasing <code>n_sd_initial</code> to 2,500, 5,000, and 10,000 generally reduced the magnitude of maximum/minimum response, integrated positive/negative area, and ensemble spread. Changes in <code>n_sd_seeding</code> were weaker. In this configuration, the resolution of the existing cloud-droplet population mattered more than the resolution of the injected population.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ensemble-time-series.png" class="img-fluid figure-img" alt="Ensemble rain-water difference time series across numerical representations"></p>
+<figcaption>Seeding-minus-control ensemble time series. Blue shading is one standard deviation; vertical shading marks the 15–20 min injection window.</figcaption>
+</figure>
+</div>
+<p>Of 1,600 planned collision-setting comparison outputs, 1,599 completed. One collision-ON member at <code>n_sd_initial = 1,000</code>, <code>n_sd_seeding = 5,000</code> generated an exceptionally large particle and exceeded an interpolation limit. It is retained as evidence of an outlier mechanism rather than silently discarded.</p>
 </section>
-<section id="what-this-stage-achievedand-what-it-did-not" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</h2>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Before</th>
-<th>After PR #2</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Edit scripts for each condition</td>
-<td>Preserve question and configuration in YAML scenarios</td>
-</tr>
-<tr class="even">
-<td>Manually track result folders</td>
-<td>Link folders to scenario slugs and metadata</td>
-</tr>
-<tr class="odd">
-<td>Focus on single runs</td>
-<td>Support comparison, sweep, and ensemble workflows</td>
-</tr>
-<tr class="even">
-<td>Inspect final curves</td>
-<td>Follow process pathways and uncertainty</td>
-</tr>
-<tr class="odd">
-<td>Wait without context</td>
-<td>Report case- and member-level progress</td>
-</tr>
-</tbody>
-</table>
-<p>One important limitation remained. Some Growth Pathway columns were proxies inferred when the adapter did not expose native PySDM products. They were useful for validating the workflow, but they were not yet safe to interpret as direct physical output.</p>
-<p>That limitation defined the next development question: how can every plotted diagnostic disclose whether it is native, derived, proxied, or missing?</p>
+<section id="interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
+<p>A larger spike is not equivalent to stronger seeding. Lower resolution produced larger spikes and greater seed-to-seed variability. Likewise, raising <code>n_sd_seeding</code> does not add more seeding material; it changes the computational representation of the same population.</p>
+<p>The 25 µm rain threshold is useful but sensitive to threshold crossing. A stronger follow-up should inspect multiple thresholds, wet-radius spectra, and robust ensemble statistics such as median and IQR.</p>
+<div class="review-verdict">
+<p><strong>Conclusion.</strong> Collision ON produced transient rain-water perturbations, not a persistent increase. Response magnitude and uncertainty were more sensitive to <code>n_sd_initial</code> than to <code>n_sd_seeding</code>, so a single resolution and random seed cannot support a generalized seeding claim.</p>
+</div>
+<p>The next step fixes numerical resolution and varies physical particle properties in <a href="../../../../en/posts/experiments/2026-07-03-parameter-sensitivity/index.html">Experiment 2</a>.</p>
 </section>
 <section id="related-material" class="level2">
 <h2 class="anchored" data-anchor-id="related-material">Related material</h2>
 <ul>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">Pull Request #2</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a></li>
-<li><a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html">Next log: From Code That Produces Results to Code That Makes Them Trustworthy</a></li>
+<li><a href="https://chatgpt.com/share/6a572206-4f94-83ee-9657-8568fa10c487">Experiment 1 design and interpretation conversation</a></li>
+<li><a href="../../../../en/experiments.html">All experiments</a></li>
 </ul>
 
 
@@ -1100,7 +1032,7 @@ config.yaml</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/experiments/2026-06-30-numerical-representation/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">

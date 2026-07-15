@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Experimental notes that connect hypotheses, settings, results, and interpretation">
+<meta name="description" content="PySDM experiments connecting numerical representation, seeded-particle properties, aerosol environments, and response surfaces">
 
 <title>Experiments – Jinu’s Cloud Seeding Blog</title>
 <style>
@@ -77,10 +77,10 @@ ul.task-list li input[type="checkbox"] {
 
 
 <meta property="og:title" content="Experiments – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="Experimental notes that connect hypotheses, settings, results, and interpretation">
+<meta property="og:description" content="PySDM experiments connecting numerical representation, seeded-particle properties, aerosol environments, and response surfaces">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
 <meta name="twitter:title" content="Experiments – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="Experimental notes that connect hypotheses, settings, results, and interpretation">
+<meta name="twitter:description" content="PySDM experiments connecting numerical representation, seeded-particle properties, aerosol environments, and response surfaces">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -356,16 +356,45 @@ ul.task-list li input[type="checkbox"] {
 </li>
       </ul>
   </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../en/experiments.html" class="sidebar-item-text sidebar-link active">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../en/experiments.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Experiments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../en/posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Numerical representation</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../en/posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Seeding sensitivity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Realistic backgrounds</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Response surface</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="https://github.com/Jinu219/PySDM-Seeding-Lab" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Experiment code ↗</span></a>
+ <span class="menu-text">Seeding Lab code ↗</span></a>
   </div>
 </li>
     </ul>
@@ -373,8 +402,14 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#experiment-sequence" id="toc-experiment-sequence" class="nav-link active" data-scroll-target="#experiment-sequence">Experiment sequence</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/experiments.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -387,7 +422,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div>
   <div class="description">
-    Experimental notes that connect hypotheses, settings, results, and interpretation
+    PySDM experiments connecting numerical representation, seeded-particle properties, aerosol environments, and response surfaces
   </div>
 </div>
 
@@ -404,10 +439,70 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.</p>
-<p>The first experiment note is in preparation.</p>
+<p>This series begins with super-droplet representation, then moves through seeded-particle properties, background aerosol environments, and a κ–radius–timing response surface. Every note separates the question, baseline, changed conditions, diagnostics, limitations, and next hypothesis.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Relationship to PySDM-Seeding-Lab">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Relationship to PySDM-Seeding-Lab
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These four experiments were run independently on the <strong>laboratory server with Visual Studio Code</strong>. They were not executed through the PySDM-Seeding-Lab app; they are documented as precursor studies that later informed the Lab’s experiment and validation design.</p>
+</div>
+</div>
+<section id="experiment-sequence" class="level2">
+<h2 class="anchored" data-anchor-id="experiment-sequence">Experiment sequence</h2>
+<pre class="text"><code>Experiment 1  numerical representation and ensemble stability
+      ↓
+Experiment 2  dry radius · κ · timing sensitivity and growth pathway
+      ↓
+Experiment 3  background aerosol · fixed-number/mass comparison
+      ↓
+Experiment 4  activation-strength · timing response surface</code></pre>
+<div class="manual-post-list">
+<div class="manual-post">
+<div class="manual-post-meta">
+2026-06-30 · Jinu
+</div>
+<section id="experiment-1.-how-much-does-super-droplet-resolution-change-the-result" class="level3">
+<h3 class="anchored" data-anchor-id="experiment-1.-how-much-does-super-droplet-resolution-change-the-result"><a href="../en/posts/experiments/2026-06-30-numerical-representation/index.html">Experiment 1. How Much Does Super-Droplet Resolution Change the Result?</a></h3>
+<p>A 4 × 4 representation grid and 50-seed ensembles separate transient collision noise from persistent rain-water response.</p>
+</section>
+</div>
+<div class="manual-post">
+<div class="manual-post-meta">
+2026-07-03 · Jinu
+</div>
+<section id="experiment-2.-sensitivity-to-seeded-particle-properties-and-injection-timing" class="level3">
+<h3 class="anchored" data-anchor-id="experiment-2.-sensitivity-to-seeded-particle-properties-and-injection-timing"><a href="../en/posts/experiments/2026-07-03-parameter-sensitivity/index.html">Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing</a></h3>
+<p>Dry radius, κ, and injection timing are connected to vapour consumption, condensational growth, and rain-size mass.</p>
+</section>
+</div>
+<div class="manual-post">
+<div class="manual-post-meta">
+2026-07-06 · Jinu
+</div>
+<section id="experiment-3.-warm-hygroscopic-seeding-across-background-aerosol-environments" class="level3">
+<h3 class="anchored" data-anchor-id="experiment-3.-warm-hygroscopic-seeding-across-background-aerosol-environments"><a href="../en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html">Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments</a></h3>
+<p>Clean marine, polluted continental, and warm-orographic backgrounds are compared under fixed-number and fixed-mass injection.</p>
+</section>
+</div>
+<div class="manual-post">
+<div class="manual-post-meta">
+2026-07-08 · Jinu
+</div>
+<section id="experiment-4.-a-κradiustiming-response-surface" class="level3">
+<h3 class="anchored" data-anchor-id="experiment-4.-a-κradiustiming-response-surface"><a href="../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html">Experiment 4. A κ–Radius–Timing Response Surface</a></h3>
+<p>A dense 2,016-condition grid maps activation strength and injection timing into an empirical final rain-water response.</p>
+</section>
+</div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script>
@@ -902,7 +997,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/experiments.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/experiments.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">

@@ -21,6 +21,234 @@
     "text": "구름 미세물리와 seeding 문제를 PySDM 기반 수치 실험으로 탐색하는 연구 프로젝트입니다.\n\n\n\n\n\n\n\n\n영역\n이 블로그\n코드 저장소\n\n\n\n\n역할\n질문, 배경, 실험 해석, 그림\n실행 코드, 설정, 테스트, 원자료 처리\n\n\n변경 단위\n한 편의 연구 노트\n재현 가능한 실행 단위\n\n\n연결 방식\n실행 버전과 결과 링크 기록\n관련 블로그 글 링크 기록\n\n\n\nPySDM-Seeding-Lab 저장소 열기"
   },
   {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "",
+    "text": "노트실험 출처\n\n\n\n이 실험은 PySDM-Seeding-Lab에서 실행하지 않았다. 연구실 서버와 Visual Studio Code에서 별도 스크립트로 수행한 PySDM 실험이다. 아래의 “최대”는 시험한 parameter range 안의 결과이며 운영 최적값이 아니다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#질문-시딩-response를-하나의-경험식으로-정리할-수-있을까",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#질문-시딩-response를-하나의-경험식으로-정리할-수-있을까",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "질문: 시딩 response를 하나의 경험식으로 정리할 수 있을까",
+    "text": "질문: 시딩 response를 하나의 경험식으로 정리할 수 있을까\n앞선 실험은 dry radius, κ, injection timing을 한 축씩 바꿨다. 그러나 κ와 입자 크기는 activation에서 독립적이지 않으며, 주입 시점은 입자 성장 가능 시간과 cloud maturity를 함께 바꾼다.\nExperiment 4는 다음을 묻는다.\n\nRain-water response는 dry radius와 κ 중 어느 쪽에 더 민감한가?\n두 입자 성질을 \\(kappa r_{dry}^3\\)라는 activation-strength variable로 묶을 수 있는가?\nInjection timing은 particle activation strength와 상호작용하는가?\n최종 response를 경험적 response surface로 표현할 수 있는가?",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#왜-experiment-4-3을-main-dataset으로-썼나",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#왜-experiment-4-3을-main-dataset으로-썼나",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "왜 Experiment 4-3을 main dataset으로 썼나",
+    "text": "왜 Experiment 4-3을 main dataset으로 썼나\n4-1은 초기 response-surface 구조를 확인했고, 4-2는 dry radius를 10 µm까지 넓혔다. 큰 response가 나타났지만 large seed 자체가 25 µm rain threshold를 넘는 효과가 지배적이어서 해석 범위를 흐렸다.\n4-3은 dry radius 0.5–6.0 µm로 범위를 좁히고 0.1 µm 간격의 조밀한 grid를 만들었다. 4-1과 4-2는 실패가 아니라, main dataset의 해석 가능한 범위를 정한 preliminary/diagnostic step이다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#실험-grid와-목적함수",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#실험-grid와-목적함수",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "실험 grid와 목적함수",
+    "text": "실험 grid와 목적함수\ncollision = ON\nterminal velocity = RogersYau\nκ = 0.3–2.0, step 0.1       → 18 values\ndry radius = 0.5–6.0 µm     → 56 values\ninjection = 15–20 / 20–25 min\nensemble seeds = 20\nt_max = 30 min\n총 조건은 \\(18\\times56\\times2=2{,}016\\)개다. 각 조건은 20개 ensemble seed로 실행하고 고정된 no-seeding baseline과 비교했다. Main metric은 최종 rain-water difference \\(J_{final}\\), 보조 지표는 양의 response 시간적분과 maximum response다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#결과-1.-큰-κ와-큰-dry-radius-방향으로-단조-증가했다",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#결과-1.-큰-κ와-큰-dry-radius-방향으로-단조-증가했다",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "결과 1. 큰 κ와 큰 dry radius 방향으로 단조 증가했다",
+    "text": "결과 1. 큰 κ와 큰 dry radius 방향으로 단조 증가했다\n\n\n\n15–20분과 20–25분 주입에서 κ와 dry radius에 따른 최종 response surface.\n\n\n두 injection window 모두 큰 κ와 큰 dry radius 방향으로 response가 증가했다. Dry radius의 효과가 더 강하고 거의 단조로웠으며, κ도 더 약하지만 일관된 양의 효과를 보였다. κ 방향의 1,904개 인접 비교 중 감소는 한 경우뿐이었다.\n20–25분 주입은 모든 시험 조건에서 15–20분보다 큰 \\(J_{final}\\)을 보였다. Late/early ratio 평균은 약 1.36, 범위는 1.29–1.46이었다. 이는 이 설정에서 더 성숙한 parcel에 주입할 때 입자 activation과 rain-size growth가 함께 강화됐음을 보여준다.\n시험 범위의 최대는 κ = 2.0, dry radius = 6.0 µm, 20–25 min의 upper boundary에 있었다. 경계에서 최대가 나왔으므로 보편적 optimum이 아니라 이 grid 안의 maximum으로만 해석한다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#결과-2.-activation-strength와-timing을-함께-써야-했다",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#결과-2.-activation-strength와-timing을-함께-써야-했다",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "결과 2. Activation strength와 timing을 함께 써야 했다",
+    "text": "결과 2. Activation strength와 timing을 함께 써야 했다\nKöhler-like activation coordinate를 다음처럼 정의했다.\n\\[\nA = \\log\\!\\left(\\kappa r_{dry}^{3}\\right)\n\\]\n최종 response는 activation coordinate \\(A\\)와 injection coordinate \\(\\tau\\)의 이차식으로 fitting했다.\n\\[\nJ_{final}=\\beta_0+\\beta_1A+\\beta_2\\tau+\\beta_3A^2+\\beta_4\\tau^2+\\beta_5A\\tau+\\epsilon\n\\]\n\n\n\nκ와 dry radius를 activation strength로 묶었을 때 두 injection window가 서로 다른 response curve를 형성한다.\n\n\n두 injection window는 하나로 겹치지 않고 분리된 curve를 만들었다. 즉 timing은 독립적인 일정 offset이 아니라 particle strength와 상호작용한다. Positive interaction term은 강한 입자와 늦은 주입이 서로의 효과를 보강했음을 나타낸다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#경험식-fit",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#경험식-fit",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "경험식 fit",
+    "text": "경험식 fit\n\n\n\n항\n계수\n\n\n\n\n\\(\\beta_0\\) intercept\n\\(1.59\\times10^{-6}\\)\n\n\n\\(\\beta_1\\) activation linear\n\\(-3.16\\times10^{-5}\\)\n\n\n\\(\\beta_2\\) timing linear\n\\(2.90\\times10^{-5}\\)\n\n\n\\(\\beta_3\\) activation curvature\n\\(6.73\\times10^{-6}\\)\n\n\n\\(\\beta_4\\) timing curvature\n\\(3.80\\times10^{-5}\\)\n\n\n\\(\\beta_5\\) activation × timing\n\\(4.69\\times10^{-5}\\)\n\n\n\n\n\n\nFitted empirical relationship and coefficient table reported in the Experiment 4 deck.\n\n\nFit 성능은 \\(R^2=0.970\\), RMSE \\(=1.23\\times10^{-5}\\), \\(n=2{,}016\\)이었다. 이 높은 설명력은 현재 고정 background, collision model, rain threshold, parameter normalization 안에서의 경험적 압축이다. 물리 법칙이나 외부 환경에 대한 검증을 뜻하지 않는다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#해석과-제한",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#해석과-제한",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "해석과 제한",
+    "text": "해석과 제한\nDry radius는 \\(r^3\\)의 부피 효과로 activation strength에 강하게 들어가며, 시험 범위에서는 κ보다 response를 더 크게 지배했다. κ는 activation barrier를 낮추고 물 흡수를 돕는 방향으로 일관되게 작용했다. Late injection은 cloud parcel이 더 성숙한 상태에서 시딩 입자가 rain-water growth에 기여하도록 했다.\n하지만 이 실험은 collision ON, 한 background, 두 absolute-time window, fixed seeding design에 한정된다. 또한 25 µm threshold와 30분 종료 시점이 목적함수에 들어간다. 따라서 식을 다른 cloud state나 실제 살포 효율에 그대로 적용하면 안 된다.\n\n결론. 시험한 범위에서 \\(J_{final}\\)은 \\(\\log(\\kappa r_{dry}^3)\\)와 injection timing으로 잘 정리됐고, dry radius가 주효과, late injection이 강화효과를 보였다. 그러나 upper-boundary maximum은 보편적 최적값이 아니라 다음 grid를 어디로 확장할지 알려주는 표지다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#다음-연구",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#다음-연구",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "다음 연구",
+    "text": "다음 연구\n다음 response law에는 네 요소가 더 필요하다.\n\nFixed particle number와 fixed dry mass를 분리한 seeding-dose normalization\nClean/moderate/polluted background aerosol sensitivity\nAbsolute time 대신 updraft와 cloud maturity를 반영한 injection coordinate\nParticle property, dose, background, cloud state를 함께 쓰는 generalized law",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#연결-자료",
+    "href": "posts/experiments/2026-07-08-efficiency-response-surface/index.html#연결-자료",
+    "title": "Experiment 4. κ–입자크기–주입시점 Response Surface",
+    "section": "연결 자료",
+    "text": "연결 자료\n\nExperiment 4 설계·해석 대화\nExperiments 목록",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "",
+    "text": "노트실험 출처\n\n\n\n본편과 Follow-Up Study 모두 PySDM-Seeding-Lab을 사용하지 않았다. 연구실 서버와 Visual Studio Code에서 수행한 독립 PySDM parcel 실험이다. 본문은 2026-07-02 민감도 실험과 2026-07-03 후속 진단을 한 흐름으로 합쳤다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#질문-어떤-입자를-언제-넣어야-하는가",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#질문-어떤-입자를-언제-넣어야-하는가",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "질문: 어떤 입자를 언제 넣어야 하는가",
+    "text": "질문: 어떤 입자를 언제 넣어야 하는가\nExperiment 1은 rain-water response가 수치 표현과 random seed에 민감하다는 점을 보여줬다. 이번에는 n_sd_initial = n_sd_seeding = 1,000으로 고정하고, 시딩 입자의 물리적 성질과 주입 시점만 바꿨다.\n질문은 세 가지다.\n\nDry radius가 큰 입자는 25 µm 이상 rain-size 질량을 더 많이 만드는가?\n흡습성 κ가 커질수록 수증기 흡수와 rain response가 강해지는가?\n같은 입자라도 cloud parcel의 어느 성장 단계에 주입하는지가 결과를 바꾸는가?",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#실험-설계",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#실험-설계",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "실험 설계",
+    "text": "실험 설계\nPySDM seeding_no_collisions 예제의 adiabatic parcel 구조를 확장했다. 각 조건마다 no seeding + collision ON, seeding + collision ON, no seeding + collision OFF, seeding + collision OFF의 네 case를 실행하고 seeding에서 no-seeding을 뺀 차이를 계산했다.\n\n\n\n\n\n\n\n\n민감도 축\n조건\n고정 조건\n\n\n\n\nDry radius\n0.5, 1.0, 2.0 µm\nκ = 0.8, 15–20 min\n\n\nκ\n0.3, 0.5, 0.8, 1.0\ndry radius = 1 µm, 15–20 min\n\n\nInjection timing\n10–15, 15–20, 20–25 min\ndry radius = 1 µm, κ = 0.8\n\n\n\n본편은 Formulae seed 100–109의 10-member ensemble을 사용했다. Rain water는 wet radius 25 µm 이상 입자의 water mixing ratio로 정의했다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#dry-radius-큰-입자가-더-강했지만-질량-효과도-섞여-있다",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#dry-radius-큰-입자가-더-강했지만-질량-효과도-섞여-있다",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "Dry radius: 큰 입자가 더 강했지만, 질량 효과도 섞여 있다",
+    "text": "Dry radius: 큰 입자가 더 강했지만, 질량 효과도 섞여 있다\n\n\n\nDry radius 0.5, 1, 2 µm 조건의 collision ON/OFF rain-water response.\n\n\nCollision ON에서 최종 rain-water response는 plot scale 기준으로 대략 2 µm &gt; 1 µm &gt; 0.5 µm 순이었다. 2 µm는 약 \\(2.1\\times10^{-5}\\), 1 µm는 약 \\(0.9\\times10^{-5}\\), 0.5 µm는 약 \\(0.4\\)–\\(0.5\\times10^{-5}\\) 수준이었다.\n큰 dry particle은 같은 κ에서 더 큰 wet particle로 성장하고 collision/coalescence에 참여하기 쉽다. 다만 이 실험은 같은 입자 수를 주입했기 때문에 dry radius를 키우면 총 dry material mass도 함께 커진다. 따라서 이 결과를 입자 크기만의 순수 효과로 볼 수는 없다. 이 한계가 Experiment 3의 fixed-mass 설계로 이어졌다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#κ-흡습성이-높을수록-response가-커졌다",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#κ-흡습성이-높을수록-response가-커졌다",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "κ: 흡습성이 높을수록 response가 커졌다",
+    "text": "κ: 흡습성이 높을수록 response가 커졌다\n\n\n\nκ 0.3–1.0 조건의 rain-water response와 collision OFF control.\n\n\nCollision ON에서 후반부 response는 κ = 1.0 &gt; 0.8 &gt; 0.5 &gt; 0.3 순으로 커졌다. 최종 값은 plot scale 기준 약 \\(1.0\\), \\(0.9\\), \\(0.75\\), \\(0.65\\times10^{-5}\\)였다. κ가 큰 입자는 더 낮은 activation barrier와 빠른 수분 흡수로 성장하고, 이후 collision pathway에 더 효과적으로 들어간 것으로 해석했다.\nCollision OFF에서는 κ가 달라도 rain water가 거의 0이었다. 이것은 시딩 효과 자체가 없다는 뜻이 아니다. Water vapour, droplet number, effective radius 같은 cloud-size diagnostic은 변할 수 있지만, 이 parcel과 시간 범위에서는 응결 성장만으로 25 µm threshold를 넘지 못했다는 뜻이다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#injection-timing-가장-큰-차이를-만든-축",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#injection-timing-가장-큰-차이를-만든-축",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "Injection timing: 가장 큰 차이를 만든 축",
+    "text": "Injection timing: 가장 큰 차이를 만든 축\n\n\n\n10–15, 15–20, 20–25분 주입 조건의 rain-water response.\n\n\n10–15분 주입은 짧은 양의 spike 뒤 약 \\(-3.8\\times10^{-5}\\)까지 내려가는 음의 response를 보였고 최종 값은 0에 가까웠다. 초기 단계에서 작은 입자 수와 수증기 경쟁이 늘어 개별 입자의 rain-size 성장을 늦췄을 가능성이 있다.\n15–20분은 급격한 spike보다 안정적인 양의 증가를 보였고 최종 약 \\(0.9\\times10^{-5}\\)에 도달했다. 20–25분은 22–23분 이후 빠르게 증가해 최종 약 \\(2.7\\times10^{-5}\\)로 가장 컸다. 그러나 이 window는 simulation 종료 시점에 가깝다. 후반부 값이 크다는 사실과 장시간 지속된다는 사실은 다르며, 장기 지속성은 더 긴 integration으로 확인해야 한다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#follow-up-study-rain-water-하나에서-성장-경로로",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#follow-up-study-rain-water-하나에서-성장-경로로",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "Follow-Up Study: rain water 하나에서 성장 경로로",
+    "text": "Follow-Up Study: rain water 하나에서 성장 경로로\n본편의 rain-water 곡선만으로는 수증기가 어디로 갔고, cloud-size 입자가 어떻게 rain-size 질량으로 바뀌었는지 설명하기 어려웠다. 일부 concentration/effective-radius product에는 유효 자료가 부족하거나 NaN 구간이 있었다.\n후속 연구에서는 입자 범위를 cloud-size (0.5–25 µm), rain-size (≥25 µm), all activated (≥0.5 µm)로 분리했다. Ensemble 통계도 mean뿐 아니라 standard deviation, median, q25, q75, n_success, finite fraction으로 확장했다. Rain-size 입자가 아직 없는 시간의 effective radius NaN은 계산 실패가 아니라 정의상 자연스러운 빈 구간일 수 있으므로 health check와 함께 해석했다.\n진단을 연결하면 다음 경로가 나타났다.\nseeding particle injection\n→ water vapour consumption\n→ RH / supersaturation depletion\n→ condensational growth + latent heating\n→ cloud-size water redistribution\n→ collision/coalescence (collision ON)\n→ rain-size mass increase\nCollision OFF에서도 수증기 소모와 cloud-size 입자 변화는 나타날 수 있었다. 그러나 rain water는 거의 증가하지 않았다. Collision ON에서는 water vapour와 RH/supersaturation이 감소하고 temperature와 all-activated water가 증가한 뒤 rain water 증가로 연결됐다. 입자 수가 늘지 않거나 줄어도 개별 입자 질량과 effective radius가 커질 수 있으므로, number response와 mass response를 함께 봐야 한다.\n\n결론. 시험 범위에서는 큰 dry radius, 높은 κ, 20–25분 주입이 더 큰 후반부 rain-water response를 보였다. 다만 dry radius에는 투입 질량 효과가 섞였고, 늦은 주입은 종료 시점 효과가 있으므로 보편적 최적값이 아니라 다음 실험의 가설이다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#다음-실험으로",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#다음-실험으로",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "다음 실험으로",
+    "text": "다음 실험으로\n다음 단계는 이상화된 한 환경을 벗어나 clean marine, polluted continental, warm orographic 배경을 비교하고, fixed-number와 fixed-mass를 분리하는 것이다. Experiment 3에서 이어진다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#연결-자료",
+    "href": "posts/experiments/2026-07-03-parameter-sensitivity/index.html#연결-자료",
+    "title": "Experiment 2. 시딩 입자와 주입 시점의 민감도",
+    "section": "연결 자료",
+    "text": "연결 자료\n\nExperiment 2 및 Follow-Up Study 설계·해석 대화\nExperiments 목록",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. 시딩 조건 민감도"
+    ]
+  },
+  {
     "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html",
     "href": "posts/build-the-lab/2026-07-14-research-quality/index.html",
     "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
@@ -368,6 +596,174 @@
     "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
   },
   {
+    "objectID": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html",
+    "href": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html",
+    "title": "Experiment 4. A κ–Radius–Timing Response Surface",
+    "section": "",
+    "text": "NoteProvenance\n\n\n\nThis experiment was not executed in PySDM-Seeding-Lab. It used separate PySDM scripts in Visual Studio Code on the laboratory server. Every “maximum” below is limited to the tested parameter range and is not an operational optimum.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#can-seeding-response-be-compressed-into-an-empirical-law",
+    "href": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#can-seeding-response-be-compressed-into-an-empirical-law",
+    "title": "Experiment 4. A κ–Radius–Timing Response Surface",
+    "section": "Can seeding response be compressed into an empirical law?",
+    "text": "Can seeding response be compressed into an empirical law?\nPrevious experiments varied dry radius, κ, and injection timing one axis at a time. Yet κ and radius are coupled through activation, while injection timing changes both available growth time and cloud maturity.\nExperiment 4 asks whether dry radius or κ dominates, whether they can be combined as \\(kappa r_{dry}^3\\), whether timing interacts with activation strength, and whether final rain-water response can be represented by an empirical surface.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#from-preliminary-tests-to-experiment-4-3",
+    "href": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#from-preliminary-tests-to-experiment-4-3",
+    "title": "Experiment 4. A κ–Radius–Timing Response Surface",
+    "section": "From preliminary tests to Experiment 4-3",
+    "text": "From preliminary tests to Experiment 4-3\nExperiment 4-1 established an initial surface. Experiment 4-2 extended radius to 10 µm, but direct crossing of the 25 µm rain threshold by very large seeds began to dominate interpretation. These were diagnostic steps, not failures.\nExperiment 4-3 narrowed the interpretable radius range to 0.5–6.0 µm and sampled it at 0.1 µm spacing. It became the main dataset.\ncollision = ON\nterminal velocity = RogersYau\nκ = 0.3–2.0, step 0.1       → 18 values\ndry radius = 0.5–6.0 µm     → 56 values\ninjection = 15–20 / 20–25 min\nensemble seeds = 20\nt_max = 30 min\nThe grid contains \\(18\\times56\\times2=2{,}016\\) conditions. Each used 20 ensemble seeds and the same no-seeding baseline. The main objective was final rain-water difference \\(J_{final}\\); integrated positive and maximum responses were secondary metrics.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#monotonic-response-toward-larger-κ-and-radius",
+    "href": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#monotonic-response-toward-larger-κ-and-radius",
+    "title": "Experiment 4. A κ–Radius–Timing Response Surface",
+    "section": "Monotonic response toward larger κ and radius",
+    "text": "Monotonic response toward larger κ and radius\n\n\n\nFinal response surfaces for the two injection windows.\n\n\nBoth windows increased toward larger κ and dry radius. Radius showed the stronger, nearly monotonic effect; κ was weaker but consistently positive. Only one decreasing case occurred among 1,904 adjacent κ comparisons.\nThe 20–25 min window exceeded the 15–20 min window across every tested condition. The late/early \\(J_{final}\\) ratio averaged about 1.36 and ranged from 1.29 to 1.46.\nThe maximum occurred at the upper boundary: κ = 2.0, dry radius = 6.0 µm, and 20–25 min. Because it lies on a boundary, it is only the maximum inside this grid—not a universal optimum.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#activation-strength-and-timing",
+    "href": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#activation-strength-and-timing",
+    "title": "Experiment 4. A κ–Radius–Timing Response Surface",
+    "section": "Activation strength and timing",
+    "text": "Activation strength and timing\nDefine a Köhler-like activation coordinate:\n\\[\nA=\\log\\!\\left(\\kappa r_{dry}^{3}\\right).\n\\]\nThe final response was fitted with a quadratic function of activation coordinate \\(A\\) and injection coordinate \\(\\tau\\):\n\\[\nJ_{final}=\\beta_0+\\beta_1A+\\beta_2\\tau+\\beta_3A^2+\\beta_4\\tau^2+\\beta_5A\\tau+\\epsilon.\n\\]\n\n\n\nActivation-strength collapse for the two injection windows.\n\n\nThe two injection windows formed separated curves. Timing is therefore not merely a constant offset; it interacts with particle strength. The positive interaction coefficient indicates that strong particles and later injection reinforced one another within this model configuration.\n\n\n\nTerm\nCoefficient\n\n\n\n\n\\(\\beta_0\\) intercept\n\\(1.59\\times10^{-6}\\)\n\n\n\\(\\beta_1\\) activation linear\n\\(-3.16\\times10^{-5}\\)\n\n\n\\(\\beta_2\\) timing linear\n\\(2.90\\times10^{-5}\\)\n\n\n\\(\\beta_3\\) activation curvature\n\\(6.73\\times10^{-6}\\)\n\n\n\\(\\beta_4\\) timing curvature\n\\(3.80\\times10^{-5}\\)\n\n\n\\(\\beta_5\\) activation × timing\n\\(4.69\\times10^{-5}\\)\n\n\n\n\n\n\nFitted empirical relationship and reported coefficients.\n\n\nThe fit achieved \\(R^2=0.970\\), RMSE \\(=1.23\\times10^{-5}\\), and \\(n=2{,}016\\). This is an empirical compression of one fixed background, collision model, threshold, timing definition, and parameter normalization. It is not a universal physical law.\nRadius enters activation strength through a cubic volume term and dominated κ over this range. Higher κ consistently supported activation and water uptake. Later injection allowed seeded particles to interact with a more mature parcel state.\n\nConclusion. Within the tested range, \\(J_{final}\\) was well organized by \\(\\log(\\kappa r_{dry}^3)\\) and injection timing. Dry radius supplied the dominant main effect, while late injection reinforced strong particles. The upper-boundary maximum is a direction for the next grid, not a final optimum.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#next-research",
+    "href": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#next-research",
+    "title": "Experiment 4. A κ–Radius–Timing Response Surface",
+    "section": "Next research",
+    "text": "Next research\nA generalized response law should add fixed-number versus fixed-mass dose normalization, background aerosol sensitivity, a cloud-maturity/updraft coordinate instead of absolute time, and joint dependence on particle property, dose, background, and cloud state.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#related-material",
+    "href": "en/posts/experiments/2026-07-08-efficiency-response-surface/index.html#related-material",
+    "title": "Experiment 4. A κ–Radius–Timing Response Surface",
+    "section": "Related material",
+    "text": "Related material\n\nExperiment 4 design and interpretation conversation\nAll experiments",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "4. Response surface"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+    "href": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+    "title": "Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing",
+    "section": "",
+    "text": "NoteProvenance\n\n\n\nNeither the main experiment nor the follow-up used PySDM-Seeding-Lab. Both were independent PySDM parcel studies developed in Visual Studio Code and run on the laboratory server. This page combines the 2 July sensitivity study and the 3 July diagnostic follow-up.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. Seeding sensitivity"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#which-particle-should-be-injected-and-when",
+    "href": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#which-particle-should-be-injected-and-when",
+    "title": "Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing",
+    "section": "Which particle should be injected, and when?",
+    "text": "Which particle should be injected, and when?\nExperiment 1 showed that rain-water response is sensitive to representation and random seed. Here, n_sd_initial = n_sd_seeding = 1,000 was fixed while three physical controls were varied: seeded-particle dry radius, hygroscopicity κ, and injection window.\nThe PySDM seeding_no_collisions parcel framework was extended to four cases per condition: no seeding and seeding with collision ON, then the same pair with collision OFF. Every reported effect is seeding minus its matching no-seeding baseline.\n\n\n\n\n\n\n\n\nSensitivity axis\nValues\nFixed settings\n\n\n\n\nDry radius\n0.5, 1.0, 2.0 µm\nκ = 0.8, 15–20 min\n\n\nκ\n0.3, 0.5, 0.8, 1.0\ndry radius = 1 µm, 15–20 min\n\n\nInjection timing\n10–15, 15–20, 20–25 min\ndry radius = 1 µm, κ = 0.8\n\n\n\nThe main study used a 10-member ensemble with Formulae seeds 100–109. Rain water was the water mixing ratio carried by particles with wet radius at least 25 µm.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. Seeding sensitivity"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#dry-radius",
+    "href": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#dry-radius",
+    "title": "Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing",
+    "section": "Dry radius",
+    "text": "Dry radius\n\n\n\nRain-water response for dry radii of 0.5, 1, and 2 µm.\n\n\nWith collision ON, the final response followed 2 µm &gt; 1 µm &gt; 0.5 µm. Approximate values on the plotted scale were \\(2.1\\times10^{-5}\\), \\(0.9\\times10^{-5}\\), and \\(0.4\\)–\\(0.5\\times10^{-5}\\).\nLarger dry particles can reach larger wet sizes and participate in coalescence more readily. However, this was a fixed-number design: increasing dry radius also increased total injected dry mass. The result cannot be interpreted as a pure size effect. That confounding factor motivates the fixed-mass design in Experiment 3.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. Seeding sensitivity"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#hygroscopicity-κ",
+    "href": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#hygroscopicity-κ",
+    "title": "Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing",
+    "section": "Hygroscopicity κ",
+    "text": "Hygroscopicity κ\n\n\n\nRain-water sensitivity to κ from 0.3 to 1.0.\n\n\nThe late response ranked κ = 1.0 &gt; 0.8 &gt; 0.5 &gt; 0.3, with approximate final values of \\(1.0\\), \\(0.9\\), \\(0.75\\), and \\(0.65\\times10^{-5}\\). More hygroscopic particles took up water more readily and entered the collision pathway more effectively.\nCollision-OFF rain water remained nearly zero across κ. That does not mean nothing changed: vapour, number, and cloud-size radius diagnostics may respond even when condensation alone does not cross the 25 µm threshold.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. Seeding sensitivity"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#injection-timing",
+    "href": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#injection-timing",
+    "title": "Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing",
+    "section": "Injection timing",
+    "text": "Injection timing\n\n\n\nRain-water response for 10–15, 15–20, and 20–25 min injection windows.\n\n\nInjection at 10–15 min produced a brief positive spike followed by a negative excursion to roughly \\(-3.8\\times10^{-5}\\) and ended near zero. Early injection may have increased vapour competition and small-droplet number before efficient rain-size growth was possible.\nThe 15–20 min window produced a smoother positive response ending near \\(0.9\\times10^{-5}\\). The 20–25 min window rose rapidly after 22–23 min and ended near \\(2.7\\times10^{-5}\\), the largest of the three. Because this window is close to the end of the simulation, a large late value does not establish long-term persistence; a longer integration is required.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. Seeding sensitivity"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#follow-up-tracing-the-growth-pathway",
+    "href": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#follow-up-tracing-the-growth-pathway",
+    "title": "Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing",
+    "section": "Follow-up: tracing the growth pathway",
+    "text": "Follow-up: tracing the growth pathway\nThe first analysis emphasized rain water but could not explain the intermediate mechanism. Some concentration and effective-radius products had insufficient finite data or natural NaN intervals.\nThe follow-up separated particles into cloud-size (0.5–25 µm), rain-size (≥25 µm), and all activated (≥0.5 µm) ranges. It expanded ensemble output from the mean to standard deviation, median, q25, q75, successful-member count, and finite fraction. A rain effective radius is naturally undefined before rain-size particles exist, so NaN intervals were evaluated with product-health checks rather than treated automatically as failed runs.\nThe diagnostics support the following pathway:\nseeded-particle injection\n→ vapour consumption\n→ RH / supersaturation depletion\n→ condensational growth and latent heating\n→ cloud-size water redistribution\n→ collision/coalescence (collision ON)\n→ rain-size mass increase\nCollision OFF could still alter vapour and cloud-size particles, but it produced almost no rain-water increase. With collision ON, vapour and RH/supersaturation decreased, temperature and all-activated water increased, and rain-water mass rose. Number and mass must be read together: coalescence may reduce particle count while increasing individual mass and effective radius.\n\nConclusion. Within the tested range, larger dry radius, higher κ, and 20–25 min injection produced stronger late rain-water responses. Dry radius remained confounded with injected mass, and late timing remained confounded with the simulation endpoint, so these are hypotheses for the next experiment—not universal optima.\n\nThe next step introduces multiple background aerosol environments and separates fixed-number from fixed-mass injection in Experiment 3.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. Seeding sensitivity"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#related-material",
+    "href": "en/posts/experiments/2026-07-03-parameter-sensitivity/index.html#related-material",
+    "title": "Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing",
+    "section": "Related material",
+    "text": "Related material\n\nExperiment 2 and follow-up conversation\nAll experiments",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "2. Seeding sensitivity"
+    ]
+  },
+  {
     "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html",
     "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html",
     "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
@@ -698,7 +1094,18 @@
     "href": "en/experiments.html",
     "title": "Experiments",
     "section": "",
-    "text": "Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.\nThe first experiment note is in preparation.",
+    "text": "This series begins with super-droplet representation, then moves through seeded-particle properties, background aerosol environments, and a κ–radius–timing response surface. Every note separates the question, baseline, changed conditions, diagnostics, limitations, and next hypothesis.",
+    "crumbs": [
+      "PySDM",
+      "Experiments"
+    ]
+  },
+  {
+    "objectID": "en/experiments.html#experiment-sequence",
+    "href": "en/experiments.html#experiment-sequence",
+    "title": "Experiments",
+    "section": "Experiment sequence",
+    "text": "Experiment sequence\nExperiment 1  numerical representation and ensemble stability\n      ↓\nExperiment 2  dry radius · κ · timing sensitivity and growth pathway\n      ↓\nExperiment 3  background aerosol · fixed-number/mass comparison\n      ↓\nExperiment 4  activation-strength · timing response surface\n\n\n\n2026-06-30 · Jinu\n\n\nExperiment 1. How Much Does Super-Droplet Resolution Change the Result?\nA 4 × 4 representation grid and 50-seed ensembles separate transient collision noise from persistent rain-water response.\n\n\n\n\n2026-07-03 · Jinu\n\n\nExperiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing\nDry radius, κ, and injection timing are connected to vapour consumption, condensational growth, and rain-size mass.\n\n\n\n\n2026-07-06 · Jinu\n\n\nExperiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments\nClean marine, polluted continental, and warm-orographic backgrounds are compared under fixed-number and fixed-mass injection.\n\n\n\n\n2026-07-08 · Jinu\n\n\nExperiment 4. A κ–Radius–Timing Response Surface\nA dense 2,016-condition grid maps activation strength and injection timing into an empirical final rain-water response.",
     "crumbs": [
       "PySDM",
       "Experiments"
@@ -880,6 +1287,162 @@
     ]
   },
   {
+    "objectID": "en/posts/experiments/2026-06-30-numerical-representation/index.html",
+    "href": "en/posts/experiments/2026-06-30-numerical-representation/index.html",
+    "title": "Experiment 1. How Much Does Super-Droplet Resolution Change the Result?",
+    "section": "",
+    "text": "NoteProvenance\n\n\n\nThis experiment was not run in PySDM-Seeding-Lab. It was an independent PySDM study developed in Visual Studio Code and executed on the laboratory server. It later informed the numerical-qualification design of the Seeding Lab.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. Numerical representation"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-06-30-numerical-representation/index.html#question-is-one-large-response-a-physical-signal",
+    "href": "en/posts/experiments/2026-06-30-numerical-representation/index.html#question-is-one-large-response-a-physical-signal",
+    "title": "Experiment 1. How Much Does Super-Droplet Resolution Change the Result?",
+    "section": "Question: is one large response a physical signal?",
+    "text": "Question: is one large response a physical signal?\nPySDM represents populations of real particles with super-droplets. n_sd_initial and n_sd_seeding therefore control more than runtime: they determine how finely the background aerosol distribution, seeded-particle distribution, and stochastic collision pairing are represented.\nThe first collision ON/OFF comparison used 1,000 for both counts. A single resolution and random seed could not tell us whether a rain-water spike was reproducible or merely a coarse-sampling event. This experiment varies numerical representation, not physical seeding dose.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. Numerical representation"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-06-30-numerical-representation/index.html#design",
+    "href": "en/posts/experiments/2026-06-30-numerical-representation/index.html#design",
+    "title": "Experiment 1. How Much Does Super-Droplet Resolution Change the Result?",
+    "section": "Design",
+    "text": "Design\nn_sd_initial = 1,000 / 2,500 / 5,000 / 10,000\nn_sd_seeding = 1,000 / 2,500 / 5,000 / 10,000\nFormulae seed = 100–149\nrain-size threshold = wet radius 25 µm\nThe 4 × 4 grid was repeated with 50 random seeds. Seeding-minus-no-seeding differences were evaluated separately with collision ON and OFF. Instead of selecting one curve, the analysis compared ensemble mean and standard deviation, final/maximum/minimum response, positive and negative integrated area, and the full time series.\nAn early version increased both super-droplet counts together. That mixed changes in background sampling, seeded-particle sampling, and collision-pair sampling. Crossing the two axes independently was the essential correction.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. Numerical representation"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-06-30-numerical-representation/index.html#collision-off-produced-no-rain-size-response",
+    "href": "en/posts/experiments/2026-06-30-numerical-representation/index.html#collision-off-produced-no-rain-size-response",
+    "title": "Experiment 1. How Much Does Super-Droplet Resolution Change the Result?",
+    "section": "Collision OFF produced no rain-size response",
+    "text": "Collision OFF produced no rain-size response\nRain-water difference remained nearly zero across every collision-OFF combination. Seeded particles could still take up vapour, but condensation alone did not create a measurable increase above the 25 µm wet-radius threshold in this parcel and time window.\nWith collision ON, both positive spikes and negative responses appeared just after injection. The perturbation was transient rather than a one-way enhancement. Final values and post-20-minute means were generally close to zero, so this experiment does not establish persistent rain-water enhancement.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. Numerical representation"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-06-30-numerical-representation/index.html#background-representation-controlled-the-variability",
+    "href": "en/posts/experiments/2026-06-30-numerical-representation/index.html#background-representation-controlled-the-variability",
+    "title": "Experiment 1. How Much Does Super-Droplet Resolution Change the Result?",
+    "section": "Background representation controlled the variability",
+    "text": "Background representation controlled the variability\n\n\n\nMaximum and minimum rain-water response across the two representation axes.\n\n\nThe largest ensemble response and spread occurred at n_sd_initial = 1,000. When the background distribution is represented by fewer computational particles, each super-droplet carries more real-particle weight and an individual collision event can dominate a threshold-based diagnostic.\nIncreasing n_sd_initial to 2,500, 5,000, and 10,000 generally reduced the magnitude of maximum/minimum response, integrated positive/negative area, and ensemble spread. Changes in n_sd_seeding were weaker. In this configuration, the resolution of the existing cloud-droplet population mattered more than the resolution of the injected population.\n\n\n\nSeeding-minus-control ensemble time series. Blue shading is one standard deviation; vertical shading marks the 15–20 min injection window.\n\n\nOf 1,600 planned collision-setting comparison outputs, 1,599 completed. One collision-ON member at n_sd_initial = 1,000, n_sd_seeding = 5,000 generated an exceptionally large particle and exceeded an interpolation limit. It is retained as evidence of an outlier mechanism rather than silently discarded.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. Numerical representation"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-06-30-numerical-representation/index.html#interpretation",
+    "href": "en/posts/experiments/2026-06-30-numerical-representation/index.html#interpretation",
+    "title": "Experiment 1. How Much Does Super-Droplet Resolution Change the Result?",
+    "section": "Interpretation",
+    "text": "Interpretation\nA larger spike is not equivalent to stronger seeding. Lower resolution produced larger spikes and greater seed-to-seed variability. Likewise, raising n_sd_seeding does not add more seeding material; it changes the computational representation of the same population.\nThe 25 µm rain threshold is useful but sensitive to threshold crossing. A stronger follow-up should inspect multiple thresholds, wet-radius spectra, and robust ensemble statistics such as median and IQR.\n\nConclusion. Collision ON produced transient rain-water perturbations, not a persistent increase. Response magnitude and uncertainty were more sensitive to n_sd_initial than to n_sd_seeding, so a single resolution and random seed cannot support a generalized seeding claim.\n\nThe next step fixes numerical resolution and varies physical particle properties in Experiment 2.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. Numerical representation"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-06-30-numerical-representation/index.html#related-material",
+    "href": "en/posts/experiments/2026-06-30-numerical-representation/index.html#related-material",
+    "title": "Experiment 1. How Much Does Super-Droplet Resolution Change the Result?",
+    "section": "Related material",
+    "text": "Related material\n\nExperiment 1 design and interpretation conversation\nAll experiments",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. Numerical representation"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
+    "href": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
+    "title": "Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments",
+    "section": "",
+    "text": "NoteProvenance\n\n\n\nThis experiment was performed outside PySDM-Seeding-Lab. Independent PySDM scripts were developed in Visual Studio Code and executed in parallel on the laboratory server.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. Realistic backgrounds"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#why-add-realistic-background-environments",
+    "href": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#why-add-realistic-background-environments",
+    "title": "Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments",
+    "section": "Why add realistic background environments?",
+    "text": "Why add realistic background environments?\nExperiment 2 found stronger responses for larger dry radius, higher κ, and later injection, but used one idealized background and a fixed number of seeded particles. Background aerosol controls vapour competition, while fixed particle number and fixed dry mass ask different efficiency questions.\nThis experiment asks whether the warm-hygroscopic pathway persists across environments, whether response speed and strength differ, whether large particles remain favorable at fixed mass, and whether the best injection stage depends on the background cloud.\n\n\n\nEnvironment\nBackground radius\nκ\nNumber concentration\n\n\n\n\nClean marine\n0.10 µm\n0.70\n100 cm⁻³\n\n\nPolluted urban/continental\n0.07 µm\n0.30\n1,000 cm⁻³\n\n\nWarm orographic\n0.08 µm\n0.45\n300 cm⁻³\n\n\n\nThe seeding grid used dry radii of 0.5, 1.0, 1.5, 2.0, and 3.0 µm; κ of 0.8, 1.0, and 1.2; and injection windows of 10–15, 15–20, 20–25, and 25–30 min. Main runs used collision ON, with representative collision-OFF controls, and a 50-member ensemble.\nFixed number injects the same particle count at every dry radius, so particle size and total dry mass change together. Fixed mass holds total dry material constant, reducing particle number as radius increases. The latter is closer to a material-limited efficiency question.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. Realistic backgrounds"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#a-common-pathway-different-response-regimes",
+    "href": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#a-common-pathway-different-response-regimes",
+    "title": "Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments",
+    "section": "A common pathway, different response regimes",
+    "text": "A common pathway, different response regimes\n\n\n\nFixed-number mechanism time series for the three environments.\n\n\nAfter injection, water vapour and RH/supersaturation decreased while temperature increased. Water moved into cloud and all-activated particle mass, then into rain water through collision/coalescence. This directional pathway appeared in all three backgrounds.\nUnder the representative fixed-number condition, clean marine responded first and most strongly. Its low background concentration reduced vapour competition. Polluted conditions were more parameter dependent because many background particles competed for vapour.\nFixed-mass runs retained the same pathway but showed weaker responses overall. Increasing dry radius reduced the number of injected particles, exposing a size–number trade-off. “Larger is better” therefore applies only to the fixed-number comparison.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. Realistic backgrounds"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#heatmaps-and-rankings-answer-different-questions",
+    "href": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#heatmaps-and-rankings-answer-different-questions",
+    "title": "Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments",
+    "section": "Heatmaps and rankings answer different questions",
+    "text": "Heatmaps and rankings answer different questions\n\n\n\nIntegrated positive response across environment, mass rule, κ, dry radius, and injection time.\n\n\nintegrated_positive_mean combines positive-response magnitude and duration. Early injections have more time to accumulate area, so the metric was paired with last_finite_mean, the response at the last valid simulation time. This matters because some collision-ON members can stop early after generating extremely large particles. Last-finite value, integrated response, median/IQR, and finite fraction must be interpreted together.\n\n\n\nConditions ranked by integrated positive and last-finite rain-water response.\n\n\nClean marine was fastest in the representative time series, yet warm-orographic cases occupied many top positions across the full grid. The views are not contradictory: one compares environments at one representative setting; the other searches all parameter combinations.\n\nClean marine: a fast-response regime\nWarm orographic: a conditional amplification regime under large radius and late injection\nPolluted continental: a strongly parameter-dependent regime\n\nClean marine responded strongly around 20–25 min, while warm-orographic top conditions favored 25–30 min injection. Optimal timing reflects environment-specific cloud development rather than a universal “later is better” rule.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. Realistic backgrounds"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#microphysical-response-is-not-operational-suitability",
+    "href": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#microphysical-response-is-not-operational-suitability",
+    "title": "Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments",
+    "section": "Microphysical response is not operational suitability",
+    "text": "Microphysical response is not operational suitability\nThis parcel experiment measures internal microphysical rain-water response. Operational targeting also depends on predictability, lifetime, precipitation delivery, and water-resource value. A fast marine response is not automatically the best operational target. Many real orographic programs also involve mixed-phase or glaciogenic—not warm-hygroscopic—seeding, so this result cannot be generalized to all mountain-cloud seeding.\n\nConclusion. The warm-hygroscopic pathway persisted across all three backgrounds, but its strength and timing were environment dependent. Large particles were favorable at fixed number, while fixed mass exposed a size–number trade-off. Efficiency cannot be reduced to particle size alone.\n\nTop-ranked conditions still require robust checks of median, IQR, finite fraction, and early-stop fraction. Experiment 4 next fixes the background and maps the κ–radius–timing interaction densely.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. Realistic backgrounds"
+    ]
+  },
+  {
+    "objectID": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#related-material",
+    "href": "en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html#related-material",
+    "title": "Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments",
+    "section": "Related material",
+    "text": "Related material\n\nExperiment 3 design and interpretation conversation\nAll experiments",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. Realistic backgrounds"
+    ]
+  },
+  {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
     "href": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
     "title": "Starting with PySDM: First Coordinates for Cloud Microphysics Experiments",
@@ -967,7 +1530,29 @@
     "href": "experiments.html",
     "title": "Experiments",
     "section": "",
-    "text": "각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.\n첫 실험 기록을 준비하고 있습니다.",
+    "text": "이 시리즈는 super-droplet 수치 표현에서 시작해 시딩 입자 특성, 배경 에어로졸 환경, κ–입자크기–주입시점 response surface로 확장됩니다. 각 글은 질문과 기준 실험을 먼저 밝히고, 변경 조건·관측 지표·해석 범위·실패를 구분해 기록합니다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments"
+    ]
+  },
+  {
+    "objectID": "experiments.html#실험-흐름",
+    "href": "experiments.html#실험-흐름",
+    "title": "Experiments",
+    "section": "실험 흐름",
+    "text": "실험 흐름\nExperiment 1  numerical representation과 ensemble 안정성\n      ↓\nExperiment 2  dry radius · κ · injection timing 민감도와 성장 경로\n      ↓\nExperiment 3  background aerosol · fixed number/mass 비교\n      ↓\nExperiment 4  activation strength · timing response surface",
+    "crumbs": [
+      "PySDM",
+      "Experiments"
+    ]
+  },
+  {
+    "objectID": "experiments.html#실험-기록",
+    "href": "experiments.html#실험-기록",
+    "title": "Experiments",
+    "section": "실험 기록",
+    "text": "실험 기록",
     "crumbs": [
       "PySDM",
       "Experiments"
@@ -1245,6 +1830,198 @@
       "PySDM",
       "Build the Lab",
       "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "",
+    "text": "노트실험 출처\n\n\n\n이 실험은 PySDM-Seeding-Lab에서 실행한 결과가 아니다. 연구실 서버에서 Visual Studio Code로 작성·실행한 독립 PySDM 실험이며, 이후 Seeding Lab의 수치 검증 설계에 참고한 선행 연구 기록이다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html#질문-한-번의-큰-반응을-물리-신호로-믿어도-될까",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html#질문-한-번의-큰-반응을-물리-신호로-믿어도-될까",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "질문: 한 번의 큰 반응을 물리 신호로 믿어도 될까",
+    "text": "질문: 한 번의 큰 반응을 물리 신호로 믿어도 될까\nPySDM은 실제 입자 전체를 계산하지 않고, 하나의 super-droplet이 같은 성질을 가진 실제 입자 집단을 대표하게 한다. 따라서 n_sd_initial과 n_sd_seeding은 단순한 속도 조절값이 아니다. 초기 에어로졸 분포, 시딩 입자 분포, 확률적 collision pair sampling을 얼마나 촘촘히 표현하는지를 결정한다.\n초기 collision ON/OFF 비교는 두 값을 모두 1,000으로 두었다. 하지만 단일 해상도와 단일 random seed에서 나타난 rain-water spike가 재현 가능한 시딩 반응인지, 거친 입자 표현이 만든 numerical noise인지 구분할 수 없었다. 이 실험의 목적은 물리적 시딩 양이 아니라 수치 표현 민감도를 분리하는 것이다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html#설계",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html#설계",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "설계",
+    "text": "설계\n초기 입자와 시딩 입자 해상도를 각각 네 수준으로 바꿨다.\nn_sd_initial = 1,000 / 2,500 / 5,000 / 10,000\nn_sd_seeding = 1,000 / 2,500 / 5,000 / 10,000\nFormulae seed = 100–149\nrain-size threshold = wet radius 25 µm\n4 × 4의 16개 조합마다 50개 random seed를 사용하고, collision ON과 OFF에서 각각 seeding–no-seeding 차이를 계산했다. 해상도 조합별 단일 곡선 대신 ensemble mean, standard deviation, final/max/min response, 양·음의 누적 면적을 비교했다.\n초기에는 n_sd_initial과 n_sd_seeding을 함께 늘렸지만, 그 결과로는 어느 축이 반응을 바꿨는지 알 수 없었다. 그래서 두 축을 독립적으로 교차시킨 것이 이 실험의 핵심 수정이다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html#결과-1.-collision이-없으면-rain-size-반응도-없었다",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html#결과-1.-collision이-없으면-rain-size-반응도-없었다",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "결과 1. Collision이 없으면 rain-size 반응도 없었다",
+    "text": "결과 1. Collision이 없으면 rain-size 반응도 없었다\nCollision OFF에서는 모든 해상도 조합의 rain water difference가 거의 0이었다. 시딩 입자가 주입되고 응결할 수는 있어도, 이 parcel 설정에서는 응결만으로 wet radius 25 µm 이상 영역의 물 질량 증가가 만들어지지 않았다.\nCollision ON에서는 주입 직후 양의 spike와 음의 response가 함께 나타났다. 즉 시딩 효과는 일방적인 증가가 아니라, threshold 주변 입자의 이동과 stochastic collision event가 섞인 일시적 변동이었다. 최종 시점과 20분 이후 평균은 대부분 0에 가까워 이 실험만으로 지속적인 rain-water enhancement를 주장할 수 없다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html#결과-2.-n_sd_initial이-변동성을-더-크게-지배했다",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html#결과-2.-n_sd_initial이-변동성을-더-크게-지배했다",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "결과 2. n_sd_initial이 변동성을 더 크게 지배했다",
+    "text": "결과 2. n_sd_initial이 변동성을 더 크게 지배했다\n\n\n\nCollision ON/OFF에서 최대·최소 rain-water response를 비교한 heatmap. 초기 super-droplet 수가 작을수록 반응 진폭이 커진다.\n\n\nn_sd_initial = 1,000일 때 ensemble mean response와 표준편차가 가장 컸다. 초기 입자분포를 적은 대표 입자로 표현하면 한 super-droplet이 담당하는 실제 입자 수가 커지고, 특정 collision event 하나가 rain-water diagnostic에 크게 반영될 수 있다.\nn_sd_initial을 2,500, 5,000, 10,000으로 늘리자 maximum/minimum response와 누적 양·음 면적의 절대값이 전반적으로 작아졌다. 반면 n_sd_seeding 변화의 영향은 상대적으로 약했다. 이 결과는 시딩 입자 표현보다 시딩 입자가 상호작용하는 기존 cloud-droplet population의 해상도가 이 설정의 rain response에 더 큰 영향을 주었음을 시사한다.\n\n\n\n각 해상도 조합의 seeding-minus-control time series. 파란 음영은 ensemble standard deviation, 세로 음영은 15–20분 주입 구간이다.\n\n\n계획한 1,600개 collision-setting별 comparison output 중 1,599개가 완료됐다. Collision ON, n_sd_initial = 1,000, n_sd_seeding = 5,000에서 한 member가 매우 큰 입자를 만들며 interpolation limit을 넘었다. 이 실패를 제거 대상이 아니라 거친 representation과 stochastic collision이 만드는 outlier 증거로 남겼다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html#무엇을-배웠나",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html#무엇을-배웠나",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "무엇을 배웠나",
+    "text": "무엇을 배웠나\n첫째, 큰 spike는 큰 시딩 효과와 동의어가 아니다. 해상도가 낮을수록 오히려 spike와 seed 간 분산이 커졌다. 둘째, n_sd_seeding 증가는 실제 투입 물질량 증가가 아니라 같은 분포를 더 많은 계산 입자로 표현하는 변화다. 이 축을 물리적 시딩 강도로 해석하면 안 된다.\n셋째, wet radius 25 µm라는 threshold는 해석을 쉽게 하지만 threshold crossing에 민감하다. 후속 실험에서는 여러 radius threshold, wet-radius spectrum, ensemble median/IQR을 함께 봐야 한다.\n\n결론. Collision ON에서 순간적인 rain-water perturbation은 나타났지만 지속적인 증가는 아니었다. 반응 크기와 불확실성은 n_sd_seeding보다 n_sd_initial에 더 민감했으며, 단일 해상도·단일 seed 결과로 시딩 효과를 일반화할 수 없다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html#다음-실험으로",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html#다음-실험으로",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "다음 실험으로",
+    "text": "다음 실험으로\n수치 표현의 영향을 확인했으므로 다음 단계에서는 해상도를 고정하고 dry radius, κ, injection timing 같은 물리 조건만 바꾼다. 그 흐름은 Experiment 2에서 이어진다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-06-30-numerical-representation/index.html#연결-자료",
+    "href": "posts/experiments/2026-06-30-numerical-representation/index.html#연결-자료",
+    "title": "Experiment 1. Super-droplet 수는 결과를 얼마나 바꾸는가",
+    "section": "연결 자료",
+    "text": "연결 자료\n\nExperiment 1 설계·해석 대화\nExperiments 목록",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "1. 수치 표현 민감도"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "",
+    "text": "노트실험 출처\n\n\n\n이 실험은 PySDM-Seeding-Lab 외부에서 수행했다. 연구실 서버의 20-core 병렬 실행과 Visual Studio Code 기반 스크립트를 사용한 독립 PySDM 연구이며, Seeding Lab 결과로 표기하지 않는다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#왜-현실적인-배경-환경이-필요한가",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#왜-현실적인-배경-환경이-필요한가",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "왜 현실적인 배경 환경이 필요한가",
+    "text": "왜 현실적인 배경 환경이 필요한가\nExperiment 2는 큰 dry radius, 높은 κ, 늦은 injection이 강한 response를 만드는 경향을 보였다. 그러나 하나의 이상화된 background와 fixed-number 주입만 사용했다. 실제로는 배경 에어로졸 수와 흡습성이 수증기 경쟁을 바꾸고, 같은 입자 수를 넣는 것과 같은 건조질량을 넣는 것은 전혀 다른 질문이다.\n이번 실험은 네 가지를 묻는다.\n\n배경 환경이 달라도 warm hygroscopic seeding pathway가 유지되는가?\nClean, polluted, orographic 환경의 반응 속도와 강도는 어떻게 다른가?\n총 시딩 질량을 고정해도 큰 입자가 항상 유리한가?\n최적 injection timing은 환경마다 달라지는가?",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#세-개의-background와-두-개의-주입-규칙",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#세-개의-background와-두-개의-주입-규칙",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "세 개의 background와 두 개의 주입 규칙",
+    "text": "세 개의 background와 두 개의 주입 규칙\n\n\n\nEnvironment\nBackground dry radius\nκ\nNumber concentration\n\n\n\n\nClean marine\n0.10 µm\n0.70\n100 cm⁻³\n\n\nPolluted urban/continental\n0.07 µm\n0.30\n1,000 cm⁻³\n\n\nWarm orographic\n0.08 µm\n0.45\n300 cm⁻³\n\n\n\nSeeding dry radius는 0.5, 1.0, 1.5, 2.0, 3.0 µm, κ는 0.8, 1.0, 1.2, injection window는 10–15, 15–20, 20–25, 25–30분으로 구성했다. Main simulation은 collision ON이며 대표 control만 collision OFF로 실행했다. 각 조건은 50-member ensemble로 계산했다.\nfixed number는 dry radius가 달라도 같은 수의 시딩 입자를 넣는다. 입자 크기 효과와 총 투입 질량 효과가 함께 바뀐다. fixed mass는 전체 dry material mass를 고정하므로 입자가 커질수록 주입되는 입자 수가 줄어든다. 실제 재료가 제한된 상황의 efficiency를 묻는 데 더 적합하다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#성장-경로는-세-환경에서-모두-유지됐다",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#성장-경로는-세-환경에서-모두-유지됐다",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "성장 경로는 세 환경에서 모두 유지됐다",
+    "text": "성장 경로는 세 환경에서 모두 유지됐다\n\n\n\nFixed-number 대표 조건에서 세 환경의 수증기, RH, 온도, cloud/all-activated water, rain-water response.\n\n\n시딩 뒤 water vapour와 RH/supersaturation이 감소하고 temperature가 증가했다. 흡수된 수증기는 cloud water와 all-activated water로 이동했고, collision/coalescence와 결합해 rain water 증가로 이어졌다. 이 방향은 세 background에서 공통으로 나타났다.\n대표 fixed-number 조건에서는 clean marine 반응이 가장 빠르고 강했다. 배경 입자 수가 적어 수증기 경쟁이 약하고 시딩 입자가 빠르게 성장한 것으로 해석했다. Polluted 환경은 많은 background aerosol 때문에 조건 의존성이 컸다.\nFixed-mass에서는 같은 mechanism 방향이 유지됐지만 response가 전반적으로 작아졌다. 큰 입자의 activation advantage와 줄어든 particle number 사이에 trade-off가 생겼기 때문이다. 따라서 “입자가 클수록 항상 좋다”는 결론은 fixed-number에 한정된다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#heatmap과-ranking은-서로-다른-질문에-답한다",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#heatmap과-ranking은-서로-다른-질문에-답한다",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "Heatmap과 ranking은 서로 다른 질문에 답한다",
+    "text": "Heatmap과 ranking은 서로 다른 질문에 답한다\n\n\n\n환경·질량 규칙·κ별 dry-radius × injection-time integrated positive response heatmap.\n\n\nintegrated_positive_mean은 양의 rain-water difference가 시간에 걸쳐 얼마나 누적됐는지 보여준다. 이 값은 response의 강도와 지속시간을 함께 담지만, early injection은 적분 시간이 길어 유리해질 수 있다. 그래서 simulation이 유효했던 마지막 시점의 last_finite_mean도 함께 비교했다.\n일부 collision ON member는 매우 큰 입자 성장으로 조기 종료될 수 있다. 단순 final value 대신 last finite response, integrated response, median/IQR, finite fraction을 함께 보는 이유다.\n\n\n\n전체 parameter grid에서 integrated positive response와 last-finite response가 큰 조건의 순위.\n\n\n대표 time series에서는 clean marine이 가장 빠르지만, 전체 grid의 top-ranked conditions에는 warm orographic이 많이 나타났다. 모순이 아니다. 첫 그림은 한 대표 조건의 반응 속도를, ranking은 모든 조합 중 가장 강한 조건을 본다.\n\nClean marine: 대표 조건에서 빠른 반응형\nWarm orographic: large dry radius와 late injection이 맞으면 강하게 증폭되는 조건형\nPolluted urban/continental: 높은 배경 입자 수 때문에 parameter dependence가 큰 환경\n\nClean marine은 20–25분 조건에서 빠른 반응을 보였고, warm orographic은 25–30분 late injection에서 강한 조건이 나타났다. 최적 시점은 단순히 “늦을수록”이 아니라 각 환경의 cloud development stage와 연결된다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#미세물리-response와-실제-운영-적합성은-다르다",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#미세물리-response와-실제-운영-적합성은-다르다",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "미세물리 response와 실제 운영 적합성은 다르다",
+    "text": "미세물리 response와 실제 운영 적합성은 다르다\n이 실험은 parcel 내부의 microphysical rain-water response를 비교한다. 실제 시딩 대상 선정에는 구름의 위치 예측 가능성, 수명, 강수 전달 위치, 수자원 가치가 추가로 필요하다. Clean marine의 빠른 반응이 곧 운영상 최적 대상이라는 뜻은 아니다. 또한 실제 orographic seeding에는 warm hygroscopic이 아닌 mixed-phase/glaciogenic 방식도 많으므로 이 결과를 모든 지형성 시딩에 확장할 수 없다.\n\n결론. Warm hygroscopic pathway는 세 background에서 유지됐지만 강도와 최적 timing은 환경 의존적이었다. Fixed-number에서는 큰 입자가 강했지만 fixed-mass에서는 크기–개수 trade-off가 나타나, efficiency를 particle size 하나로 설명할 수 없었다.",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#남은-검증",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#남은-검증",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "남은 검증",
+    "text": "남은 검증\nTop-ranked condition이 일부 seed에 좌우되지 않는지 median, IQR, finite/early-stop fraction을 더 엄격히 확인해야 한다. 다음 실험에서는 환경을 하나로 고정한 채 κ, dry radius, timing의 상호작용을 조밀한 response surface로 만들고, “시험 범위 안의 최대”와 “보편적 최적”을 구분한다.\nExperiment 4로 이어서 읽기",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
+    ]
+  },
+  {
+    "objectID": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#연결-자료",
+    "href": "posts/experiments/2026-07-06-realistic-warm-seeding/index.html#연결-자료",
+    "title": "Experiment 3. 배경 에어로졸 환경까지 바꾼 Warm Hygroscopic Seeding",
+    "section": "연결 자료",
+    "text": "연결 자료\n\nExperiment 3 설계·해석 대화\nExperiments 목록",
+    "crumbs": [
+      "PySDM",
+      "Experiments",
+      "3. 현실 배경환경"
     ]
   },
   {
