@@ -1,0 +1,68 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "posts/**/*.qmd"
+    - "!_templates/**"
+
+website:
+  title: "PySDM Seeding Lab"
+  site-url: "https://jinu219.github.io"
+  description: "PySDM으로 구름 미세물리와 seeding 실험을 배우고, 만들고, 기록합니다."
+  repo-url: "https://github.com/Jinu219/Jinu219.github.io"
+  repo-actions: [source, issue]
+  open-graph: true
+  twitter-card: true
+  search:
+    location: navbar
+    type: overlay
+  navbar:
+    pinned: true
+    left:
+      - href: index.qmd
+        text: 홈
+      - href: learn-pysdm.qmd
+        text: Learn PySDM
+      - href: build-the-lab.qmd
+        text: Build the Lab
+      - href: experiments.qmd
+        text: Experiments
+      - href: projects.qmd
+        text: 프로젝트
+      - href: about.qmd
+        text: 소개
+    right:
+      - icon: github
+        href: "https://github.com/Jinu219"
+        aria-label: Jinu219 GitHub
+  page-footer:
+    border: true
+    left: "© 2026 Jinu. Notes from the PySDM Seeding Lab."
+    right:
+      - text: "RSS"
+        href: index.xml
+      - text: "GitHub"
+        href: "https://github.com/Jinu219"
+
+lang: ko
+date-format: "YYYY-MM-DD"
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      light: [cosmo, styles.scss]
+      dark: [darkly, styles.scss]
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-overflow: wrap
+    code-link: true
+    anchor-sections: true
+    smooth-scroll: true
+    citations-hover: true
+    footnotes-hover: true
+
+execute:
+  freeze: auto

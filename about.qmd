@@ -1,0 +1,26 @@
+---
+title: "소개"
+description: "PySDM Seeding Lab과 이 블로그를 소개합니다."
+page-layout: article
+---
+
+## 이곳은 무엇을 기록하나요?
+
+PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우고, 구름 씨뿌리기와 관련된 수치 실험을 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다.
+
+완성된 결론만 전시하기보다 다음을 함께 남깁니다.
+
+- 어떤 물리 질문에서 실험이 시작됐는지
+- 어떤 가정과 설정을 사용했는지
+- 코드와 결과를 어떻게 다시 만들 수 있는지
+- 결과가 예상과 달랐을 때 무엇을 배웠는지
+
+## 글의 구성
+
+**Learn PySDM**은 개념과 도구를, **Build the Lab**은 재현 가능한 환경을, **Experiments**는 가설과 결과를 다룹니다. 논문과 소프트웨어는 인용으로 연결하고, 실험 코드는 별도 저장소의 고정된 버전으로 연결합니다.
+
+## 연결
+
+- [GitHub · Jinu219](https://github.com/Jinu219)
+- [PySDM 공식 저장소](https://github.com/open-atmos/PySDM)
+- [PySDM 공식 문서](https://open-atmos.github.io/PySDM/)
