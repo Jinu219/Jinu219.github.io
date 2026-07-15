@@ -21,6 +21,150 @@
     "text": "구름 미세물리와 seeding 문제를 PySDM 기반 수치 실험으로 탐색하는 연구 프로젝트입니다.\n\n\n\n\n\n\n\n\n영역\n이 블로그\n코드 저장소\n\n\n\n\n역할\n질문, 배경, 실험 해석, 그림\n실행 코드, 설정, 테스트, 원자료 처리\n\n\n변경 단위\n한 편의 연구 노트\n재현 가능한 실행 단위\n\n\n연결 방식\n실행 버전과 결과 링크 기록\n관련 블로그 글 링크 기록\n\n\n\nPySDM-Seeding-Lab 저장소 열기"
   },
   {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "",
+    "text": "첫 번째 개발에서 Scenario–Sweep–Run–Dashboard 흐름을 완성한 뒤 더 어려운 질문이 남았다. 대시보드에 곡선이 그려진다는 사실만으로 그 값을 과학적으로 해석해도 되는가?\n2026년 7월 14일 병합한 PySDM-Seeding-Lab PR #3는 기능 확장보다 진단값의 출처, 수치 품질, 실패 증거와 재현성을 다룬다. 12개 커밋과 78개 변경 파일을 통해 작동하는 실험 앱을 검증 가능한 연구 플랫폼으로 바꾸려 했다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#가장-먼저-해결한-문제-이-값은-어디에서-왔는가",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#가장-먼저-해결한-문제-이-값은-어디에서-왔는가",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "가장 먼저 해결한 문제: 이 값은 어디에서 왔는가",
+    "text": "가장 먼저 해결한 문제: 이 값은 어디에서 왔는가\n초기 Growth Pathway에는 adapter가 제공하지 않는 변수를 계산 흐름 검증용 proxy로 채운 경우가 있었다. UI에서는 native 출력과 proxy가 비슷한 모양의 열로 보였다. 이 상태는 가장 위험하다. 임시 변수가 실제 PySDM 미세물리 결과처럼 해석될 수 있기 때문이다.\n모든 진단값을 네 단계로 분류했다.\n\n\n\n분류\n의미\n\n\n\n\nnative\nPySDM product 또는 상태에서 직접 얻은 값\n\n\nderived\nnative 값으로부터 명시적인 식으로 계산한 값\n\n\nproxy\nworkflow 검증을 위한 근사·대체값\n\n\nmissing\n현재 adapter에서 제공하지 않는 값\n\n\n\n각 결과에는 diagnostic_provenance.json을 저장하고 Dashboard가 개수와 경고를 표시한다. native parcel 경로의 검증된 계약은 현재 native: 11, derived: 2, proxy: 0으로 정리됐다.\n여기서 중요한 점은 proxy를 없애는 것만이 아니다. 미래에 새 변수가 추가될 때도 출처를 밝히지 않은 값은 조용히 그래프에 들어올 수 없게 하는 계약을 만든 것이다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#pysdm-native-성장경로-연결",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#pysdm-native-성장경로-연결",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "PySDM native 성장경로 연결",
+    "text": "PySDM native 성장경로 연결\nparcel simulation builder에 PySDM native products를 연결해 다음 항목을 직접 또는 반지름 구간 필터로 계산했다.\n\n온도, 압력, 수증기 혼합비, 상대습도\n구름수와 빗물 혼합비\n구름방울과 빗방울 수농도\n구름·비 유효반지름\n전체 활성화 입자의 물과 수농도\n\n여기서 cloud와 rain은 입자의 과거 이력을 뜻하지 않는다. 각 시각의 wet-radius 구간으로 분류한 상태다. 이 제한도 provenance와 보고서에 명시했다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#평균값에서-wet-radius-spectrum으로",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#평균값에서-wet-radius-spectrum으로",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "평균값에서 wet-radius spectrum으로",
+    "text": "평균값에서 wet-radius spectrum으로\n평균 유효반지름만으로는 씨뿌리기 후 일부 입자가 큰 크기 구간으로 이동했는지 알기 어렵다. 지정한 checkpoint마다 wet-radius spectrum을 저장하도록 했다.\nwet_radius_spectrum.csv\nwet_radius_spectrum_comparison.csv\nthreshold_robustness.csv\n각 bin에는 반지름 경계, 수농도, 액체부피 분율과 unactivated/cloud/rain 구간을 기록한다. Control–Seeding 차이를 통해 작은 활성화 방울에서 큰 cloud·rain-size 입자로 질량이 이동했는지 볼 수 있다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#임계값-하나를-정답처럼-사용하지-않기",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#임계값-하나를-정답처럼-사용하지-않기",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "임계값 하나를 정답처럼 사용하지 않기",
+    "text": "임계값 하나를 정답처럼 사용하지 않기\ncloud와 rain을 가르는 반지름 경계는 20, 25, 30 \\(\\mu\\mathrm{m}\\)에서 반복 계산한다. rain-size 액체가 전체 활성화 액체의 일정 비율을 처음 넘는 시점을 spectrum transition으로 정의하고, 분율도 0.5%, 1%, 2%에서 검사한다.\nradius threshold: 20 / 25 / 30 µm\ntransition fraction: 0.5 / 1.0 / 2.0%\n1%는 보편적인 관측 표준이 아니라 이 프로젝트의 운영적 탐지 기준이다. 그래서 한 값의 transition time만 보고하지 않고, 임계값을 바꿔도 전이 방향과 시점 차이가 유지되는지 함께 저장한다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#씨뿌리기-source를-고려한-물수지",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#씨뿌리기-source를-고려한-물수지",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "씨뿌리기 source를 고려한 물수지",
+    "text": "씨뿌리기 source를 고려한 물수지\n흡습성 입자를 주입하는 동안에는 모델 계에 의도적인 source가 들어온다. 이 구간을 무시하고 전체 물이 변했다고 판단하면 정상적인 주입을 수치 오차로 오해한다.\nwater_budget.csv는 수증기, 구름수, 빗물과 총물을 분리하고 주입 source window를 표시한다. 보존성 평가는 source가 닫힌 구간을 중심으로 수행한다.\nbefore injection: closed-budget check\nduring injection: source-aware record\nafter injection: closed-budget check\n단순한 총합 하나보다 어느 시간 구간에서 어떤 항이 물수지를 바꿨는지를 설명하는 것이 목표다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#수치-수렴성을-실제-pysdm-실행으로-확인하기",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#수치-수렴성을-실제-pysdm-실행으로-확인하기",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "수치 수렴성을 실제 PySDM 실행으로 확인하기",
+    "text": "수치 수렴성을 실제 PySDM 실행으로 확인하기\n수렴성 진단은 timestep, background super-droplet 수, seeding super-droplet 수를 각각 바꾸고 다른 축을 고정한 상태에서 다음으로 조밀한 수준과 가장 조밀한 기준을 비교한다.\n표준 qualification은 다음 격자를 사용했다.\ntimestep: 5 / 10 / 15 s\nseeding super-droplets: 100 / 200 / 400\nbackground super-droplets: 100 / 200 / 400\n결과는 27개 조건, control–seeding을 포함한 54회 실제 PySDM 실행, 실패 0회였다. 0이 아닌 기준값을 가진 비교에서는 다음 결과를 얻었다.\n\n\n\n진단\n결과\n\n\n\n\n5% 이내 비교\n12 / 12\n\n\n상대차이 중앙값\n0.187%\n\n\n95백분위\n1.140%\n\n\n최대 상대차이\n1.731%\n\n\n\n이 결과는 기본 5% 허용오차를 시험한 marine, condensation/seeding, collision-OFF 조건에서만 지지한다. 이 qualification에서 rain 관련 지표는 0이었으므로, collision-ON 강수 생성 실험의 수렴성을 증명하지 않는다. 통과 숫자보다 적용 범위를 함께 기록하는 것이 더 중요하다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#실패-기록-windows-281자-경로와-240개-실패",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#실패-기록-windows-281자-경로와-240개-실패",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "실패 기록: Windows 281자 경로와 240개 실패",
+    "text": "실패 기록: Windows 281자 경로와 240개 실패\n24개 sweep case에 case당 10개 ensemble member를 실행한 실험은 총 240개 member가 모두 실패했다. 원인은 미세물리가 아니라 약 281자까지 길어진 Windows 출력 경로였다. parameter label과 값을 디렉터리 이름마다 반복하면서 중첩 경로가 한계를 넘었다.\n경로는 짧고 안정적인 식별자로 교체했다.\ncases/case_001/\nmembers/member_001/\ncomparison/\nsingle/\n과학적 label과 parameter 값은 config와 metadata에 보존했다. 사람이 읽는 설명과 파일시스템 식별자의 책임을 분리한 것이다.\n또한 sweep과 ensemble의 실행 상태를 success / partial / failed로 구분하고, 전체 실패를 올리기 전에 member·case 예외를 디스크에 저장하도록 했다. 빈 그래프가 “변화 없음”인지 “실행 실패”인지 Dashboard가 구별할 수 있게 됐다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#member-benchmark가-보여준-병목",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#member-benchmark가-보여준-병목",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "24-member benchmark가 보여준 병목",
+    "text": "24-member benchmark가 보여준 병목\n24개 실제 PySDM member를 연속 실행한 large benchmark 결과는 다음과 같다.\n\n\n\n항목\n측정값\n\n\n\n\n전체 wall time\n743.878 s\n\n\n시작 RSS\n111.34 MiB\n\n\npeak RSS\n1,110.98 MiB\n\n\n종료 RSS\n1,064.70 MiB\n\n\n\n반면 24개 member CSV를 streaming 방식으로 집계하는 단계의 RSS 증가는 0.270 MiB, 처리시간은 3.772 s였다. 집계기가 아니라 반복 실행 후 남는 PySDM·backend·JIT 상태가 다음 profiling 대상이라는 근거다. 이 측정만으로 특정 구성요소의 memory leak을 단정할 수는 없다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#결과-폴더-자체를-연구-기록으로",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#결과-폴더-자체를-연구-기록으로",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "결과 폴더 자체를 연구 기록으로",
+    "text": "결과 폴더 자체를 연구 기록으로\n새 결과에는 가능한 경우 다음 보고서를 함께 생성한다.\nreport.md\nreport.html\nreport.pdf\nresult_manifest.json\n보고서는 설정, adapter, provenance, 검증 상태, 주요 결과, 물수지, 수렴성, spectrum transition, 재현 명령과 해석 제한을 포함한다. publication figure는 PNG·SVG·PDF와 journal-width preset을 지원한다.\nresult_manifest.json에는 schema version, 최소 reader version, result type, primary data와 artifact 역할을 기록한다. manifest가 없던 과거 결과와 schema-v1 alias도 읽을 수 있도록 migration fixture를 보존했다. 새 기능이 과거 실험을 조용히 깨뜨리지 않게 하기 위해서다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#검증과-남은-일",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#검증과-남은-일",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "검증과 남은 일",
+    "text": "검증과 남은 일\n이번 변경에서는 23개 unit/integration test가 통과했고 그중 2개는 실제 PySDM integration test였다. 프로젝트 무결성 검사와 주요 Streamlit AppTest도 통과했다.\n하지만 다음 질문은 아직 열려 있다.\n\ncollision-ON, 실제 rain-producing 조건에서도 5% 수렴 기준이 유지되는가?\nensemble 반복 뒤 유지되는 RSS는 어느 구성요소가 소유하는가?\n운영 기준인 1% spectrum-transition threshold를 관측으로 보정할 수 있는가?\nCSV와 columnar cache가 수치적으로 같은 통계를 만드는가?\n\n첫 번째 PR이 실험의 흐름을 만들었다면, 두 번째 PR은 각 결과 옆에 출처·품질·실패·적용범위를 붙였다. 연구 소프트웨어의 완성도는 그래프 수가 아니라, 틀릴 수 있는 지점을 얼마나 명시적으로 남기는가에서 결정된다는 것을 배웠다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-14-research-quality/index.html#연결-자료",
+    "href": "posts/build-the-lab/2026-07-14-research-quality/index.html#연결-자료",
+    "title": "결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "section": "연결 자료",
+    "text": "연결 자료\n\nPull Request #3\nPySDM-Seeding-Lab 저장소\n이전 개발일지: PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "결과를 믿을 수 있는 코드"
+    ]
+  },
+  {
     "objectID": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
     "href": "posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
     "title": "WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적",
@@ -224,6 +368,114 @@
     "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
   },
   {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "",
+    "text": "After the Scenario–Sweep–Run–Dashboard workflow was in place, a more difficult question remained: does the existence of a curve make it scientifically interpretable?\nPySDM-Seeding-Lab PR #3, merged on 14 July 2026, focused on provenance, numerical quality, durable failure evidence, and reproducibility. Its 12 commits and 78 changed files moved the project from a functional app toward a qualified research platform.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#every-diagnostic-needs-a-provenance",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#every-diagnostic-needs-a-provenance",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "Every diagnostic needs a provenance",
+    "text": "Every diagnostic needs a provenance\nEarly Growth Pathway views sometimes used proxy values when the adapter did not expose a native product. In a dashboard, a proxy column looked too similar to a direct model output. Every diagnostic is now classified as:\n\n\n\nClass\nMeaning\n\n\n\n\nnative\nDirectly from a PySDM product or state\n\n\nderived\nCalculated explicitly from native values\n\n\nproxy\nApproximation used for workflow validation\n\n\nmissing\nNot provided by the current adapter\n\n\n\nEach result includes diagnostic_provenance.json, and the dashboard shows counts and warnings. The verified native parcel contract currently reports 11 native, 2 derived, and 0 proxy diagnostics. More importantly, future variables cannot enter the scientific view without declaring their origin.\nNative or radius-filtered outputs now cover thermodynamics, water-vapour mixing ratio, cloud and rain water, droplet concentrations, effective radii, and all-activated water and number. Cloud and rain remain instantaneous wet-radius bins, not particle-history classifications—an interpretation constraint recorded with the result.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#from-mean-radius-to-spectrum-transition",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#from-mean-radius-to-spectrum-transition",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "From mean radius to spectrum transition",
+    "text": "From mean radius to spectrum transition\nAn effective mean radius cannot show whether only part of the population moved into rain-size bins. The lab now writes wet-radius spectra at configurable checkpoints, with bin boundaries, number concentration, liquid-volume fraction, and unactivated/cloud/rain regimes.\nRain boundaries are audited at 20, 25, and 30 \\(\\mu\\mathrm{m}\\). Spectrum transition—the first time rain-size liquid exceeds a fraction of activated liquid—is tested at 0.5%, 1%, and 2%. The 1% value is explicitly a project-owned operational threshold, not a universal observational standard.\nReporting threshold sensitivity prevents one convenient cutoff from masquerading as a physical law.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#source-aware-water-budget",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#source-aware-water-budget",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "Source-aware water budget",
+    "text": "Source-aware water budget\nHygroscopic injection deliberately adds a source. Treating the injection window as a closed system would misclassify the intended source as numerical drift. Water-budget output therefore separates vapour, cloud water, rain water, total water, and the source interval. Closed-budget checks are evaluated before and after injection, while the source window remains explicitly recorded.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#qualification-with-real-pysdm-runs",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#qualification-with-real-pysdm-runs",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "Qualification with real PySDM runs",
+    "text": "Qualification with real PySDM runs\nNumerical convergence varies timestep and background and seeding super-droplet resolution while holding the other axes fixed.\ntimestep: 5 / 10 / 15 s\nseeding super-droplets: 100 / 200 / 400\nbackground super-droplets: 100 / 200 / 400\nThe standard qualification completed 27 parameter cases and 54 real PySDM executions with zero failures. For non-zero next-finest comparisons, 12 of 12 checks were within 5%; the median relative difference was 0.187%, P95 was 1.140%, and the maximum was 1.731%.\nThis evidence supports the 5% default only for the tested marine, condensation/seeding, collision-OFF profile. Rain metrics were zero, so it does not establish convergence for collision-ON, rain-producing experiments. A passing number without its scope would be misleading.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#failure-evidence-281-character-paths",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#failure-evidence-281-character-paths",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "Failure evidence: 281-character paths",
+    "text": "Failure evidence: 281-character paths\nA nested experiment requested 24 sweep cases and 10 ensemble members per case—240 members in total. Every member failed because repeated parameter labels pushed Windows output paths to roughly 281 characters.\nThe solution was to separate human-readable scientific metadata from filesystem identity:\ncases/case_001/\nmembers/member_001/\ncomparison/\nsingle/\nLabels and values remain in configuration and metadata. Execution health is now success, partial, or failed, and member/case exceptions are saved before a total failure is propagated. The dashboard can distinguish “no physical response” from “no valid execution.”",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#the-24-member-memory-benchmark",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#the-24-member-memory-benchmark",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "The 24-member memory benchmark",
+    "text": "The 24-member memory benchmark\nThe large benchmark completed 24 of 24 requested members in 743.878 seconds. RSS grew from 111.34 MiB to a 1,110.98 MiB peak and remained at 1,064.70 MiB after completion.\nBy contrast, streaming aggregation of the 24 CSV files took 3.772 seconds and added only 0.270 MiB of RSS. This shows that the aggregator is memory-bounded and points future profiling toward retained PySDM, backend, or JIT state. The evidence does not yet identify one component as a memory leak.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#a-result-directory-as-a-research-record",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#a-result-directory-as-a-research-record",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "A result directory as a research record",
+    "text": "A result directory as a research record\nNew results can include report.md, self-contained report.html, report.pdf, and result_manifest.json. Reports collect configuration, adapter, provenance, validation, main metrics, water-budget and convergence status, spectrum transition, artifacts, reproduction commands, and interpretation constraints.\nThe versioned manifest records schema and reader compatibility. Legacy results without manifests and schema-v1 aliases are preserved as migration fixtures so that new readers do not silently abandon old experiments.\nValidation included 23 unit/integration tests, two of them using real PySDM, plus project-integrity and key Streamlit application tests.\nThe remaining work is equally important: collision-ON rain-producing qualification, ownership profiling for retained RSS, observational review of the 1% transition threshold, and numerical equality tests for a future columnar cache.\nPR #2 made experiments runnable and traceable. PR #3 attached provenance, quality, failure state, and scope to every result. The quality of research software is not the number of figures it can draw, but how explicitly it records where it may be wrong.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#related-material",
+    "href": "en/posts/build-the-lab/2026-07-14-research-quality/index.html#related-material",
+    "title": "From Code That Produces Results to Code That Makes Them Trustworthy",
+    "section": "Related material",
+    "text": "Related material\n\nPull Request #3\nPySDM-Seeding-Lab\nPrevious log: Turning PySDM Experiment Scripts into a Seeding Lab",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "Making results trustworthy"
+    ]
+  },
+  {
     "objectID": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
     "href": "en/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
     "title": "Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur",
@@ -347,14 +599,14 @@
     "href": "en/index.html#recent-notes",
     "title": "Jinu’s Cloud Seeding Blog",
     "section": "Recent notes",
-    "text": "Recent notes\n\n\n\n2026-07-15 · Jinu\n\n\nUsing WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur\nReviewing altitude, treated area, particle size, and the warm-rain pathway in a hybrid microphysics model.\n\n\n\n\n2026-07-15 · Jinu\n\n\nConnecting Aerosol Hygroscopicity and CCN Activity with One κ\nThe κ-Köhler equation as a bridge between aerosol water uptake, CCN activation, and PySDM experiments.\n\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
+    "text": "Recent notes\n\n\n\n2026-07-15 · Jinu\n\n\nUsing WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur\nReviewing altitude, treated area, particle size, and the warm-rain pathway in a hybrid microphysics model.\n\n\n\n\n2026-07-15 · Jinu\n\n\nConnecting Aerosol Hygroscopicity and CCN Activity with One κ\nThe κ-Köhler equation as a bridge between aerosol water uptake, CCN activation, and PySDM experiments.\n\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.\n\n\n\n\n2026-07-14 · Jinu\n\n\nFrom Code That Produces Results to Code That Makes Them Trustworthy\nHow diagnostic provenance, numerical qualification, failure evidence, and portable reports turned PySDM Seeding Lab into a research tool.\n\n\n\n\n2026-07-13 · Jinu\n\n\nTurning PySDM Experiment Scripts into a Seeding Lab\nDesigning a traceable Scenario → Sweep → Run → Dashboard workflow for cloud-seeding experiments."
   },
   {
     "objectID": "en/build-the-lab.html",
     "href": "en/build-the-lab.html",
     "title": "Build the Lab",
     "section": "",
-    "text": "Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.\n\n\n\n\n\n\nNote\n\n\n\nThe implementation code for this track is connected to the PySDM-Seeding-Lab repository.\n\n\nThe first build note is in preparation.",
+    "text": "Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.\n\n\n\n\n\n\nNote\n\n\n\nThe implementation code for this track is connected to the PySDM-Seeding-Lab repository.\n\n\nThese notes focus on the problem behind each change, the design decision, the failure that challenged it, the evidence used for validation, and the limits that remain.\n\n\n\n2026-07-14 · Jinu\n\n\nFrom Code That Produces Results to Code That Makes Them Trustworthy\nAdding diagnostic provenance, native PySDM outputs, numerical qualification, water-budget gates, spectrum transitions, and reproducible reports.\n\n\n\n\n2026-07-13 · Jinu\n\n\nTurning PySDM Experiment Scripts into a Seeding Lab\nReframing manual scripts as a Scenario → Sweep → Run → Dashboard experimental workflow.",
     "crumbs": [
       "PySDM",
       "Build the Lab"
@@ -428,7 +680,7 @@
     "href": "build-the-lab.html",
     "title": "Build the Lab",
     "section": "",
-    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다.",
+    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n기능 목록만 남기지 않고, 어떤 문제에서 출발했는지, 왜 그 구조를 선택했는지, 실제 실패가 설계를 어떻게 바꿨는지를 중심으로 기록합니다. 각 글은 연결된 Pull Request와 검증 결과, 아직 해결하지 못한 한계를 함께 공개합니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로\n\n\nNative 진단값, 수치 수렴성, 물수지, 스펙트럼 전이와 재현 보고서를 연결해 PySDM Seeding Lab을 연구 도구로 발전시킨 기록입니다.\n\n\n\n\n\n2026-07-14\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기\n\n\n매번 코드를 고치던 실험을 Scenario → Sweep → Run → Dashboard 흐름으로 재설계한 첫 번째 개발일지입니다.\n\n\n\n\n\n2026-07-13\n\n\nJinu\n\n\n\n\n\n일치 없음",
     "crumbs": [
       "PySDM",
       "Build the Lab"
@@ -542,6 +794,90 @@
     "title": "Connecting Aerosol Hygroscopicity and CCN Activity with One κ",
     "section": "References",
     "text": "References\n\n\nPetters, M. D., and S. M. Kreidenweis. 2007. “A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity.” Atmospheric Chemistry and Physics 7: 1961–71. https://doi.org/10.5194/acp-7-1961-2007."
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html",
+    "href": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html",
+    "title": "Turning PySDM Experiment Scripts into a Seeding Lab",
+    "section": "",
+    "text": "The first obstacle in building PySDM cloud-seeding sensitivity experiments was not a microphysical equation. Every change in conditions required editing Python, remembering which configuration produced which result directory, and reconstructing how a figure had been made. The simulations ran, but the experimental history was fragile.\nPySDM-Seeding-Lab PR #2, merged on 13 July 2026, was the first attempt to turn those scripts into a scenario-based experimental platform. Across 31 commits and 66 changed files, the goal was to keep the question, configuration, execution, and result connected.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "From scripts to a lab"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#the-starting-problem",
+    "href": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#the-starting-problem",
+    "title": "Turning PySDM Experiment Scripts into a Seeding Lab",
+    "section": "The starting problem",
+    "text": "The starting problem\nManual scripts worked for one or two tests. They became unreliable as dry radius, hygroscopicity, injection timing, updraft, and random seeds multiplied.\n\nResults did not identify the configuration that created them.\nControl and seeding settings had to be synchronized by hand.\nA small sweep change could silently create hundreds of model executions.\nLong runs gave little indication of the current case or member.\nDashboard figures could outlive the context needed to interpret them.\n\nThe project target therefore became more specific than “build a GUI”: preserve one scientific question as one scenario.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "From scripts to a lab"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#scenario-as-the-experimental-unit",
+    "href": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#scenario-as-the-experimental-unit",
+    "title": "Turning PySDM Experiment Scripts into a Seeding Lab",
+    "section": "Scenario as the experimental unit",
+    "text": "Scenario as the experimental unit\nThe new workflow follows a deliberate sequence:\nCreate scenario\n→ configure environment / aerosol / seeding / dynamics\n→ configure parameter sweep\n→ run simulation\n→ inspect results through dashboard\nA YAML scenario stores a name, slug, memo, timestamp, and complete configuration. Settings pages can update the working configuration or a selected saved scenario. Result directories include the scenario slug, making it possible to navigate from output back to experimental intent.\nresults/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/\nThe Streamlit pages were reordered to match the research process:\n00. Experiment Scenarios\n01. Atmospheric Environment\n02. Background Aerosol Settings\n03. Seeding Particle Settings\n04. Dynamic Parameters\n05. Parameter Sweep\n06. Run Simulation\n07. Results Dashboard\nThe UI became a checklist: define the environment and background first, then seeding and dynamics, and only then choose what to vary.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "From scripts to a lab"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#control-seeding-sweep-and-ensemble",
+    "href": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#control-seeding-sweep-and-ensemble",
+    "title": "Turning PySDM Experiment Scripts into a Seeding Lab",
+    "section": "Control, seeding, sweep, and ensemble",
+    "text": "Control, seeding, sweep, and ensemble\nSeeding cannot be interpreted from a treatment run alone. Comparison mode creates matched control and seeding outputs:\ncontrol/\nseeding/\ncomparison.csv\nsummary.json\nmetadata.json\nconfig.yaml\nFor each variable, the result stores control, seeding, difference, and relative change. The first sweep catalog covered dry radius, \\(\\kappa\\), injection start and duration, updraft velocity, and collision ON/OFF. Before execution, the app estimates\nparameter combinations × ensemble members × control/seeding.\nThis is both a planning feature and a safety check against accidentally launching an oversized workload.\nThe Results Dashboard connects single, comparison, sweep, and ensemble results. Growth Pathway Diagnostics follows\nvapour / supersaturation\n→ cloud water\n→ activated particles\n→ size growth\n→ rain water.\nSweep filters, full-range case sampling, and injection-relative time alignment were added so later parameter values would not disappear merely because a plot had a maximum case count.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "From scripts to a lab"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#failures-that-changed-the-design",
+    "href": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#failures-that-changed-the-design",
+    "title": "Turning PySDM Experiment Scripts into a Seeding Lab",
+    "section": "Failures that changed the design",
+    "text": "Failures that changed the design\nRenaming Streamlit pages left duplicate files and caused Multiple Pages specified with URL pathname run. A cleanup script and integrity check were added instead of relying on manual deletion.\nDuring long sweeps, the dashboard sometimes read a CSV while it was still being written, producing EmptyDataError. Safe reading and incomplete-result filtering separated “directory exists” from “result is complete.” A subsequent regression made safe_read_csv() call itself recursively. The repair changed it back to pd.read_csv(path) and strengthened the integrity check to reject the pattern in future.\nThe lesson was larger than exception handling: dashboard stability comes from making known failures testable.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "From scripts to a lab"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#what-this-stage-achievedand-what-it-did-not",
+    "href": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#what-this-stage-achievedand-what-it-did-not",
+    "title": "Turning PySDM Experiment Scripts into a Seeding Lab",
+    "section": "What this stage achieved—and what it did not",
+    "text": "What this stage achieved—and what it did not\n\n\n\n\n\n\n\nBefore\nAfter PR #2\n\n\n\n\nEdit scripts for each condition\nPreserve question and configuration in YAML scenarios\n\n\nManually track result folders\nLink folders to scenario slugs and metadata\n\n\nFocus on single runs\nSupport comparison, sweep, and ensemble workflows\n\n\nInspect final curves\nFollow process pathways and uncertainty\n\n\nWait without context\nReport case- and member-level progress\n\n\n\nOne important limitation remained. Some Growth Pathway columns were proxies inferred when the adapter did not expose native PySDM products. They were useful for validating the workflow, but they were not yet safe to interpret as direct physical output.\nThat limitation defined the next development question: how can every plotted diagnostic disclose whether it is native, derived, proxied, or missing?",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "From scripts to a lab"
+    ]
+  },
+  {
+    "objectID": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#related-material",
+    "href": "en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html#related-material",
+    "title": "Turning PySDM Experiment Scripts into a Seeding Lab",
+    "section": "Related material",
+    "text": "Related material\n\nPull Request #2\nPySDM-Seeding-Lab\nNext log: From Code That Produces Results to Code That Makes Them Trustworthy",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "From scripts to a lab"
+    ]
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
@@ -790,6 +1126,126 @@
     "title": "κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기",
     "section": "참고문헌",
     "text": "참고문헌\n\n\nPetters, M. D., 와/과 S. M. Kreidenweis. 2007년. “A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”. Atmospheric Chemistry and Physics 7: 1961–71. https://doi.org/10.5194/acp-7-1961-2007."
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "",
+    "text": "PySDM으로 구름 씨뿌리기 민감도 실험을 시작할 때 가장 먼저 부딪힌 문제는 미세물리식이 아니었다. 실험 조건을 바꿀 때마다 Python 파일을 직접 수정하고, 결과 폴더 이름을 기억하고, 어떤 설정으로 만든 그림인지 다시 추적해야 했다. 계산은 실행되지만 연구 과정은 쉽게 재현되지 않았다.\n2026년 7월 13일 병합한 PySDM-Seeding-Lab PR #2는 이 문제를 해결하기 위해 스크립트 모음을 시나리오 기반 실험 플랫폼으로 바꾼 첫 단계다. 31개 커밋과 66개 변경 파일에는 기능 추가뿐 아니라, 실험을 하나의 추적 가능한 단위로 만들기 위한 시행착오가 담겨 있다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#출발점-실행은-되지만-실험은-남지-않았다",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#출발점-실행은-되지만-실험은-남지-않았다",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "출발점: 실행은 되지만 실험은 남지 않았다",
+    "text": "출발점: 실행은 되지만 실험은 남지 않았다\n초기의 작업 방식은 단순했다. 설정값을 수정하고 스크립트를 실행한 뒤 CSV와 그림을 확인했다. 한두 번의 테스트에는 충분했지만 조건 수가 늘자 문제가 빠르게 커졌다.\n\n어떤 실험에서 사용한 설정인지 결과만 보고 알기 어려웠다.\n기준 실험과 씨뿌리기 실험의 차이를 수작업으로 맞춰야 했다.\n건조반지름, \\(\\kappa\\), 주입 시각을 동시에 바꾸면 실행 수를 놓치기 쉬웠다.\n같은 실험을 다시 실행해도 결과 폴더와 그림을 연결하기 어려웠다.\n긴 sweep 도중 어디까지 진행됐는지 알 수 없었다.\n\n여기서 목표를 “GUI를 만든다”가 아니라 하나의 과학 질문을 하나의 시나리오로 보존한다로 정했다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#scenario를-실험의-기본-단위로",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#scenario를-실험의-기본-단위로",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "Scenario를 실험의 기본 단위로",
+    "text": "Scenario를 실험의 기본 단위로\n새로운 흐름은 다음과 같이 설계했다.\nCreate scenario\n→ configure environment / aerosol / seeding / dynamics\n→ configure parameter sweep\n→ run simulation\n→ inspect results through dashboard\n시나리오는 이름, 짧은 메모, 생성 시각과 전체 설정을 YAML로 저장한다.\nname: Dry radius and kappa sweep\nslug: dry_radius_kappa_sweep\nmemo: Compare activation response under a fixed updraft\n설정 페이지에서 현재 working config뿐 아니라 저장된 시나리오를 직접 선택해 수정할 수 있도록 했다. 결과 폴더에도 시나리오 slug를 넣었다.\nresults/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/\n이름을 보기 좋게 만드는 기능처럼 보이지만, 실제 목적은 결과에서 원래 실험 설계로 되돌아갈 수 있게 하는 것이다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#화면-순서를-연구-순서로-바꾸기",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#화면-순서를-연구-순서로-바꾸기",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "화면 순서를 연구 순서로 바꾸기",
+    "text": "화면 순서를 연구 순서로 바꾸기\nStreamlit 페이지는 사용자가 실험을 설계하는 순서와 맞췄다.\n00. Experiment Scenarios\n01. Atmospheric Environment\n02. Background Aerosol Settings\n03. Seeding Particle Settings\n04. Dynamic Parameters\n05. Parameter Sweep\n06. Run Simulation\n07. Results Dashboard\n페이지 번호는 단순한 정렬용 접두사가 아니다. 환경과 배경 에어로졸을 먼저 정의하고, 씨뿌리기 입자와 동역학을 설정한 뒤, 마지막에 변화시킬 변수를 고르게 한다. UI 자체가 실험 설계의 체크리스트가 되도록 한 것이다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#비교-실험과-parameter-sweep",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#비교-실험과-parameter-sweep",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "비교 실험과 parameter sweep",
+    "text": "비교 실험과 parameter sweep\n씨뿌리기 효과는 seeding 실행 하나만으로 해석할 수 없다. 동일한 환경에서 기준 실행과 씨뿌리기 실행을 묶는 comparison 모드를 만들었다.\ncontrol/\nseeding/\ncomparison.csv\nsummary.json\nmetadata.json\nconfig.yaml\n각 변수에는 control, seeding, 차이와 상대변화를 함께 저장한다.\n\\[\n\\Delta X = X_{seeding}-X_{control}\n\\]\n첫 sweep 카탈로그에는 건조반지름, \\(\\kappa\\), 주입 시작·지속시간, 상승속도, collision ON/OFF를 넣었다. 실행 전에는 다음 곱으로 전체 모델 실행 수를 계산한다.\nparameter combinations\n× ensemble members\n× control/seeding\n이 사전 계산은 편의 기능이면서 동시에 안전장치다. 작은 입력 변경이 수백 번의 실행으로 커지는 것을 시작 전에 보여준다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#결과를-그림이-아니라-경로로-읽기",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#결과를-그림이-아니라-경로로-읽기",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "결과를 ‘그림’이 아니라 경로로 읽기",
+    "text": "결과를 ‘그림’이 아니라 경로로 읽기\nResults Dashboard에는 single, comparison, sweep, ensemble 네 종류를 연결했다. 단일 최종값뿐 아니라 다음 성장 경로를 한 화면에서 추적하도록 구성했다.\nvapour / supersaturation\n→ cloud water response\n→ activated particle response\n→ size growth\n→ rain water response\nensemble에서는 평균±표준편차와 중앙값·사분위범위를 제공하고, sweep에서는 조건 필터와 상대 주입시각 정렬을 추가했다. 특히 많은 조건 중 앞부분만 그리던 문제를 수정해, 표시 수가 제한되어도 전체 sweep 범위에서 사례를 표본화하도록 했다. 그렇지 않으면 뒤쪽의 큰 반지름 조건이 실험에 존재하면서도 그래프에는 나타나지 않을 수 있었다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#실패-기록-1-streamlit-경로-충돌",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#실패-기록-1-streamlit-경로-충돌",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "실패 기록 1: Streamlit 경로 충돌",
+    "text": "실패 기록 1: Streamlit 경로 충돌\n페이지 이름을 재구성한 뒤 이전 파일이 남아 다음 오류가 발생했다.\nMultiple Pages specified with URL pathname run\n새 파일을 추가하는 것만으로는 충분하지 않았다. 기존 페이지를 일관되게 정리하는 cleanup_old_pages.py를 만들고, 무결성 검사에서 예상 페이지와 중복 파일을 함께 확인하도록 했다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#실패-기록-2-실행-중인-csv를-읽었다",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#실패-기록-2-실행-중인-csv를-읽었다",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "실패 기록 2: 실행 중인 CSV를 읽었다",
+    "text": "실패 기록 2: 실행 중인 CSV를 읽었다\n긴 sweep을 실행하면서 dashboard가 아직 기록 중인 CSV를 읽어 다음 오류가 발생했다.\npandas.errors.EmptyDataError: No columns to parse from file\n결과 디렉터리가 존재한다는 사실과 결과가 완성됐다는 사실을 구분해야 했다. 안전한 CSV 읽기와 미완성 결과 필터를 추가했다.\n그 과정에서 safe_read_csv()가 실수로 자기 자신을 호출하는 재귀 버그도 생겼다.\n# 잘못된 코드\nreturn safe_read_csv(path)\n\n# 수정\nreturn pd.read_csv(path)\n단순 hotfix로 끝내지 않고 무결성 검사가 이 패턴을 잡도록 했다. 대시보드 안정성은 예외처리 몇 줄보다 실패가 다시 들어오지 못하게 하는 검사에서 만들어졌다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#이번-단계에서-얻은-것",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#이번-단계에서-얻은-것",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "이번 단계에서 얻은 것",
+    "text": "이번 단계에서 얻은 것\n\n\n\n이전\nPR #2 이후\n\n\n\n\n스크립트마다 설정 수정\nYAML Scenario로 질문과 설정 보존\n\n\n결과 폴더를 수동 추적\nScenario slug와 metadata로 연결\n\n\n단일 실행 중심\nControl–Seeding, sweep, ensemble 지원\n\n\n최종 그래프 중심\n성장경로와 불확실성 진단\n\n\n진행 상황 확인 어려움\ncase·member 단위 진행 이벤트\n\n\n\n하지만 중요한 한계도 남았다. 일부 성장경로 변수는 PySDM native product가 아니라 제한된 adapter 출력에서 추정한 proxy였다. 플랫폼의 흐름을 검증하는 데는 쓸 수 있지만, 물리 결과로 그대로 해석해서는 안 된다.\n이 문제는 다음 개발 단계의 질문이 됐다.\n\n이 결과가 PySDM이 직접 계산한 값인지, 가공한 값인지, 임시 proxy인지 사용자가 어떻게 확인할 수 있을까?\n\n첫 번째 개발은 “실험을 실행할 수 있는 Lab”을 만들었다. 다음 개발은 그 Lab의 결과를 믿을 수 있는 근거를 만드는 작업으로 이어졌다.",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
+  },
+  {
+    "objectID": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#연결-자료",
+    "href": "posts/build-the-lab/2026-07-13-scenario-workflow/index.html#연결-자료",
+    "title": "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기",
+    "section": "연결 자료",
+    "text": "연결 자료\n\nPull Request #2\nPySDM-Seeding-Lab 저장소\n다음 개발일지: 결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로",
+    "crumbs": [
+      "PySDM",
+      "Build the Lab",
+      "스크립트에서 실험실로"
+    ]
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html",

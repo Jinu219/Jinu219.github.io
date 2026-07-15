@@ -352,6 +352,400 @@ Jinu. 2026. <span>“PySDM을 시작하며: 구름 미세물리 실험의 첫
   <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
 </item>
 <item>
+  <title>결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/build-the-lab/2026-07-14-research-quality/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="../../../posts/build-the-lab/2026-07-13-scenario-workflow/index.html">첫 번째 개발</a>에서 Scenario–Sweep–Run–Dashboard 흐름을 완성한 뒤 더 어려운 질문이 남았다. 대시보드에 곡선이 그려진다는 사실만으로 그 값을 과학적으로 해석해도 되는가?</p>
+<p>2026년 7월 14일 병합한 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/3">PySDM-Seeding-Lab PR #3</a>는 기능 확장보다 <strong>진단값의 출처, 수치 품질, 실패 증거와 재현성</strong>을 다룬다. 12개 커밋과 78개 변경 파일을 통해 작동하는 실험 앱을 검증 가능한 연구 플랫폼으로 바꾸려 했다.</p>
+<div class="review-verdict">
+<p><strong>이번 개발의 핵심.</strong> 좋은 결과를 고르는 기능보다 먼저, 결과가 어디에서 왔고 어느 조건까지 믿을 수 있는지를 기록하는 장치를 만들었다.</p>
+</div>
+<section id="가장-먼저-해결한-문제-이-값은-어디에서-왔는가" class="level2">
+<h2 class="anchored" data-anchor-id="가장-먼저-해결한-문제-이-값은-어디에서-왔는가">가장 먼저 해결한 문제: 이 값은 어디에서 왔는가</h2>
+<p>초기 Growth Pathway에는 adapter가 제공하지 않는 변수를 계산 흐름 검증용 proxy로 채운 경우가 있었다. UI에서는 native 출력과 proxy가 비슷한 모양의 열로 보였다. 이 상태는 가장 위험하다. 임시 변수가 실제 PySDM 미세물리 결과처럼 해석될 수 있기 때문이다.</p>
+<p>모든 진단값을 네 단계로 분류했다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>분류</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>native</code></td>
+<td>PySDM product 또는 상태에서 직접 얻은 값</td>
+</tr>
+<tr class="even">
+<td><code>derived</code></td>
+<td>native 값으로부터 명시적인 식으로 계산한 값</td>
+</tr>
+<tr class="odd">
+<td><code>proxy</code></td>
+<td>workflow 검증을 위한 근사·대체값</td>
+</tr>
+<tr class="even">
+<td><code>missing</code></td>
+<td>현재 adapter에서 제공하지 않는 값</td>
+</tr>
+</tbody>
+</table>
+<p>각 결과에는 <code>diagnostic_provenance.json</code>을 저장하고 Dashboard가 개수와 경고를 표시한다. native parcel 경로의 검증된 계약은 현재 <code>native: 11</code>, <code>derived: 2</code>, <code>proxy: 0</code>으로 정리됐다.</p>
+<p>여기서 중요한 점은 proxy를 없애는 것만이 아니다. 미래에 새 변수가 추가될 때도 <strong>출처를 밝히지 않은 값은 조용히 그래프에 들어올 수 없게 하는 계약</strong>을 만든 것이다.</p>
+</section>
+<section id="pysdm-native-성장경로-연결" class="level2">
+<h2 class="anchored" data-anchor-id="pysdm-native-성장경로-연결">PySDM native 성장경로 연결</h2>
+<p>parcel simulation builder에 PySDM native products를 연결해 다음 항목을 직접 또는 반지름 구간 필터로 계산했다.</p>
+<ul>
+<li>온도, 압력, 수증기 혼합비, 상대습도</li>
+<li>구름수와 빗물 혼합비</li>
+<li>구름방울과 빗방울 수농도</li>
+<li>구름·비 유효반지름</li>
+<li>전체 활성화 입자의 물과 수농도</li>
+</ul>
+<p>여기서 cloud와 rain은 입자의 과거 이력을 뜻하지 않는다. 각 시각의 wet-radius 구간으로 분류한 상태다. 이 제한도 provenance와 보고서에 명시했다.</p>
+</section>
+<section id="평균값에서-wet-radius-spectrum으로" class="level2">
+<h2 class="anchored" data-anchor-id="평균값에서-wet-radius-spectrum으로">평균값에서 wet-radius spectrum으로</h2>
+<p>평균 유효반지름만으로는 씨뿌리기 후 일부 입자가 큰 크기 구간으로 이동했는지 알기 어렵다. 지정한 checkpoint마다 wet-radius spectrum을 저장하도록 했다.</p>
+<pre class="text"><code>wet_radius_spectrum.csv
+wet_radius_spectrum_comparison.csv
+threshold_robustness.csv</code></pre>
+<p>각 bin에는 반지름 경계, 수농도, 액체부피 분율과 unactivated/cloud/rain 구간을 기록한다. Control–Seeding 차이를 통해 작은 활성화 방울에서 큰 cloud·rain-size 입자로 질량이 이동했는지 볼 수 있다.</p>
+</section>
+<section id="임계값-하나를-정답처럼-사용하지-않기" class="level2">
+<h2 class="anchored" data-anchor-id="임계값-하나를-정답처럼-사용하지-않기">임계값 하나를 정답처럼 사용하지 않기</h2>
+<p>cloud와 rain을 가르는 반지름 경계는 20, 25, 30 <img src="https://latex.codecogs.com/png.latex?%5Cmu%5Cmathrm%7Bm%7D">에서 반복 계산한다. rain-size 액체가 전체 활성화 액체의 일정 비율을 처음 넘는 시점을 spectrum transition으로 정의하고, 분율도 0.5%, 1%, 2%에서 검사한다.</p>
+<pre class="text"><code>radius threshold: 20 / 25 / 30 µm
+transition fraction: 0.5 / 1.0 / 2.0%</code></pre>
+<p>1%는 보편적인 관측 표준이 아니라 이 프로젝트의 <strong>운영적 탐지 기준</strong>이다. 그래서 한 값의 transition time만 보고하지 않고, 임계값을 바꿔도 전이 방향과 시점 차이가 유지되는지 함께 저장한다.</p>
+</section>
+<section id="씨뿌리기-source를-고려한-물수지" class="level2">
+<h2 class="anchored" data-anchor-id="씨뿌리기-source를-고려한-물수지">씨뿌리기 source를 고려한 물수지</h2>
+<p>흡습성 입자를 주입하는 동안에는 모델 계에 의도적인 source가 들어온다. 이 구간을 무시하고 전체 물이 변했다고 판단하면 정상적인 주입을 수치 오차로 오해한다.</p>
+<p><code>water_budget.csv</code>는 수증기, 구름수, 빗물과 총물을 분리하고 주입 source window를 표시한다. 보존성 평가는 source가 닫힌 구간을 중심으로 수행한다.</p>
+<pre class="text"><code>before injection: closed-budget check
+during injection: source-aware record
+after injection: closed-budget check</code></pre>
+<p>단순한 총합 하나보다 <strong>어느 시간 구간에서 어떤 항이 물수지를 바꿨는지</strong>를 설명하는 것이 목표다.</p>
+</section>
+<section id="수치-수렴성을-실제-pysdm-실행으로-확인하기" class="level2">
+<h2 class="anchored" data-anchor-id="수치-수렴성을-실제-pysdm-실행으로-확인하기">수치 수렴성을 실제 PySDM 실행으로 확인하기</h2>
+<p>수렴성 진단은 timestep, background super-droplet 수, seeding super-droplet 수를 각각 바꾸고 다른 축을 고정한 상태에서 다음으로 조밀한 수준과 가장 조밀한 기준을 비교한다.</p>
+<p>표준 qualification은 다음 격자를 사용했다.</p>
+<pre class="text"><code>timestep: 5 / 10 / 15 s
+seeding super-droplets: 100 / 200 / 400
+background super-droplets: 100 / 200 / 400</code></pre>
+<p>결과는 27개 조건, control–seeding을 포함한 54회 실제 PySDM 실행, 실패 0회였다. 0이 아닌 기준값을 가진 비교에서는 다음 결과를 얻었다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>진단</th>
+<th style="text-align: right;">결과</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5% 이내 비교</td>
+<td style="text-align: right;">12 / 12</td>
+</tr>
+<tr class="even">
+<td>상대차이 중앙값</td>
+<td style="text-align: right;">0.187%</td>
+</tr>
+<tr class="odd">
+<td>95백분위</td>
+<td style="text-align: right;">1.140%</td>
+</tr>
+<tr class="even">
+<td>최대 상대차이</td>
+<td style="text-align: right;">1.731%</td>
+</tr>
+</tbody>
+</table>
+<p>이 결과는 기본 5% 허용오차를 <strong>시험한 marine, condensation/seeding, collision-OFF 조건</strong>에서만 지지한다. 이 qualification에서 rain 관련 지표는 0이었으므로, collision-ON 강수 생성 실험의 수렴성을 증명하지 않는다. 통과 숫자보다 적용 범위를 함께 기록하는 것이 더 중요하다.</p>
+</section>
+<section id="실패-기록-windows-281자-경로와-240개-실패" class="level2">
+<h2 class="anchored" data-anchor-id="실패-기록-windows-281자-경로와-240개-실패">실패 기록: Windows 281자 경로와 240개 실패</h2>
+<p>24개 sweep case에 case당 10개 ensemble member를 실행한 실험은 총 240개 member가 모두 실패했다. 원인은 미세물리가 아니라 약 281자까지 길어진 Windows 출력 경로였다. parameter label과 값을 디렉터리 이름마다 반복하면서 중첩 경로가 한계를 넘었다.</p>
+<p>경로는 짧고 안정적인 식별자로 교체했다.</p>
+<pre class="text"><code>cases/case_001/
+members/member_001/
+comparison/
+single/</code></pre>
+<p>과학적 label과 parameter 값은 config와 metadata에 보존했다. 사람이 읽는 설명과 파일시스템 식별자의 책임을 분리한 것이다.</p>
+<p>또한 sweep과 ensemble의 실행 상태를 <code>success / partial / failed</code>로 구분하고, 전체 실패를 올리기 전에 member·case 예외를 디스크에 저장하도록 했다. 빈 그래프가 “변화 없음”인지 “실행 실패”인지 Dashboard가 구별할 수 있게 됐다.</p>
+</section>
+<section id="member-benchmark가-보여준-병목" class="level2">
+<h2 class="anchored" data-anchor-id="member-benchmark가-보여준-병목">24-member benchmark가 보여준 병목</h2>
+<p>24개 실제 PySDM member를 연속 실행한 large benchmark 결과는 다음과 같다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>항목</th>
+<th style="text-align: right;">측정값</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>전체 wall time</td>
+<td style="text-align: right;">743.878 s</td>
+</tr>
+<tr class="even">
+<td>시작 RSS</td>
+<td style="text-align: right;">111.34 MiB</td>
+</tr>
+<tr class="odd">
+<td>peak RSS</td>
+<td style="text-align: right;">1,110.98 MiB</td>
+</tr>
+<tr class="even">
+<td>종료 RSS</td>
+<td style="text-align: right;">1,064.70 MiB</td>
+</tr>
+</tbody>
+</table>
+<p>반면 24개 member CSV를 streaming 방식으로 집계하는 단계의 RSS 증가는 0.270 MiB, 처리시간은 3.772 s였다. 집계기가 아니라 반복 실행 후 남는 PySDM·backend·JIT 상태가 다음 profiling 대상이라는 근거다. 이 측정만으로 특정 구성요소의 memory leak을 단정할 수는 없다.</p>
+</section>
+<section id="결과-폴더-자체를-연구-기록으로" class="level2">
+<h2 class="anchored" data-anchor-id="결과-폴더-자체를-연구-기록으로">결과 폴더 자체를 연구 기록으로</h2>
+<p>새 결과에는 가능한 경우 다음 보고서를 함께 생성한다.</p>
+<pre class="text"><code>report.md
+report.html
+report.pdf
+result_manifest.json</code></pre>
+<p>보고서는 설정, adapter, provenance, 검증 상태, 주요 결과, 물수지, 수렴성, spectrum transition, 재현 명령과 해석 제한을 포함한다. publication figure는 PNG·SVG·PDF와 journal-width preset을 지원한다.</p>
+<p><code>result_manifest.json</code>에는 schema version, 최소 reader version, result type, primary data와 artifact 역할을 기록한다. manifest가 없던 과거 결과와 schema-v1 alias도 읽을 수 있도록 migration fixture를 보존했다. 새 기능이 과거 실험을 조용히 깨뜨리지 않게 하기 위해서다.</p>
+</section>
+<section id="검증과-남은-일" class="level2">
+<h2 class="anchored" data-anchor-id="검증과-남은-일">검증과 남은 일</h2>
+<p>이번 변경에서는 23개 unit/integration test가 통과했고 그중 2개는 실제 PySDM integration test였다. 프로젝트 무결성 검사와 주요 Streamlit AppTest도 통과했다.</p>
+<p>하지만 다음 질문은 아직 열려 있다.</p>
+<ul>
+<li>collision-ON, 실제 rain-producing 조건에서도 5% 수렴 기준이 유지되는가?</li>
+<li>ensemble 반복 뒤 유지되는 RSS는 어느 구성요소가 소유하는가?</li>
+<li>운영 기준인 1% spectrum-transition threshold를 관측으로 보정할 수 있는가?</li>
+<li>CSV와 columnar cache가 수치적으로 같은 통계를 만드는가?</li>
+</ul>
+<p>첫 번째 PR이 실험의 흐름을 만들었다면, 두 번째 PR은 각 결과 옆에 <strong>출처·품질·실패·적용범위</strong>를 붙였다. 연구 소프트웨어의 완성도는 그래프 수가 아니라, 틀릴 수 있는 지점을 얼마나 명시적으로 남기는가에서 결정된다는 것을 배웠다.</p>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
+<ul>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/3">Pull Request #3</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab 저장소</a></li>
+<li><a href="../../../posts/build-the-lab/2026-07-13-scenario-workflow/index.html">이전 개발일지: PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기</a></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Build the Lab</category>
+  <category>PySDM</category>
+  <category>scientific software</category>
+  <category>numerical qualification</category>
+  <guid>https://jinu219.github.io/posts/build-the-lab/2026-07-14-research-quality/</guid>
+  <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/build-the-lab/2026-07-13-scenario-workflow/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>PySDM으로 구름 씨뿌리기 민감도 실험을 시작할 때 가장 먼저 부딪힌 문제는 미세물리식이 아니었다. 실험 조건을 바꿀 때마다 Python 파일을 직접 수정하고, 결과 폴더 이름을 기억하고, 어떤 설정으로 만든 그림인지 다시 추적해야 했다. 계산은 실행되지만 연구 과정은 쉽게 재현되지 않았다.</p>
+<p>2026년 7월 13일 병합한 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">PySDM-Seeding-Lab PR #2</a>는 이 문제를 해결하기 위해 스크립트 모음을 <strong>시나리오 기반 실험 플랫폼</strong>으로 바꾼 첫 단계다. 31개 커밋과 66개 변경 파일에는 기능 추가뿐 아니라, 실험을 하나의 추적 가능한 단위로 만들기 위한 시행착오가 담겨 있다.</p>
+<div class="review-verdict">
+<p><strong>이번 개발의 핵심.</strong> 실행 가능한 코드보다 먼저, 질문–설정–실행–결과가 끊어지지 않는 실험 흐름을 만들었다.</p>
+</div>
+<section id="출발점-실행은-되지만-실험은-남지-않았다" class="level2">
+<h2 class="anchored" data-anchor-id="출발점-실행은-되지만-실험은-남지-않았다">출발점: 실행은 되지만 실험은 남지 않았다</h2>
+<p>초기의 작업 방식은 단순했다. 설정값을 수정하고 스크립트를 실행한 뒤 CSV와 그림을 확인했다. 한두 번의 테스트에는 충분했지만 조건 수가 늘자 문제가 빠르게 커졌다.</p>
+<ul>
+<li>어떤 실험에서 사용한 설정인지 결과만 보고 알기 어려웠다.</li>
+<li>기준 실험과 씨뿌리기 실험의 차이를 수작업으로 맞춰야 했다.</li>
+<li>건조반지름, <img src="https://latex.codecogs.com/png.latex?%5Ckappa">, 주입 시각을 동시에 바꾸면 실행 수를 놓치기 쉬웠다.</li>
+<li>같은 실험을 다시 실행해도 결과 폴더와 그림을 연결하기 어려웠다.</li>
+<li>긴 sweep 도중 어디까지 진행됐는지 알 수 없었다.</li>
+</ul>
+<p>여기서 목표를 “GUI를 만든다”가 아니라 <strong>하나의 과학 질문을 하나의 시나리오로 보존한다</strong>로 정했다.</p>
+</section>
+<section id="scenario를-실험의-기본-단위로" class="level2">
+<h2 class="anchored" data-anchor-id="scenario를-실험의-기본-단위로">Scenario를 실험의 기본 단위로</h2>
+<p>새로운 흐름은 다음과 같이 설계했다.</p>
+<pre class="text"><code>Create scenario
+→ configure environment / aerosol / seeding / dynamics
+→ configure parameter sweep
+→ run simulation
+→ inspect results through dashboard</code></pre>
+<p>시나리오는 이름, 짧은 메모, 생성 시각과 전체 설정을 YAML로 저장한다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">name</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> Dry radius and kappa sweep</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">slug</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> dry_radius_kappa_sweep</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">memo</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> Compare activation response under a fixed updraft</span></span></code></pre></div></div>
+<p>설정 페이지에서 현재 working config뿐 아니라 저장된 시나리오를 직접 선택해 수정할 수 있도록 했다. 결과 폴더에도 시나리오 slug를 넣었다.</p>
+<pre class="text"><code>results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/</code></pre>
+<p>이름을 보기 좋게 만드는 기능처럼 보이지만, 실제 목적은 <strong>결과에서 원래 실험 설계로 되돌아갈 수 있게 하는 것</strong>이다.</p>
+</section>
+<section id="화면-순서를-연구-순서로-바꾸기" class="level2">
+<h2 class="anchored" data-anchor-id="화면-순서를-연구-순서로-바꾸기">화면 순서를 연구 순서로 바꾸기</h2>
+<p>Streamlit 페이지는 사용자가 실험을 설계하는 순서와 맞췄다.</p>
+<pre class="text"><code>00. Experiment Scenarios
+01. Atmospheric Environment
+02. Background Aerosol Settings
+03. Seeding Particle Settings
+04. Dynamic Parameters
+05. Parameter Sweep
+06. Run Simulation
+07. Results Dashboard</code></pre>
+<p>페이지 번호는 단순한 정렬용 접두사가 아니다. 환경과 배경 에어로졸을 먼저 정의하고, 씨뿌리기 입자와 동역학을 설정한 뒤, 마지막에 변화시킬 변수를 고르게 한다. UI 자체가 실험 설계의 체크리스트가 되도록 한 것이다.</p>
+</section>
+<section id="비교-실험과-parameter-sweep" class="level2">
+<h2 class="anchored" data-anchor-id="비교-실험과-parameter-sweep">비교 실험과 parameter sweep</h2>
+<p>씨뿌리기 효과는 seeding 실행 하나만으로 해석할 수 없다. 동일한 환경에서 기준 실행과 씨뿌리기 실행을 묶는 comparison 모드를 만들었다.</p>
+<pre class="text"><code>control/
+seeding/
+comparison.csv
+summary.json
+metadata.json
+config.yaml</code></pre>
+<p>각 변수에는 control, seeding, 차이와 상대변화를 함께 저장한다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CDelta%20X%20=%20X_%7Bseeding%7D-X_%7Bcontrol%7D%0A"></p>
+<p>첫 sweep 카탈로그에는 건조반지름, <img src="https://latex.codecogs.com/png.latex?%5Ckappa">, 주입 시작·지속시간, 상승속도, collision ON/OFF를 넣었다. 실행 전에는 다음 곱으로 전체 모델 실행 수를 계산한다.</p>
+<pre class="text"><code>parameter combinations
+× ensemble members
+× control/seeding</code></pre>
+<p>이 사전 계산은 편의 기능이면서 동시에 안전장치다. 작은 입력 변경이 수백 번의 실행으로 커지는 것을 시작 전에 보여준다.</p>
+</section>
+<section id="결과를-그림이-아니라-경로로-읽기" class="level2">
+<h2 class="anchored" data-anchor-id="결과를-그림이-아니라-경로로-읽기">결과를 ‘그림’이 아니라 경로로 읽기</h2>
+<p>Results Dashboard에는 single, comparison, sweep, ensemble 네 종류를 연결했다. 단일 최종값뿐 아니라 다음 성장 경로를 한 화면에서 추적하도록 구성했다.</p>
+<pre class="text"><code>vapour / supersaturation
+→ cloud water response
+→ activated particle response
+→ size growth
+→ rain water response</code></pre>
+<p>ensemble에서는 평균±표준편차와 중앙값·사분위범위를 제공하고, sweep에서는 조건 필터와 상대 주입시각 정렬을 추가했다. 특히 많은 조건 중 앞부분만 그리던 문제를 수정해, 표시 수가 제한되어도 전체 sweep 범위에서 사례를 표본화하도록 했다. 그렇지 않으면 뒤쪽의 큰 반지름 조건이 실험에 존재하면서도 그래프에는 나타나지 않을 수 있었다.</p>
+</section>
+<section id="실패-기록-1-streamlit-경로-충돌" class="level2">
+<h2 class="anchored" data-anchor-id="실패-기록-1-streamlit-경로-충돌">실패 기록 1: Streamlit 경로 충돌</h2>
+<p>페이지 이름을 재구성한 뒤 이전 파일이 남아 다음 오류가 발생했다.</p>
+<pre class="text"><code>Multiple Pages specified with URL pathname run</code></pre>
+<p>새 파일을 추가하는 것만으로는 충분하지 않았다. 기존 페이지를 일관되게 정리하는 <code>cleanup_old_pages.py</code>를 만들고, 무결성 검사에서 예상 페이지와 중복 파일을 함께 확인하도록 했다.</p>
+</section>
+<section id="실패-기록-2-실행-중인-csv를-읽었다" class="level2">
+<h2 class="anchored" data-anchor-id="실패-기록-2-실행-중인-csv를-읽었다">실패 기록 2: 실행 중인 CSV를 읽었다</h2>
+<p>긴 sweep을 실행하면서 dashboard가 아직 기록 중인 CSV를 읽어 다음 오류가 발생했다.</p>
+<pre class="text"><code>pandas.errors.EmptyDataError: No columns to parse from file</code></pre>
+<p>결과 디렉터리가 존재한다는 사실과 결과가 완성됐다는 사실을 구분해야 했다. 안전한 CSV 읽기와 미완성 결과 필터를 추가했다.</p>
+<p>그 과정에서 <code>safe_read_csv()</code>가 실수로 자기 자신을 호출하는 재귀 버그도 생겼다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 잘못된 코드</span></span>
+<span id="cb10-2"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> safe_read_csv(path)</span>
+<span id="cb10-3"></span>
+<span id="cb10-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 수정</span></span>
+<span id="cb10-5"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> pd.read_csv(path)</span></code></pre></div></div>
+<p>단순 hotfix로 끝내지 않고 무결성 검사가 이 패턴을 잡도록 했다. 대시보드 안정성은 예외처리 몇 줄보다 <strong>실패가 다시 들어오지 못하게 하는 검사</strong>에서 만들어졌다.</p>
+</section>
+<section id="이번-단계에서-얻은-것" class="level2">
+<h2 class="anchored" data-anchor-id="이번-단계에서-얻은-것">이번 단계에서 얻은 것</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>이전</th>
+<th>PR #2 이후</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>스크립트마다 설정 수정</td>
+<td>YAML Scenario로 질문과 설정 보존</td>
+</tr>
+<tr class="even">
+<td>결과 폴더를 수동 추적</td>
+<td>Scenario slug와 metadata로 연결</td>
+</tr>
+<tr class="odd">
+<td>단일 실행 중심</td>
+<td>Control–Seeding, sweep, ensemble 지원</td>
+</tr>
+<tr class="even">
+<td>최종 그래프 중심</td>
+<td>성장경로와 불확실성 진단</td>
+</tr>
+<tr class="odd">
+<td>진행 상황 확인 어려움</td>
+<td>case·member 단위 진행 이벤트</td>
+</tr>
+</tbody>
+</table>
+<p>하지만 중요한 한계도 남았다. 일부 성장경로 변수는 PySDM native product가 아니라 제한된 adapter 출력에서 추정한 proxy였다. 플랫폼의 흐름을 검증하는 데는 쓸 수 있지만, 물리 결과로 그대로 해석해서는 안 된다.</p>
+<p>이 문제는 다음 개발 단계의 질문이 됐다.</p>
+<blockquote class="blockquote">
+<p>이 결과가 PySDM이 직접 계산한 값인지, 가공한 값인지, 임시 proxy인지 사용자가 어떻게 확인할 수 있을까?</p>
+</blockquote>
+<p>첫 번째 개발은 “실험을 실행할 수 있는 Lab”을 만들었다. 다음 개발은 그 Lab의 결과를 <strong>믿을 수 있는 근거</strong>를 만드는 작업으로 이어졌다.</p>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
+<ul>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">Pull Request #2</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab 저장소</a></li>
+<li><a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html">다음 개발일지: 결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로</a></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Build the Lab</category>
+  <category>PySDM</category>
+  <category>Streamlit</category>
+  <category>reproducible research</category>
+  <guid>https://jinu219.github.io/posts/build-the-lab/2026-07-13-scenario-workflow/</guid>
+  <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
   <title>구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬</title>
   <dc:creator>Jinu </dc:creator>
   <link>https://jinu219.github.io/posts/article-review/2026-05-20-cloud-seeding-review/</link>

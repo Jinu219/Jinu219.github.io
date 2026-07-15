@@ -5,6 +5,8 @@
       "/posts/article-review/2026-07-15-kappa-kohler/index.html",
       "/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
       "/posts/learn-pysdm/2026-07-15-first-steps/index.html",
+      "/posts/build-the-lab/2026-07-14-research-quality/index.html",
+      "/posts/build-the-lab/2026-07-13-scenario-workflow/index.html",
       "/posts/article-review/2026-05-20-cloud-seeding-review/index.html",
       "/posts/article-review/2026-05-20-negative-ion-seeding/index.html",
       "/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
@@ -20,6 +22,13 @@
       "/posts/article-review/2026-05-20-negative-ion-seeding/index.html",
       "/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
       "/posts/article-review/2026-04-08-orographic-bin-seeding/index.html"
+    ]
+  },
+  {
+    "listing": "/build-the-lab.html",
+    "items": [
+      "/posts/build-the-lab/2026-07-14-research-quality/index.html",
+      "/posts/build-the-lab/2026-07-13-scenario-workflow/index.html"
     ]
   },
   {
