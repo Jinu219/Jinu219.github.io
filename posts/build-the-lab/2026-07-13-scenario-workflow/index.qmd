@@ -1,0 +1,175 @@
+---
+title: "PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기"
+description: "매번 코드를 고치던 실험을 Scenario → Sweep → Run → Dashboard 흐름으로 재설계한 첫 번째 개발일지입니다."
+date: 2026-07-13
+categories:
+  - Build the Lab
+  - PySDM
+  - Streamlit
+  - reproducible research
+sidebar: pysdm-ko
+---
+
+PySDM으로 구름 씨뿌리기 민감도 실험을 시작할 때 가장 먼저 부딪힌 문제는 미세물리식이 아니었다. 실험 조건을 바꿀 때마다 Python 파일을 직접 수정하고, 결과 폴더 이름을 기억하고, 어떤 설정으로 만든 그림인지 다시 추적해야 했다. 계산은 실행되지만 연구 과정은 쉽게 재현되지 않았다.
+
+2026년 7월 13일 병합한 [PySDM-Seeding-Lab PR #2](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2)는 이 문제를 해결하기 위해 스크립트 모음을 **시나리오 기반 실험 플랫폼**으로 바꾼 첫 단계다. 31개 커밋과 66개 변경 파일에는 기능 추가뿐 아니라, 실험을 하나의 추적 가능한 단위로 만들기 위한 시행착오가 담겨 있다.
+
+::: {.review-verdict}
+**이번 개발의 핵심.** 실행 가능한 코드보다 먼저, 질문–설정–실행–결과가 끊어지지 않는 실험 흐름을 만들었다.
+:::
+
+## 출발점: 실행은 되지만 실험은 남지 않았다
+
+초기의 작업 방식은 단순했다. 설정값을 수정하고 스크립트를 실행한 뒤 CSV와 그림을 확인했다. 한두 번의 테스트에는 충분했지만 조건 수가 늘자 문제가 빠르게 커졌다.
+
+- 어떤 실험에서 사용한 설정인지 결과만 보고 알기 어려웠다.
+- 기준 실험과 씨뿌리기 실험의 차이를 수작업으로 맞춰야 했다.
+- 건조반지름, $\kappa$, 주입 시각을 동시에 바꾸면 실행 수를 놓치기 쉬웠다.
+- 같은 실험을 다시 실행해도 결과 폴더와 그림을 연결하기 어려웠다.
+- 긴 sweep 도중 어디까지 진행됐는지 알 수 없었다.
+
+여기서 목표를 “GUI를 만든다”가 아니라 **하나의 과학 질문을 하나의 시나리오로 보존한다**로 정했다.
+
+## Scenario를 실험의 기본 단위로
+
+새로운 흐름은 다음과 같이 설계했다.
+
+```text
+Create scenario
+→ configure environment / aerosol / seeding / dynamics
+→ configure parameter sweep
+→ run simulation
+→ inspect results through dashboard
+```
+
+시나리오는 이름, 짧은 메모, 생성 시각과 전체 설정을 YAML로 저장한다.
+
+```yaml
+name: Dry radius and kappa sweep
+slug: dry_radius_kappa_sweep
+memo: Compare activation response under a fixed updraft
+```
+
+설정 페이지에서 현재 working config뿐 아니라 저장된 시나리오를 직접 선택해 수정할 수 있도록 했다. 결과 폴더에도 시나리오 slug를 넣었다.
+
+```text
+results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/
+```
+
+이름을 보기 좋게 만드는 기능처럼 보이지만, 실제 목적은 **결과에서 원래 실험 설계로 되돌아갈 수 있게 하는 것**이다.
+
+## 화면 순서를 연구 순서로 바꾸기
+
+Streamlit 페이지는 사용자가 실험을 설계하는 순서와 맞췄다.
+
+```text
+00. Experiment Scenarios
+01. Atmospheric Environment
+02. Background Aerosol Settings
+03. Seeding Particle Settings
+04. Dynamic Parameters
+05. Parameter Sweep
+06. Run Simulation
+07. Results Dashboard
+```
+
+페이지 번호는 단순한 정렬용 접두사가 아니다. 환경과 배경 에어로졸을 먼저 정의하고, 씨뿌리기 입자와 동역학을 설정한 뒤, 마지막에 변화시킬 변수를 고르게 한다. UI 자체가 실험 설계의 체크리스트가 되도록 한 것이다.
+
+## 비교 실험과 parameter sweep
+
+씨뿌리기 효과는 seeding 실행 하나만으로 해석할 수 없다. 동일한 환경에서 기준 실행과 씨뿌리기 실행을 묶는 comparison 모드를 만들었다.
+
+```text
+control/
+seeding/
+comparison.csv
+summary.json
+metadata.json
+config.yaml
+```
+
+각 변수에는 control, seeding, 차이와 상대변화를 함께 저장한다.
+
+$$
+\Delta X = X_{seeding}-X_{control}
+$$
+
+첫 sweep 카탈로그에는 건조반지름, $\kappa$, 주입 시작·지속시간, 상승속도, collision ON/OFF를 넣었다. 실행 전에는 다음 곱으로 전체 모델 실행 수를 계산한다.
+
+```text
+parameter combinations
+× ensemble members
+× control/seeding
+```
+
+이 사전 계산은 편의 기능이면서 동시에 안전장치다. 작은 입력 변경이 수백 번의 실행으로 커지는 것을 시작 전에 보여준다.
+
+## 결과를 ‘그림’이 아니라 경로로 읽기
+
+Results Dashboard에는 single, comparison, sweep, ensemble 네 종류를 연결했다. 단일 최종값뿐 아니라 다음 성장 경로를 한 화면에서 추적하도록 구성했다.
+
+```text
+vapour / supersaturation
+→ cloud water response
+→ activated particle response
+→ size growth
+→ rain water response
+```
+
+ensemble에서는 평균±표준편차와 중앙값·사분위범위를 제공하고, sweep에서는 조건 필터와 상대 주입시각 정렬을 추가했다. 특히 많은 조건 중 앞부분만 그리던 문제를 수정해, 표시 수가 제한되어도 전체 sweep 범위에서 사례를 표본화하도록 했다. 그렇지 않으면 뒤쪽의 큰 반지름 조건이 실험에 존재하면서도 그래프에는 나타나지 않을 수 있었다.
+
+## 실패 기록 1: Streamlit 경로 충돌
+
+페이지 이름을 재구성한 뒤 이전 파일이 남아 다음 오류가 발생했다.
+
+```text
+Multiple Pages specified with URL pathname run
+```
+
+새 파일을 추가하는 것만으로는 충분하지 않았다. 기존 페이지를 일관되게 정리하는 `cleanup_old_pages.py`를 만들고, 무결성 검사에서 예상 페이지와 중복 파일을 함께 확인하도록 했다.
+
+## 실패 기록 2: 실행 중인 CSV를 읽었다
+
+긴 sweep을 실행하면서 dashboard가 아직 기록 중인 CSV를 읽어 다음 오류가 발생했다.
+
+```text
+pandas.errors.EmptyDataError: No columns to parse from file
+```
+
+결과 디렉터리가 존재한다는 사실과 결과가 완성됐다는 사실을 구분해야 했다. 안전한 CSV 읽기와 미완성 결과 필터를 추가했다.
+
+그 과정에서 `safe_read_csv()`가 실수로 자기 자신을 호출하는 재귀 버그도 생겼다.
+
+```python
+# 잘못된 코드
+return safe_read_csv(path)
+
+# 수정
+return pd.read_csv(path)
+```
+
+단순 hotfix로 끝내지 않고 무결성 검사가 이 패턴을 잡도록 했다. 대시보드 안정성은 예외처리 몇 줄보다 **실패가 다시 들어오지 못하게 하는 검사**에서 만들어졌다.
+
+## 이번 단계에서 얻은 것
+
+| 이전 | PR #2 이후 |
+|---|---|
+| 스크립트마다 설정 수정 | YAML Scenario로 질문과 설정 보존 |
+| 결과 폴더를 수동 추적 | Scenario slug와 metadata로 연결 |
+| 단일 실행 중심 | Control–Seeding, sweep, ensemble 지원 |
+| 최종 그래프 중심 | 성장경로와 불확실성 진단 |
+| 진행 상황 확인 어려움 | case·member 단위 진행 이벤트 |
+
+하지만 중요한 한계도 남았다. 일부 성장경로 변수는 PySDM native product가 아니라 제한된 adapter 출력에서 추정한 proxy였다. 플랫폼의 흐름을 검증하는 데는 쓸 수 있지만, 물리 결과로 그대로 해석해서는 안 된다.
+
+이 문제는 다음 개발 단계의 질문이 됐다.
+
+> 이 결과가 PySDM이 직접 계산한 값인지, 가공한 값인지, 임시 proxy인지 사용자가 어떻게 확인할 수 있을까?
+
+첫 번째 개발은 “실험을 실행할 수 있는 Lab”을 만들었다. 다음 개발은 그 Lab의 결과를 **믿을 수 있는 근거**를 만드는 작업으로 이어졌다.
+
+## 연결 자료
+
+- [Pull Request #2](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2)
+- [PySDM-Seeding-Lab 저장소](https://github.com/Jinu219/PySDM-Seeding-Lab)
+- [다음 개발일지: 결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로](../2026-07-14-research-quality/index.qmd)

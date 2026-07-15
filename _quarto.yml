@@ -48,8 +48,13 @@ website:
           contents:
             - href: posts/learn-pysdm/2026-07-15-first-steps/index.qmd
               text: "PySDM 시작하기"
-        - href: build-the-lab.qmd
-          text: "Build the Lab"
+        - section: "Build the Lab"
+          href: build-the-lab.qmd
+          contents:
+            - href: posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd
+              text: "스크립트에서 실험실로"
+            - href: posts/build-the-lab/2026-07-14-research-quality/index.qmd
+              text: "결과를 믿을 수 있는 코드"
         - href: experiments.qmd
           text: "Experiments"
         - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"
@@ -67,8 +72,13 @@ website:
           contents:
             - href: en/posts/learn-pysdm/2026-07-15-first-steps/index.qmd
               text: "Getting started"
-        - href: en/build-the-lab.qmd
-          text: "Build the Lab"
+        - section: "Build the Lab"
+          href: en/build-the-lab.qmd
+          contents:
+            - href: en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd
+              text: "From scripts to a lab"
+            - href: en/posts/build-the-lab/2026-07-14-research-quality/index.qmd
+              text: "Making results trustworthy"
         - href: en/experiments.qmd
           text: "Experiments"
         - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"

@@ -1,0 +1,125 @@
+---
+title: "Turning PySDM Experiment Scripts into a Seeding Lab"
+description: "The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow."
+date: 2026-07-13
+categories:
+  - Build the Lab
+  - PySDM
+  - Streamlit
+  - reproducible research
+sidebar: pysdm-en
+---
+
+The first obstacle in building PySDM cloud-seeding sensitivity experiments was not a microphysical equation. Every change in conditions required editing Python, remembering which configuration produced which result directory, and reconstructing how a figure had been made. The simulations ran, but the experimental history was fragile.
+
+[PySDM-Seeding-Lab PR #2](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2), merged on 13 July 2026, was the first attempt to turn those scripts into a scenario-based experimental platform. Across 31 commits and 66 changed files, the goal was to keep the question, configuration, execution, and result connected.
+
+::: {.review-verdict}
+**Core decision.** Before adding more physics, build an experimental path that can be traced from a saved question to its outputs.
+:::
+
+## The starting problem
+
+Manual scripts worked for one or two tests. They became unreliable as dry radius, hygroscopicity, injection timing, updraft, and random seeds multiplied.
+
+- Results did not identify the configuration that created them.
+- Control and seeding settings had to be synchronized by hand.
+- A small sweep change could silently create hundreds of model executions.
+- Long runs gave little indication of the current case or member.
+- Dashboard figures could outlive the context needed to interpret them.
+
+The project target therefore became more specific than “build a GUI”: **preserve one scientific question as one scenario**.
+
+## Scenario as the experimental unit
+
+The new workflow follows a deliberate sequence:
+
+```text
+Create scenario
+→ configure environment / aerosol / seeding / dynamics
+→ configure parameter sweep
+→ run simulation
+→ inspect results through dashboard
+```
+
+A YAML scenario stores a name, slug, memo, timestamp, and complete configuration. Settings pages can update the working configuration or a selected saved scenario. Result directories include the scenario slug, making it possible to navigate from output back to experimental intent.
+
+```text
+results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/
+```
+
+The Streamlit pages were reordered to match the research process:
+
+```text
+00. Experiment Scenarios
+01. Atmospheric Environment
+02. Background Aerosol Settings
+03. Seeding Particle Settings
+04. Dynamic Parameters
+05. Parameter Sweep
+06. Run Simulation
+07. Results Dashboard
+```
+
+The UI became a checklist: define the environment and background first, then seeding and dynamics, and only then choose what to vary.
+
+## Control, seeding, sweep, and ensemble
+
+Seeding cannot be interpreted from a treatment run alone. Comparison mode creates matched control and seeding outputs:
+
+```text
+control/
+seeding/
+comparison.csv
+summary.json
+metadata.json
+config.yaml
+```
+
+For each variable, the result stores control, seeding, difference, and relative change. The first sweep catalog covered dry radius, $\kappa$, injection start and duration, updraft velocity, and collision ON/OFF. Before execution, the app estimates
+
+```text
+parameter combinations × ensemble members × control/seeding.
+```
+
+This is both a planning feature and a safety check against accidentally launching an oversized workload.
+
+The Results Dashboard connects single, comparison, sweep, and ensemble results. Growth Pathway Diagnostics follows
+
+```text
+vapour / supersaturation
+→ cloud water
+→ activated particles
+→ size growth
+→ rain water.
+```
+
+Sweep filters, full-range case sampling, and injection-relative time alignment were added so later parameter values would not disappear merely because a plot had a maximum case count.
+
+## Failures that changed the design
+
+Renaming Streamlit pages left duplicate files and caused `Multiple Pages specified with URL pathname run`. A cleanup script and integrity check were added instead of relying on manual deletion.
+
+During long sweeps, the dashboard sometimes read a CSV while it was still being written, producing `EmptyDataError`. Safe reading and incomplete-result filtering separated “directory exists” from “result is complete.” A subsequent regression made `safe_read_csv()` call itself recursively. The repair changed it back to `pd.read_csv(path)` and strengthened the integrity check to reject the pattern in future.
+
+The lesson was larger than exception handling: dashboard stability comes from making known failures testable.
+
+## What this stage achieved—and what it did not
+
+| Before | After PR #2 |
+|---|---|
+| Edit scripts for each condition | Preserve question and configuration in YAML scenarios |
+| Manually track result folders | Link folders to scenario slugs and metadata |
+| Focus on single runs | Support comparison, sweep, and ensemble workflows |
+| Inspect final curves | Follow process pathways and uncertainty |
+| Wait without context | Report case- and member-level progress |
+
+One important limitation remained. Some Growth Pathway columns were proxies inferred when the adapter did not expose native PySDM products. They were useful for validating the workflow, but they were not yet safe to interpret as direct physical output.
+
+That limitation defined the next development question: how can every plotted diagnostic disclose whether it is native, derived, proxied, or missing?
+
+## Related material
+
+- [Pull Request #2](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2)
+- [PySDM-Seeding-Lab](https://github.com/Jinu219/PySDM-Seeding-Lab)
+- [Next log: From Code That Produces Results to Code That Makes Them Trustworthy](../2026-07-14-research-quality/index.qmd)

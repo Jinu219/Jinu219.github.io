@@ -3,6 +3,15 @@ title: "Build the Lab"
 description: "다시 실행할 수 있는 연구 환경과 실험 파이프라인 구축 기록"
 page-layout: article
 sidebar: pysdm-ko
+listing:
+  contents: posts/build-the-lab
+  sort: "date desc"
+  type: default
+  id: ko-build-the-lab
+  exclude:
+    lang: en
+  categories: false
+  feed: true
 ---
 
 좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.
@@ -11,4 +20,4 @@ sidebar: pysdm-ko
 이 카테고리의 구현 코드는 [PySDM-Seeding-Lab 저장소](https://github.com/Jinu219/PySDM-Seeding-Lab)와 연결됩니다.
 :::
 
-첫 구축 기록을 준비하고 있습니다.
+기능 목록만 남기지 않고, **어떤 문제에서 출발했는지**, **왜 그 구조를 선택했는지**, **실제 실패가 설계를 어떻게 바꿨는지**를 중심으로 기록합니다. 각 글은 연결된 Pull Request와 검증 결과, 아직 해결하지 못한 한계를 함께 공개합니다.

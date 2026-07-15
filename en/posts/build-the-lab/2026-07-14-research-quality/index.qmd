@@ -1,0 +1,99 @@
+---
+title: "From Code That Produces Results to Code That Makes Them Trustworthy"
+description: "Adding native diagnostics, qualification evidence, water-budget gates, spectrum transitions, and reproducible reports to PySDM Seeding Lab."
+date: 2026-07-14
+categories:
+  - Build the Lab
+  - PySDM
+  - scientific software
+  - numerical qualification
+sidebar: pysdm-en
+---
+
+After the Scenario–Sweep–Run–Dashboard workflow was in place, a more difficult question remained: does the existence of a curve make it scientifically interpretable?
+
+[PySDM-Seeding-Lab PR #3](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/3), merged on 14 July 2026, focused on provenance, numerical quality, durable failure evidence, and reproducibility. Its 12 commits and 78 changed files moved the project from a functional app toward a qualified research platform.
+
+::: {.review-verdict}
+**Core decision.** Before selecting favorable results, record where each result came from, which quality checks it passed, and where its interpretation stops.
+:::
+
+## Every diagnostic needs a provenance
+
+Early Growth Pathway views sometimes used proxy values when the adapter did not expose a native product. In a dashboard, a proxy column looked too similar to a direct model output. Every diagnostic is now classified as:
+
+| Class | Meaning |
+|---|---|
+| `native` | Directly from a PySDM product or state |
+| `derived` | Calculated explicitly from native values |
+| `proxy` | Approximation used for workflow validation |
+| `missing` | Not provided by the current adapter |
+
+Each result includes `diagnostic_provenance.json`, and the dashboard shows counts and warnings. The verified native parcel contract currently reports 11 native, 2 derived, and 0 proxy diagnostics. More importantly, future variables cannot enter the scientific view without declaring their origin.
+
+Native or radius-filtered outputs now cover thermodynamics, water-vapour mixing ratio, cloud and rain water, droplet concentrations, effective radii, and all-activated water and number. Cloud and rain remain instantaneous wet-radius bins, not particle-history classifications—an interpretation constraint recorded with the result.
+
+## From mean radius to spectrum transition
+
+An effective mean radius cannot show whether only part of the population moved into rain-size bins. The lab now writes wet-radius spectra at configurable checkpoints, with bin boundaries, number concentration, liquid-volume fraction, and unactivated/cloud/rain regimes.
+
+Rain boundaries are audited at 20, 25, and 30 $\mu\mathrm{m}$. Spectrum transition—the first time rain-size liquid exceeds a fraction of activated liquid—is tested at 0.5%, 1%, and 2%. The 1% value is explicitly a project-owned operational threshold, not a universal observational standard.
+
+Reporting threshold sensitivity prevents one convenient cutoff from masquerading as a physical law.
+
+## Source-aware water budget
+
+Hygroscopic injection deliberately adds a source. Treating the injection window as a closed system would misclassify the intended source as numerical drift. Water-budget output therefore separates vapour, cloud water, rain water, total water, and the source interval. Closed-budget checks are evaluated before and after injection, while the source window remains explicitly recorded.
+
+## Qualification with real PySDM runs
+
+Numerical convergence varies timestep and background and seeding super-droplet resolution while holding the other axes fixed.
+
+```text
+timestep: 5 / 10 / 15 s
+seeding super-droplets: 100 / 200 / 400
+background super-droplets: 100 / 200 / 400
+```
+
+The standard qualification completed 27 parameter cases and 54 real PySDM executions with zero failures. For non-zero next-finest comparisons, 12 of 12 checks were within 5%; the median relative difference was 0.187%, P95 was 1.140%, and the maximum was 1.731%.
+
+This evidence supports the 5% default only for the tested marine, condensation/seeding, collision-OFF profile. Rain metrics were zero, so it does not establish convergence for collision-ON, rain-producing experiments. A passing number without its scope would be misleading.
+
+## Failure evidence: 281-character paths
+
+A nested experiment requested 24 sweep cases and 10 ensemble members per case—240 members in total. Every member failed because repeated parameter labels pushed Windows output paths to roughly 281 characters.
+
+The solution was to separate human-readable scientific metadata from filesystem identity:
+
+```text
+cases/case_001/
+members/member_001/
+comparison/
+single/
+```
+
+Labels and values remain in configuration and metadata. Execution health is now `success`, `partial`, or `failed`, and member/case exceptions are saved before a total failure is propagated. The dashboard can distinguish “no physical response” from “no valid execution.”
+
+## The 24-member memory benchmark
+
+The large benchmark completed 24 of 24 requested members in 743.878 seconds. RSS grew from 111.34 MiB to a 1,110.98 MiB peak and remained at 1,064.70 MiB after completion.
+
+By contrast, streaming aggregation of the 24 CSV files took 3.772 seconds and added only 0.270 MiB of RSS. This shows that the aggregator is memory-bounded and points future profiling toward retained PySDM, backend, or JIT state. The evidence does not yet identify one component as a memory leak.
+
+## A result directory as a research record
+
+New results can include `report.md`, self-contained `report.html`, `report.pdf`, and `result_manifest.json`. Reports collect configuration, adapter, provenance, validation, main metrics, water-budget and convergence status, spectrum transition, artifacts, reproduction commands, and interpretation constraints.
+
+The versioned manifest records schema and reader compatibility. Legacy results without manifests and schema-v1 aliases are preserved as migration fixtures so that new readers do not silently abandon old experiments.
+
+Validation included 23 unit/integration tests, two of them using real PySDM, plus project-integrity and key Streamlit application tests.
+
+The remaining work is equally important: collision-ON rain-producing qualification, ownership profiling for retained RSS, observational review of the 1% transition threshold, and numerical equality tests for a future columnar cache.
+
+PR #2 made experiments runnable and traceable. PR #3 attached provenance, quality, failure state, and scope to every result. The quality of research software is not the number of figures it can draw, but how explicitly it records where it may be wrong.
+
+## Related material
+
+- [Pull Request #3](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/3)
+- [PySDM-Seeding-Lab](https://github.com/Jinu219/PySDM-Seeding-Lab)
+- [Previous log: Turning PySDM Experiment Scripts into a Seeding Lab](../2026-07-13-scenario-workflow/index.qmd)

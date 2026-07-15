@@ -72,4 +72,20 @@ The κ-Köhler equation as a bridge between aerosol water uptake, CCN activation
 
 Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.
 :::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-14 · Jinu</div>
+
+### [From Code That Produces Results to Code That Makes Them Trustworthy](posts/build-the-lab/2026-07-14-research-quality/index.qmd)
+
+How diagnostic provenance, numerical qualification, failure evidence, and portable reports turned PySDM Seeding Lab into a research tool.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-13 · Jinu</div>
+
+### [Turning PySDM Experiment Scripts into a Seeding Lab](posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd)
+
+Designing a traceable Scenario → Sweep → Run → Dashboard workflow for cloud-seeding experiments.
+:::
 :::
