@@ -3,7 +3,7 @@ title: "Starting with PySDM: First Coordinates for Cloud Microphysics Experiment
 description: "Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
 date: 2026-07-15
 categories:
-  - Learn PySDM
+  - PySDM
   - cloud microphysics
   - super-droplet method
 citation: true

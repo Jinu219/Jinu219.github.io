@@ -86,10 +86,25 @@ a {
   color: var(--ink) !important;
 }
 
+.navbar-nav.ms-auto {
+  align-items: center;
+}
+
+.navbar-nav.ms-auto .nav-link,
+#quarto-search .aa-DetachedSearchButton,
+#quarto-search .quarto-search-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  line-height: 1;
+}
+
 .navbar a[aria-label="Switch language"],
 .navbar-nav.ms-auto > .nav-item:first-child > .nav-link {
-  margin-top: 0.18rem;
-  padding: 0.24rem 0.65rem !important;
+  min-width: 2.5rem;
+  margin: 0;
+  padding: 0 0.55rem !important;
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--ink) !important;
@@ -291,6 +306,38 @@ main.content {
   font-size: 0.92rem;
 }
 
+.manual-post-list {
+  width: min(calc(100% - 2rem), var(--content-wide));
+  margin: 0 auto 2rem;
+}
+
+.manual-post {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.manual-post h3 {
+  margin: 0.35rem 0 0.45rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.manual-post h3 a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.manual-post > p:last-child {
+  margin-bottom: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.manual-post-meta {
+  color: var(--ink-faint);
+  font-size: 0.76rem;
+}
+
 .listing-category {
   border: 0 !important;
   background: var(--accent-soft) !important;
@@ -306,14 +353,21 @@ main.content {
   font-size: 0.76rem;
 }
 
-.quarto-title-block,
-main.content > :not(.home-intro):not(.track-list):not(.section-heading):not(#listing-listing):not(.quarto-listing-container-default) {
+.page-layout-article main.content {
+  width: 100%;
   max-width: var(--content-reading);
-}
-
-.quarto-title-block {
   margin-right: auto;
   margin-left: auto;
+}
+
+.page-layout-article main.content > *,
+.page-layout-article main.content .quarto-title-block,
+.page-layout-article main.content .quarto-listing-container-default,
+.page-layout-article main.content .manual-post-list {
+  width: 100%;
+  max-width: none;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .quarto-title .title {
@@ -407,8 +461,12 @@ pre.sourceCode {
 
   .navbar a[aria-label="Switch language"],
   .navbar-nav.ms-auto > .nav-item:first-child > .nav-link {
-    display: inline-block;
+    display: inline-flex;
     margin: 0.35rem 0 0.65rem;
+  }
+
+  .navbar-nav.ms-auto {
+    align-items: flex-start;
   }
 }
 

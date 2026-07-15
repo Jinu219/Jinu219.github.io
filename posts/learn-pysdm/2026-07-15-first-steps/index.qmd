@@ -3,7 +3,7 @@ title: "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표"
 description: "Super-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다."
 date: 2026-07-15
 categories:
-  - Learn PySDM
+  - PySDM
   - cloud microphysics
   - super-droplet method
 citation: true

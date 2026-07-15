@@ -6,7 +6,7 @@
     const switchLink =
       document.querySelector('a[aria-label="Switch language"]') ||
       [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
-        ["EN", "한국어"].includes(link.textContent.trim())
+        ["EN", "KO"].includes(link.textContent.trim())
       );
 
     if (switchLink) {
@@ -18,7 +18,7 @@
         : path.replace(/^\/en/, "");
       const label = switchLink.querySelector(".menu-text") || switchLink;
 
-      label.textContent = isEnglish ? "한국어" : "EN";
+      label.textContent = isEnglish ? "KO" : "EN";
       switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
       switchLink.setAttribute(
         "aria-label",
@@ -34,12 +34,9 @@
     if (brand) brand.href = "/en/";
 
     const menu = [
-      ["홈", "Home", "/en/"],
-      ["Learn PySDM", "Learn PySDM", "/en/learn-pysdm.html"],
-      ["Build the Lab", "Build the Lab", "/en/build-the-lab.html"],
-      ["Experiments", "Experiments", "/en/experiments.html"],
-      ["프로젝트", "Projects", "/en/projects.html"],
-      ["소개", "About", "/en/about.html"]
+      ["PySDM", "PySDM", "/en/pysdm.html"],
+      ["WRF", "WRF", "/en/wrf.html"],
+      ["Article Review", "Article Review", "/en/article-review.html"]
     ];
 
     document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
@@ -57,7 +54,11 @@
     });
 
     document.querySelectorAll(".nav-footer a").forEach((link) => {
-      if (link.textContent.trim() === "RSS") link.href = "/en/index.xml";
+      if (link.textContent.trim() === "소개") {
+        link.textContent = "About";
+        link.href = "/en/about.html";
+      }
+      if (link.textContent.trim() === "RSS") link.href = "/index.xml";
     });
   };
 

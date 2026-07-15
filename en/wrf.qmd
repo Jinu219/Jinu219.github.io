@@ -1,0 +1,12 @@
+---
+title: "WRF"
+description: "Notes on mesoscale weather modeling and numerical cloud-seeding experiments"
+lang: en
+page-layout: article
+---
+
+This section examines how WRF weather fields, physics parameterizations, and initial and boundary conditions affect simulations of clouds and precipitation. Case selection, sensitivity experiments, and interpretation will be documented as reproducible workflows.
+
+::: {.callout-note}
+The first WRF setup and case-study note is in preparation.
+:::

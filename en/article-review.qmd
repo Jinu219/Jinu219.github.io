@@ -1,0 +1,12 @@
+---
+title: "Article Review"
+description: "Reading cloud-seeding and cloud-microphysics papers from an experimental perspective"
+lang: en
+page-layout: article
+---
+
+Rather than summarizing conclusions alone, each review separates the research question, method, key assumptions, observations or model data, reproducible elements, and remaining limitations. Ideas found in the literature will feed back into PySDM or WRF experiments.
+
+::: {.callout-note}
+The first article review is in preparation.
+:::

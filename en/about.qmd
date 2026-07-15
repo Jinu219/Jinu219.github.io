@@ -1,13 +1,13 @@
 ---
 title: "About"
-description: "About the PySDM Seeding Lab and this blog"
+description: "About Jinu's Cloud Seeding Blog"
 lang: en
 page-layout: article
 ---
 
 ## What does this site document?
 
-PySDM Seeding Lab is an open research notebook for learning PySDM, a particle-based cloud microphysics model, designing numerical experiments related to cloud seeding, and documenting the process in public.
+Jinu's Cloud Seeding Blog is an open research notebook for learning and designing cloud-seeding research. It connects particle-based cloud microphysics with PySDM, mesoscale weather simulations with WRF, and reviews of the relevant literature in one research workflow.
 
 Rather than presenting only finished conclusions, it records:
 
@@ -18,7 +18,7 @@ Rather than presenting only finished conclusions, it records:
 
 ## How the notes are organized
 
-**Learn PySDM** covers concepts and tools, **Build the Lab** develops reproducible environments, and **Experiments** connects hypotheses with results. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.
+**PySDM** covers particle-based microphysics and experiments, **WRF** covers weather fields and case simulations, and **Article Review** examines research questions and methods. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.
 
 ## Links
 

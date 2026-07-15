@@ -1,25 +1,28 @@
 ---
-title: "PySDM Seeding Lab"
+title: "Jinu's Cloud Seeding Blog"
 page-layout: full
 title-block-style: none
 listing:
   contents: posts
   sort: "date desc"
   type: default
+  id: ko-home
+  exclude:
+    lang: en
   page-size: 6
   categories: true
   feed:
-    title: "PySDM Seeding Lab"
-    description: "PySDM 학습, 연구 환경 구축, 구름 씨뿌리기 수치 실험 기록"
+    title: "Jinu's Cloud Seeding Blog"
+    description: "PySDM, WRF, 논문 리뷰로 이어가는 구름 씨뿌리기 연구 기록"
 ---
 
 ::: {.home-intro}
-<div class="home-kicker">PySDM · Cloud microphysics · Open notebook</div>
-<h1>구름을 계산하고,<br><em>실험을 기록합니다.</em></h1>
-<p class="home-deck">PySDM을 배우고 재현 가능한 실험 환경을 만듭니다. 구름 씨뿌리기 가설을 코드와 그림으로 검증하고, 결과뿐 아니라 질문과 실패의 과정까지 차분히 기록합니다.</p>
+<div class="home-kicker">Cloud seeding · Numerical modeling · Open notebook</div>
+<h1>구름 씨뿌리기를 계산하고,<br><em>연구를 기록합니다.</em></h1>
+<p class="home-deck">PySDM과 WRF로 구름 씨뿌리기 문제를 탐색하고, 관련 논문을 실험의 언어로 다시 읽습니다. 결과뿐 아니라 질문, 가정, 실패와 수정의 과정까지 차분히 기록합니다.</p>
 <div class="home-actions">
-  <a href="learn-pysdm.html">첫 노트 읽기 <span aria-hidden="true">↗</span></a>
-  <a href="projects.html">프로젝트 소개 <span aria-hidden="true">→</span></a>
+  <a href="pysdm.html">PySDM 노트 보기 <span aria-hidden="true">↗</span></a>
+  <a href="about.html">블로그 소개 <span aria-hidden="true">→</span></a>
 </div>
 :::
 
@@ -28,29 +31,29 @@ listing:
 :::: {.track-list}
 ::: {.track-item}
 <div class="track-index">01</div>
-### Learn PySDM
+### PySDM
 
-Super-Droplet Method의 개념부터 PySDM 객체와 공식 예제 해석까지, 학습의 발판을 하나씩 만듭니다.
+Super-Droplet Method부터 입자 기반 구름 미세물리 실험까지, 코드와 물리 가정을 함께 해석합니다.
 
-[학습 노트 보기](learn-pysdm.qmd)
+[PySDM 노트 보기](pysdm.qmd)
 :::
 
 ::: {.track-item}
 <div class="track-index">02</div>
-### Build the Lab
+### WRF
 
-환경, 데이터, 실험 설정과 검증 규칙을 기록해 같은 계산을 누구나 다시 실행할 수 있게 합니다.
+중규모 기상장과 구름 과정을 연결하고, WRF 기반 수치 실험의 설정과 결과를 재현 가능한 형태로 남깁니다.
 
-[구축 기록 보기](build-the-lab.qmd)
+[WRF 노트 보기](wrf.qmd)
 :::
 
 ::: {.track-item}
 <div class="track-index">03</div>
-### Experiments
+### Article Review
 
-민감도 실험과 비교 그림을 통해 seeding 가설이 언제, 왜 달라지는지 탐색합니다.
+구름 씨뿌리기와 구름 미세물리 논문의 질문, 방법, 가정과 한계를 실험 관점에서 정리합니다.
 
-[실험 기록 보기](experiments.qmd)
+[논문 리뷰 보기](article-review.qmd)
 :::
 ::::
 

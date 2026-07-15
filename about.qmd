@@ -1,12 +1,12 @@
 ---
 title: "소개"
-description: "PySDM Seeding Lab과 이 블로그를 소개합니다."
+description: "Jinu's Cloud Seeding Blog를 소개합니다."
 page-layout: article
 ---
 
 ## 이곳은 무엇을 기록하나요?
 
-PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우고, 구름 씨뿌리기와 관련된 수치 실험을 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다.
+Jinu's Cloud Seeding Blog는 구름 씨뿌리기 연구를 배우고 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다. PySDM의 입자 기반 구름 미세물리, WRF의 중규모 기상 모의, 관련 논문 리뷰를 하나의 연구 흐름으로 연결합니다.
 
 완성된 결론만 전시하기보다 다음을 함께 남깁니다.
 
@@ -17,7 +17,7 @@ PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우
 
 ## 글의 구성
 
-**Learn PySDM**은 개념과 도구를, **Build the Lab**은 재현 가능한 환경을, **Experiments**는 가설과 결과를 다룹니다. 논문과 소프트웨어는 인용으로 연결하고, 실험 코드는 별도 저장소의 고정된 버전으로 연결합니다.
+**PySDM**은 입자 기반 미세물리와 실험을, **WRF**는 기상장과 사례 모의를, **Article Review**는 연구 질문과 방법을 다룹니다. 논문과 소프트웨어는 인용으로 연결하고, 실험 코드는 별도 저장소의 고정된 버전으로 연결합니다.
 
 ## 연결
 
