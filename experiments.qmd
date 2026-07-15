@@ -1,10 +1,32 @@
 ---
 title: "Experiments"
-description: "가설, 설정, 결과, 해석을 한 흐름으로 남기는 실험 노트"
-page-layout: article
+description: "연구실 서버에서 수행한 PySDM 수치실험의 질문, 설정, 결과, 한계를 연결하는 실험 노트"
+page-layout: full
 sidebar: pysdm-ko
+listing:
+  contents: posts/experiments
+  sort: "date asc"
+  type: default
+  categories: false
+  feed: true
 ---
 
-각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.
+이 시리즈는 super-droplet 수치 표현에서 시작해 시딩 입자 특성, 배경 에어로졸 환경, κ–입자크기–주입시점 response surface로 확장됩니다. 각 글은 질문과 기준 실험을 먼저 밝히고, 변경 조건·관측 지표·해석 범위·실패를 구분해 기록합니다.
 
-첫 실험 기록을 준비하고 있습니다.
+::: {.callout-note title="PySDM-Seeding-Lab과의 관계"}
+아래 네 실험은 **연구실 서버 + Visual Studio Code**에서 수행한 독립 PySDM 연구입니다. PySDM-Seeding-Lab 앱에서 실행한 결과가 아니며, 이후 Lab의 실험·검증 구조를 설계하는 데 참고한 선행 실험으로 구분합니다.
+:::
+
+## 실험 흐름 {.section-heading}
+
+```text
+Experiment 1  numerical representation과 ensemble 안정성
+      ↓
+Experiment 2  dry radius · κ · injection timing 민감도와 성장 경로
+      ↓
+Experiment 3  background aerosol · fixed number/mass 비교
+      ↓
+Experiment 4  activation strength · timing response surface
+```
+
+## 실험 기록 {.section-heading}

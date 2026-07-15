@@ -55,10 +55,19 @@ website:
               text: "스크립트에서 실험실로"
             - href: posts/build-the-lab/2026-07-14-research-quality/index.qmd
               text: "결과를 믿을 수 있는 코드"
-        - href: experiments.qmd
-          text: "Experiments"
+        - section: "Experiments"
+          href: experiments.qmd
+          contents:
+            - href: posts/experiments/2026-06-30-numerical-representation/index.qmd
+              text: "1. 수치 표현 민감도"
+            - href: posts/experiments/2026-07-03-parameter-sensitivity/index.qmd
+              text: "2. 시딩 조건 민감도"
+            - href: posts/experiments/2026-07-06-realistic-warm-seeding/index.qmd
+              text: "3. 현실 배경환경"
+            - href: posts/experiments/2026-07-08-efficiency-response-surface/index.qmd
+              text: "4. Response surface"
         - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"
-          text: "실험 코드 ↗"
+          text: "Seeding Lab 코드 ↗"
     - id: pysdm-en
       title: "PySDM Lab"
       style: docked
@@ -79,10 +88,19 @@ website:
               text: "From scripts to a lab"
             - href: en/posts/build-the-lab/2026-07-14-research-quality/index.qmd
               text: "Making results trustworthy"
-        - href: en/experiments.qmd
-          text: "Experiments"
+        - section: "Experiments"
+          href: en/experiments.qmd
+          contents:
+            - href: en/posts/experiments/2026-06-30-numerical-representation/index.qmd
+              text: "1. Numerical representation"
+            - href: en/posts/experiments/2026-07-03-parameter-sensitivity/index.qmd
+              text: "2. Seeding sensitivity"
+            - href: en/posts/experiments/2026-07-06-realistic-warm-seeding/index.qmd
+              text: "3. Realistic backgrounds"
+            - href: en/posts/experiments/2026-07-08-efficiency-response-surface/index.qmd
+              text: "4. Response surface"
         - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"
-          text: "Experiment code ↗"
+          text: "Seeding Lab code ↗"
   page-footer:
     border: true
     left: "© 2026 Jinu. Cloud seeding research notes."

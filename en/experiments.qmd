@@ -1,11 +1,59 @@
 ---
 title: "Experiments"
-description: "Experimental notes that connect hypotheses, settings, results, and interpretation"
+description: "PySDM experiments connecting numerical representation, seeded-particle properties, aerosol environments, and response surfaces"
 lang: en
 page-layout: article
 sidebar: pysdm-en
 ---
 
-Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.
+This series begins with super-droplet representation, then moves through seeded-particle properties, background aerosol environments, and a κ–radius–timing response surface. Every note separates the question, baseline, changed conditions, diagnostics, limitations, and next hypothesis.
 
-The first experiment note is in preparation.
+::: {.callout-note title="Relationship to PySDM-Seeding-Lab"}
+These four experiments were run independently on the **laboratory server with Visual Studio Code**. They were not executed through the PySDM-Seeding-Lab app; they are documented as precursor studies that later informed the Lab's experiment and validation design.
+:::
+
+## Experiment sequence
+
+```text
+Experiment 1  numerical representation and ensemble stability
+      ↓
+Experiment 2  dry radius · κ · timing sensitivity and growth pathway
+      ↓
+Experiment 3  background aerosol · fixed-number/mass comparison
+      ↓
+Experiment 4  activation-strength · timing response surface
+```
+
+::: {.manual-post-list}
+::: {.manual-post}
+<div class="manual-post-meta">2026-06-30 · Jinu</div>
+
+### [Experiment 1. How Much Does Super-Droplet Resolution Change the Result?](posts/experiments/2026-06-30-numerical-representation/index.qmd)
+
+A 4 × 4 representation grid and 50-seed ensembles separate transient collision noise from persistent rain-water response.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-03 · Jinu</div>
+
+### [Experiment 2. Sensitivity to Seeded-Particle Properties and Injection Timing](posts/experiments/2026-07-03-parameter-sensitivity/index.qmd)
+
+Dry radius, κ, and injection timing are connected to vapour consumption, condensational growth, and rain-size mass.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-06 · Jinu</div>
+
+### [Experiment 3. Warm Hygroscopic Seeding Across Background Aerosol Environments](posts/experiments/2026-07-06-realistic-warm-seeding/index.qmd)
+
+Clean marine, polluted continental, and warm-orographic backgrounds are compared under fixed-number and fixed-mass injection.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-07-08 · Jinu</div>
+
+### [Experiment 4. A κ–Radius–Timing Response Surface](posts/experiments/2026-07-08-efficiency-response-surface/index.qmd)
+
+A dense 2,016-condition grid maps activation strength and injection timing into an empirical final rain-water response.
+:::
+:::
