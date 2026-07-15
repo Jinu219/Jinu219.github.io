@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>PySDM Seeding Lab</title>
+<link>https://jinu219.github.io/learn-pysdm.html</link>
+<atom:link href="https://jinu219.github.io/learn-pysdm.xml" rel="self" type="application/rss+xml"/>
+<description>개념, API, 예제를 연결하는 PySDM 학습 노트</description>
+<generator>quarto-1.9.38</generator>
+<lastBuildDate>Tue, 14 Jul 2026 15:00:00 GMT</lastBuildDate>
+<item>
+  <title>PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>수치 모델을 배우는 가장 좋은 출발점은 “어떤 코드를 실행할까?”보다 “무엇을 표현하려는가?”를 묻는 일이라고 생각합니다. 이 첫 글에서는 PySDM이 구름 미세물리 문제에서 맡는 역할을 정리하고, 이 블로그에서 따라갈 실험 경로를 세웁니다.</p>
+<section id="pysdm은-무엇을-표현하나" class="level2">
+<h2 class="anchored" data-anchor-id="pysdm은-무엇을-표현하나">PySDM은 무엇을 표현하나</h2>
+<p>PySDM은 입자 집단의 동역학을 모사하는 오픈소스 패키지입니다. 현재 개발의 중심은 습윤 공기 속 에어로졸·구름방울·빗방울의 미세물리이며, Super-Droplet Method(SDM)를 사용해 매우 많은 실제 입자를 더 적은 수의 계산 입자로 표현합니다 <span class="citation" data-cites="Shima2009SDM Bartman2022PySDM">(Shima 기타 2009년; Bartman 기타 2022년)</span>.</p>
+<p>하나의 super-droplet을 반지름 <img src="https://latex.codecogs.com/png.latex?r_i">와 multiplicity <img src="https://latex.codecogs.com/png.latex?%5Cxi_i">로 나타낸다고 생각해 봅시다. 실제 입자 집단의 <img src="https://latex.codecogs.com/png.latex?k">차 모멘트는 계산 입자들의 합으로 근사할 수 있습니다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AM_k%20%5Capprox%20%5Csum_i%20%5Cxi_i%20r_i%5Ek%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?k=0">은 수농도, <img src="https://latex.codecogs.com/png.latex?k=3">은 부피 또는 질량과 연결됩니다. 따라서 “몇 개의 계산 입자를 쓸 것인가”, “초기 분포를 어떻게 표본화할 것인가”는 단순한 구현 선택이 아니라 결과의 통계적 품질과 직접 이어지는 실험 조건입니다.</p>
+</section>
+<section id="첫-번째-환경-점검" class="level2">
+<h2 class="anchored" data-anchor-id="첫-번째-환경-점검">첫 번째 환경 점검</h2>
+<p>PySDM의 최신 릴리스는 <code>pip</code>로 설치할 수 있습니다. 이 블로그의 코드 블록은 별도 표시가 없는 한 설명용이며, 실제 재현 환경은 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a>의 고정된 의존성 파일을 기준으로 삼을 예정입니다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">python</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-m</span> pip install PySDM</span></code></pre></div></div>
+<p>설치 후 가장 작은 점검은 패키지가 현재 환경에서 import되는지, 어떤 버전이 선택되었는지 확인하는 것입니다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> importlib.metadata <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> version</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> PySDM</span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PySDM import: OK"</span>)</span>
+<span id="cb2-6"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PySDM version:"</span>, version(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PySDM"</span>))</span></code></pre></div></div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+힌트
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>실험 노트에는 Python과 PySDM 버전뿐 아니라 운영체제, 난수 시드, 실행한 저장소 커밋도 함께 남기겠습니다. “내 컴퓨터에서는 됐다”를 연구 기록으로 바꾸는 가장 작은 습관입니다.</p>
+</div>
+</div>
+</section>
+<section id="블로그에서-따라갈-세-단계" class="level2">
+<h2 class="anchored" data-anchor-id="블로그에서-따라갈-세-단계">블로그에서 따라갈 세 단계</h2>
+<section id="learn-pysdm" class="level3">
+<h3 class="anchored" data-anchor-id="learn-pysdm">1. Learn PySDM</h3>
+<p>SDM의 상태 변수와 모멘트를 이해한 뒤, environment, dynamics, products가 어떤 책임을 나누는지 살펴봅니다. 공식 예제를 그대로 실행하는 데서 멈추지 않고, 각 객체가 물리 가정과 어떻게 연결되는지 주석을 붙일 것입니다.</p>
+</section>
+<section id="build-the-lab" class="level3">
+<h3 class="anchored" data-anchor-id="build-the-lab">2. Build the Lab</h3>
+<p>독립된 Python 환경, 설정 파일, 데이터와 그림의 저장 규칙을 세웁니다. 실험 한 번을 다시 실행하는 명령과, 같은 결과를 확인하는 최소 검증을 함께 둡니다.</p>
+</section>
+<section id="experiments" class="level3">
+<h3 class="anchored" data-anchor-id="experiments">3. Experiments</h3>
+<p>기준 실험을 먼저 만들고, seeding 시점·입자 크기 분포·투입량 같은 조건을 하나씩 바꿉니다. 단일 곡선의 차이보다 물 수지, 수농도, 스펙트럼 모멘트처럼 해석 가능한 지표를 우선합니다.</p>
+</section>
+</section>
+<section id="첫-체크포인트" class="level2">
+<h2 class="anchored" data-anchor-id="첫-체크포인트">첫 체크포인트</h2>
+<p>다음 글로 넘어가기 전에 확인할 항목은 네 가지입니다.</p>
+<ul class="task-list">
+<li><label><input type="checkbox">격리된 환경에서 PySDM을 import할 수 있다.</label></li>
+<li><label><input type="checkbox">Python과 PySDM 버전을 한 번에 기록할 수 있다.</label></li>
+<li><label><input type="checkbox">한 super-droplet의 multiplicity가 무엇을 뜻하는지 설명할 수 있다.</label></li>
+<li><label><input type="checkbox">기준 실험과 seeding 실험에서 고정할 조건을 구분할 수 있다.</label></li>
+</ul>
+<p>이 체크포인트를 통과하면 다음 단계에서는 PySDM 공식 예제 하나를 골라 입력, dynamics, products의 흐름을 해부하겠습니다. PySDM v2 논문은 패키지의 구조와 확장된 기능을 살펴볼 좋은 지도입니다 <span class="citation" data-cites="deJong2023PySDM">(Jong 기타 2023년)</span>.</p>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bartman2022PySDM" class="csl-entry">
+Bartman, Piotr, Oleg Bulenok, Tomasz Gierczak, 기타. 2022년. <span>“<span>PySDM</span> v1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry”</span>. <em>Journal of Open Source Software</em> 7 (72): 3219. <a href="https://doi.org/10.21105/joss.03219">https://doi.org/10.21105/joss.03219</a>.
+</div>
+<div id="ref-deJong2023PySDM" class="csl-entry">
+Jong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, 와/과 Sylwester Arabas. 2023년. <span>“<span>PySDM</span> v2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry”</span>. <em>Journal of Open Source Software</em> 8 (84): 4968. <a href="https://doi.org/10.21105/joss.04968">https://doi.org/10.21105/joss.04968</a>.
+</div>
+<div id="ref-Shima2009SDM" class="csl-entry">
+Shima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintaro Kawahara. 2009년. <span>“The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model”</span>. <em>Quarterly Journal of the Royal Meteorological Society</em> 135 (642): 1307–20. <a href="https://doi.org/10.1002/qj.441">https://doi.org/10.1002/qj.441</a>.
+</div>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표},
+  date = {2026-07-15},
+  url = {https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/},
+  langid = {ko}
+}
+</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+Jinu. 2026. <span>“PySDM을 시작하며: 구름 미세물리 실험의 첫
+좌표.”</span> July 15. <a href="https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/">https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/</a>.
+</div></div></section></div> ]]></description>
+  <category>Learn PySDM</category>
+  <category>cloud microphysics</category>
+  <category>super-droplet method</category>
+  <guid>https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/</guid>
+  <pubDate>Tue, 14 Jul 2026 15:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

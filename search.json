@@ -1,0 +1,128 @@
+[
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "프로젝트",
+    "section": "",
+    "text": "구름 미세물리와 seeding 문제를 PySDM 기반 수치 실험으로 탐색하는 연구 프로젝트입니다.\n\n\n\n\n\n\n\n\n영역\n이 블로그\n코드 저장소\n\n\n\n\n역할\n질문, 배경, 실험 해석, 그림\n실행 코드, 설정, 테스트, 원자료 처리\n\n\n변경 단위\n한 편의 연구 노트\n재현 가능한 실행 단위\n\n\n연결 방식\n실행 버전과 결과 링크 기록\n관련 블로그 글 링크 기록\n\n\n\nPySDM-Seeding-Lab 저장소 열기"
+  },
+  {
+    "objectID": "projects.html#pysdm-seeding-lab",
+    "href": "projects.html#pysdm-seeding-lab",
+    "title": "프로젝트",
+    "section": "",
+    "text": "구름 미세물리와 seeding 문제를 PySDM 기반 수치 실험으로 탐색하는 연구 프로젝트입니다.\n\n\n\n\n\n\n\n\n영역\n이 블로그\n코드 저장소\n\n\n\n\n역할\n질문, 배경, 실험 해석, 그림\n실행 코드, 설정, 테스트, 원자료 처리\n\n\n변경 단위\n한 편의 연구 노트\n재현 가능한 실행 단위\n\n\n연결 방식\n실행 버전과 결과 링크 기록\n관련 블로그 글 링크 기록\n\n\n\nPySDM-Seeding-Lab 저장소 열기"
+  },
+  {
+    "objectID": "projects.html#공개-원칙",
+    "href": "projects.html#공개-원칙",
+    "title": "프로젝트",
+    "section": "공개 원칙",
+    "text": "공개 원칙\n\n질문을 먼저 씁니다. 결과에 맞춰 가설을 뒤늦게 만들지 않습니다.\n기준 실험을 둡니다. 바뀐 조건과 고정한 조건을 분리합니다.\n버전을 남깁니다. 코드 커밋, 패키지 버전, 난수 시드를 기록합니다.\n그림을 추적 가능하게 만듭니다. 그림이 어떤 데이터와 스크립트에서 왔는지 연결합니다."
+  },
+  {
+    "objectID": "learn-pysdm.html",
+    "href": "learn-pysdm.html",
+    "title": "Learn PySDM",
+    "section": "",
+    "text": "PySDM을 처음 만나는 순간부터 문헌 속 실험을 읽을 수 있을 때까지의 학습 경로입니다. 각 글은 하나의 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\n\nLearn PySDM\n\ncloud microphysics\n\nsuper-droplet method\n\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
+  },
+  {
+    "objectID": "experiments.html",
+    "href": "experiments.html",
+    "title": "Experiments",
+    "section": "",
+    "text": "각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.\n첫 실험 기록을 준비하고 있습니다."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "소개",
+    "section": "",
+    "text": "PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우고, 구름 씨뿌리기와 관련된 수치 실험을 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다.\n완성된 결론만 전시하기보다 다음을 함께 남깁니다.\n\n어떤 물리 질문에서 실험이 시작됐는지\n어떤 가정과 설정을 사용했는지\n코드와 결과를 어떻게 다시 만들 수 있는지\n결과가 예상과 달랐을 때 무엇을 배웠는지"
+  },
+  {
+    "objectID": "about.html#이곳은-무엇을-기록하나요",
+    "href": "about.html#이곳은-무엇을-기록하나요",
+    "title": "소개",
+    "section": "",
+    "text": "PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우고, 구름 씨뿌리기와 관련된 수치 실험을 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다.\n완성된 결론만 전시하기보다 다음을 함께 남깁니다.\n\n어떤 물리 질문에서 실험이 시작됐는지\n어떤 가정과 설정을 사용했는지\n코드와 결과를 어떻게 다시 만들 수 있는지\n결과가 예상과 달랐을 때 무엇을 배웠는지"
+  },
+  {
+    "objectID": "about.html#글의-구성",
+    "href": "about.html#글의-구성",
+    "title": "소개",
+    "section": "글의 구성",
+    "text": "글의 구성\nLearn PySDM은 개념과 도구를, Build the Lab은 재현 가능한 환경을, Experiments는 가설과 결과를 다룹니다. 논문과 소프트웨어는 인용으로 연결하고, 실험 코드는 별도 저장소의 고정된 버전으로 연결합니다."
+  },
+  {
+    "objectID": "about.html#연결",
+    "href": "about.html#연결",
+    "title": "소개",
+    "section": "연결",
+    "text": "연결\n\nGitHub · Jinu219\nPySDM 공식 저장소\nPySDM 공식 문서"
+  },
+  {
+    "objectID": "build-the-lab.html",
+    "href": "build-the-lab.html",
+    "title": "Build the Lab",
+    "section": "",
+    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다."
+  },
+  {
+    "objectID": "index.html#세-개의-연구-트랙",
+    "href": "index.html#세-개의-연구-트랙",
+    "title": "PySDM Seeding Lab",
+    "section": "세 개의 연구 트랙",
+    "text": "세 개의 연구 트랙\n\n\n\nTRACK 01\n\n\nLearn PySDM\nSuper-Droplet Method의 개념부터 PySDM 객체와 예제 해석까지, 학습의 발판을 차근차근 만듭니다.\n학습 노트 보기 →\n\n\n\n\nTRACK 02\n\n\nBuild the Lab\n환경, 데이터, 실험 설정, 검증 규칙을 기록해 누구나 같은 출발점에서 계산을 반복할 수 있게 합니다.\n구축 기록 보기 →\n\n\n\n\nTRACK 03\n\n\nExperiments\n민감도 실험과 비교 그림을 통해 seeding 가설이 언제, 왜 달라지는지 탐색합니다.\n실험 기록 보기 →"
+  },
+  {
+    "objectID": "index.html#최근-글",
+    "href": "index.html#최근-글",
+    "title": "PySDM Seeding Lab",
+    "section": "최근 글",
+    "text": "최근 글"
+  },
+  {
+    "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html",
+    "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html",
+    "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
+    "section": "",
+    "text": "수치 모델을 배우는 가장 좋은 출발점은 “어떤 코드를 실행할까?”보다 “무엇을 표현하려는가?”를 묻는 일이라고 생각합니다. 이 첫 글에서는 PySDM이 구름 미세물리 문제에서 맡는 역할을 정리하고, 이 블로그에서 따라갈 실험 경로를 세웁니다."
+  },
+  {
+    "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#pysdm은-무엇을-표현하나",
+    "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#pysdm은-무엇을-표현하나",
+    "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
+    "section": "PySDM은 무엇을 표현하나",
+    "text": "PySDM은 무엇을 표현하나\nPySDM은 입자 집단의 동역학을 모사하는 오픈소스 패키지입니다. 현재 개발의 중심은 습윤 공기 속 에어로졸·구름방울·빗방울의 미세물리이며, Super-Droplet Method(SDM)를 사용해 매우 많은 실제 입자를 더 적은 수의 계산 입자로 표현합니다 (Shima 기타 2009년; Bartman 기타 2022년).\n하나의 super-droplet을 반지름 \\(r_i\\)와 multiplicity \\(\\xi_i\\)로 나타낸다고 생각해 봅시다. 실제 입자 집단의 \\(k\\)차 모멘트는 계산 입자들의 합으로 근사할 수 있습니다.\n\\[\nM_k \\approx \\sum_i \\xi_i r_i^k\n\\]\n\\(k=0\\)은 수농도, \\(k=3\\)은 부피 또는 질량과 연결됩니다. 따라서 “몇 개의 계산 입자를 쓸 것인가”, “초기 분포를 어떻게 표본화할 것인가”는 단순한 구현 선택이 아니라 결과의 통계적 품질과 직접 이어지는 실험 조건입니다."
+  },
+  {
+    "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-번째-환경-점검",
+    "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-번째-환경-점검",
+    "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
+    "section": "첫 번째 환경 점검",
+    "text": "첫 번째 환경 점검\nPySDM의 최신 릴리스는 pip로 설치할 수 있습니다. 이 블로그의 코드 블록은 별도 표시가 없는 한 설명용이며, 실제 재현 환경은 PySDM-Seeding-Lab의 고정된 의존성 파일을 기준으로 삼을 예정입니다.\npython -m pip install PySDM\n설치 후 가장 작은 점검은 패키지가 현재 환경에서 import되는지, 어떤 버전이 선택되었는지 확인하는 것입니다.\nfrom importlib.metadata import version\n\nimport PySDM\n\nprint(\"PySDM import: OK\")\nprint(\"PySDM version:\", version(\"PySDM\"))\n\n\n\n\n\n\n힌트\n\n\n\n실험 노트에는 Python과 PySDM 버전뿐 아니라 운영체제, 난수 시드, 실행한 저장소 커밋도 함께 남기겠습니다. “내 컴퓨터에서는 됐다”를 연구 기록으로 바꾸는 가장 작은 습관입니다."
+  },
+  {
+    "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#블로그에서-따라갈-세-단계",
+    "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#블로그에서-따라갈-세-단계",
+    "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
+    "section": "블로그에서 따라갈 세 단계",
+    "text": "블로그에서 따라갈 세 단계\n\n1. Learn PySDM\nSDM의 상태 변수와 모멘트를 이해한 뒤, environment, dynamics, products가 어떤 책임을 나누는지 살펴봅니다. 공식 예제를 그대로 실행하는 데서 멈추지 않고, 각 객체가 물리 가정과 어떻게 연결되는지 주석을 붙일 것입니다.\n\n\n2. Build the Lab\n독립된 Python 환경, 설정 파일, 데이터와 그림의 저장 규칙을 세웁니다. 실험 한 번을 다시 실행하는 명령과, 같은 결과를 확인하는 최소 검증을 함께 둡니다.\n\n\n3. Experiments\n기준 실험을 먼저 만들고, seeding 시점·입자 크기 분포·투입량 같은 조건을 하나씩 바꿉니다. 단일 곡선의 차이보다 물 수지, 수농도, 스펙트럼 모멘트처럼 해석 가능한 지표를 우선합니다."
+  },
+  {
+    "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-체크포인트",
+    "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#첫-체크포인트",
+    "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
+    "section": "첫 체크포인트",
+    "text": "첫 체크포인트\n다음 글로 넘어가기 전에 확인할 항목은 네 가지입니다.\n\n격리된 환경에서 PySDM을 import할 수 있다.\nPython과 PySDM 버전을 한 번에 기록할 수 있다.\n한 super-droplet의 multiplicity가 무엇을 뜻하는지 설명할 수 있다.\n기준 실험과 seeding 실험에서 고정할 조건을 구분할 수 있다.\n\n이 체크포인트를 통과하면 다음 단계에서는 PySDM 공식 예제 하나를 골라 입력, dynamics, products의 흐름을 해부하겠습니다. PySDM v2 논문은 패키지의 구조와 확장된 기능을 살펴볼 좋은 지도입니다 (Jong 기타 2023년)."
+  },
+  {
+    "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html#참고문헌",
+    "href": "posts/learn-pysdm/2026-07-15-first-steps/index.html#참고문헌",
+    "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
+    "section": "참고문헌",
+    "text": "참고문헌\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, 기타. 2022년. “PySDM v1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry”. Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, 와/과 Sylwester Arabas. 2023년. “PySDM v2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry”. Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintaro Kawahara. 2009년. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model”. Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441."
+  }
+]

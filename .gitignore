@@ -1,8 +1,0 @@
-/.quarto/
-/_site/
-/.cache/
-.DS_Store
-Thumbs.db
-
-
-**/*.quarto_ipynb
