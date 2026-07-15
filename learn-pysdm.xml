@@ -10,7 +10,7 @@
 <atom:link href="https://jinu219.github.io/learn-pysdm.xml" rel="self" type="application/rss+xml"/>
 <description>개념, API, 예제를 연결하는 PySDM 학습 노트</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Tue, 14 Jul 2026 15:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 15 Jul 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표</title>
   <dc:creator>Jinu </dc:creator>
@@ -132,7 +132,7 @@ Jinu. 2026. <span>“PySDM을 시작하며: 구름 미세물리 실험의 첫
   <category>cloud microphysics</category>
   <category>super-droplet method</category>
   <guid>https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/</guid>
-  <pubDate>Tue, 14 Jul 2026 15:00:00 GMT</pubDate>
+  <pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
