@@ -1,27 +1,13 @@
 [
   {
-    "listing": "/learn-pysdm.html",
+    "listing": "/index.html",
     "items": [
-      "/en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
       "/posts/learn-pysdm/2026-07-15-first-steps/index.html"
     ]
   },
   {
-    "listing": "/en/index.html",
+    "listing": "/pysdm.html",
     "items": [
-      "/en/posts/learn-pysdm/2026-07-15-first-steps/index.html"
-    ]
-  },
-  {
-    "listing": "/en/learn-pysdm.html",
-    "items": [
-      "/en/posts/learn-pysdm/2026-07-15-first-steps/index.html"
-    ]
-  },
-  {
-    "listing": "/index.html",
-    "items": [
-      "/en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
       "/posts/learn-pysdm/2026-07-15-first-steps/index.html"
     ]
   }

@@ -1,59 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jinu219.github.io/wrf.html</loc>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
+  </url>
+  <url>
     <loc>https://jinu219.github.io/projects.html</loc>
-    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/learn-pysdm.html</loc>
-    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/experiments.html</loc>
-    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/index.html</loc>
-    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/en/index.html</loc>
-    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/en/build-the-lab.html</loc>
-    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/build-the-lab.html</loc>
-    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/about.html</loc>
-    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/en/about.html</loc>
-    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/en/experiments.html</loc>
-    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/en/learn-pysdm.html</loc>
-    <lastmod>2026-07-15T03:23:33.631Z</lastmod>
-  </url>
-  <url>
-    <loc>https://jinu219.github.io/en/projects.html</loc>
-    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
   </url>
   <url>
     <loc>https://jinu219.github.io/index.html</loc>
-    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/wrf.html</loc>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/projects.html</loc>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/index.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/build-the-lab.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/about.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/article-review.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/about.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/build-the-lab.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/article-review.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/experiments.html</loc>
+    <lastmod>2026-07-15T03:41:03.126Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/posts/learn-pysdm/2026-07-15-first-steps/index.html</loc>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/en/pysdm.html</loc>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/experiments.html</loc>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
   </url>
   <url>
     <loc>https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/index.html</loc>
-    <lastmod>2026-07-15T03:23:33.632Z</lastmod>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
+  </url>
+  <url>
+    <loc>https://jinu219.github.io/pysdm.html</loc>
+    <lastmod>2026-07-15T03:41:03.127Z</lastmod>
   </url>
 </urlset>

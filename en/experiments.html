@@ -8,7 +8,7 @@
 
 <meta name="description" content="Experimental notes that connect hypotheses, settings, results, and interpretation">
 
-<title>Experiments – PySDM Seeding Lab</title>
+<title>Experiments – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -44,9 +44,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-900a572c9452982c5b309ba5cc9161f8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-532d5fc7c54e1c72c9cdb90174b40430.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-d69f67862192a1c0d432b91fe1e13cb2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-5c584a9634f7f0428d8d3186e6c108e8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-d69f67862192a1c0d432b91fe1e13cb2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -76,10 +76,10 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<meta property="og:title" content="Experiments – PySDM Seeding Lab">
+<meta property="og:title" content="Experiments – Jinu’s Cloud Seeding Blog">
 <meta property="og:description" content="Experimental notes that connect hypotheses, settings, results, and interpretation">
-<meta property="og:site_name" content="PySDM Seeding Lab">
-<meta name="twitter:title" content="Experiments – PySDM Seeding Lab">
+<meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
+<meta name="twitter:title" content="Experiments – Jinu’s Cloud Seeding Blog">
 <meta name="twitter:description" content="Experimental notes that connect hypotheses, settings, results, and interpretation">
 <meta name="twitter:card" content="summary">
 </head>
@@ -254,7 +254,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">PySDM Seeding Lab</span>
+    <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -264,28 +264,16 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">홈</span></a>
+    <a class="nav-link" href="../pysdm.html"> 
+<span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../learn-pysdm.html"> 
-<span class="menu-text">Learn PySDM</span></a>
+    <a class="nav-link" href="../wrf.html"> 
+<span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../build-the-lab.html"> 
-<span class="menu-text">Build the Lab</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../experiments.html"> 
-<span class="menu-text">Experiments</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../projects.html"> 
-<span class="menu-text">프로젝트</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
-<span class="menu-text">소개</span></a>
+    <a class="nav-link" href="../article-review.html"> 
+<span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
@@ -355,7 +343,7 @@ ul.task-list li input[type="checkbox"] {
     const switchLink =
       document.querySelector('a[aria-label="Switch language"]') ||
       [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
-        ["EN", "한국어"].includes(link.textContent.trim())
+        ["EN", "KO"].includes(link.textContent.trim())
       );
 
     if (switchLink) {
@@ -367,7 +355,7 @@ ul.task-list li input[type="checkbox"] {
         : path.replace(/^\/en/, "");
       const label = switchLink.querySelector(".menu-text") || switchLink;
 
-      label.textContent = isEnglish ? "한국어" : "EN";
+      label.textContent = isEnglish ? "KO" : "EN";
       switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
       switchLink.setAttribute(
         "aria-label",
@@ -383,12 +371,9 @@ ul.task-list li input[type="checkbox"] {
     if (brand) brand.href = "/en/";
 
     const menu = [
-      ["홈", "Home", "/en/"],
-      ["Learn PySDM", "Learn PySDM", "/en/learn-pysdm.html"],
-      ["Build the Lab", "Build the Lab", "/en/build-the-lab.html"],
-      ["Experiments", "Experiments", "/en/experiments.html"],
-      ["프로젝트", "Projects", "/en/projects.html"],
-      ["소개", "About", "/en/about.html"]
+      ["PySDM", "PySDM", "/en/pysdm.html"],
+      ["WRF", "WRF", "/en/wrf.html"],
+      ["Article Review", "Article Review", "/en/article-review.html"]
     ];
 
     document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
@@ -406,7 +391,11 @@ ul.task-list li input[type="checkbox"] {
     });
 
     document.querySelectorAll(".nav-footer a").forEach((link) => {
-      if (link.textContent.trim() === "RSS") link.href = "/en/index.xml";
+      if (link.textContent.trim() === "소개") {
+        link.textContent = "About";
+        link.href = "/en/about.html";
+      }
+      if (link.textContent.trim() === "RSS") link.href = "/index.xml";
     });
   };
 
@@ -834,13 +823,18 @@ ul.task-list li input[type="checkbox"] {
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© 2026 Jinu. Notes from the PySDM Seeding Lab.</p>
+<p>© 2026 Jinu. Cloud seeding research notes.</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
     <div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/experiments.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../about.html">
+<p>소개</p>
+</a>
+  </li>  
     <li class="nav-item">
     <a class="nav-link" href="../index.xml">
 <p>RSS</p>

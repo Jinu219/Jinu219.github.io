@@ -1,5 +1,12 @@
 [
   {
+    "objectID": "wrf.html",
+    "href": "wrf.html",
+    "title": "WRF",
+    "section": "",
+    "text": "WRF의 기상장, 물리 모수화, 초기·경계 조건이 구름과 강수 모의에 어떤 영향을 주는지 살펴봅니다. 사례 선정부터 민감도 실험, 결과 해석까지 다시 실행할 수 있는 흐름으로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n첫 WRF 구축 및 사례 실험 노트를 준비하고 있습니다."
+  },
+  {
     "objectID": "projects.html",
     "href": "projects.html",
     "title": "프로젝트",
@@ -14,18 +21,144 @@
     "text": "구름 미세물리와 seeding 문제를 PySDM 기반 수치 실험으로 탐색하는 연구 프로젝트입니다.\n\n\n\n\n\n\n\n\n영역\n이 블로그\n코드 저장소\n\n\n\n\n역할\n질문, 배경, 실험 해석, 그림\n실행 코드, 설정, 테스트, 원자료 처리\n\n\n변경 단위\n한 편의 연구 노트\n재현 가능한 실행 단위\n\n\n연결 방식\n실행 버전과 결과 링크 기록\n관련 블로그 글 링크 기록\n\n\n\nPySDM-Seeding-Lab 저장소 열기"
   },
   {
-    "objectID": "learn-pysdm.html",
-    "href": "learn-pysdm.html",
-    "title": "Learn PySDM",
-    "section": "",
-    "text": "PySDM을 처음 만나는 순간부터 문헌 속 실험을 읽을 수 있을 때까지의 학습 경로입니다. 각 글은 하나의 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\n\n\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
+    "objectID": "index.html#세-개의-연구-트랙",
+    "href": "index.html#세-개의-연구-트랙",
+    "title": "Jinu’s Cloud Seeding Blog",
+    "section": "세 개의 연구 트랙",
+    "text": "세 개의 연구 트랙\n\n\n\n01\n\n\nPySDM\nSuper-Droplet Method부터 입자 기반 구름 미세물리 실험까지, 코드와 물리 가정을 함께 해석합니다.\nPySDM 노트 보기\n\n\n\n\n02\n\n\nWRF\n중규모 기상장과 구름 과정을 연결하고, WRF 기반 수치 실험의 설정과 결과를 재현 가능한 형태로 남깁니다.\nWRF 노트 보기\n\n\n\n\n03\n\n\nArticle Review\n구름 씨뿌리기와 구름 미세물리 논문의 질문, 방법, 가정과 한계를 실험 관점에서 정리합니다.\n논문 리뷰 보기"
   },
   {
-    "objectID": "experiments.html",
-    "href": "experiments.html",
+    "objectID": "index.html#최근-글",
+    "href": "index.html#최근-글",
+    "title": "Jinu’s Cloud Seeding Blog",
+    "section": "최근 글",
+    "text": "최근 글"
+  },
+  {
+    "objectID": "en/wrf.html",
+    "href": "en/wrf.html",
+    "title": "WRF",
+    "section": "",
+    "text": "This section examines how WRF weather fields, physics parameterizations, and initial and boundary conditions affect simulations of clouds and precipitation. Case selection, sensitivity experiments, and interpretation will be documented as reproducible workflows.\n\n\n\n\n\n\nNote\n\n\n\nThe first WRF setup and case-study note is in preparation."
+  },
+  {
+    "objectID": "en/projects.html",
+    "href": "en/projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
+  },
+  {
+    "objectID": "en/projects.html#pysdm-seeding-lab",
+    "href": "en/projects.html#pysdm-seeding-lab",
+    "title": "Projects",
+    "section": "",
+    "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
+  },
+  {
+    "objectID": "en/index.html#three-research-tracks",
+    "href": "en/index.html#three-research-tracks",
+    "title": "Jinu’s Cloud Seeding Blog",
+    "section": "Three research tracks",
+    "text": "Three research tracks\n\n\n\n01\n\n\nPySDM\nConnect the Super-Droplet Method, particle-based cloud microphysics, code, and physical assumptions.\nBrowse PySDM notes\n\n\n\n\n02\n\n\nWRF\nConnect mesoscale weather fields with cloud processes and document reproducible WRF configurations and results.\nBrowse WRF notes\n\n\n\n\n03\n\n\nArticle Review\nRead the questions, methods, assumptions, and limitations of cloud-seeding literature from an experimental perspective.\nBrowse article reviews"
+  },
+  {
+    "objectID": "en/index.html#recent-notes",
+    "href": "en/index.html#recent-notes",
+    "title": "Jinu’s Cloud Seeding Blog",
+    "section": "Recent notes",
+    "text": "Recent notes\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
+  },
+  {
+    "objectID": "en/build-the-lab.html",
+    "href": "en/build-the-lab.html",
+    "title": "Build the Lab",
+    "section": "",
+    "text": "Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.\n\n\n\n\n\n\nNote\n\n\n\nThe implementation code for this track is connected to the PySDM-Seeding-Lab repository.\n\n\nThe first build note is in preparation."
+  },
+  {
+    "objectID": "en/about.html",
+    "href": "en/about.html",
+    "title": "About",
+    "section": "",
+    "text": "Jinu’s Cloud Seeding Blog is an open research notebook for learning and designing cloud-seeding research. It connects particle-based cloud microphysics with PySDM, mesoscale weather simulations with WRF, and reviews of the relevant literature in one research workflow.\nRather than presenting only finished conclusions, it records:\n\nthe physical question that started each experiment,\nthe assumptions and settings used,\nhow the code and results can be reproduced, and\nwhat was learned when results differed from expectations."
+  },
+  {
+    "objectID": "en/about.html#what-does-this-site-document",
+    "href": "en/about.html#what-does-this-site-document",
+    "title": "About",
+    "section": "",
+    "text": "Jinu’s Cloud Seeding Blog is an open research notebook for learning and designing cloud-seeding research. It connects particle-based cloud microphysics with PySDM, mesoscale weather simulations with WRF, and reviews of the relevant literature in one research workflow.\nRather than presenting only finished conclusions, it records:\n\nthe physical question that started each experiment,\nthe assumptions and settings used,\nhow the code and results can be reproduced, and\nwhat was learned when results differed from expectations."
+  },
+  {
+    "objectID": "en/about.html#how-the-notes-are-organized",
+    "href": "en/about.html#how-the-notes-are-organized",
+    "title": "About",
+    "section": "How the notes are organized",
+    "text": "How the notes are organized\nPySDM covers particle-based microphysics and experiments, WRF covers weather fields and case simulations, and Article Review examines research questions and methods. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository."
+  },
+  {
+    "objectID": "en/about.html#links",
+    "href": "en/about.html#links",
+    "title": "About",
+    "section": "Links",
+    "text": "Links\n\nGitHub · Jinu219\nOfficial PySDM repository\nOfficial PySDM documentation"
+  },
+  {
+    "objectID": "article-review.html",
+    "href": "article-review.html",
+    "title": "Article Review",
+    "section": "",
+    "text": "논문의 결론만 요약하지 않고, 연구 질문과 방법, 핵심 가정, 사용한 관측·모델 자료, 재현 가능한 부분과 남은 한계를 구분해 읽습니다. 리뷰에서 발견한 아이디어는 PySDM 또는 WRF 실험으로 다시 연결합니다.\n\n\n\n\n\n\n노트\n\n\n\n첫 번째 논문 리뷰를 준비하고 있습니다."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "소개",
+    "section": "",
+    "text": "Jinu’s Cloud Seeding Blog는 구름 씨뿌리기 연구를 배우고 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다. PySDM의 입자 기반 구름 미세물리, WRF의 중규모 기상 모의, 관련 논문 리뷰를 하나의 연구 흐름으로 연결합니다.\n완성된 결론만 전시하기보다 다음을 함께 남깁니다.\n\n어떤 물리 질문에서 실험이 시작됐는지\n어떤 가정과 설정을 사용했는지\n코드와 결과를 어떻게 다시 만들 수 있는지\n결과가 예상과 달랐을 때 무엇을 배웠는지"
+  },
+  {
+    "objectID": "about.html#이곳은-무엇을-기록하나요",
+    "href": "about.html#이곳은-무엇을-기록하나요",
+    "title": "소개",
+    "section": "",
+    "text": "Jinu’s Cloud Seeding Blog는 구름 씨뿌리기 연구를 배우고 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다. PySDM의 입자 기반 구름 미세물리, WRF의 중규모 기상 모의, 관련 논문 리뷰를 하나의 연구 흐름으로 연결합니다.\n완성된 결론만 전시하기보다 다음을 함께 남깁니다.\n\n어떤 물리 질문에서 실험이 시작됐는지\n어떤 가정과 설정을 사용했는지\n코드와 결과를 어떻게 다시 만들 수 있는지\n결과가 예상과 달랐을 때 무엇을 배웠는지"
+  },
+  {
+    "objectID": "about.html#글의-구성",
+    "href": "about.html#글의-구성",
+    "title": "소개",
+    "section": "글의 구성",
+    "text": "글의 구성\nPySDM은 입자 기반 미세물리와 실험을, WRF는 기상장과 사례 모의를, Article Review는 연구 질문과 방법을 다룹니다. 논문과 소프트웨어는 인용으로 연결하고, 실험 코드는 별도 저장소의 고정된 버전으로 연결합니다."
+  },
+  {
+    "objectID": "about.html#연결",
+    "href": "about.html#연결",
+    "title": "소개",
+    "section": "연결",
+    "text": "연결\n\nGitHub · Jinu219\nPySDM 공식 저장소\nPySDM 공식 문서"
+  },
+  {
+    "objectID": "build-the-lab.html",
+    "href": "build-the-lab.html",
+    "title": "Build the Lab",
+    "section": "",
+    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다."
+  },
+  {
+    "objectID": "en/article-review.html",
+    "href": "en/article-review.html",
+    "title": "Article Review",
+    "section": "",
+    "text": "Rather than summarizing conclusions alone, each review separates the research question, method, key assumptions, observations or model data, reproducible elements, and remaining limitations. Ideas found in the literature will feed back into PySDM or WRF experiments.\n\n\n\n\n\n\nNote\n\n\n\nThe first article review is in preparation."
+  },
+  {
+    "objectID": "en/experiments.html",
+    "href": "en/experiments.html",
     "title": "Experiments",
     "section": "",
-    "text": "각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.\n첫 실험 기록을 준비하고 있습니다."
+    "text": "Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.\nThe first experiment note is in preparation."
   },
   {
     "objectID": "en/posts/learn-pysdm/2026-07-15-first-steps/index.html",
@@ -70,130 +203,18 @@
     "text": "References\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, et al. 2022. “PySDM V1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry.” Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, and Sylwester Arabas. 2023. “PySDM V2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry.” Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, and Shintaro Kawahara. 2009. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model.” Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441."
   },
   {
-    "objectID": "en/index.html#three-research-tracks",
-    "href": "en/index.html#three-research-tracks",
-    "title": "PySDM Seeding Lab",
-    "section": "Three research tracks",
-    "text": "Three research tracks\n\n\n\n01\n\n\nLearn PySDM\nBuild a foundation step by step, from the Super-Droplet Method to PySDM objects and official examples.\nBrowse learning notes\n\n\n\n\n02\n\n\nBuild the Lab\nDocument environments, data, configurations, and validation rules so anyone can reproduce the same calculations.\nBrowse build notes\n\n\n\n\n03\n\n\nExperiments\nUse sensitivity studies and comparative figures to explore when and why seeding hypotheses lead to different outcomes.\nBrowse experiments"
-  },
-  {
-    "objectID": "en/index.html#recent-notes",
-    "href": "en/index.html#recent-notes",
-    "title": "PySDM Seeding Lab",
-    "section": "Recent notes",
-    "text": "Recent notes"
-  },
-  {
-    "objectID": "en/build-the-lab.html",
-    "href": "en/build-the-lab.html",
-    "title": "Build the Lab",
+    "objectID": "en/pysdm.html",
+    "href": "en/pysdm.html",
+    "title": "PySDM",
     "section": "",
-    "text": "Good numerical experiments begin with a good environment. Dependencies, input data, configuration files, automated validation, and figure generation are documented as reproducible units.\n\n\n\n\n\n\nNote\n\n\n\nThe implementation code for this track is connected to the PySDM-Seeding-Lab repository.\n\n\nThe first build note is in preparation."
+    "text": "These notes connect the Super-Droplet Method with PySDM objects, official examples, and numerical cloud-seeding experiments. Each note has one physical question, a minimal piece of code, and a checkpoint leading to the next experiment.\nThe research environment and reproduction workflow are documented in Build the Lab, with hypothesis testing collected under Experiments.\n\n\n\n2026-07-15 · Jinu\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead."
   },
   {
-    "objectID": "build-the-lab.html",
-    "href": "build-the-lab.html",
-    "title": "Build the Lab",
-    "section": "",
-    "text": "좋은 수치 실험은 좋은 환경에서 시작합니다. 의존성, 입력 자료, 설정 파일, 자동 검증과 그림 생성 과정을 재현 가능한 단위로 기록합니다.\n\n\n\n\n\n\n노트\n\n\n\n이 카테고리의 구현 코드는 PySDM-Seeding-Lab 저장소와 연결됩니다.\n\n\n첫 구축 기록을 준비하고 있습니다."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "소개",
-    "section": "",
-    "text": "PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우고, 구름 씨뿌리기와 관련된 수치 실험을 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다.\n완성된 결론만 전시하기보다 다음을 함께 남깁니다.\n\n어떤 물리 질문에서 실험이 시작됐는지\n어떤 가정과 설정을 사용했는지\n코드와 결과를 어떻게 다시 만들 수 있는지\n결과가 예상과 달랐을 때 무엇을 배웠는지"
-  },
-  {
-    "objectID": "about.html#이곳은-무엇을-기록하나요",
-    "href": "about.html#이곳은-무엇을-기록하나요",
-    "title": "소개",
-    "section": "",
-    "text": "PySDM Seeding Lab은 입자 기반 구름 미세물리 모델인 PySDM을 배우고, 구름 씨뿌리기와 관련된 수치 실험을 설계하며, 그 과정을 공개적으로 축적하는 연구 노트입니다.\n완성된 결론만 전시하기보다 다음을 함께 남깁니다.\n\n어떤 물리 질문에서 실험이 시작됐는지\n어떤 가정과 설정을 사용했는지\n코드와 결과를 어떻게 다시 만들 수 있는지\n결과가 예상과 달랐을 때 무엇을 배웠는지"
-  },
-  {
-    "objectID": "about.html#글의-구성",
-    "href": "about.html#글의-구성",
-    "title": "소개",
-    "section": "글의 구성",
-    "text": "글의 구성\nLearn PySDM은 개념과 도구를, Build the Lab은 재현 가능한 환경을, Experiments는 가설과 결과를 다룹니다. 논문과 소프트웨어는 인용으로 연결하고, 실험 코드는 별도 저장소의 고정된 버전으로 연결합니다."
-  },
-  {
-    "objectID": "about.html#연결",
-    "href": "about.html#연결",
-    "title": "소개",
-    "section": "연결",
-    "text": "연결\n\nGitHub · Jinu219\nPySDM 공식 저장소\nPySDM 공식 문서"
-  },
-  {
-    "objectID": "en/about.html",
-    "href": "en/about.html",
-    "title": "About",
-    "section": "",
-    "text": "PySDM Seeding Lab is an open research notebook for learning PySDM, a particle-based cloud microphysics model, designing numerical experiments related to cloud seeding, and documenting the process in public.\nRather than presenting only finished conclusions, it records:\n\nthe physical question that started each experiment,\nthe assumptions and settings used,\nhow the code and results can be reproduced, and\nwhat was learned when results differed from expectations."
-  },
-  {
-    "objectID": "en/about.html#what-does-this-site-document",
-    "href": "en/about.html#what-does-this-site-document",
-    "title": "About",
-    "section": "",
-    "text": "PySDM Seeding Lab is an open research notebook for learning PySDM, a particle-based cloud microphysics model, designing numerical experiments related to cloud seeding, and documenting the process in public.\nRather than presenting only finished conclusions, it records:\n\nthe physical question that started each experiment,\nthe assumptions and settings used,\nhow the code and results can be reproduced, and\nwhat was learned when results differed from expectations."
-  },
-  {
-    "objectID": "en/about.html#how-the-notes-are-organized",
-    "href": "en/about.html#how-the-notes-are-organized",
-    "title": "About",
-    "section": "How the notes are organized",
-    "text": "How the notes are organized\nLearn PySDM covers concepts and tools, Build the Lab develops reproducible environments, and Experiments connects hypotheses with results. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository."
-  },
-  {
-    "objectID": "en/about.html#links",
-    "href": "en/about.html#links",
-    "title": "About",
-    "section": "Links",
-    "text": "Links\n\nGitHub · Jinu219\nOfficial PySDM repository\nOfficial PySDM documentation"
-  },
-  {
-    "objectID": "en/experiments.html",
-    "href": "en/experiments.html",
+    "objectID": "experiments.html",
+    "href": "experiments.html",
     "title": "Experiments",
     "section": "",
-    "text": "Each experiment begins by stating its question and baseline. Changed conditions and observed metrics are documented separately, and unexpected results remain as data for the next hypothesis.\nThe first experiment note is in preparation."
-  },
-  {
-    "objectID": "en/learn-pysdm.html",
-    "href": "en/learn-pysdm.html",
-    "title": "Learn PySDM",
-    "section": "",
-    "text": "A learning path from the first encounter with PySDM to reading experiments in the literature. Each note has one question, a minimal piece of code, and a checkpoint leading to the next experiment.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nStarting with PySDM: First Coordinates for Cloud Microphysics Experiments\n\n\nIntroducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "en/projects.html",
-    "href": "en/projects.html",
-    "title": "Projects",
-    "section": "",
-    "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
-  },
-  {
-    "objectID": "en/projects.html#pysdm-seeding-lab",
-    "href": "en/projects.html#pysdm-seeding-lab",
-    "title": "Projects",
-    "section": "",
-    "text": "A research project exploring cloud microphysics and seeding problems through PySDM-based numerical experiments.\n\n\n\n\n\n\n\n\nArea\nThis blog\nCode repository\n\n\n\n\nRole\nQuestions, context, interpretation, and figures\nExecutable code, configurations, tests, and raw-data processing\n\n\nUnit of change\nOne research note\nOne reproducible run\n\n\nConnection\nRecords code versions and result links\nLinks back to related blog notes\n\n\n\nOpen the PySDM-Seeding-Lab repository"
-  },
-  {
-    "objectID": "index.html#세-개의-연구-트랙",
-    "href": "index.html#세-개의-연구-트랙",
-    "title": "PySDM Seeding Lab",
-    "section": "세 개의 연구 트랙",
-    "text": "세 개의 연구 트랙\n\n\n\n01\n\n\nLearn PySDM\nSuper-Droplet Method의 개념부터 PySDM 객체와 공식 예제 해석까지, 학습의 발판을 하나씩 만듭니다.\n학습 노트 보기\n\n\n\n\n02\n\n\nBuild the Lab\n환경, 데이터, 실험 설정과 검증 규칙을 기록해 같은 계산을 누구나 다시 실행할 수 있게 합니다.\n구축 기록 보기\n\n\n\n\n03\n\n\nExperiments\n민감도 실험과 비교 그림을 통해 seeding 가설이 언제, 왜 달라지는지 탐색합니다.\n실험 기록 보기"
-  },
-  {
-    "objectID": "index.html#최근-글",
-    "href": "index.html#최근-글",
-    "title": "PySDM Seeding Lab",
-    "section": "최근 글",
-    "text": "최근 글"
+    "text": "각 실험은 질문과 기준 실험을 먼저 밝히고, 바꾼 조건과 관측 지표를 구분해 기록합니다. 예상과 다른 결과도 다음 가설을 만드는 데이터로 남깁니다.\n첫 실험 기록을 준비하고 있습니다."
   },
   {
     "objectID": "posts/learn-pysdm/2026-07-15-first-steps/index.html",
@@ -236,5 +257,12 @@
     "title": "PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표",
     "section": "참고문헌",
     "text": "참고문헌\n\n\nBartman, Piotr, Oleg Bulenok, Tomasz Gierczak, 기타. 2022년. “PySDM v1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry”. Journal of Open Source Software 7 (72): 3219. https://doi.org/10.21105/joss.03219.\n\n\nJong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, 와/과 Sylwester Arabas. 2023년. “PySDM v2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry”. Journal of Open Source Software 8 (84): 4968. https://doi.org/10.21105/joss.04968.\n\n\nShima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintaro Kawahara. 2009년. “The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model”. Quarterly Journal of the Royal Meteorological Society 135 (642): 1307–20. https://doi.org/10.1002/qj.441."
+  },
+  {
+    "objectID": "pysdm.html",
+    "href": "pysdm.html",
+    "title": "PySDM",
+    "section": "",
+    "text": "Super-Droplet Method의 개념부터 PySDM 객체와 공식 예제, 구름 씨뿌리기 수치 실험까지 연결합니다. 각 글은 하나의 물리 질문, 최소한의 코드, 다음 실험으로 이어지는 체크포인트를 갖습니다.\n연구 환경과 재현 과정은 Build the Lab, 실제 가설 검증은 Experiments에 함께 정리합니다.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPySDM을 시작하며: 구름 미세물리 실험의 첫 좌표\n\n\nSuper-Droplet Method와 PySDM의 역할을 짚고, 앞으로의 학습·실험 경로를 설계합니다.\n\n\n\n\n\n2026-07-15\n\n\nJinu\n\n\n\n\n\n일치 없음"
   }
 ]
