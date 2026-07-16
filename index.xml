@@ -10,7 +10,335 @@
 <atom:link href="https://jinu219.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>PySDM, WRF, 논문 리뷰로 이어가는 구름 씨뿌리기 연구 기록</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Wed, 15 Jul 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 16 Jul 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>비를 만드는 실험을 검증하고, 서버가 밤새 일하게 하기</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/build-the-lab/2026-07-16-rain-server-execution/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html">이전 개발</a>은 진단값의 출처, 물수지, wet-radius spectrum, 수치 수렴성과 재현 보고서를 연결했다. 하지만 당시 qualification은 collision OFF였고 rain 관련 값이 0이었다. “결과를 믿을 수 있는 코드”를 만들었지만, 정작 <strong>비를 만드는 collision-ON 조건에서 무엇을 믿을 수 있는지</strong>는 아직 답하지 못했다.</p>
+<p>2026년 7월 16일 병합한 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/4">PySDM-Seeding-Lab PR #4</a>는 이 빈칸을 채우는 동시에, 수십 분에서 수시간 걸리는 실험을 연구실 Linux 서버에서 지속적으로 실행할 수 있게 만든다. 7개 커밋, 42개 변경 파일, 4,808줄 추가와 141줄 삭제를 통해 qualification, ensemble resource control, background job, multi-core sweep을 하나의 운영 흐름으로 연결했다.</p>
+<div class="review-verdict">
+<p><strong>이번 개발의 핵심.</strong> “모델이 비를 만들었다”와 “시딩 효과의 크기를 믿을 수 있다”를 분리했다. 전자는 시험한 조건에서 지지됐지만 후자는 아직 지지되지 않았다. 그 경계를 숨기지 않은 채, 더 큰 실험을 안전하게 실행할 서버 기반을 만들었다.</p>
+</div>
+<section id="개-조합을-돌리지-않고도-같은-수렴-질문에-답하기" class="level2">
+<h2 class="anchored" data-anchor-id="개-조합을-돌리지-않고도-같은-수렴-질문에-답하기">27개 조합을 돌리지 않고도 같은 수렴 질문에 답하기</h2>
+<p>기존 수렴성 격자는 timestep, background super-droplet, seeding super-droplet의 3축 Cartesian product였다. 세 수준씩 조합하면 27개 case, control–seeding을 합쳐 54회 PySDM 실행이 필요하다. 하지만 수렴성 판정에 실제로 필요한 비교는 각 축을 하나씩 바꾸고 나머지를 finest reference에 고정한 경우뿐이다.</p>
+<p>새 <code>one_factor_at_reference</code> 설계는 다음만 실행한다.</p>
+<pre class="text"><code>1 finest reference
++ 2 lower timestep levels
++ 2 lower seeding-super-droplet levels
++ 2 lower background-super-droplet levels
+= 7 cases / 14 control–seeding executions</code></pre>
+<p>필요한 next-finest 비교를 하나도 제거하지 않으면서 27개 case를 7개로 줄였다. 계산량을 줄인 것이 목적이 아니라, <strong>수렴성 질문에 기여하지 않는 조합을 실행 계획에서 제거한 것</strong>이다.</p>
+<p><code>rain_standard</code>는 5초 timestep, background와 seeding super-droplet 각각 400개를 finest reference로 사용했다. Collision과 condensation은 ON, sedimentation은 OFF다. 7개 case와 14회 실제 PySDM 실행이 모두 성공했고 wall time은 699초였다.</p>
+</section>
+<section id="비는-만들어졌지만-시딩-효과는-수렴하지-않았다" class="level2">
+<h2 class="anchored" data-anchor-id="비는-만들어졌지만-시딩-효과는-수렴하지-않았다">비는 만들어졌지만, 시딩 효과는 수렴하지 않았다</h2>
+<p>Finest reference는 rain-signal gate를 충분히 넘었다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Signal</th>
+<th style="text-align: right;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Control final/max rain water</td>
+<td style="text-align: right;">0.002558 kg/kg</td>
+</tr>
+<tr class="even">
+<td>Seeding final/max rain water</td>
+<td style="text-align: right;">0.002634 kg/kg</td>
+</tr>
+<tr class="odd">
+<td>Control rain onset</td>
+<td style="text-align: right;">355 s</td>
+</tr>
+<tr class="even">
+<td>Seeding rain onset</td>
+<td style="text-align: right;">395 s</td>
+</tr>
+<tr class="odd">
+<td>Final seeding − control</td>
+<td style="text-align: right;">+0.0000763 kg/kg (+2.98%)</td>
+</tr>
+</tbody>
+</table>
+<p>표만 보면 시딩 case의 최종 rain water가 2.98% 많다. 그러나 이 숫자를 곧바로 “시딩 효과”라고 부르면 안 된다. 해상도를 바꿔 수렴성을 확인하자 절대 상태와 두 상태의 차이가 전혀 다른 결과를 보였다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric family</th>
+<th style="text-align: right;">5% 이내</th>
+<th style="text-align: right;">최대 오차</th>
+<th>판정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Control/seeding 절대 rain state</td>
+<td style="text-align: right;">12 / 12</td>
+<td style="text-align: right;">3.285%</td>
+<td>시험 profile에서 지지</td>
+</tr>
+<tr class="even">
+<td>Seeding-minus-control response</td>
+<td style="text-align: right;">2 / 21</td>
+<td style="text-align: right;">4613.006%</td>
+<td>지지되지 않음</td>
+</tr>
+</tbody>
+</table>
+<p>Control과 seeding rain state는 각각 안정적이어도, 서로 가까운 두 값을 뺀 작은 차이는 timestep과 입자 해상도에 훨씬 민감할 수 있다. 따라서 이 결과가 지지하는 것은 <strong>collision-ON parcel에서 rain water가 생성되고 절대 상태가 5% 기준 안에서 수렴한다는 것</strong>이다. 시딩 enhancement, onset shift, cloud-to-rain conversion delta의 정량값은 아직 지지하지 않는다.</p>
+<p>Sedimentation도 연결되지 않았으므로 이 rain water는 parcel 내부 미세물리 결과이지 지표 강수량이나 누적 강수량이 아니다.</p>
+</section>
+<section id="random-seed를-평균내기-전에-같은-seed끼리-비교하기" class="level2">
+<h2 class="anchored" data-anchor-id="random-seed를-평균내기-전에-같은-seed끼리-비교하기">Random seed를 평균내기 전에 같은 seed끼리 비교하기</h2>
+<p>한 random seed의 실패가 수치 해상도 때문인지 stochastic collision sampling 때문인지 구분하려면, 서로 다른 해상도에서 <strong>같은 seed</strong>를 짝지어 비교해야 한다.</p>
+<p><code>rain_response_pilot</code>은 reference를 5초, background/seeding super-droplet 각각 800개로 높이고 공통 seed 3개를 사용했다. 4개 case × 3개 seed의 12개 pair, control–seeding 24회 실행이 모두 성공했으며 wall time은 956.4초였다.</p>
+<pre class="text"><code>paired_seed_metrics.csv
+case × seed coverage
+per-seed rain-signal gate
+per-seed convergence evidence</code></pre>
+<p>서로 다른 seed의 결과를 비교하거나 case mean으로 빈 pair를 대신하지 않는다. Random seed가 평균 뒤에 숨는 보조 설정이 아니라 수렴성 판정의 명시적 조건이 됐다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Metric family</th>
+<th style="text-align: right;">5% 이내</th>
+<th style="text-align: right;">중앙값 오차</th>
+<th style="text-align: right;">최대 오차</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>절대 rain state</td>
+<td style="text-align: right;">36 / 36</td>
+<td style="text-align: right;">0.689%</td>
+<td style="text-align: right;">2.366%</td>
+</tr>
+<tr class="even">
+<td>Seeding response</td>
+<td style="text-align: right;">4 / 63</td>
+<td style="text-align: right;">39.093%</td>
+<td style="text-align: right;">526.314%</td>
+</tr>
+</tbody>
+</table>
+<p>세 seed 모두 독립적으로 quantitative response support를 거부했다. Reference를 400개에서 800개로 높이면서 최악의 response error는 4613%에서 526%로 줄었지만, 수렴했다고 볼 수준은 아니었다. 가장 민감한 축은 background super-droplet 수였고, 그다음은 timestep과 seeding super-droplet 수였다.</p>
+<p>여기서 중요한 결정은 더 큰 <code>rain_response_standard</code>를 즉시 실행하지 않은 것이다. 2.5초, 1,600 super-droplet, 5개 seed 계획은 control–seeding 70회 실행을 요구한다. Resource benchmark 없이 “더 촘촘하면 되겠지”라고 서버에 던지지 않고, 먼저 메모리 소유권과 실행 격리를 확인했다.</p>
+</section>
+<section id="gc.collect가-메모리를-돌려주지-못한-이유" class="level2">
+<h2 class="anchored" data-anchor-id="gc.collect가-메모리를-돌려주지-못한-이유"><code>gc.collect()</code>가 메모리를 돌려주지 못한 이유</h2>
+<p>이전 24-member benchmark는 반복 실행 뒤 RSS가 남고, streaming aggregation의 메모리 증가는 0.27 MiB에 불과하다는 것을 보여줬다. PR #4는 12개 실제 PySDM member의 matched A/B로 explicit garbage collection을 시험했다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Measurement</th>
+<th style="text-align: right;">Baseline</th>
+<th style="text-align: right;">Member마다 explicit GC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Wall time</td>
+<td style="text-align: right;">475.329 s</td>
+<td style="text-align: right;">493.260 s</td>
+</tr>
+<tr class="even">
+<td>Peak RSS increase</td>
+<td style="text-align: right;">878.137 MiB</td>
+<td style="text-align: right;">880.859 MiB</td>
+</tr>
+<tr class="odd">
+<td>First-to-last retained RSS</td>
+<td style="text-align: right;">252.883 MiB</td>
+<td style="text-align: right;">256.715 MiB</td>
+</tr>
+<tr class="even">
+<td>RSS slope</td>
+<td style="text-align: right;">23.461 MiB/member</td>
+<td style="text-align: right;">24.472 MiB/member</td>
+</tr>
+</tbody>
+</table>
+<p>GC는 Python object를 실제로 회수했고 각 collection 직후 일시적인 RSS 감소도 만들었다. 하지만 peak와 member-to-member retained RSS는 줄이지 못했고 실행만 3.772% 느려졌다. 열려 있는 Matplotlib figure 누적도 없었다.</p>
+<p>따라서 <code>collect_garbage_between_members</code> 기본값은 <code>false</code>로 유지했다. 문제를 Python cyclic garbage로 단정하지 않고, PySDM/Numba/backend allocator의 <strong>process lifetime</strong>을 다음 가설로 삼았다.</p>
+</section>
+<section id="process-isolation은-메모리를-반환하지만-공짜가-아니다" class="level2">
+<h2 class="anchored" data-anchor-id="process-isolation은-메모리를-반환하지만-공짜가-아니다">Process isolation은 메모리를 반환하지만 공짜가 아니다</h2>
+<p>새 <code>subprocess</code> backend는 ensemble member마다 fresh Python process를 사용한다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ensemble</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span></span>
+<span id="cb3-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">execution_backend</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> subprocess</span></span></code></pre></div></div>
+<p>각 child의 config, return code, elapsed time, stdout/stderr, exception, process-tree peak RSS, result directory를 보존한다. 실패한 child도 증거를 남긴다.</p>
+<p>3-member matched A/B에서 in-process와 subprocess 모두 성공했다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Measurement</th>
+<th style="text-align: right;">In-process</th>
+<th style="text-align: right;">Subprocess</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Wall time</td>
+<td style="text-align: right;">248.725 s</td>
+<td style="text-align: right;">530.714 s</td>
+</tr>
+<tr class="even">
+<td>Process-tree peak RSS increase</td>
+<td style="text-align: right;">879.238 MiB</td>
+<td style="text-align: right;">998.867 MiB</td>
+</tr>
+<tr class="odd">
+<td>First-to-last parent RSS retention</td>
+<td style="text-align: right;">37.797 MiB</td>
+<td style="text-align: right;">0.125 MiB</td>
+</tr>
+</tbody>
+</table>
+<p>Process가 끝나자 cross-member parent RSS는 99.669% 감소했다. 남던 메모리의 상당 부분이 Python GC가 아니라 process-lifetime backend 상태라는 가설을 지지한다.</p>
+<p>하지만 interpreter와 JIT startup을 member마다 반복해 wall time이 113.374% 늘었고 instantaneous peak도 13.606% 나빠졌다. Subprocess를 “빠른 모드”나 “peak-memory 절약 모드”라고 부를 수 없다. 기본은 <code>in_process</code>, parent retention이 장시간 ensemble의 한계가 될 때만 opt-in으로 사용한다.</p>
+</section>
+<section id="브라우저를-닫아도-실험이-계속되게-만들기" class="level2">
+<h2 class="anchored" data-anchor-id="브라우저를-닫아도-실험이-계속되게-만들기">브라우저를 닫아도 실험이 계속되게 만들기</h2>
+<p>수시간 실험을 Streamlit 버튼을 누른 브라우저 session에 묶어둘 수 없다. PR #4는 Run page가 실험을 detached worker로 제출하도록 했다.</p>
+<p>각 job은 <code>.runtime/jobs/</code> 아래에 다음을 저장한다.</p>
+<ul>
+<li>immutable YAML snapshot</li>
+<li>job ID와 PID</li>
+<li><code>queued / running / succeeded / failed</code> 상태</li>
+<li>현재 stage와 완료/전체 model-run 수</li>
+<li>worker log와 error</li>
+<li>최종 result directory</li>
+</ul>
+<p>브라우저를 새로고침하거나 연결을 끊어도 worker는 계속 실행된다. 새 <strong>Server Jobs</strong> page에서 최근 job, PID, 진행률, worker count, log와 실패 증거를 다시 확인할 수 있다.</p>
+<p>Linux 서버의 Streamlit 자체는 <code>nohup</code> 기반 <code>server_web.sh</code>로 관리한다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bash</span> scripts/server_web.sh start</span>
+<span id="cb4-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bash</span> scripts/server_web.sh status</span>
+<span id="cb4-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bash</span> scripts/server_web.sh stop</span>
+<span id="cb4-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bash</span> scripts/server_web.sh restart</span></code></pre></div></div>
+<p>기본 bind는 <code>127.0.0.1:8501</code>이고 SSH tunnel 사용을 안내한다. 인증되지 않은 Streamlit port를 외부 네트워크에 바로 노출하지 않는 것이 기본값이다. Web service를 재시작해도 이미 제출한 simulation worker는 별도 process로 남는다.</p>
+</section>
+<section id="cpu-core-수보다-메모리-예산을-먼저-보기" class="level2">
+<h2 class="anchored" data-anchor-id="cpu-core-수보다-메모리-예산을-먼저-보기">CPU core 수보다 메모리 예산을 먼저 보기</h2>
+<p>Independent sweep case는 spawn-based process pool로 분산할 수 있다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">execution</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span></span>
+<span id="cb5-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">  </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">max_workers</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span></span></code></pre></div></div>
+<p>실제 worker 수는 <code>min(max_workers, sweep case 수)</code>다. 한 case 안의 ensemble member는 순차 실행해 nested oversubscription을 막고, 결과 ordering과 partial/failed evidence는 그대로 보존한다.</p>
+<p>Marine OFAT showcase는 10 case이므로 <code>max_workers: 20</code>을 써도 10개보다 많이 병렬화되지 않는다. Process-isolation benchmark의 한 child peak가 약 1.03 GiB였기 때문에 4 worker부터 시작해 <code>htop</code>, <code>free -h</code>와 resource evidence를 보고 8, 10으로 올리는 rollout을 권장한다. 20 worker는 OS와 app overhead를 제외하고도 20 GiB 이상 여유가 있는 서버에서만 검토한다. 프로젝트 전체 기본값은 안전하게 1이다.</p>
+<p>동시에 끝나는 worker들이 timing history를 덮어쓰지 않도록 inter-process lock, stale-lock recovery, timeout, per-process temporary file과 atomic <code>os.replace()</code>도 추가했다. 보조 timing history를 기록하지 못해도 scientific simulation 자체는 실패시키지 않는다.</p>
+</section>
+<section id="실제로-돌릴-수-있는-marine-ofat-showcase" class="level2">
+<h2 class="anchored" data-anchor-id="실제로-돌릴-수-있는-marine-ofat-showcase">실제로 돌릴 수 있는 Marine OFAT showcase</h2>
+<p><code>marine_showcase_ofat_v1.yaml</code>은 지금까지 만든 흐름을 collision-ON rain-producing 조건에서 시연한다.</p>
+<pre class="text"><code>10 one-factor-at-reference cases
+× 3 common random seeds
+× control / seeding
+= 60 physical PySDM executions</code></pre>
+<p>Dry radius, κ, number concentration, injection start time, collision OFF/ON을 바꾸며 5초 timestep과 background/seeding super-droplet 800개를 사용한다. 이 scenario는 <strong>exploratory physical sensitivity</strong>를 위한 것이다. 현재 qualification은 절대 parcel rain state를 지지하지만 seeding-minus-control response의 정량 수렴은 지지하지 않으므로, dashboard와 report에도 그 경계를 함께 표시한다.</p>
+</section>
+<section id="dashboard가-통과-하나로-뭉개지-않게-하기" class="level2">
+<h2 class="anchored" data-anchor-id="dashboard가-통과-하나로-뭉개지-않게-하기">Dashboard가 “통과” 하나로 뭉개지 않게 하기</h2>
+<p>Results Dashboard와 portable report는 이제 다음을 분리해 보여준다.</p>
+<ul>
+<li>absolute-state와 seeding-response qualification family</li>
+<li>physical rain-signal gate</li>
+<li>paired common-seed table과 case-seed coverage</li>
+<li>member execution backend와 child peak RSS</li>
+<li>member-boundary RSS/USS trend와 raw checkpoint</li>
+<li>subprocess failure evidence</li>
+</ul>
+<p>절대 상태가 통과했다고 전체 experiment를 초록색 하나로 표시하지 않는다. 무엇이 supported이고 무엇이 <code>not_supported_for_profile</code>인지 metric family별로 남긴다.</p>
+</section>
+<section id="검증과-아직-남은-한-단계" class="level2">
+<h2 class="anchored" data-anchor-id="검증과-아직-남은-한-단계">검증과 아직 남은 한 단계</h2>
+<p>최종 검증에서는 37개 unit/integration test가 통과했다. 실제 PySDM native-product, control–seeding runner, detached background process, two-worker parallel sweep, failed subprocess member, legacy migration, portable path budget, 주요 Streamlit AppTest와 Results Dashboard가 포함된다.</p>
+<p>아직 남은 운영 검증은 <strong>실제 Linux 연구실 서버 smoke test</strong>다. 또한 현재 증거가 지지하지 않는 항목도 명확하다.</p>
+<ul>
+<li>정량적으로 수렴한 seeding enhancement와 rain-onset shift</li>
+<li>정량적으로 수렴한 cloud-to-rain conversion response</li>
+<li>지표 강수량과 누적 강수량</li>
+<li>subprocess를 속도 또는 instantaneous peak 최적화로 해석하는 것</li>
+<li>resource benchmark 없이 70-execution 고해상도 plan을 실행하는 것</li>
+</ul>
+<p>PR #3가 결과마다 출처와 품질 범위를 붙였다면, PR #4는 그 원칙을 실제 rain-producing 조건과 서버 운영에 적용했다. 가장 중요한 결과는 +2.98%라는 숫자가 아니라, <strong>그 숫자를 아직 정량 주장으로 사용하면 안 된다는 사실을 자동으로 증명하고 보존한 것</strong>이다.</p>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
+<ul>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/4">Pull Request #4</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/RAIN_QUALIFICATION_20260715.md">Collision-ON rain qualification evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/RAIN_RESPONSE_COMMON_SEED_20260715.md">Common-seed response evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/ENSEMBLE_MEMORY_OWNERSHIP_20260715.md">Ensemble memory ownership evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/ENSEMBLE_EXECUTION_BACKEND_AB_20260715.md">Execution backend A/B evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/SERVER_DEPLOYMENT.md">Lab server deployment guide</a></li>
+<li><a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html">이전 개발일지: 결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로</a></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <category>Build the Lab</category>
+  <category>PySDM</category>
+  <category>numerical qualification</category>
+  <category>lab server</category>
+  <guid>https://jinu219.github.io/posts/build-the-lab/2026-07-16-rain-server-execution/</guid>
+  <pubDate>Thu, 16 Jul 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기</title>
   <dc:creator>Jinu </dc:creator>

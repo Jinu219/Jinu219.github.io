@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jinu">
-<meta name="dcterms.date" content="2026-07-14">
-<meta name="description" content="Native 진단값, 수치 수렴성, 물수지, 스펙트럼 전이와 재현 보고서를 연결해 PySDM Seeding Lab을 연구 도구로 발전시킨 기록입니다.">
+<meta name="dcterms.date" content="2026-07-16">
+<meta name="description" content="Connecting collision-ON qualification, common-seed ensembles, process isolation, detached jobs, and bounded parallel execution in PySDM Seeding Lab PR #4.">
 
-<title>결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로 – Jinu’s Cloud Seeding Blog</title>
+<title>Qualifying Rain-Producing Experiments and Letting the Server Work Overnight – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -26,29 +26,64 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../../">
-<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../site_libs/bootstrap/bootstrap-3cbdc6b527877d228325cea798a6bcc7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../site_libs/bootstrap/bootstrap-dark-c7ed5aaebdc5f6a7f17f683e93303918.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../site_libs/bootstrap/bootstrap-3cbdc6b527877d228325cea798a6bcc7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-de927ec96a2411cf822331f71755f83e.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-4a0610749eeff5ab924a4729b5181608.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-3cbdc6b527877d228325cea798a6bcc7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-c7ed5aaebdc5f6a7f17f683e93303918.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-3cbdc6b527877d228325cea798a6bcc7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -62,56 +97,27 @@ ul.task-list li input[type="checkbox"] {
     "s"
   ],
   "language": {
-    "search-no-results-text": "일치 없음",
-    "search-matching-documents-text": "일치된 문서",
-    "search-copy-link-title": "검색 링크 복사",
-    "search-hide-matches-text": "추가 검색 결과 숨기기",
-    "search-more-match-text": "추가 검색결과",
-    "search-more-matches-text": "추가 검색결과",
-    "search-clear-button-title": "제거",
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "취소",
-    "search-submit-button-title": "검색",
-    "search-label": "검색"
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로 – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="Native 진단값, 수치 수렴성, 물수지, 스펙트럼 전이와 재현 보고서를 연결해 PySDM Seeding Lab을 연구 도구로 발전시킨 기록입니다.">
+<meta property="og:title" content="Qualifying Rain-Producing Experiments and Letting the Server Work Overnight – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Connecting collision-ON qualification, common-seed ensembles, process isolation, detached jobs, and bounded parallel execution in PySDM Seeding Lab PR #4.">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로 – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="Native 진단값, 수치 수렴성, 물수지, 스펙트럼 전이와 재현 보고서를 연결해 PySDM Seeding Lab을 연구 도구로 발전시킨 기록입니다.">
+<meta name="twitter:title" content="Qualifying Rain-Producing Experiments and Letting the Server Work Overnight – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Connecting collision-ON qualification, common-seed ensembles, process isolation, detached jobs, and bounded parallel execution in PySDM Seeding Lab PR #4.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -284,32 +290,32 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="검색"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../../../pysdm.html" aria-current="page"> 
+    <a class="nav-link" href="../../../../pysdm.html"> 
 <span class="menu-text">PySDM</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../wrf.html"> 
+    <a class="nav-link" href="../../../../wrf.html"> 
 <span class="menu-text">WRF</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../../article-review.html"> 
+    <a class="nav-link" href="../../../../article-review.html"> 
 <span class="menu-text">Article Review</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../../en/index.html"> 
+    <a class="nav-link" href="../../../../en/index.html"> 
 <span class="menu-text">EN</span></a>
   </li>  
   <li class="nav-item compact">
@@ -320,17 +326,17 @@ window.Quarto = {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="사이드바 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html">결과를 믿을 수 있는 코드</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="사이드바 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html">Rain qualification &amp; server</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
   </nav>
@@ -343,86 +349,86 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../pysdm.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">PySDM 개요</span></a>
+  <a href="../../../../en/pysdm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PySDM overview</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Learn PySDM</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="토글 섹션">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/learn-pysdm/2026-07-15-first-steps/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">PySDM 시작하기</span></a>
+  <a href="../../../../en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting started</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../build-the-lab.html" class="sidebar-item-text sidebar-link">
+            <a href="../../../../en/build-the-lab.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Build the Lab</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="토글 섹션">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">스크립트에서 실험실로</span></a>
+  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">From scripts to a lab</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">결과를 믿을 수 있는 코드</span></a>
+  <a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Making results trustworthy</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/build-the-lab/2026-07-16-rain-server-execution/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">강수 검증과 서버 실행</span></a>
+  <a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Rain qualification &amp; server</span></a>
   </div>
 </li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../../../experiments.html" class="sidebar-item-text sidebar-link">
+            <a href="../../../../en/experiments.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Experiments</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="토글 섹션">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1. 수치 표현 민감도</span></a>
+  <a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Numerical representation</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2. 시딩 조건 민감도</span></a>
+  <a href="../../../../en/posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Seeding sensitivity</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3. 현실 배경환경</span></a>
+  <a href="../../../../en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Realistic backgrounds</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">4. Response surface</span></a>
   </div>
 </li>
@@ -431,7 +437,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="https://github.com/Jinu219/PySDM-Seeding-Lab" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Seeding Lab 코드 ↗</span></a>
+ <span class="menu-text">Seeding Lab code ↗</span></a>
   </div>
 </li>
     </ul>
@@ -441,41 +447,40 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">목차</h2>
+    <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#가장-먼저-해결한-문제-이-값은-어디에서-왔는가" id="toc-가장-먼저-해결한-문제-이-값은-어디에서-왔는가" class="nav-link active" data-scroll-target="#가장-먼저-해결한-문제-이-값은-어디에서-왔는가">가장 먼저 해결한 문제: 이 값은 어디에서 왔는가</a></li>
-  <li><a href="#pysdm-native-성장경로-연결" id="toc-pysdm-native-성장경로-연결" class="nav-link" data-scroll-target="#pysdm-native-성장경로-연결">PySDM native 성장경로 연결</a></li>
-  <li><a href="#평균값에서-wet-radius-spectrum으로" id="toc-평균값에서-wet-radius-spectrum으로" class="nav-link" data-scroll-target="#평균값에서-wet-radius-spectrum으로">평균값에서 wet-radius spectrum으로</a></li>
-  <li><a href="#임계값-하나를-정답처럼-사용하지-않기" id="toc-임계값-하나를-정답처럼-사용하지-않기" class="nav-link" data-scroll-target="#임계값-하나를-정답처럼-사용하지-않기">임계값 하나를 정답처럼 사용하지 않기</a></li>
-  <li><a href="#씨뿌리기-source를-고려한-물수지" id="toc-씨뿌리기-source를-고려한-물수지" class="nav-link" data-scroll-target="#씨뿌리기-source를-고려한-물수지">씨뿌리기 source를 고려한 물수지</a></li>
-  <li><a href="#수치-수렴성을-실제-pysdm-실행으로-확인하기" id="toc-수치-수렴성을-실제-pysdm-실행으로-확인하기" class="nav-link" data-scroll-target="#수치-수렴성을-실제-pysdm-실행으로-확인하기">수치 수렴성을 실제 PySDM 실행으로 확인하기</a></li>
-  <li><a href="#실패-기록-windows-281자-경로와-240개-실패" id="toc-실패-기록-windows-281자-경로와-240개-실패" class="nav-link" data-scroll-target="#실패-기록-windows-281자-경로와-240개-실패">실패 기록: Windows 281자 경로와 240개 실패</a></li>
-  <li><a href="#member-benchmark가-보여준-병목" id="toc-member-benchmark가-보여준-병목" class="nav-link" data-scroll-target="#member-benchmark가-보여준-병목">24-member benchmark가 보여준 병목</a></li>
-  <li><a href="#결과-폴더-자체를-연구-기록으로" id="toc-결과-폴더-자체를-연구-기록으로" class="nav-link" data-scroll-target="#결과-폴더-자체를-연구-기록으로">결과 폴더 자체를 연구 기록으로</a></li>
-  <li><a href="#검증과-남은-일" id="toc-검증과-남은-일" class="nav-link" data-scroll-target="#검증과-남은-일">검증과 남은 일</a></li>
-  <li><a href="#연결-자료" id="toc-연결-자료" class="nav-link" data-scroll-target="#연결-자료">연결 자료</a></li>
+  <li><a href="#a-convergence-design-that-runs-only-the-comparisons-it-needs" id="toc-a-convergence-design-that-runs-only-the-comparisons-it-needs" class="nav-link active" data-scroll-target="#a-convergence-design-that-runs-only-the-comparisons-it-needs">A convergence design that runs only the comparisons it needs</a></li>
+  <li><a href="#rain-production-passed-quantitative-response-did-not" id="toc-rain-production-passed-quantitative-response-did-not" class="nav-link" data-scroll-target="#rain-production-passed-quantitative-response-did-not">Rain production passed; quantitative response did not</a></li>
+  <li><a href="#pair-the-same-random-seeds-before-averaging" id="toc-pair-the-same-random-seeds-before-averaging" class="nav-link" data-scroll-target="#pair-the-same-random-seeds-before-averaging">Pair the same random seeds before averaging</a></li>
+  <li><a href="#explicit-garbage-collection-was-not-the-memory-fix" id="toc-explicit-garbage-collection-was-not-the-memory-fix" class="nav-link" data-scroll-target="#explicit-garbage-collection-was-not-the-memory-fix">Explicit garbage collection was not the memory fix</a></li>
+  <li><a href="#process-isolation-returns-retained-memory-at-a-price" id="toc-process-isolation-returns-retained-memory-at-a-price" class="nav-link" data-scroll-target="#process-isolation-returns-retained-memory-at-a-price">Process isolation returns retained memory, at a price</a></li>
+  <li><a href="#experiments-that-survive-a-browser-disconnect" id="toc-experiments-that-survive-a-browser-disconnect" class="nav-link" data-scroll-target="#experiments-that-survive-a-browser-disconnect">Experiments that survive a browser disconnect</a></li>
+  <li><a href="#bound-parallelism-by-cases-and-memory-not-cpu-count" id="toc-bound-parallelism-by-cases-and-memory-not-cpu-count" class="nav-link" data-scroll-target="#bound-parallelism-by-cases-and-memory-not-cpu-count">Bound parallelism by cases and memory, not CPU count</a></li>
+  <li><a href="#a-runnable-marine-ofat-showcase" id="toc-a-runnable-marine-ofat-showcase" class="nav-link" data-scroll-target="#a-runnable-marine-ofat-showcase">A runnable marine OFAT showcase</a></li>
+  <li><a href="#qualification-must-remain-plural" id="toc-qualification-must-remain-plural" class="nav-link" data-scroll-target="#qualification-must-remain-plural">Qualification must remain plural</a></li>
+  <li><a href="#related-material" id="toc-related-material" class="nav-link" data-scroll-target="#related-material">Related material</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/build-the-lab/2026-07-14-research-quality/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../posts/build-the-lab/2026-07-14-research-quality/index.html">결과를 믿을 수 있는 코드</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html">Rain qualification &amp; server</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">결과가 나오는 코드에서, 결과를 믿을 수 있는 코드로</h1>
+<h1 class="title">Qualifying Rain-Producing Experiments and Letting the Server Work Overnight</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Build the Lab</div>
     <div class="quarto-category">PySDM</div>
-    <div class="quarto-category">scientific software</div>
     <div class="quarto-category">numerical qualification</div>
+    <div class="quarto-category">lab server</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Native 진단값, 수치 수렴성, 물수지, 스펙트럼 전이와 재현 보고서를 연결해 PySDM Seeding Lab을 연구 도구로 발전시킨 기록입니다.
+    Connecting collision-ON qualification, common-seed ensembles, process isolation, detached jobs, and bounded parallel execution in PySDM Seeding Lab PR #4.
   </div>
 </div>
 
@@ -483,16 +488,16 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">저자</div>
+    <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
              <p>Jinu </p>
           </div>
   </div>
     
     <div>
-    <div class="quarto-title-meta-heading">공개</div>
+    <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-07-14</p>
+      <p class="date">2026-07-16</p>
     </div>
   </div>
   
@@ -504,186 +509,228 @@ window.Quarto = {
 </header>
 
 
-<p><a href="../../../posts/build-the-lab/2026-07-13-scenario-workflow/index.html">첫 번째 개발</a>에서 Scenario–Sweep–Run–Dashboard 흐름을 완성한 뒤 더 어려운 질문이 남았다. 대시보드에 곡선이 그려진다는 사실만으로 그 값을 과학적으로 해석해도 되는가?</p>
-<p>2026년 7월 14일 병합한 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/3">PySDM-Seeding-Lab PR #3</a>는 기능 확장보다 <strong>진단값의 출처, 수치 품질, 실패 증거와 재현성</strong>을 다룬다. 12개 커밋과 78개 변경 파일을 통해 작동하는 실험 앱을 검증 가능한 연구 플랫폼으로 바꾸려 했다.</p>
+<p><a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html">The previous development</a> connected diagnostic provenance, water budgets, wet-radius spectra, numerical qualification, and reproducible reports. Its qualification profile, however, had collision OFF and zero rain diagnostics. The Lab could explain where a result came from, but it had not yet established what could be trusted in a collision-ON, rain-producing experiment.</p>
+<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/4">PySDM-Seeding-Lab PR #4</a>, merged on 16 July 2026, closes that gap and makes long experiments durable on a Linux lab server. Seven commits changed 42 files, adding 4,808 lines and deleting 141 across qualification, ensemble resource control, detached jobs, and bounded multi-core sweeps.</p>
 <div class="review-verdict">
-<p><strong>이번 개발의 핵심.</strong> 좋은 결과를 고르는 기능보다 먼저, 결과가 어디에서 왔고 어느 조건까지 믿을 수 있는지를 기록하는 장치를 만들었다.</p>
+<p><strong>Core decision.</strong> “The model produced rain” and “the magnitude of the seeding effect is trustworthy” are separate claims. The tested profile supports the first, not yet the second. The server workflow was built around preserving that boundary rather than hiding it.</p>
 </div>
-<section id="가장-먼저-해결한-문제-이-값은-어디에서-왔는가" class="level2">
-<h2 class="anchored" data-anchor-id="가장-먼저-해결한-문제-이-값은-어디에서-왔는가">가장 먼저 해결한 문제: 이 값은 어디에서 왔는가</h2>
-<p>초기 Growth Pathway에는 adapter가 제공하지 않는 변수를 계산 흐름 검증용 proxy로 채운 경우가 있었다. UI에서는 native 출력과 proxy가 비슷한 모양의 열로 보였다. 이 상태는 가장 위험하다. 임시 변수가 실제 PySDM 미세물리 결과처럼 해석될 수 있기 때문이다.</p>
-<p>모든 진단값을 네 단계로 분류했다.</p>
+<section id="a-convergence-design-that-runs-only-the-comparisons-it-needs" class="level2">
+<h2 class="anchored" data-anchor-id="a-convergence-design-that-runs-only-the-comparisons-it-needs">A convergence design that runs only the comparisons it needs</h2>
+<p>The earlier Cartesian grid combined three levels of timestep, background super-droplet count, and seeding super-droplet count: 27 cases and 54 control/seeding executions. Yet the convergence decision only needs one axis varied at a time while the others remain at the finest reference.</p>
+<p>The new <code>one_factor_at_reference</code> design runs one reference plus two lower levels on each of three numerical axes: 7 cases and 14 physical executions. It removes 20 combinations that never enter a next-finest convergence comparison without removing any required evidence.</p>
+<p>The <code>rain_standard</code> profile used a 5 s reference timestep and 400 background and seeding super-droplets, with condensation and collision ON and sedimentation OFF. All 7 cases and 14 real PySDM executions succeeded in 699 seconds.</p>
+</section>
+<section id="rain-production-passed-quantitative-response-did-not" class="level2">
+<h2 class="anchored" data-anchor-id="rain-production-passed-quantitative-response-did-not">Rain production passed; quantitative response did not</h2>
+<p>The finest reference produced clear parcel rain-water signals.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>분류</th>
-<th>의미</th>
+<th>Signal</th>
+<th style="text-align: right;">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>native</code></td>
-<td>PySDM product 또는 상태에서 직접 얻은 값</td>
+<td>Control final/maximum rain water</td>
+<td style="text-align: right;">0.002558 kg/kg</td>
 </tr>
 <tr class="even">
-<td><code>derived</code></td>
-<td>native 값으로부터 명시적인 식으로 계산한 값</td>
+<td>Seeding final/maximum rain water</td>
+<td style="text-align: right;">0.002634 kg/kg</td>
 </tr>
 <tr class="odd">
-<td><code>proxy</code></td>
-<td>workflow 검증을 위한 근사·대체값</td>
+<td>Control rain onset</td>
+<td style="text-align: right;">355 s</td>
 </tr>
 <tr class="even">
-<td><code>missing</code></td>
-<td>현재 adapter에서 제공하지 않는 값</td>
+<td>Seeding rain onset</td>
+<td style="text-align: right;">395 s</td>
+</tr>
+<tr class="odd">
+<td>Final seeding − control</td>
+<td style="text-align: right;">+0.0000763 kg/kg (+2.98%)</td>
 </tr>
 </tbody>
 </table>
-<p>각 결과에는 <code>diagnostic_provenance.json</code>을 저장하고 Dashboard가 개수와 경고를 표시한다. native parcel 경로의 검증된 계약은 현재 <code>native: 11</code>, <code>derived: 2</code>, <code>proxy: 0</code>으로 정리됐다.</p>
-<p>여기서 중요한 점은 proxy를 없애는 것만이 아니다. 미래에 새 변수가 추가될 때도 <strong>출처를 밝히지 않은 값은 조용히 그래프에 들어올 수 없게 하는 계약</strong>을 만든 것이다.</p>
-</section>
-<section id="pysdm-native-성장경로-연결" class="level2">
-<h2 class="anchored" data-anchor-id="pysdm-native-성장경로-연결">PySDM native 성장경로 연결</h2>
-<p>parcel simulation builder에 PySDM native products를 연결해 다음 항목을 직접 또는 반지름 구간 필터로 계산했다.</p>
-<ul>
-<li>온도, 압력, 수증기 혼합비, 상대습도</li>
-<li>구름수와 빗물 혼합비</li>
-<li>구름방울과 빗방울 수농도</li>
-<li>구름·비 유효반지름</li>
-<li>전체 활성화 입자의 물과 수농도</li>
-</ul>
-<p>여기서 cloud와 rain은 입자의 과거 이력을 뜻하지 않는다. 각 시각의 wet-radius 구간으로 분류한 상태다. 이 제한도 provenance와 보고서에 명시했다.</p>
-</section>
-<section id="평균값에서-wet-radius-spectrum으로" class="level2">
-<h2 class="anchored" data-anchor-id="평균값에서-wet-radius-spectrum으로">평균값에서 wet-radius spectrum으로</h2>
-<p>평균 유효반지름만으로는 씨뿌리기 후 일부 입자가 큰 크기 구간으로 이동했는지 알기 어렵다. 지정한 checkpoint마다 wet-radius spectrum을 저장하도록 했다.</p>
-<pre class="text"><code>wet_radius_spectrum.csv
-wet_radius_spectrum_comparison.csv
-threshold_robustness.csv</code></pre>
-<p>각 bin에는 반지름 경계, 수농도, 액체부피 분율과 unactivated/cloud/rain 구간을 기록한다. Control–Seeding 차이를 통해 작은 활성화 방울에서 큰 cloud·rain-size 입자로 질량이 이동했는지 볼 수 있다.</p>
-</section>
-<section id="임계값-하나를-정답처럼-사용하지-않기" class="level2">
-<h2 class="anchored" data-anchor-id="임계값-하나를-정답처럼-사용하지-않기">임계값 하나를 정답처럼 사용하지 않기</h2>
-<p>cloud와 rain을 가르는 반지름 경계는 20, 25, 30 <span class="math inline">\(\mu\mathrm{m}\)</span>에서 반복 계산한다. rain-size 액체가 전체 활성화 액체의 일정 비율을 처음 넘는 시점을 spectrum transition으로 정의하고, 분율도 0.5%, 1%, 2%에서 검사한다.</p>
-<pre class="text"><code>radius threshold: 20 / 25 / 30 µm
-transition fraction: 0.5 / 1.0 / 2.0%</code></pre>
-<p>1%는 보편적인 관측 표준이 아니라 이 프로젝트의 <strong>운영적 탐지 기준</strong>이다. 그래서 한 값의 transition time만 보고하지 않고, 임계값을 바꿔도 전이 방향과 시점 차이가 유지되는지 함께 저장한다.</p>
-</section>
-<section id="씨뿌리기-source를-고려한-물수지" class="level2">
-<h2 class="anchored" data-anchor-id="씨뿌리기-source를-고려한-물수지">씨뿌리기 source를 고려한 물수지</h2>
-<p>흡습성 입자를 주입하는 동안에는 모델 계에 의도적인 source가 들어온다. 이 구간을 무시하고 전체 물이 변했다고 판단하면 정상적인 주입을 수치 오차로 오해한다.</p>
-<p><code>water_budget.csv</code>는 수증기, 구름수, 빗물과 총물을 분리하고 주입 source window를 표시한다. 보존성 평가는 source가 닫힌 구간을 중심으로 수행한다.</p>
-<pre class="text"><code>before injection: closed-budget check
-during injection: source-aware record
-after injection: closed-budget check</code></pre>
-<p>단순한 총합 하나보다 <strong>어느 시간 구간에서 어떤 항이 물수지를 바꿨는지</strong>를 설명하는 것이 목표다.</p>
-</section>
-<section id="수치-수렴성을-실제-pysdm-실행으로-확인하기" class="level2">
-<h2 class="anchored" data-anchor-id="수치-수렴성을-실제-pysdm-실행으로-확인하기">수치 수렴성을 실제 PySDM 실행으로 확인하기</h2>
-<p>수렴성 진단은 timestep, background super-droplet 수, seeding super-droplet 수를 각각 바꾸고 다른 축을 고정한 상태에서 다음으로 조밀한 수준과 가장 조밀한 기준을 비교한다.</p>
-<p>표준 qualification은 다음 격자를 사용했다.</p>
-<pre class="text"><code>timestep: 5 / 10 / 15 s
-seeding super-droplets: 100 / 200 / 400
-background super-droplets: 100 / 200 / 400</code></pre>
-<p>결과는 27개 조건, control–seeding을 포함한 54회 실제 PySDM 실행, 실패 0회였다. 0이 아닌 기준값을 가진 비교에서는 다음 결과를 얻었다.</p>
+<p>The positive 2.98% difference is not, by itself, a qualified seeding-effect estimate.</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 21%">
+</colgroup>
 <thead>
 <tr class="header">
-<th>진단</th>
-<th style="text-align: right;">결과</th>
+<th>Metric family</th>
+<th style="text-align: right;">Within 5%</th>
+<th style="text-align: right;">Maximum error</th>
+<th>Decision</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>5% 이내 비교</td>
+<td>Absolute control/seeding rain state</td>
 <td style="text-align: right;">12 / 12</td>
+<td style="text-align: right;">3.285%</td>
+<td>Supported for this profile</td>
 </tr>
 <tr class="even">
-<td>상대차이 중앙값</td>
-<td style="text-align: right;">0.187%</td>
-</tr>
-<tr class="odd">
-<td>95백분위</td>
-<td style="text-align: right;">1.140%</td>
-</tr>
-<tr class="even">
-<td>최대 상대차이</td>
-<td style="text-align: right;">1.731%</td>
+<td>Seeding-minus-control response</td>
+<td style="text-align: right;">2 / 21</td>
+<td style="text-align: right;">4613.006%</td>
+<td>Not supported</td>
 </tr>
 </tbody>
 </table>
-<p>이 결과는 기본 5% 허용오차를 <strong>시험한 marine, condensation/seeding, collision-OFF 조건</strong>에서만 지지한다. 이 qualification에서 rain 관련 지표는 0이었으므로, collision-ON 강수 생성 실험의 수렴성을 증명하지 않는다. 통과 숫자보다 적용 범위를 함께 기록하는 것이 더 중요하다.</p>
+<p>Two nearby collision simulations can each have a stable absolute rain state while their much smaller difference remains highly sensitive to timestep and particle resolution. The evidence supports collision-ON parcel rain generation and the absolute rain-water state within the 5% criterion. It does not support a quantitative seeding enhancement, onset shift, or conversion delta.</p>
+<p>Sedimentation remains OFF, so rain water is an internal parcel-microphysics result, not surface precipitation or accumulated rainfall.</p>
 </section>
-<section id="실패-기록-windows-281자-경로와-240개-실패" class="level2">
-<h2 class="anchored" data-anchor-id="실패-기록-windows-281자-경로와-240개-실패">실패 기록: Windows 281자 경로와 240개 실패</h2>
-<p>24개 sweep case에 case당 10개 ensemble member를 실행한 실험은 총 240개 member가 모두 실패했다. 원인은 미세물리가 아니라 약 281자까지 길어진 Windows 출력 경로였다. parameter label과 값을 디렉터리 이름마다 반복하면서 중첩 경로가 한계를 넘었다.</p>
-<p>경로는 짧고 안정적인 식별자로 교체했다.</p>
-<pre class="text"><code>cases/case_001/
-members/member_001/
-comparison/
-single/</code></pre>
-<p>과학적 label과 parameter 값은 config와 metadata에 보존했다. 사람이 읽는 설명과 파일시스템 식별자의 책임을 분리한 것이다.</p>
-<p>또한 sweep과 ensemble의 실행 상태를 <code>success / partial / failed</code>로 구분하고, 전체 실패를 올리기 전에 member·case 예외를 디스크에 저장하도록 했다. 빈 그래프가 “변화 없음”인지 “실행 실패”인지 Dashboard가 구별할 수 있게 됐다.</p>
-</section>
-<section id="member-benchmark가-보여준-병목" class="level2">
-<h2 class="anchored" data-anchor-id="member-benchmark가-보여준-병목">24-member benchmark가 보여준 병목</h2>
-<p>24개 실제 PySDM member를 연속 실행한 large benchmark 결과는 다음과 같다.</p>
+<section id="pair-the-same-random-seeds-before-averaging" class="level2">
+<h2 class="anchored" data-anchor-id="pair-the-same-random-seeds-before-averaging">Pair the same random seeds before averaging</h2>
+<p>To separate numerical-resolution sensitivity from stochastic collision sampling, the new workflow compares only identical random seeds across resolution cases.</p>
+<p><code>rain_response_pilot</code> raised the reference to 800 background and seeding super-droplets, retained the 5 s timestep, and used three common seeds. All 12 case-seed pairs and 24 control/seeding executions completed in 956.4 seconds.</p>
+<p>Every run now preserves member-level scalar metrics, <code>paired_seed_metrics.csv</code>, complete case × seed coverage, per-seed rain gates, and per-seed convergence evidence. An unrelated seed or a case mean can never silently substitute for a missing pair.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>항목</th>
-<th style="text-align: right;">측정값</th>
+<th>Metric family</th>
+<th style="text-align: right;">Within 5%</th>
+<th style="text-align: right;">Median error</th>
+<th style="text-align: right;">Maximum error</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>전체 wall time</td>
-<td style="text-align: right;">743.878 s</td>
+<td>Absolute rain state</td>
+<td style="text-align: right;">36 / 36</td>
+<td style="text-align: right;">0.689%</td>
+<td style="text-align: right;">2.366%</td>
 </tr>
 <tr class="even">
-<td>시작 RSS</td>
-<td style="text-align: right;">111.34 MiB</td>
-</tr>
-<tr class="odd">
-<td>peak RSS</td>
-<td style="text-align: right;">1,110.98 MiB</td>
-</tr>
-<tr class="even">
-<td>종료 RSS</td>
-<td style="text-align: right;">1,064.70 MiB</td>
+<td>Seeding response</td>
+<td style="text-align: right;">4 / 63</td>
+<td style="text-align: right;">39.093%</td>
+<td style="text-align: right;">526.314%</td>
 </tr>
 </tbody>
 </table>
-<p>반면 24개 member CSV를 streaming 방식으로 집계하는 단계의 RSS 증가는 0.270 MiB, 처리시간은 3.772 s였다. 집계기가 아니라 반복 실행 후 남는 PySDM·backend·JIT 상태가 다음 profiling 대상이라는 근거다. 이 측정만으로 특정 구성요소의 memory leak을 단정할 수는 없다.</p>
+<p>All three seeds independently rejected quantitative response support. Raising the reference from 400 to 800 super-droplets reduced the worst response error from 4613% to 526%, but did not establish convergence. The background-super-droplet axis was most sensitive, followed by timestep and seeded-super-droplet count.</p>
+<p>The planned 2.5 s, 1,600-super-droplet, five-seed standard profile would require 70 physical executions. Rather than launch it blindly, the project first investigated retained memory and process isolation.</p>
 </section>
-<section id="결과-폴더-자체를-연구-기록으로" class="level2">
-<h2 class="anchored" data-anchor-id="결과-폴더-자체를-연구-기록으로">결과 폴더 자체를 연구 기록으로</h2>
-<p>새 결과에는 가능한 경우 다음 보고서를 함께 생성한다.</p>
-<pre class="text"><code>report.md
-report.html
-report.pdf
-result_manifest.json</code></pre>
-<p>보고서는 설정, adapter, provenance, 검증 상태, 주요 결과, 물수지, 수렴성, spectrum transition, 재현 명령과 해석 제한을 포함한다. publication figure는 PNG·SVG·PDF와 journal-width preset을 지원한다.</p>
-<p><code>result_manifest.json</code>에는 schema version, 최소 reader version, result type, primary data와 artifact 역할을 기록한다. manifest가 없던 과거 결과와 schema-v1 alias도 읽을 수 있도록 migration fixture를 보존했다. 새 기능이 과거 실험을 조용히 깨뜨리지 않게 하기 위해서다.</p>
+<section id="explicit-garbage-collection-was-not-the-memory-fix" class="level2">
+<h2 class="anchored" data-anchor-id="explicit-garbage-collection-was-not-the-memory-fix">Explicit garbage collection was not the memory fix</h2>
+<p>A matched 12-member A/B test compared normal execution with <code>gc.collect()</code> after every member.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Measurement</th>
+<th style="text-align: right;">Baseline</th>
+<th style="text-align: right;">Explicit GC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Wall time</td>
+<td style="text-align: right;">475.329 s</td>
+<td style="text-align: right;">493.260 s</td>
+</tr>
+<tr class="even">
+<td>Peak RSS increase</td>
+<td style="text-align: right;">878.137 MiB</td>
+<td style="text-align: right;">880.859 MiB</td>
+</tr>
+<tr class="odd">
+<td>First-to-last retained RSS</td>
+<td style="text-align: right;">252.883 MiB</td>
+<td style="text-align: right;">256.715 MiB</td>
+</tr>
+<tr class="even">
+<td>Member RSS slope</td>
+<td style="text-align: right;">23.461 MiB/member</td>
+<td style="text-align: right;">24.472 MiB/member</td>
+</tr>
+</tbody>
+</table>
+<p>Explicit GC reclaimed Python objects and produced transient RSS drops, but neither peak nor retained RSS improved; execution became 3.772% slower. No accumulation of open Matplotlib figures was found. The default therefore remains <code>collect_garbage_between_members: false</code>, while process-lifetime PySDM/Numba/backend state became the next hypothesis.</p>
 </section>
-<section id="검증과-남은-일" class="level2">
-<h2 class="anchored" data-anchor-id="검증과-남은-일">검증과 남은 일</h2>
-<p>이번 변경에서는 23개 unit/integration test가 통과했고 그중 2개는 실제 PySDM integration test였다. 프로젝트 무결성 검사와 주요 Streamlit AppTest도 통과했다.</p>
-<p>하지만 다음 질문은 아직 열려 있다.</p>
+<section id="process-isolation-returns-retained-memory-at-a-price" class="level2">
+<h2 class="anchored" data-anchor-id="process-isolation-returns-retained-memory-at-a-price">Process isolation returns retained memory, at a price</h2>
+<p>The optional <code>subprocess</code> backend runs each ensemble member in a fresh Python process and preserves configuration, status, return code, elapsed time, stdout/stderr, exceptions, child process-tree peak RSS, and result location.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Measurement</th>
+<th style="text-align: right;">In-process</th>
+<th style="text-align: right;">Subprocess</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Wall time</td>
+<td style="text-align: right;">248.725 s</td>
+<td style="text-align: right;">530.714 s</td>
+</tr>
+<tr class="even">
+<td>Process-tree peak RSS increase</td>
+<td style="text-align: right;">879.238 MiB</td>
+<td style="text-align: right;">998.867 MiB</td>
+</tr>
+<tr class="odd">
+<td>First-to-last parent RSS retention</td>
+<td style="text-align: right;">37.797 MiB</td>
+<td style="text-align: right;">0.125 MiB</td>
+</tr>
+</tbody>
+</table>
+<p>Process exit reduced cross-member parent retention by 99.669%, supporting a process-lifetime ownership explanation. But repeated interpreter and JIT startup increased wall time by 113.374% and instantaneous peak by 13.606%.</p>
+<p><code>in_process</code> remains the default. <code>subprocess</code> is an opt-in retention-control mechanism for long ensembles, not a speed or peak-memory optimization.</p>
+</section>
+<section id="experiments-that-survive-a-browser-disconnect" class="level2">
+<h2 class="anchored" data-anchor-id="experiments-that-survive-a-browser-disconnect">Experiments that survive a browser disconnect</h2>
+<p>Long calculations can now be submitted as detached worker processes from the Run page. Each job stores an immutable YAML snapshot, job ID, PID, queued/running/succeeded/failed state, current stage, completed and total model-run counts, worker log, error, and final result directory under <code>.runtime/jobs/</code>.</p>
+<p>A refresh, browser disconnect, or Streamlit rerun no longer terminates the experiment. The new <strong>Server Jobs</strong> page reconstructs progress and failure evidence from disk.</p>
+<p>The web service itself is managed through a headless <code>nohup</code> script:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/server_web.sh start</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/server_web.sh status</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/server_web.sh stop</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/server_web.sh restart</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>It binds to <code>127.0.0.1:8501</code> by default and documents SSH tunneling, avoiding direct exposure of an unauthenticated Streamlit service. Restarting the web service does not cancel already detached simulation workers.</p>
+</section>
+<section id="bound-parallelism-by-cases-and-memory-not-cpu-count" class="level2">
+<h2 class="anchored" data-anchor-id="bound-parallelism-by-cases-and-memory-not-cpu-count">Bound parallelism by cases and memory, not CPU count</h2>
+<p>Independent sweep cases can use a spawn-based process pool configured with <code>execution.max_workers</code>. Ensemble members inside one case remain sequential to avoid nested oversubscription. Effective concurrency is:</p>
+<pre class="text"><code>min(execution.max_workers, number of sweep cases)</code></pre>
+<p>The marine showcase has ten cases, so twenty configured workers cannot create more than ten concurrent case workers. Because one isolated child peaked near 1.03 GiB in the tested profile, the recommended rollout starts at four workers, inspects <code>htop</code>, <code>free -h</code>, and resource evidence, then increases to eight or ten. Twenty workers require more than 20 GiB plus operating-system and application overhead. The project-wide default remains one.</p>
+<p>Concurrent timing-history updates now use an inter-process lock, stale-lock recovery, bounded timeout, per-process temporary files, and atomic replacement. Failure of this best-effort auxiliary history cannot fail the scientific simulation.</p>
+</section>
+<section id="a-runnable-marine-ofat-showcase" class="level2">
+<h2 class="anchored" data-anchor-id="a-runnable-marine-ofat-showcase">A runnable marine OFAT showcase</h2>
+<p><code>marine_showcase_ofat_v1.yaml</code> demonstrates the complete workflow in a collision-ON, rain-producing profile:</p>
+<pre class="text"><code>10 one-factor-at-reference cases
+× 3 common random seeds
+× control / seeding
+= 60 physical PySDM executions</code></pre>
+<p>It varies dry radius, κ, number concentration, injection start time, and collision OFF/ON using a 5 s timestep and 800 background and seeding super-droplets. It is explicitly labeled exploratory physical sensitivity. Absolute parcel rain state is qualified; the quantitative seeding-minus-control response is not.</p>
+</section>
+<section id="qualification-must-remain-plural" class="level2">
+<h2 class="anchored" data-anchor-id="qualification-must-remain-plural">Qualification must remain plural</h2>
+<p>The Results Dashboard and portable reports now separate absolute-state and seeding-response families, physical rain gates, paired-seed coverage, execution backend, child peak RSS, member-boundary RSS/USS trends, raw checkpoints, and subprocess failures.</p>
+<p>A passing absolute state no longer turns an entire experiment into one green badge. Each metric family records what is supported and what remains <code>not_supported_for_profile</code>.</p>
+<p>Final validation passed 37 unit/integration tests, including real PySDM products, control–seeding execution, detached workers, a two-worker sweep, failed-subprocess evidence, legacy migration, path budgets, key Streamlit AppTests, and the Results Dashboard. The remaining operational step is an actual Linux lab-server smoke test.</p>
+<p>PR #3 attached provenance and scope to every result. PR #4 applied that principle to real rain production and persistent server execution. Its most important result is not +2.98%; it is the durable evidence that this number must not yet be presented as a converged quantitative seeding claim.</p>
+</section>
+<section id="related-material" class="level2">
+<h2 class="anchored" data-anchor-id="related-material">Related material</h2>
 <ul>
-<li>collision-ON, 실제 rain-producing 조건에서도 5% 수렴 기준이 유지되는가?</li>
-<li>ensemble 반복 뒤 유지되는 RSS는 어느 구성요소가 소유하는가?</li>
-<li>운영 기준인 1% spectrum-transition threshold를 관측으로 보정할 수 있는가?</li>
-<li>CSV와 columnar cache가 수치적으로 같은 통계를 만드는가?</li>
-</ul>
-<p>첫 번째 PR이 실험의 흐름을 만들었다면, 두 번째 PR은 각 결과 옆에 <strong>출처·품질·실패·적용범위</strong>를 붙였다. 연구 소프트웨어의 완성도는 그래프 수가 아니라, 틀릴 수 있는 지점을 얼마나 명시적으로 남기는가에서 결정된다는 것을 배웠다.</p>
-</section>
-<section id="연결-자료" class="level2">
-<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
-<ul>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/3">Pull Request #3</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab 저장소</a></li>
-<li><a href="../../../posts/build-the-lab/2026-07-13-scenario-workflow/index.html">이전 개발일지: PySDM 실험 스크립트를 하나의 Seeding Lab으로 만들기</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/4">Pull Request #4</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/RAIN_QUALIFICATION_20260715.md">Collision-ON rain qualification evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/RAIN_RESPONSE_COMMON_SEED_20260715.md">Common-seed response evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/ENSEMBLE_MEMORY_OWNERSHIP_20260715.md">Ensemble memory ownership evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/ENSEMBLE_EXECUTION_BACKEND_AB_20260715.md">Execution backend A/B evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/SERVER_DEPLOYMENT.md">Lab-server deployment guide</a></li>
+<li><a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html">Previous log: From Code That Produces Results to Code That Makes Them Trustworthy</a></li>
 </ul>
 
 
@@ -799,12 +846,12 @@ result_manifest.json</code></pre>
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "복사완료!");
+      button.setAttribute("title", "Copied!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "복사완료!");
+        button.setAttribute("data-bs-title", "Copied!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -1182,16 +1229,16 @@ result_manifest.json</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/build-the-lab/2026-07-14-research-quality/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
-    <a class="nav-link" href="../../../about.html">
+    <a class="nav-link" href="../../../../about.html">
 <p>소개</p>
 </a>
   </li>  
     <li class="nav-item">
-    <a class="nav-link" href="../../../index.xml">
+    <a class="nav-link" href="../../../../index.xml">
 <p>RSS</p>
 </a>
   </li>  
@@ -1208,5 +1255,5 @@ result_manifest.json</code></pre>
 
 
 
-<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
