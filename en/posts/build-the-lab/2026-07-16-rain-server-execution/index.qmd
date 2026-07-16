@@ -1,0 +1,157 @@
+---
+title: "Qualifying Rain-Producing Experiments and Letting the Server Work Overnight"
+description: "Connecting collision-ON qualification, common-seed ensembles, process isolation, detached jobs, and bounded parallel execution in PySDM Seeding Lab PR #4."
+date: 2026-07-16
+categories:
+  - Build the Lab
+  - PySDM
+  - numerical qualification
+  - lab server
+sidebar: pysdm-en
+---
+
+[The previous development](../2026-07-14-research-quality/index.qmd) connected diagnostic provenance, water budgets, wet-radius spectra, numerical qualification, and reproducible reports. Its qualification profile, however, had collision OFF and zero rain diagnostics. The Lab could explain where a result came from, but it had not yet established what could be trusted in a collision-ON, rain-producing experiment.
+
+[PySDM-Seeding-Lab PR #4](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/4), merged on 16 July 2026, closes that gap and makes long experiments durable on a Linux lab server. Seven commits changed 42 files, adding 4,808 lines and deleting 141 across qualification, ensemble resource control, detached jobs, and bounded multi-core sweeps.
+
+::: {.review-verdict}
+**Core decision.** “The model produced rain” and “the magnitude of the seeding effect is trustworthy” are separate claims. The tested profile supports the first, not yet the second. The server workflow was built around preserving that boundary rather than hiding it.
+:::
+
+## A convergence design that runs only the comparisons it needs
+
+The earlier Cartesian grid combined three levels of timestep, background super-droplet count, and seeding super-droplet count: 27 cases and 54 control/seeding executions. Yet the convergence decision only needs one axis varied at a time while the others remain at the finest reference.
+
+The new `one_factor_at_reference` design runs one reference plus two lower levels on each of three numerical axes: 7 cases and 14 physical executions. It removes 20 combinations that never enter a next-finest convergence comparison without removing any required evidence.
+
+The `rain_standard` profile used a 5 s reference timestep and 400 background and seeding super-droplets, with condensation and collision ON and sedimentation OFF. All 7 cases and 14 real PySDM executions succeeded in 699 seconds.
+
+## Rain production passed; quantitative response did not
+
+The finest reference produced clear parcel rain-water signals.
+
+| Signal | Result |
+|---|---:|
+| Control final/maximum rain water | 0.002558 kg/kg |
+| Seeding final/maximum rain water | 0.002634 kg/kg |
+| Control rain onset | 355 s |
+| Seeding rain onset | 395 s |
+| Final seeding − control | +0.0000763 kg/kg (+2.98%) |
+
+The positive 2.98% difference is not, by itself, a qualified seeding-effect estimate.
+
+| Metric family | Within 5% | Maximum error | Decision |
+|---|---:|---:|---|
+| Absolute control/seeding rain state | 12 / 12 | 3.285% | Supported for this profile |
+| Seeding-minus-control response | 2 / 21 | 4613.006% | Not supported |
+
+Two nearby collision simulations can each have a stable absolute rain state while their much smaller difference remains highly sensitive to timestep and particle resolution. The evidence supports collision-ON parcel rain generation and the absolute rain-water state within the 5% criterion. It does not support a quantitative seeding enhancement, onset shift, or conversion delta.
+
+Sedimentation remains OFF, so rain water is an internal parcel-microphysics result, not surface precipitation or accumulated rainfall.
+
+## Pair the same random seeds before averaging
+
+To separate numerical-resolution sensitivity from stochastic collision sampling, the new workflow compares only identical random seeds across resolution cases.
+
+`rain_response_pilot` raised the reference to 800 background and seeding super-droplets, retained the 5 s timestep, and used three common seeds. All 12 case-seed pairs and 24 control/seeding executions completed in 956.4 seconds.
+
+Every run now preserves member-level scalar metrics, `paired_seed_metrics.csv`, complete case × seed coverage, per-seed rain gates, and per-seed convergence evidence. An unrelated seed or a case mean can never silently substitute for a missing pair.
+
+| Metric family | Within 5% | Median error | Maximum error |
+|---|---:|---:|---:|
+| Absolute rain state | 36 / 36 | 0.689% | 2.366% |
+| Seeding response | 4 / 63 | 39.093% | 526.314% |
+
+All three seeds independently rejected quantitative response support. Raising the reference from 400 to 800 super-droplets reduced the worst response error from 4613% to 526%, but did not establish convergence. The background-super-droplet axis was most sensitive, followed by timestep and seeded-super-droplet count.
+
+The planned 2.5 s, 1,600-super-droplet, five-seed standard profile would require 70 physical executions. Rather than launch it blindly, the project first investigated retained memory and process isolation.
+
+## Explicit garbage collection was not the memory fix
+
+A matched 12-member A/B test compared normal execution with `gc.collect()` after every member.
+
+| Measurement | Baseline | Explicit GC |
+|---|---:|---:|
+| Wall time | 475.329 s | 493.260 s |
+| Peak RSS increase | 878.137 MiB | 880.859 MiB |
+| First-to-last retained RSS | 252.883 MiB | 256.715 MiB |
+| Member RSS slope | 23.461 MiB/member | 24.472 MiB/member |
+
+Explicit GC reclaimed Python objects and produced transient RSS drops, but neither peak nor retained RSS improved; execution became 3.772% slower. No accumulation of open Matplotlib figures was found. The default therefore remains `collect_garbage_between_members: false`, while process-lifetime PySDM/Numba/backend state became the next hypothesis.
+
+## Process isolation returns retained memory, at a price
+
+The optional `subprocess` backend runs each ensemble member in a fresh Python process and preserves configuration, status, return code, elapsed time, stdout/stderr, exceptions, child process-tree peak RSS, and result location.
+
+| Measurement | In-process | Subprocess |
+|---|---:|---:|
+| Wall time | 248.725 s | 530.714 s |
+| Process-tree peak RSS increase | 879.238 MiB | 998.867 MiB |
+| First-to-last parent RSS retention | 37.797 MiB | 0.125 MiB |
+
+Process exit reduced cross-member parent retention by 99.669%, supporting a process-lifetime ownership explanation. But repeated interpreter and JIT startup increased wall time by 113.374% and instantaneous peak by 13.606%.
+
+`in_process` remains the default. `subprocess` is an opt-in retention-control mechanism for long ensembles, not a speed or peak-memory optimization.
+
+## Experiments that survive a browser disconnect
+
+Long calculations can now be submitted as detached worker processes from the Run page. Each job stores an immutable YAML snapshot, job ID, PID, queued/running/succeeded/failed state, current stage, completed and total model-run counts, worker log, error, and final result directory under `.runtime/jobs/`.
+
+A refresh, browser disconnect, or Streamlit rerun no longer terminates the experiment. The new **Server Jobs** page reconstructs progress and failure evidence from disk.
+
+The web service itself is managed through a headless `nohup` script:
+
+```bash
+bash scripts/server_web.sh start
+bash scripts/server_web.sh status
+bash scripts/server_web.sh stop
+bash scripts/server_web.sh restart
+```
+
+It binds to `127.0.0.1:8501` by default and documents SSH tunneling, avoiding direct exposure of an unauthenticated Streamlit service. Restarting the web service does not cancel already detached simulation workers.
+
+## Bound parallelism by cases and memory, not CPU count
+
+Independent sweep cases can use a spawn-based process pool configured with `execution.max_workers`. Ensemble members inside one case remain sequential to avoid nested oversubscription. Effective concurrency is:
+
+```text
+min(execution.max_workers, number of sweep cases)
+```
+
+The marine showcase has ten cases, so twenty configured workers cannot create more than ten concurrent case workers. Because one isolated child peaked near 1.03 GiB in the tested profile, the recommended rollout starts at four workers, inspects `htop`, `free -h`, and resource evidence, then increases to eight or ten. Twenty workers require more than 20 GiB plus operating-system and application overhead. The project-wide default remains one.
+
+Concurrent timing-history updates now use an inter-process lock, stale-lock recovery, bounded timeout, per-process temporary files, and atomic replacement. Failure of this best-effort auxiliary history cannot fail the scientific simulation.
+
+## A runnable marine OFAT showcase
+
+`marine_showcase_ofat_v1.yaml` demonstrates the complete workflow in a collision-ON, rain-producing profile:
+
+```text
+10 one-factor-at-reference cases
+× 3 common random seeds
+× control / seeding
+= 60 physical PySDM executions
+```
+
+It varies dry radius, κ, number concentration, injection start time, and collision OFF/ON using a 5 s timestep and 800 background and seeding super-droplets. It is explicitly labeled exploratory physical sensitivity. Absolute parcel rain state is qualified; the quantitative seeding-minus-control response is not.
+
+## Qualification must remain plural
+
+The Results Dashboard and portable reports now separate absolute-state and seeding-response families, physical rain gates, paired-seed coverage, execution backend, child peak RSS, member-boundary RSS/USS trends, raw checkpoints, and subprocess failures.
+
+A passing absolute state no longer turns an entire experiment into one green badge. Each metric family records what is supported and what remains `not_supported_for_profile`.
+
+Final validation passed 37 unit/integration tests, including real PySDM products, control–seeding execution, detached workers, a two-worker sweep, failed-subprocess evidence, legacy migration, path budgets, key Streamlit AppTests, and the Results Dashboard. The remaining operational step is an actual Linux lab-server smoke test.
+
+PR #3 attached provenance and scope to every result. PR #4 applied that principle to real rain production and persistent server execution. Its most important result is not +2.98%; it is the durable evidence that this number must not yet be presented as a converged quantitative seeding claim.
+
+## Related material
+
+- [Pull Request #4](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/4)
+- [Collision-ON rain qualification evidence](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/RAIN_QUALIFICATION_20260715.md)
+- [Common-seed response evidence](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/RAIN_RESPONSE_COMMON_SEED_20260715.md)
+- [Ensemble memory ownership evidence](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/ENSEMBLE_MEMORY_OWNERSHIP_20260715.md)
+- [Execution backend A/B evidence](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/evidence/ENSEMBLE_EXECUTION_BACKEND_AB_20260715.md)
+- [Lab-server deployment guide](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/main/docs/SERVER_DEPLOYMENT.md)
+- [Previous log: From Code That Produces Results to Code That Makes Them Trustworthy](../2026-07-14-research-quality/index.qmd)
+

@@ -16,6 +16,14 @@ These notes focus on the problem behind each change, the design decision, the fa
 
 ::: {.manual-post-list}
 ::: {.manual-post}
+<div class="manual-post-meta">2026-07-16 · Jinu</div>
+
+### [Qualifying Rain-Producing Experiments and Letting the Server Work Overnight](posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd)
+
+Separating converged absolute rain state from unconverged seeding response, then adding common-seed evidence, process isolation, detached jobs, and bounded server parallelism.
+:::
+
+::: {.manual-post}
 <div class="manual-post-meta">2026-07-14 · Jinu</div>
 
 ### [From Code That Produces Results to Code That Makes Them Trustworthy](posts/build-the-lab/2026-07-14-research-quality/index.qmd)
