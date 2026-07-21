@@ -484,10 +484,13 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<blockquote class="blockquote">
+<p><strong>릴리스 업데이트 (2026-07-21).</strong> PR #5가 <code>main</code>에 병합됐고, merge commit <code>d0fc97e</code>는 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0">PySDM Seeding Lab v1.0.0</a>으로 정식 발행됐다. <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29800846731">main release CI</a>에서도 Windows·Ubuntu fast regression과 실제 PySDM Ubuntu integration이 모두 통과했다.</p>
+</blockquote>
 <p><a href="../../../posts/build-the-lab/2026-07-16-rain-server-execution/index.html">이전 개발일지</a>는 collision-ON 조건에서 절대 rain state와 seeding response를 분리해 검증하고, common seed, process isolation, detached job, 제한된 병렬 실행을 연결했다. 그 결과 실험은 연구실 서버에서 오래 살아남을 수 있게 됐지만, 아직 <strong>어디까지 계산하면 충분한지, 관측과 어떻게 비교할지, 그리고 v1.0에서 무엇을 주장할 수 있는지</strong>는 프로젝트 수준의 계약으로 닫히지 않았다.</p>
 <p>2026년 7월 21일의 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">PySDM-Seeding-Lab PR #5</a>는 이 빈칸을 채운다. 현재 PR 범위는 16개 커밋, 71개 변경 파일, 7,054줄 추가와 98줄 삭제다. 단순히 기능을 더한 릴리스 노트가 아니라, 실행 계획부터 수치 검증, 관측 매핑 검토, 결과 보고, 과학적 한계까지 같은 증거 사슬 안에 두기 위한 개발이었다.</p>
 <div class="review-verdict">
-<p><strong>이번 개발의 핵심.</strong> PySDM Seeding Lab v1.0.0은 cloud-seeding 효과를 입증한 릴리스가 아니다. 실험 실행·수치 검증·관측 매핑 검토·결과 보고·과학적 한계 관리를 하나의 재현 가능한 <strong>research workflow</strong>로 완성한 릴리스 후보이다.</p>
+<p><strong>이번 개발의 핵심.</strong> PySDM Seeding Lab v1.0.0은 cloud-seeding 효과를 입증한 릴리스가 아니다. 실험 실행·수치 검증·관측 매핑 검토·결과 보고·과학적 한계 관리를 하나의 재현 가능한 <strong>research workflow</strong>로 완성한 정식 릴리스이다.</p>
 </div>
 <section id="끝이-보이지-않던-개발을-하나의-질문으로-묶기" class="level2">
 <h2 class="anchored" data-anchor-id="끝이-보이지-않던-개발을-하나의-질문으로-묶기">끝이 보이지 않던 개발을 하나의 질문으로 묶기</h2>
@@ -660,8 +663,8 @@ ul.task-list li input[type="checkbox"] {
 <li>최종 scientific scope review</li>
 <li>version·changelog·CI가 고정된 release candidate</li>
 </ol>
-<p>현재 다섯 gate는 모두 complete다. 로컬 fast regression 77개가 통과했고, 지정된 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29796010627">GitHub Actions run</a>에서 Windows fast regression, Ubuntu fast regression, 실제 PySDM Ubuntu integration이 모두 성공했다. Release manifest와 scientific scope도 CI가 기계적으로 검사한다.</p>
-<p>다만 이는 이미 <code>main</code>에 병합되고 tag가 발행됐다는 뜻이 아니다. <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>의 정책에 따라 PR #5는 <strong>병합 전 Build the Lab checkpoint</strong>에서 멈춰 있다. 이 글이 개발의 근거와 한계를 먼저 공개하고, 그 다음 <code>develop → main</code> 병합, release CI 확인, <code>v1.0.0</code> tag 생성으로 이어진다.</p>
+<p>현재 다섯 gate는 모두 complete다. 로컬 fast regression 77개가 통과했고, <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29800846731">release CI</a>에서 Windows fast regression, Ubuntu fast regression, 실제 PySDM Ubuntu integration이 모두 성공했다. Release manifest와 scientific scope도 CI가 기계적으로 검사한다.</p>
+<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>의 정책대로 이 글을 먼저 공개한 뒤 PR #5를 <code>main</code>에 병합하고 release CI를 확인했다. 검증된 merge commit <code>d0fc97e</code>는 <code>v1.0.0</code> tag와 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0">GitHub Release</a>로 고정됐다.</p>
 </section>
 <section id="실패하지-않은-것이-아니라-실패를-해석할-수-있게-된-것" class="level2">
 <h2 class="anchored" data-anchor-id="실패하지-않은-것이-아니라-실패를-해석할-수-있게-된-것">실패하지 않은 것이 아니라, 실패를 해석할 수 있게 된 것</h2>
@@ -689,6 +692,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="연결-자료" class="level2">
 <h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
 <ul>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0">PySDM Seeding Lab v1.0.0 Release</a></li>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">Pull Request #5</a></li>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TARGETED_RESPONSE_PLAN.md">Targeted response plan</a></li>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted qualification evidence</a></li>

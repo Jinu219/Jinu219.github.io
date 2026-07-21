@@ -484,6 +484,9 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<blockquote class="blockquote">
+<p><strong>Release update (21 July 2026).</strong> PR #5 was merged into <code>main</code>, and merge commit <code>d0fc97e</code> was published as <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0">PySDM Seeding Lab v1.0.0</a>. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29800846731">main release CI</a> passed Windows and Ubuntu fast regression plus real PySDM integration on Ubuntu.</p>
+</blockquote>
 <p><a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html">The previous development log</a> separated absolute rain-state qualification from seeding-response qualification, then connected common seeds, process isolation, detached jobs, and bounded parallel execution. Experiments could finally survive a long night on the lab server. What remained open was a project-level contract: <strong>How much computation is enough, how should model transitions be compared with observations, and what can v1.0 actually claim?</strong></p>
 <p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">PySDM-Seeding-Lab PR #5</a>, at its 21 July 2026 checkpoint, answers those questions across 16 commits and 71 changed files, with 7,054 additions and 98 deletions. This was not a changelog-sized feature bundle. It was an effort to place execution planning, numerical qualification, observation-mapping review, reporting, and scientific limitations in one evidence chain.</p>
 <div class="review-verdict">
@@ -660,8 +663,8 @@ ul.task-list li input[type="checkbox"] {
 <li>a frozen scientific scope review; and</li>
 <li>a versioned, documented, CI-checked release candidate.</li>
 </ol>
-<p>All five gates are complete. The local fast-regression suite passed 77 tests. In the specified <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29796010627">GitHub Actions run</a>, Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.</p>
-<p>This does not mean the PR has already been merged into <code>main</code> or that the tag has been published. Under <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>, PR #5 is paused at the mandatory <strong>pre-merge Build the Lab checkpoint</strong>. Publishing this evidence-backed account comes before the <code>develop → main</code> merge, release-CI confirmation, and <code>v1.0.0</code> tag.</p>
+<p>All five gates are complete. The local fast-regression suite passed 77 tests. In the <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29800846731">release CI</a>, Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.</p>
+<p>Following the policy in <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>, this evidence-backed account was published before PR #5 was merged into <code>main</code> and release CI was confirmed. The verified merge commit <code>d0fc97e</code> is now fixed by the <code>v1.0.0</code> tag and <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0">GitHub Release</a>.</p>
 </section>
 <section id="not-avoiding-failure-but-making-it-interpretable" class="level2">
 <h2 class="anchored" data-anchor-id="not-avoiding-failure-but-making-it-interpretable">Not avoiding failure, but making it interpretable</h2>
@@ -689,6 +692,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="related-material" class="level2">
 <h2 class="anchored" data-anchor-id="related-material">Related material</h2>
 <ul>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0">PySDM Seeding Lab v1.0.0 Release</a></li>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">Pull Request #5</a></li>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TARGETED_RESPONSE_PLAN.md">Targeted response plan</a></li>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted qualification evidence</a></li>

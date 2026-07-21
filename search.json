@@ -253,7 +253,7 @@
     "href": "posts/build-the-lab/2026-07-21-v1-research-workflow/index.html",
     "title": "실험 코드를 연구 워크플로로: PySDM Seeding Lab v1.0.0",
     "section": "",
-    "text": "이전 개발일지는 collision-ON 조건에서 절대 rain state와 seeding response를 분리해 검증하고, common seed, process isolation, detached job, 제한된 병렬 실행을 연결했다. 그 결과 실험은 연구실 서버에서 오래 살아남을 수 있게 됐지만, 아직 어디까지 계산하면 충분한지, 관측과 어떻게 비교할지, 그리고 v1.0에서 무엇을 주장할 수 있는지는 프로젝트 수준의 계약으로 닫히지 않았다.\n2026년 7월 21일의 PySDM-Seeding-Lab PR #5는 이 빈칸을 채운다. 현재 PR 범위는 16개 커밋, 71개 변경 파일, 7,054줄 추가와 98줄 삭제다. 단순히 기능을 더한 릴리스 노트가 아니라, 실행 계획부터 수치 검증, 관측 매핑 검토, 결과 보고, 과학적 한계까지 같은 증거 사슬 안에 두기 위한 개발이었다.",
+    "text": "릴리스 업데이트 (2026-07-21). PR #5가 main에 병합됐고, merge commit d0fc97e는 PySDM Seeding Lab v1.0.0으로 정식 발행됐다. main release CI에서도 Windows·Ubuntu fast regression과 실제 PySDM Ubuntu integration이 모두 통과했다.\n이전 개발일지는 collision-ON 조건에서 절대 rain state와 seeding response를 분리해 검증하고, common seed, process isolation, detached job, 제한된 병렬 실행을 연결했다. 그 결과 실험은 연구실 서버에서 오래 살아남을 수 있게 됐지만, 아직 어디까지 계산하면 충분한지, 관측과 어떻게 비교할지, 그리고 v1.0에서 무엇을 주장할 수 있는지는 프로젝트 수준의 계약으로 닫히지 않았다.\n2026년 7월 21일의 PySDM-Seeding-Lab PR #5는 이 빈칸을 채운다. 현재 PR 범위는 16개 커밋, 71개 변경 파일, 7,054줄 추가와 98줄 삭제다. 단순히 기능을 더한 릴리스 노트가 아니라, 실행 계획부터 수치 검증, 관측 매핑 검토, 결과 보고, 과학적 한계까지 같은 증거 사슬 안에 두기 위한 개발이었다.",
     "crumbs": [
       "PySDM",
       "Build the Lab",
@@ -337,7 +337,7 @@
     "href": "posts/build-the-lab/2026-07-21-v1-research-workflow/index.html#다섯-개-gate로-v1.0의-끝을-고정하기",
     "title": "실험 코드를 연구 워크플로로: PySDM Seeding Lab v1.0.0",
     "section": "다섯 개 gate로 v1.0의 끝을 고정하기",
-    "text": "다섯 개 gate로 v1.0의 끝을 고정하기\n개발이 계속 확장되면 유용한 다음 일이 언제나 하나 더 생긴다. v1.0 release checklist는 종료 조건을 다섯 개의 의존성 있는 gate로 고정했다.\n\n재현 가능한 simulation·analysis software platform\n실제 BASTALIAS observation ingestion과 mapping audit\n외부 validation 가능성의 보수적 disposition\n최종 scientific scope review\nversion·changelog·CI가 고정된 release candidate\n\n현재 다섯 gate는 모두 complete다. 로컬 fast regression 77개가 통과했고, 지정된 GitHub Actions run에서 Windows fast regression, Ubuntu fast regression, 실제 PySDM Ubuntu integration이 모두 성공했다. Release manifest와 scientific scope도 CI가 기계적으로 검사한다.\n다만 이는 이미 main에 병합되고 tag가 발행됐다는 뜻이 아니다. release/v1.0.0.json의 정책에 따라 PR #5는 병합 전 Build the Lab checkpoint에서 멈춰 있다. 이 글이 개발의 근거와 한계를 먼저 공개하고, 그 다음 develop → main 병합, release CI 확인, v1.0.0 tag 생성으로 이어진다.",
+    "text": "다섯 개 gate로 v1.0의 끝을 고정하기\n개발이 계속 확장되면 유용한 다음 일이 언제나 하나 더 생긴다. v1.0 release checklist는 종료 조건을 다섯 개의 의존성 있는 gate로 고정했다.\n\n재현 가능한 simulation·analysis software platform\n실제 BASTALIAS observation ingestion과 mapping audit\n외부 validation 가능성의 보수적 disposition\n최종 scientific scope review\nversion·changelog·CI가 고정된 release candidate\n\n현재 다섯 gate는 모두 complete다. 로컬 fast regression 77개가 통과했고, release CI에서 Windows fast regression, Ubuntu fast regression, 실제 PySDM Ubuntu integration이 모두 성공했다. Release manifest와 scientific scope도 CI가 기계적으로 검사한다.\nrelease/v1.0.0.json의 정책대로 이 글을 먼저 공개한 뒤 PR #5를 main에 병합하고 release CI를 확인했다. 검증된 merge commit d0fc97e는 v1.0.0 tag와 GitHub Release로 고정됐다.",
     "crumbs": [
       "PySDM",
       "Build the Lab",
@@ -373,7 +373,7 @@
     "href": "posts/build-the-lab/2026-07-21-v1-research-workflow/index.html#연결-자료",
     "title": "실험 코드를 연구 워크플로로: PySDM Seeding Lab v1.0.0",
     "section": "연결 자료",
-    "text": "연결 자료\n\nPull Request #5\nTargeted response plan\nTargeted qualification evidence\nColumnar cache design\nArrow IPC benchmark\nTransition observation validation\nBASTALIAS import evidence\nARM ENA candidate audit\nv1.0 scientific scope\nv1.0 release checklist\nChangelog\n이전 개발일지: 비를 만드는 실험을 검증하고, 서버가 밤새 일하게 하기",
+    "text": "연결 자료\n\nPySDM Seeding Lab v1.0.0 Release\nPull Request #5\nTargeted response plan\nTargeted qualification evidence\nColumnar cache design\nArrow IPC benchmark\nTransition observation validation\nBASTALIAS import evidence\nARM ENA candidate audit\nv1.0 scientific scope\nv1.0 release checklist\nChangelog\n이전 개발일지: 비를 만드는 실험을 검증하고, 서버가 밤새 일하게 하기",
     "crumbs": [
       "PySDM",
       "Build the Lab",
@@ -900,7 +900,7 @@
     "href": "en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html",
     "title": "From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0",
     "section": "",
-    "text": "The previous development log separated absolute rain-state qualification from seeding-response qualification, then connected common seeds, process isolation, detached jobs, and bounded parallel execution. Experiments could finally survive a long night on the lab server. What remained open was a project-level contract: How much computation is enough, how should model transitions be compared with observations, and what can v1.0 actually claim?\nPySDM-Seeding-Lab PR #5, at its 21 July 2026 checkpoint, answers those questions across 16 commits and 71 changed files, with 7,054 additions and 98 deletions. This was not a changelog-sized feature bundle. It was an effort to place execution planning, numerical qualification, observation-mapping review, reporting, and scientific limitations in one evidence chain.",
+    "text": "Release update (21 July 2026). PR #5 was merged into main, and merge commit d0fc97e was published as PySDM Seeding Lab v1.0.0. The main release CI passed Windows and Ubuntu fast regression plus real PySDM integration on Ubuntu.\nThe previous development log separated absolute rain-state qualification from seeding-response qualification, then connected common seeds, process isolation, detached jobs, and bounded parallel execution. Experiments could finally survive a long night on the lab server. What remained open was a project-level contract: How much computation is enough, how should model transitions be compared with observations, and what can v1.0 actually claim?\nPySDM-Seeding-Lab PR #5, at its 21 July 2026 checkpoint, answers those questions across 16 commits and 71 changed files, with 7,054 additions and 98 deletions. This was not a changelog-sized feature bundle. It was an effort to place execution planning, numerical qualification, observation-mapping review, reporting, and scientific limitations in one evidence chain.",
     "crumbs": [
       "PySDM",
       "Build the Lab",
@@ -984,7 +984,7 @@
     "href": "en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html#giving-v1.0-a-finite-finish-line",
     "title": "From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0",
     "section": "Giving v1.0 a finite finish line",
-    "text": "Giving v1.0 a finite finish line\nThere is always another useful task in an expanding research codebase. The v1.0 release checklist defines five dependency-ordered gates:\n\na reproducible simulation and analysis platform;\nreal BASTALIAS observation ingestion and a mapping audit;\na conservative external-validation disposition;\na frozen scientific scope review; and\na versioned, documented, CI-checked release candidate.\n\nAll five gates are complete. The local fast-regression suite passed 77 tests. In the specified GitHub Actions run, Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.\nThis does not mean the PR has already been merged into main or that the tag has been published. Under release/v1.0.0.json, PR #5 is paused at the mandatory pre-merge Build the Lab checkpoint. Publishing this evidence-backed account comes before the develop → main merge, release-CI confirmation, and v1.0.0 tag.",
+    "text": "Giving v1.0 a finite finish line\nThere is always another useful task in an expanding research codebase. The v1.0 release checklist defines five dependency-ordered gates:\n\na reproducible simulation and analysis platform;\nreal BASTALIAS observation ingestion and a mapping audit;\na conservative external-validation disposition;\na frozen scientific scope review; and\na versioned, documented, CI-checked release candidate.\n\nAll five gates are complete. The local fast-regression suite passed 77 tests. In the release CI, Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.\nFollowing the policy in release/v1.0.0.json, this evidence-backed account was published before PR #5 was merged into main and release CI was confirmed. The verified merge commit d0fc97e is now fixed by the v1.0.0 tag and GitHub Release.",
     "crumbs": [
       "PySDM",
       "Build the Lab",
@@ -1020,7 +1020,7 @@
     "href": "en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html#related-material",
     "title": "From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0",
     "section": "Related material",
-    "text": "Related material\n\nPull Request #5\nTargeted response plan\nTargeted qualification evidence\nColumnar cache design\nArrow IPC benchmark\nTransition observation validation\nBASTALIAS import evidence\nARM ENA candidate audit\nv1.0 scientific scope\nv1.0 release checklist\nChangelog\nPrevious log: Qualifying Rain-Producing Experiments and Letting the Server Work Overnight",
+    "text": "Related material\n\nPySDM Seeding Lab v1.0.0 Release\nPull Request #5\nTargeted response plan\nTargeted qualification evidence\nColumnar cache design\nArrow IPC benchmark\nTransition observation validation\nBASTALIAS import evidence\nARM ENA candidate audit\nv1.0 scientific scope\nv1.0 release checklist\nChangelog\nPrevious log: Qualifying Rain-Producing Experiments and Letting the Server Work Overnight",
     "crumbs": [
       "PySDM",
       "Build the Lab",
