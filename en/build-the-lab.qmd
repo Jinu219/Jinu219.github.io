@@ -16,6 +16,14 @@ These notes focus on the problem behind each change, the design decision, the fa
 
 ::: {.manual-post-list}
 ::: {.manual-post}
+<div class="manual-post-meta">2026-07-21 · Jinu</div>
+
+### [From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0](posts/build-the-lab/2026-07-21-v1-research-workflow/index.qmd)
+
+How targeted qualification, resumable evidence, observation-mapping audits, and a machine-checked claim contract established a finite, reproducible v1.0 release boundary.
+:::
+
+::: {.manual-post}
 <div class="manual-post-meta">2026-07-16 · Jinu</div>
 
 ### [Qualifying Rain-Producing Experiments and Letting the Server Work Overnight](posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd)

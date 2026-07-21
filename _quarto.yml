@@ -57,6 +57,8 @@ website:
               text: "결과를 믿을 수 있는 코드"
             - href: posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd
               text: "강수 검증과 서버 실행"
+            - href: posts/build-the-lab/2026-07-21-v1-research-workflow/index.qmd
+              text: "실험 코드에서 연구 워크플로로"
         - section: "Experiments"
           href: experiments.qmd
           contents:
@@ -92,6 +94,8 @@ website:
               text: "Making results trustworthy"
             - href: en/posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd
               text: "Rain qualification & server"
+            - href: en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.qmd
+              text: "From code to research workflow"
         - section: "Experiments"
           href: en/experiments.qmd
           contents:

@@ -50,6 +50,14 @@ Read the questions, methods, assumptions, and limitations of cloud-seeding liter
 
 ::: {.manual-post-list}
 ::: {.manual-post}
+<div class="manual-post-meta">2026-07-21 · Jinu</div>
+
+### [From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0](posts/build-the-lab/2026-07-21-v1-research-workflow/index.qmd)
+
+Completing a reproducible release workflow without turning unconverged response or observation proxies into unsupported cloud-seeding claims.
+:::
+
+::: {.manual-post}
 <div class="manual-post-meta">2026-07-16 · Jinu</div>
 
 ### [Qualifying Rain-Producing Experiments and Letting the Server Work Overnight](posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd)
@@ -89,11 +97,4 @@ Introducing the Super-Droplet Method and PySDM, then mapping the learning and ex
 How diagnostic provenance, numerical qualification, failure evidence, and portable reports turned PySDM Seeding Lab into a research tool.
 :::
 
-::: {.manual-post}
-<div class="manual-post-meta">2026-07-13 · Jinu</div>
-
-### [Turning PySDM Experiment Scripts into a Seeding Lab](posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd)
-
-Designing a traceable Scenario → Sweep → Run → Dashboard workflow for cloud-seeding experiments.
-:::
 :::
