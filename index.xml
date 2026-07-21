@@ -42,7 +42,7 @@
 <section id="회를-밀어붙이지-않고-40회로-질문을-좁히기" class="level2">
 <h2 class="anchored" data-anchor-id="회를-밀어붙이지-않고-40회로-질문을-좁히기">70회를 밀어붙이지 않고 40회로 질문을 좁히기</h2>
 <p>기존 <code>rain_response_standard</code> 계획은 2.5초 timestep, seeding/background super-droplet 각각 1,600개, common random seed 5개를 사용한다. 전체 계획을 실행하면 control과 seeding을 합쳐 70회가 필요했다. 하지만 pilot evidence가 이미 절대 상태와 response의 거동이 다르다는 것을 보여준 상황에서, 모든 조합을 실행하는 것이 반드시 더 좋은 질문은 아니었다.</p>
-<p>새 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TARGETED_RESPONSE_PLAN.md">targeted qualification 계획</a>은 finest reference와 각 수치 축의 next-finest 비교만 남겼다.</p>
+<p>새 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TARGETED_RESPONSE_PLAN.md">targeted qualification 계획</a>은 finest reference와 각 수치 축의 next-finest 비교만 남겼다.</p>
 <pre class="text"><code>4 one-factor-at-reference cases
 × 5 common random seeds
 × control / seeding
@@ -53,54 +53,56 @@
 <section id="csv를-버리지-않고-읽기-속도만-두-배로-만들기" class="level2">
 <h2 class="anchored" data-anchor-id="csv를-버리지-않고-읽기-속도만-두-배로-만들기">CSV를 버리지 않고 읽기 속도만 두 배로 만들기</h2>
 <p>결과가 커지자 Streamlit dashboard가 같은 CSV를 반복해서 parsing하는 비용이 눈에 띄기 시작했다. 그렇다고 CSV를 더 빠른 binary format으로 교체하면 사람이 열어볼 수 있는 원본, 다운로드, migration, provenance 계약이 함께 흔들린다.</p>
-<p>결정은 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/COLUMNAR_CACHE.md">CSV를 canonical source of truth로 유지</a>하고, 그 옆의 숨김 디렉터리에 Arrow IPC cache를 두는 것이었다. Cache는 없어지거나 깨지거나 source fingerprint가 달라지면 폐기하고 CSV에서 다시 만든다. <code>pyarrow</code>가 없거나 작은 table이면 그대로 CSV를 읽는다. 즉 Arrow는 연구 결과가 아니라 <strong>다시 만들 수 있는 성능 계층</strong>이다.</p>
-<p>실제 101 × 505, 51,005-cell 결과를 20회씩 읽은 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">benchmark</a>는 다음과 같았다.</p>
+<p>결정은 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/COLUMNAR_CACHE.md">CSV를 canonical source of truth로 유지</a>하고, 그 옆의 숨김 디렉터리에 Arrow IPC cache를 두는 것이었다. Cache는 없어지거나 깨지거나 source fingerprint가 달라지면 폐기하고 CSV에서 다시 만든다. <code>pyarrow</code>가 없거나 작은 table이면 그대로 CSV를 읽는다. 즉 Arrow는 연구 결과가 아니라 <strong>다시 만들 수 있는 성능 계층</strong>이다.</p>
+<p>실제 101 × 505, 51,005-cell 결과를 20회씩 읽은 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">benchmark</a>는 다음과 같았다.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Reader</th>
-<th style="text-align: right;">Median read</th>
-<th style="text-align: right;">CSV 대비</th>
+<th>Format</th>
+<th style="text-align: right;">Raw CSV</th>
+<th style="text-align: right;">Cold build/read</th>
+<th style="text-align: right;">Warm cache</th>
+<th style="text-align: right;">Warm / CSV</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Raw CSV</td>
-<td style="text-align: right;">16.271 ms</td>
-<td style="text-align: right;">1.000×</td>
+<td>Parquet prototype</td>
+<td style="text-align: right;">24.981 ms</td>
+<td style="text-align: right;">370.801 ms</td>
+<td style="text-align: right;">33.058 ms</td>
+<td style="text-align: right;">0.756×</td>
 </tr>
 <tr class="even">
-<td>Warm Arrow IPC</td>
+<td>Arrow IPC v2</td>
+<td style="text-align: right;">16.271 ms</td>
+<td style="text-align: right;">61.597 ms</td>
 <td style="text-align: right;">8.076 ms</td>
 <td style="text-align: right;">2.015×</td>
-</tr>
-<tr class="odd">
-<td>Parquet</td>
-<td style="text-align: right;">24.981 ms</td>
-<td style="text-align: right;">0.652×</td>
 </tr>
 </tbody>
 </table>
 <p>Arrow는 warm read latency를 약 50.4% 줄였고 약 7번째 전체 read부터 cache 구축 비용을 회수했다. 저장 공간은 CSV의 1.2467배였다. Parquet은 흔히 쓰인다는 이유만으로 채택하지 않았다. 이 result shape에서는 CSV보다 느렸기 때문에 제외했다. 최적화 선택도 선호가 아니라 exact dataframe equality와 실제 benchmark evidence에 묶였다.</p>
+<p>Parquet screening과 Arrow IPC 확인은 별도의 순차 실행이므로, 절대 시간을 서로 직접 비교하기보다 각 실행의 CSV baseline 대비 비율을 해석했다.</p>
 </section>
 <section id="관측을-넣는-것과-관측으로-검증하는-것을-분리하기" class="level2">
 <h2 class="anchored" data-anchor-id="관측을-넣는-것과-관측으로-검증하는-것을-분리하기">관측을 넣는 것과 관측으로 검증하는 것을 분리하기</h2>
-<p>모델 내부의 1% rain-liquid fraction transition을 실제 drizzle onset과 비교하려면 먼저 “관측 event 한 행이 무엇인가”부터 고정해야 했다. 새 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TRANSITION_OBSERVATION_VALIDATION.md">observation-event contract</a>는 event ID, control/seeding case, onset과 uncertainty, model-time offset, time origin, source ID, 관측 방법, event definition, sampling context와 mapping status를 요구한다.</p>
+<p>모델 내부의 1% rain-liquid fraction transition을 실제 drizzle onset과 비교하려면 먼저 “관측 event 한 행이 무엇인가”부터 고정해야 했다. 새 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TRANSITION_OBSERVATION_VALIDATION.md">observation-event contract</a>는 event ID, control/seeding case, onset과 uncertainty, model-time offset, time origin, source ID, 관측 방법, event definition, sampling context와 mapping status를 요구한다.</p>
 <p>비교 package는 모든 threshold candidate에 대한 onset error, RMSE, uncertainty 안의 비교 비율, 원본 SHA-256과 manifest를 남긴다. 하지만 가장 낮은 MAE를 자동 calibration으로 승격하지 않는다. Synthetic row는 software workflow만 검증하며, 실제 관측도 sampled volume과 parcel time의 대응이 불충분하면 <code>spatiotemporal_proxy</code>로 남는다.</p>
 <section id="bastalias-실제-데이터지만-움직이는-관측-부피" class="level3">
 <h3 class="anchored" data-anchor-id="bastalias-실제-데이터지만-움직이는-관측-부피">BASTALIAS: 실제 데이터지만 움직이는 관측 부피</h3>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/BASTALIAS_OBSERVATION_IMPORT.md">EUREC4A BASTALIAS importer</a>는 약 1.5초 간격의 airborne radar–lidar NetCDF에서 지속적인 drizzle detection을 추출하고, source file 전체의 SHA-256과 -15/-17/-20 dBZ 경계 민감도를 보존했다. 검토한 10분 window의 400개 sample은 모두 quality flag를 통과했고, 선택한 -20 dBZ event는 window 시작 후 7.121초에 검출됐다.</p>
-<p>그러나 항공기는 이동하면서 서로 다른 수평 부피를 관측한다. 3초간 이어진 echo가 한 parcel의 시간 진화를 뜻하지 않을 수 있다. 그래서 importer는 실제 관측임에도 항상 <code>mapping_status = spatiotemporal_proxy</code>를 기록한다. 27개 model candidate와 비교하는 pipeline은 끝까지 실행됐지만 direct-temporal row는 0개였고, <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/BASTALIAS_IMPORT_20260720.md">mapping audit</a>은 1% floor를 검증하거나 수정하는 데 이 결과를 쓰지 못하도록 했다.</p>
+<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/BASTALIAS_OBSERVATION_IMPORT.md">EUREC4A BASTALIAS importer</a>는 약 1.5초 간격의 airborne radar–lidar NetCDF에서 지속적인 drizzle detection을 추출하고, source file 전체의 SHA-256과 -15/-17/-20 dBZ 경계 민감도를 보존했다. 검토한 10분 window의 400개 sample은 모두 quality flag를 통과했고, 선택한 -20 dBZ event는 window 시작 후 7.121초에 검출됐다.</p>
+<p>그러나 항공기는 이동하면서 서로 다른 수평 부피를 관측한다. 3초간 이어진 echo가 한 parcel의 시간 진화를 뜻하지 않을 수 있다. 그래서 importer는 실제 관측임에도 항상 <code>mapping_status = spatiotemporal_proxy</code>를 기록한다. 27개 model candidate와 비교하는 pipeline은 끝까지 실행됐지만 direct-temporal row는 0개였고, <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/BASTALIAS_IMPORT_20260720.md">mapping audit</a>은 1% floor를 검증하거나 수정하는 데 이 결과를 쓰지 못하도록 했다.</p>
 </section>
 <section id="arm-ena-고정된-기둥도-parcel-history는-아니다" class="level3">
 <h3 class="anchored" data-anchor-id="arm-ena-고정된-기둥도-parcel-history는-아니다">ARM ENA: 고정된 기둥도 parcel history는 아니다</h3>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/ARM_ENA_OBSERVATION_IMPORT.md">ARM ENA pipeline</a>은 KAZR/KAZRARSCL fixed-column 자료를 다음 후보로 삼았다. Credential을 환경 변수로만 받고, partial download를 원자적으로 교체하며, source hash, QC field, height range와 -20/-17/-15 dBZ threshold sensitivity를 package에 기록한다.</p>
-<p>고정된 zenith radar는 움직이는 항공기보다 시간 비교에 가깝지만, 바람이 서로 다른 parcel을 관측 기둥으로 운반하는 Eulerian sample이다. Reflectivity도 모델의 rain-liquid fraction과 같은 물리량이 아니다. 실제 ARM credential과 source file이 없는 이번 checkpoint의 test는 synthetic ARM-format NetCDF로 software behavior만 확인했다. 따라서 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">candidate audit</a> 역시 외부 calibration gate를 “성공”으로 바꾸지 않고 proxy로 닫았다.</p>
+<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/ARM_ENA_OBSERVATION_IMPORT.md">ARM ENA pipeline</a>은 KAZR/KAZRARSCL fixed-column 자료를 다음 후보로 삼았다. Credential을 환경 변수로만 받고, partial download를 원자적으로 교체하며, source hash, QC field, height range와 -20/-17/-15 dBZ threshold sensitivity를 package에 기록한다.</p>
+<p>고정된 zenith radar는 움직이는 항공기보다 시간 비교에 가깝지만, 바람이 서로 다른 parcel을 관측 기둥으로 운반하는 Eulerian sample이다. Reflectivity도 모델의 rain-liquid fraction과 같은 물리량이 아니다. 실제 ARM credential과 source file이 없는 이번 checkpoint의 test는 synthetic ARM-format NetCDF로 software behavior만 확인했다. 따라서 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">candidate audit</a> 역시 외부 calibration gate를 “성공”으로 바꾸지 않고 proxy로 닫았다.</p>
 </section>
 </section>
 <section id="더-높은-해상도에서-발견한-것은-효과가-아니라-경계였다" class="level2">
 <h2 class="anchored" data-anchor-id="더-높은-해상도에서-발견한-것은-효과가-아니라-경계였다">더 높은 해상도에서 발견한 것은 효과가 아니라 경계였다</h2>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted run evidence</a>는 계획한 20/20 case-seed pair와 40/40 physical execution을 모두 완료했다. 실패한 case와 member는 각각 0개였다.</p>
+<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted run evidence</a>는 계획한 20/20 case-seed pair와 40/40 physical execution을 모두 완료했다. 실패한 case와 member는 각각 0개였다.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 21%">
@@ -131,12 +133,12 @@
 </tr>
 </tbody>
 </table>
-<p>Finest reference의 다섯 seed는 모두 final rain response가 양의 방향이었다. 평균 final difference는 약 0.0001377 kg/kg였다. 하지만 이 5/5는 confidence interval도, significance test도, 수렴한 effect estimate도 아니다. 각 seed가 독립적으로 response support를 거부했고, timestep·seeding SD·background SD 축의 최대 response error는 각각 1630.411%, 2272.468%, 2465.158%였다.</p>
+<p>Finest reference의 다섯 seed는 모두 final rain response가 양의 방향이었다. 평균 final difference는 약 0.0001377 kg/kg였다. 하지만 이 5/5는 confidence interval도, significance test도, 수렴한 effect estimate도 아니다. 각 seed가 독립적으로 response support를 거부했고, timestep·seeding super-droplet count·background super-droplet count 축의 최대 response error는 각각 1630.411%, 2272.468%, 2465.158%였다.</p>
 <p>원하는 방향의 숫자를 얻었는데도 “효과”라고 부르지 않은 것이 이번 개발의 전환점이다. 절대 rain state는 검토한 collision-ON marine profile, 네 OFAT case, 다섯 common seed와 finest/next-finest 비교 안에서 지지된다. 반면 두 상태의 작은 차이는 해상도 변화에 수렴하지 않았다. 따라서 전체 70회를 더 돌려 통과를 기대하기보다, 방향과 spread는 descriptive result로, resolution convergence는 별도의 실패 판정으로 보존했다.</p>
 </section>
 <section id="주장도-데이터처럼-schema로-관리하기" class="level2">
 <h2 class="anchored" data-anchor-id="주장도-데이터처럼-schema로-관리하기">주장도 데이터처럼 schema로 관리하기</h2>
-<p>과학적 경계를 문서 한 구석의 주의 문구로만 남기면 다음 분석이나 UI가 쉽게 잊을 수 있다. PR #5는 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/release/v1_scientific_scope.json"><code>release/v1_scientific_scope.json</code></a>을 machine-readable source of truth로 만들고, claim의 순서와 상태, 범위, limitation과 evidence file을 검사한다.</p>
+<p>과학적 경계를 문서 한 구석의 주의 문구로만 남기면 다음 분석이나 UI가 쉽게 잊을 수 있다. PR #5는 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1_scientific_scope.json"><code>release/v1_scientific_scope.json</code></a>을 machine-readable source of truth로 만들고, claim의 순서와 상태, 범위, limitation과 evidence file을 검사한다.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -187,7 +189,7 @@
 </section>
 <section id="다섯-개-gate로-v1.0의-끝을-고정하기" class="level2">
 <h2 class="anchored" data-anchor-id="다섯-개-gate로-v1.0의-끝을-고정하기">다섯 개 gate로 v1.0의 끝을 고정하기</h2>
-<p>개발이 계속 확장되면 유용한 다음 일이 언제나 하나 더 생긴다. <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a>는 종료 조건을 다섯 개의 의존성 있는 gate로 고정했다.</p>
+<p>개발이 계속 확장되면 유용한 다음 일이 언제나 하나 더 생긴다. <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a>는 종료 조건을 다섯 개의 의존성 있는 gate로 고정했다.</p>
 <ol type="1">
 <li>재현 가능한 simulation·analysis software platform</li>
 <li>실제 BASTALIAS observation ingestion과 mapping audit</li>
@@ -196,11 +198,11 @@
 <li>version·changelog·CI가 고정된 release candidate</li>
 </ol>
 <p>현재 다섯 gate는 모두 complete다. 로컬 fast regression 77개가 통과했고, 지정된 <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29796010627">GitHub Actions run</a>에서 Windows fast regression, Ubuntu fast regression, 실제 PySDM Ubuntu integration이 모두 성공했다. Release manifest와 scientific scope도 CI가 기계적으로 검사한다.</p>
-<p>다만 이는 이미 <code>main</code>에 병합되고 tag가 발행됐다는 뜻이 아니다. <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>의 정책에 따라 PR #5는 <strong>병합 전 Build the Lab checkpoint</strong>에서 멈춰 있다. 이 글이 개발의 근거와 한계를 먼저 공개하고, 그 다음 <code>develop → main</code> 병합, release CI 확인, <code>v1.0.0</code> tag 생성으로 이어진다.</p>
+<p>다만 이는 이미 <code>main</code>에 병합되고 tag가 발행됐다는 뜻이 아니다. <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>의 정책에 따라 PR #5는 <strong>병합 전 Build the Lab checkpoint</strong>에서 멈춰 있다. 이 글이 개발의 근거와 한계를 먼저 공개하고, 그 다음 <code>develop → main</code> 병합, release CI 확인, <code>v1.0.0</code> tag 생성으로 이어진다.</p>
 </section>
 <section id="실패하지-않은-것이-아니라-실패를-해석할-수-있게-된-것" class="level2">
 <h2 class="anchored" data-anchor-id="실패하지-않은-것이-아니라-실패를-해석할-수-있게-된-것">실패하지 않은 것이 아니라, 실패를 해석할 수 있게 된 것</h2>
-<p>v1.0.0의 완료는 모든 과학적 질문에 긍정적인 답을 얻었다는 뜻이 아니다. 오히려 어떤 질문은 현재 evidence로 답할 수 없다는 판정을 반복 가능하게 만든 것이다.</p>
+<p>v1.0.0 릴리스 후보의 완료는 모든 과학적 질문에 긍정적인 답을 얻었다는 뜻이 아니다. 오히려 어떤 질문은 현재 evidence로 답할 수 없다는 판정을 반복 가능하게 만든 것이다.</p>
 <ul>
 <li>절대 rain state는 제한된 profile에서 수치적으로 supported다.</li>
 <li>Seeding response 방향은 descriptive지만 정량 response는 unsupported다.</li>
@@ -225,16 +227,16 @@
 <h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
 <ul>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">Pull Request #5</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TARGETED_RESPONSE_PLAN.md">Targeted response plan</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted qualification evidence</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/COLUMNAR_CACHE.md">Columnar cache design</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">Arrow IPC benchmark</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TRANSITION_OBSERVATION_VALIDATION.md">Transition observation validation</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/BASTALIAS_IMPORT_20260720.md">BASTALIAS import evidence</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">ARM ENA candidate audit</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_SCIENTIFIC_SCOPE.md">v1.0 scientific scope</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/CHANGELOG.md">Changelog</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TARGETED_RESPONSE_PLAN.md">Targeted response plan</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted qualification evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/COLUMNAR_CACHE.md">Columnar cache design</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">Arrow IPC benchmark</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TRANSITION_OBSERVATION_VALIDATION.md">Transition observation validation</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/BASTALIAS_IMPORT_20260720.md">BASTALIAS import evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">ARM ENA candidate audit</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/V1_SCIENTIFIC_SCOPE.md">v1.0 scientific scope</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/CHANGELOG.md">Changelog</a></li>
 <li><a href="../../../posts/build-the-lab/2026-07-16-rain-server-execution/index.html">이전 개발일지: 비를 만드는 실험을 검증하고, 서버가 밤새 일하게 하기</a></li>
 </ul>
 

@@ -505,7 +505,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="asking-the-high-resolution-question-in-40-runs-not-70" class="level2">
 <h2 class="anchored" data-anchor-id="asking-the-high-resolution-question-in-40-runs-not-70">Asking the high-resolution question in 40 runs, not 70</h2>
 <p>The original <code>rain_response_standard</code> plan called for a 2.5 s timestep, 1,600 seeded and 1,600 background super-droplets, and five common random seeds. Running its complete plan would require 70 control/seeding executions. Pilot evidence had already shown that absolute state and response behaved very differently, so executing every combination was not automatically the best scientific question.</p>
-<p>The new <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TARGETED_RESPONSE_PLAN.md">targeted qualification plan</a> retains only the finest reference and each numerical axis’s next-finest comparison:</p>
+<p>The new <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TARGETED_RESPONSE_PLAN.md">targeted qualification plan</a> retains only the finest reference and each numerical axis’s next-finest comparison:</p>
 <pre class="text"><code>4 one-factor-at-reference cases
 × 5 common random seeds
 × control / seeding
@@ -516,54 +516,56 @@ ul.task-list li input[type="checkbox"] {
 <section id="doubling-repeated-read-speed-without-replacing-csv" class="level2">
 <h2 class="anchored" data-anchor-id="doubling-repeated-read-speed-without-replacing-csv">Doubling repeated-read speed without replacing CSV</h2>
 <p>Repeated dashboard views made large CSV parsing increasingly expensive. Replacing CSV with a binary format would also replace the human-readable provenance, migration, and download contract.</p>
-<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/COLUMNAR_CACHE.md">columnar-cache design</a> keeps CSV as the canonical source of truth and stores Arrow IPC in a hidden, disposable cache. A missing, corrupt, or stale cache is rebuilt from CSV. Systems without <code>pyarrow</code>, and tables below the default size threshold, continue to read CSV. Arrow is a rebuildable performance layer, not a scientific result.</p>
-<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">benchmark</a> repeatedly read a real 101 × 505 result with 51,005 cells:</p>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/COLUMNAR_CACHE.md">columnar-cache design</a> keeps CSV as the canonical source of truth and stores Arrow IPC in a hidden, disposable cache. A missing, corrupt, or stale cache is rebuilt from CSV. Systems without <code>pyarrow</code>, and tables below the default size threshold, continue to read CSV. Arrow is a rebuildable performance layer, not a scientific result.</p>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">benchmark</a> repeatedly read a real 101 × 505 result with 51,005 cells:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Reader</th>
-<th style="text-align: right;">Median read</th>
-<th style="text-align: right;">Relative to CSV</th>
+<th>Format</th>
+<th style="text-align: right;">Raw CSV</th>
+<th style="text-align: right;">Cold build/read</th>
+<th style="text-align: right;">Warm cache</th>
+<th style="text-align: right;">Warm / CSV</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Raw CSV</td>
-<td style="text-align: right;">16.271 ms</td>
-<td style="text-align: right;">1.000×</td>
+<td>Parquet prototype</td>
+<td style="text-align: right;">24.981 ms</td>
+<td style="text-align: right;">370.801 ms</td>
+<td style="text-align: right;">33.058 ms</td>
+<td style="text-align: right;">0.756×</td>
 </tr>
 <tr class="even">
-<td>Warm Arrow IPC</td>
+<td>Arrow IPC v2</td>
+<td style="text-align: right;">16.271 ms</td>
+<td style="text-align: right;">61.597 ms</td>
 <td style="text-align: right;">8.076 ms</td>
 <td style="text-align: right;">2.015×</td>
-</tr>
-<tr class="odd">
-<td>Parquet</td>
-<td style="text-align: right;">24.981 ms</td>
-<td style="text-align: right;">0.652×</td>
 </tr>
 </tbody>
 </table>
 <p>Warm Arrow reduced latency by about 50.4%, reached break-even after roughly seven total reads, and occupied 1.2467 times the CSV storage. Parquet was not selected merely because it is familiar: it was slower than CSV for this result shape. Exact dataframe equality and measured behavior—not format preference—made the decision.</p>
+<p>The Parquet screening and Arrow IPC confirmation were separate sequential runs, so the meaningful comparison is each format’s ratio to its own CSV baseline rather than a direct comparison of absolute timings.</p>
 </section>
 <section id="separating-observation-ingestion-from-observational-validation" class="level2">
 <h2 class="anchored" data-anchor-id="separating-observation-ingestion-from-observational-validation">Separating observation ingestion from observational validation</h2>
-<p>Before comparing the model’s internal 1% rain-liquid transition with observed drizzle onset, the project needed to define what one observation event means. The new <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TRANSITION_OBSERVATION_VALIDATION.md">observation-event contract</a> requires event and case identity, onset and uncertainty, model-time offset, time origin, source ID, observation method, event definition, sampling context, and mapping status.</p>
+<p>Before comparing the model’s internal 1% rain-liquid transition with observed drizzle onset, the project needed to define what one observation event means. The new <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TRANSITION_OBSERVATION_VALIDATION.md">observation-event contract</a> requires event and case identity, onset and uncertainty, model-time offset, time origin, source ID, observation method, event definition, sampling context, and mapping status.</p>
 <p>An immutable comparison package records every threshold candidate, onset error, RMSE, within-uncertainty fraction, source hashes, and a manifest. The lowest-MAE candidate is never promoted automatically to a calibration. Synthetic rows test only software behavior; even real observations remain <code>spatiotemporal_proxy</code> when sampled volume and parcel time are not defensibly aligned.</p>
 <section id="bastalias-real-data-from-a-moving-volume" class="level3">
 <h3 class="anchored" data-anchor-id="bastalias-real-data-from-a-moving-volume">BASTALIAS: real data from a moving volume</h3>
-<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/BASTALIAS_OBSERVATION_IMPORT.md">EUREC4A BASTALIAS importer</a> extracts persistent drizzle detections from approximately 1.5 s airborne radar–lidar NetCDF data. It retains the source file’s full SHA-256 and sensitivity across the -15, -17, and -20 dBZ cloud–drizzle boundaries. All 400 samples in the reviewed ten-minute window passed the time quality flag; the selected -20 dBZ event appeared 7.121 s after the window began.</p>
-<p>The aircraft, however, observes different horizontal volumes as it moves. A persistent echo is not necessarily the temporal history of one parcel. The importer therefore forces <code>mapping_status = spatiotemporal_proxy</code> even though the evidence class is observation. The pipeline compared the event against 27 model candidates, but produced zero direct-temporal rows. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/BASTALIAS_IMPORT_20260720.md">mapping audit</a> explicitly prevents those rankings from calibrating the operational 1% floor.</p>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/BASTALIAS_OBSERVATION_IMPORT.md">EUREC4A BASTALIAS importer</a> extracts persistent drizzle detections from approximately 1.5 s airborne radar–lidar NetCDF data. It retains the source file’s full SHA-256 and sensitivity across the -15, -17, and -20 dBZ cloud–drizzle boundaries. All 400 samples in the reviewed ten-minute window passed the time quality flag; the selected -20 dBZ event appeared 7.121 s after the window began.</p>
+<p>The aircraft, however, observes different horizontal volumes as it moves. A persistent echo is not necessarily the temporal history of one parcel. The importer therefore forces <code>mapping_status = spatiotemporal_proxy</code> even though the evidence class is observation. The pipeline compared the event against 27 model candidates, but produced zero direct-temporal rows. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/BASTALIAS_IMPORT_20260720.md">mapping audit</a> explicitly prevents those rankings from calibrating the operational 1% floor.</p>
 </section>
 <section id="arm-ena-a-fixed-column-is-still-not-a-parcel-history" class="level3">
 <h3 class="anchored" data-anchor-id="arm-ena-a-fixed-column-is-still-not-a-parcel-history">ARM ENA: a fixed column is still not a parcel history</h3>
-<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/ARM_ENA_OBSERVATION_IMPORT.md">ARM ENA pipeline</a> selects fixed-column KAZR/KAZRARSCL data as the next candidate. Credentials are accepted only through environment variables; partial downloads are atomically replaced; source hashes, QC fields, height selection, and -20/-17/-15 dBZ sensitivity are retained in the package.</p>
-<p>A zenith radar is closer to a time series than a moving aircraft, but it observes an Eulerian column through which wind advects different parcels. Radar reflectivity is also not the model’s rain-liquid fraction. No ARM credential or real source file was available at this checkpoint, so a synthetic ARM-format NetCDF verified software behavior only. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">candidate audit</a> therefore closes the v1.0 investigation with a proxy disposition, not a successful external calibration.</p>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/ARM_ENA_OBSERVATION_IMPORT.md">ARM ENA pipeline</a> selects fixed-column KAZR/KAZRARSCL data as the next candidate. Credentials are accepted only through environment variables; partial downloads are atomically replaced; source hashes, QC fields, height selection, and -20/-17/-15 dBZ sensitivity are retained in the package.</p>
+<p>A zenith radar is closer to a time series than a moving aircraft, but it observes an Eulerian column through which wind advects different parcels. Radar reflectivity is also not the model’s rain-liquid fraction. No ARM credential or real source file was available at this checkpoint, so a synthetic ARM-format NetCDF verified software behavior only. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">candidate audit</a> therefore closes the v1.0 investigation with a proxy disposition, not a successful external calibration.</p>
 </section>
 </section>
 <section id="the-finer-run-found-a-boundary-not-an-effect" class="level2">
 <h2 class="anchored" data-anchor-id="the-finer-run-found-a-boundary-not-an-effect">The finer run found a boundary, not an effect</h2>
-<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">targeted-run evidence</a> completed all 20 case-seed pairs and all 40 physical executions, with zero failed cases and zero failed members.</p>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">targeted-run evidence</a> completed all 20 case-seed pairs and all 40 physical executions, with zero failed cases and zero failed members.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 21%">
@@ -594,12 +596,12 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p>All five finest-reference seeds had a positive final rain-response direction, with a mean final difference of about 0.0001377 kg/kg. That 5/5 result is neither a confidence interval nor a significance test, and it is not a converged effect estimate. Every seed independently rejected response support. Maximum response errors along the timestep, seeded-SD, and background-SD axes were 1630.411%, 2272.468%, and 2465.158%, respectively.</p>
+<p>All five finest-reference seeds had a positive final rain-response direction, with a mean final difference of about 0.0001377 kg/kg. That 5/5 result is neither a confidence interval nor a significance test, and it is not a converged effect estimate. Every seed independently rejected response support. Maximum response errors along the timestep, seeded super-droplet count, and background super-droplet count axes were 1630.411%, 2272.468%, and 2465.158%, respectively.</p>
 <p>The turning point was refusing to rename a desirable sign as an effect. Absolute rain state is supported only for the reviewed collision-ON marine profile, its four OFAT cases, five common seeds, and finest-to-next-finest comparisons. The smaller difference between two states did not converge with resolution. Rather than launch all 70 executions in hope of a pass, the workflow preserves direction and spread as descriptive results and convergence as a separate rejected claim.</p>
 </section>
 <section id="managing-scientific-claims-with-a-schema" class="level2">
 <h2 class="anchored" data-anchor-id="managing-scientific-claims-with-a-schema">Managing scientific claims with a schema</h2>
-<p>A limitation written only in a paragraph is easy for the next analysis or UI to forget. PR #5 makes <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/release/v1_scientific_scope.json"><code>release/v1_scientific_scope.json</code></a> the machine-readable source of truth for claim order, status, scope, limitations, and evidence.</p>
+<p>A limitation written only in a paragraph is easy for the next analysis or UI to forget. PR #5 makes <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1_scientific_scope.json"><code>release/v1_scientific_scope.json</code></a> the machine-readable source of truth for claim order, status, scope, limitations, and evidence.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -650,7 +652,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="giving-v1.0-a-finite-finish-line" class="level2">
 <h2 class="anchored" data-anchor-id="giving-v1.0-a-finite-finish-line">Giving v1.0 a finite finish line</h2>
-<p>There is always another useful task in an expanding research codebase. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a> defines five dependency-ordered gates:</p>
+<p>There is always another useful task in an expanding research codebase. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a> defines five dependency-ordered gates:</p>
 <ol type="1">
 <li>a reproducible simulation and analysis platform;</li>
 <li>real BASTALIAS observation ingestion and a mapping audit;</li>
@@ -659,11 +661,11 @@ ul.task-list li input[type="checkbox"] {
 <li>a versioned, documented, CI-checked release candidate.</li>
 </ol>
 <p>All five gates are complete. The local fast-regression suite passed 77 tests. In the specified <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29796010627">GitHub Actions run</a>, Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.</p>
-<p>This does not mean the PR has already been merged into <code>main</code> or that the tag has been published. Under <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>, PR #5 is paused at the mandatory <strong>pre-merge Build the Lab checkpoint</strong>. Publishing this evidence-backed account comes before the <code>develop → main</code> merge, release-CI confirmation, and <code>v1.0.0</code> tag.</p>
+<p>This does not mean the PR has already been merged into <code>main</code> or that the tag has been published. Under <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>, PR #5 is paused at the mandatory <strong>pre-merge Build the Lab checkpoint</strong>. Publishing this evidence-backed account comes before the <code>develop → main</code> merge, release-CI confirmation, and <code>v1.0.0</code> tag.</p>
 </section>
 <section id="not-avoiding-failure-but-making-it-interpretable" class="level2">
 <h2 class="anchored" data-anchor-id="not-avoiding-failure-but-making-it-interpretable">Not avoiding failure, but making it interpretable</h2>
-<p>Completing v1.0.0 does not mean every scientific question produced a positive answer. It means the workflow can reproduce where the answer stops.</p>
+<p>Completing the v1.0.0 release candidate does not mean every scientific question produced a positive answer. It means the workflow can reproduce where the answer stops.</p>
 <ul>
 <li>Absolute rain state is numerically supported within a limited tested profile.</li>
 <li>Response direction is descriptive, while quantitative response is unsupported.</li>
@@ -688,16 +690,16 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="related-material">Related material</h2>
 <ul>
 <li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">Pull Request #5</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TARGETED_RESPONSE_PLAN.md">Targeted response plan</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted qualification evidence</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/COLUMNAR_CACHE.md">Columnar cache design</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">Arrow IPC benchmark</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TRANSITION_OBSERVATION_VALIDATION.md">Transition observation validation</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/BASTALIAS_IMPORT_20260720.md">BASTALIAS import evidence</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">ARM ENA candidate audit</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_SCIENTIFIC_SCOPE.md">v1.0 scientific scope</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/CHANGELOG.md">Changelog</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TARGETED_RESPONSE_PLAN.md">Targeted response plan</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted qualification evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/COLUMNAR_CACHE.md">Columnar cache design</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">Arrow IPC benchmark</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TRANSITION_OBSERVATION_VALIDATION.md">Transition observation validation</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/BASTALIAS_IMPORT_20260720.md">BASTALIAS import evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">ARM ENA candidate audit</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/V1_SCIENTIFIC_SCOPE.md">v1.0 scientific scope</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/CHANGELOG.md">Changelog</a></li>
 <li><a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html">Previous log: Qualifying Rain-Producing Experiments and Letting the Server Work Overnight</a></li>
 </ul>
 
