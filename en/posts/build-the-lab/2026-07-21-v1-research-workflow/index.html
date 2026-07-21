@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jinu">
-<meta name="dcterms.date" content="2026-07-13">
-<meta name="description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta name="dcterms.date" content="2026-07-21">
+<meta name="description" content="How PR #5 connected targeted response qualification, resumable execution, Arrow caching, observation-mapping audits, and a machine-checked scientific claim contract.">
 
-<title>Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog</title>
+<title>From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0 – Jinu’s Cloud Seeding Blog</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,41 +77,12 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<meta property="og:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta property="og:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta property="og:title" content="From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0 – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="How PR #5 connected targeted response qualification, resumable execution, Arrow caching, observation-mapping audits, and a machine-checked scientific claim contract.">
 <meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
-<meta name="twitter:title" content="Turning PySDM Experiment Scripts into a Seeding Lab – Jinu’s Cloud Seeding Blog">
-<meta name="twitter:description" content="The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.">
+<meta name="twitter:title" content="From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0 – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="How PR #5 connected targeted response qualification, resumable execution, Arrow caching, observation-mapping audits, and a machine-checked scientific claim contract.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -329,7 +300,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html">From code to research workflow</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -375,7 +346,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">From scripts to a lab</span></a>
   </div>
 </li>
@@ -393,7 +364,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../../../en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">From code to research workflow</span></a>
   </div>
 </li>
@@ -450,33 +421,41 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#the-starting-problem" id="toc-the-starting-problem" class="nav-link active" data-scroll-target="#the-starting-problem">The starting problem</a></li>
-  <li><a href="#scenario-as-the-experimental-unit" id="toc-scenario-as-the-experimental-unit" class="nav-link" data-scroll-target="#scenario-as-the-experimental-unit">Scenario as the experimental unit</a></li>
-  <li><a href="#control-seeding-sweep-and-ensemble" id="toc-control-seeding-sweep-and-ensemble" class="nav-link" data-scroll-target="#control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</a></li>
-  <li><a href="#failures-that-changed-the-design" id="toc-failures-that-changed-the-design" class="nav-link" data-scroll-target="#failures-that-changed-the-design">Failures that changed the design</a></li>
-  <li><a href="#what-this-stage-achievedand-what-it-did-not" id="toc-what-this-stage-achievedand-what-it-did-not" class="nav-link" data-scroll-target="#what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</a></li>
+  <li><a href="#turning-an-open-ended-project-into-one-bounded-question" id="toc-turning-an-open-ended-project-into-one-bounded-question" class="nav-link active" data-scroll-target="#turning-an-open-ended-project-into-one-bounded-question">Turning an open-ended project into one bounded question</a></li>
+  <li><a href="#asking-the-high-resolution-question-in-40-runs-not-70" id="toc-asking-the-high-resolution-question-in-40-runs-not-70" class="nav-link" data-scroll-target="#asking-the-high-resolution-question-in-40-runs-not-70">Asking the high-resolution question in 40 runs, not 70</a></li>
+  <li><a href="#doubling-repeated-read-speed-without-replacing-csv" id="toc-doubling-repeated-read-speed-without-replacing-csv" class="nav-link" data-scroll-target="#doubling-repeated-read-speed-without-replacing-csv">Doubling repeated-read speed without replacing CSV</a></li>
+  <li><a href="#separating-observation-ingestion-from-observational-validation" id="toc-separating-observation-ingestion-from-observational-validation" class="nav-link" data-scroll-target="#separating-observation-ingestion-from-observational-validation">Separating observation ingestion from observational validation</a>
+  <ul class="collapse">
+  <li><a href="#bastalias-real-data-from-a-moving-volume" id="toc-bastalias-real-data-from-a-moving-volume" class="nav-link" data-scroll-target="#bastalias-real-data-from-a-moving-volume">BASTALIAS: real data from a moving volume</a></li>
+  <li><a href="#arm-ena-a-fixed-column-is-still-not-a-parcel-history" id="toc-arm-ena-a-fixed-column-is-still-not-a-parcel-history" class="nav-link" data-scroll-target="#arm-ena-a-fixed-column-is-still-not-a-parcel-history">ARM ENA: a fixed column is still not a parcel history</a></li>
+  </ul></li>
+  <li><a href="#the-finer-run-found-a-boundary-not-an-effect" id="toc-the-finer-run-found-a-boundary-not-an-effect" class="nav-link" data-scroll-target="#the-finer-run-found-a-boundary-not-an-effect">The finer run found a boundary, not an effect</a></li>
+  <li><a href="#managing-scientific-claims-with-a-schema" id="toc-managing-scientific-claims-with-a-schema" class="nav-link" data-scroll-target="#managing-scientific-claims-with-a-schema">Managing scientific claims with a schema</a></li>
+  <li><a href="#giving-v1.0-a-finite-finish-line" id="toc-giving-v1.0-a-finite-finish-line" class="nav-link" data-scroll-target="#giving-v1.0-a-finite-finish-line">Giving v1.0 a finite finish line</a></li>
+  <li><a href="#not-avoiding-failure-but-making-it-interpretable" id="toc-not-avoiding-failure-but-making-it-interpretable" class="nav-link" data-scroll-target="#not-avoiding-failure-but-making-it-interpretable">Not avoiding failure, but making it interpretable</a></li>
+  <li><a href="#questions-deliberately-left-for-v1.1-and-later-research" id="toc-questions-deliberately-left-for-v1.1-and-later-research" class="nav-link" data-scroll-target="#questions-deliberately-left-for-v1.1-and-later-research">Questions deliberately left for v1.1 and later research</a></li>
   <li><a href="#related-material" id="toc-related-material" class="nav-link" data-scroll-target="#related-material">Related material</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html">From scripts to a lab</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/build-the-lab.html">Build the Lab</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html">From code to research workflow</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Turning PySDM Experiment Scripts into a Seeding Lab</h1>
+<h1 class="title">From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Build the Lab</div>
     <div class="quarto-category">PySDM</div>
-    <div class="quarto-category">Streamlit</div>
     <div class="quarto-category">reproducible research</div>
+    <div class="quarto-category">scientific scope</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    The first development log: redesigning manually edited scripts as a Scenario → Sweep → Run → Dashboard workflow.
+    How PR #5 connected targeted response qualification, resumable execution, Arrow caching, observation-mapping audits, and a machine-checked scientific claim contract.
   </div>
 </div>
 
@@ -493,7 +472,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-07-13</p>
+      <p class="date">2026-07-21</p>
     </div>
   </div>
   
@@ -505,115 +484,221 @@ window.Quarto = {
 </header>
 
 
-<p>The first obstacle in building PySDM cloud-seeding sensitivity experiments was not a microphysical equation. Every change in conditions required editing Python, remembering which configuration produced which result directory, and reconstructing how a figure had been made. The simulations ran, but the experimental history was fragile.</p>
-<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">PySDM-Seeding-Lab PR #2</a>, merged on 13 July 2026, was the first attempt to turn those scripts into a scenario-based experimental platform. Across 31 commits and 66 changed files, the goal was to keep the question, configuration, execution, and result connected.</p>
+<p><a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html">The previous development log</a> separated absolute rain-state qualification from seeding-response qualification, then connected common seeds, process isolation, detached jobs, and bounded parallel execution. Experiments could finally survive a long night on the lab server. What remained open was a project-level contract: <strong>How much computation is enough, how should model transitions be compared with observations, and what can v1.0 actually claim?</strong></p>
+<p><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">PySDM-Seeding-Lab PR #5</a>, at its 21 July 2026 checkpoint, answers those questions across 16 commits and 71 changed files, with 7,054 additions and 98 deletions. This was not a changelog-sized feature bundle. It was an effort to place execution planning, numerical qualification, observation-mapping review, reporting, and scientific limitations in one evidence chain.</p>
 <div class="review-verdict">
-<p><strong>Core decision.</strong> Before adding more physics, build an experimental path that can be traced from a saved question to its outputs.</p>
+<p><strong>Core decision.</strong> PySDM Seeding Lab v1.0.0 does not demonstrate that cloud seeding works. It completes a reproducible <strong>research workflow</strong> that runs experiments, qualifies numerical behavior, audits observation mappings, reports results, and preserves the boundary of every scientific claim.</p>
 </div>
-<section id="the-starting-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-starting-problem">The starting problem</h2>
-<p>Manual scripts worked for one or two tests. They became unreliable as dry radius, hygroscopicity, injection timing, updraft, and random seeds multiplied.</p>
+<section id="turning-an-open-ended-project-into-one-bounded-question" class="level2">
+<h2 class="anchored" data-anchor-id="turning-an-open-ended-project-into-one-bounded-question">Turning an open-ended project into one bounded question</h2>
+<p>PR #4 left six practical and scientific problems unresolved:</p>
 <ul>
-<li>Results did not identify the configuration that created them.</li>
-<li>Control and seeding settings had to be synchronized by hand.</li>
-<li>A small sweep change could silently create hundreds of model executions.</li>
-<li>Long runs gave little indication of the current case or member.</li>
-<li>Dashboard figures could outlive the context needed to interpret them.</li>
+<li>Would the seeding-minus-control response converge at a finer reference resolution?</li>
+<li>Could an interrupted qualification safely resume without rerunning valid members?</li>
+<li>Could the Streamlit dashboard avoid repeatedly parsing large CSV files?</li>
+<li>What contract would align a model spectrum transition with an observed drizzle event?</li>
+<li>How should real observations be retained when they do not map cleanly to parcel time?</li>
+<li>Where should an expanding development program stop and call itself v1.0?</li>
 </ul>
-<p>The project target therefore became more specific than “build a GUI”: <strong>preserve one scientific question as one scenario</strong>.</p>
+<p>These are all reproducibility questions. Reproducing a result requires more than a successful number: the reason for running a calculation, the rejected interpretation, and the unusable evidence must survive beside it. The sixteen commits in PR #5 therefore move from a finer targeted run to a machine-checked scientific claim boundary.</p>
 </section>
-<section id="scenario-as-the-experimental-unit" class="level2">
-<h2 class="anchored" data-anchor-id="scenario-as-the-experimental-unit">Scenario as the experimental unit</h2>
-<p>The new workflow follows a deliberate sequence:</p>
-<pre class="text"><code>Create scenario
-→ configure environment / aerosol / seeding / dynamics
-→ configure parameter sweep
-→ run simulation
-→ inspect results through dashboard</code></pre>
-<p>A YAML scenario stores a name, slug, memo, timestamp, and complete configuration. Settings pages can update the working configuration or a selected saved scenario. Result directories include the scenario slug, making it possible to navigate from output back to experimental intent.</p>
-<pre class="text"><code>results/20260713_XXXXXX_dry_radius_kappa_sweep_parameter_sweep/</code></pre>
-<p>The Streamlit pages were reordered to match the research process:</p>
-<pre class="text"><code>00. Experiment Scenarios
-01. Atmospheric Environment
-02. Background Aerosol Settings
-03. Seeding Particle Settings
-04. Dynamic Parameters
-05. Parameter Sweep
-06. Run Simulation
-07. Results Dashboard</code></pre>
-<p>The UI became a checklist: define the environment and background first, then seeding and dynamics, and only then choose what to vary.</p>
+<section id="asking-the-high-resolution-question-in-40-runs-not-70" class="level2">
+<h2 class="anchored" data-anchor-id="asking-the-high-resolution-question-in-40-runs-not-70">Asking the high-resolution question in 40 runs, not 70</h2>
+<p>The original <code>rain_response_standard</code> plan called for a 2.5 s timestep, 1,600 seeded and 1,600 background super-droplets, and five common random seeds. Running its complete plan would require 70 control/seeding executions. Pilot evidence had already shown that absolute state and response behaved very differently, so executing every combination was not automatically the best scientific question.</p>
+<p>The new <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TARGETED_RESPONSE_PLAN.md">targeted qualification plan</a> retains only the finest reference and each numerical axis’s next-finest comparison:</p>
+<pre class="text"><code>4 one-factor-at-reference cases
+× 5 common random seeds
+× control / seeding
+= 40 physical PySDM executions</code></pre>
+<p>That is 42.9% less work than the 70-execution plan without removing a comparison used by the 5% convergence decision. A dry run freezes the plan first; the confirmed qualification then runs serially with one worker so its resource commitment remains explicit.</p>
+<p>Long runs can still be interrupted. Resume does not trust a directory merely because its name exists. A member is reusable only when its normalized execution configuration has the same SHA-256 fingerprint and its configuration, summary, and CSV are readable and successful. Missing, corrupt, failed, and configuration-mismatched members are rerun. Aggregation, evidence, and reports are rebuilt, while each attempt records reuse and rerun counts in <code>qualification_plan.json</code>.</p>
 </section>
-<section id="control-seeding-sweep-and-ensemble" class="level2">
-<h2 class="anchored" data-anchor-id="control-seeding-sweep-and-ensemble">Control, seeding, sweep, and ensemble</h2>
-<p>Seeding cannot be interpreted from a treatment run alone. Comparison mode creates matched control and seeding outputs:</p>
-<pre class="text"><code>control/
-seeding/
-comparison.csv
-summary.json
-metadata.json
-config.yaml</code></pre>
-<p>For each variable, the result stores control, seeding, difference, and relative change. The first sweep catalog covered dry radius, <span class="math inline">\(\kappa\)</span>, injection start and duration, updraft velocity, and collision ON/OFF. Before execution, the app estimates</p>
-<pre class="text"><code>parameter combinations × ensemble members × control/seeding.</code></pre>
-<p>This is both a planning feature and a safety check against accidentally launching an oversized workload.</p>
-<p>The Results Dashboard connects single, comparison, sweep, and ensemble results. Growth Pathway Diagnostics follows</p>
-<pre class="text"><code>vapour / supersaturation
-→ cloud water
-→ activated particles
-→ size growth
-→ rain water.</code></pre>
-<p>Sweep filters, full-range case sampling, and injection-relative time alignment were added so later parameter values would not disappear merely because a plot had a maximum case count.</p>
-</section>
-<section id="failures-that-changed-the-design" class="level2">
-<h2 class="anchored" data-anchor-id="failures-that-changed-the-design">Failures that changed the design</h2>
-<p>Renaming Streamlit pages left duplicate files and caused <code>Multiple Pages specified with URL pathname run</code>. A cleanup script and integrity check were added instead of relying on manual deletion.</p>
-<p>During long sweeps, the dashboard sometimes read a CSV while it was still being written, producing <code>EmptyDataError</code>. Safe reading and incomplete-result filtering separated “directory exists” from “result is complete.” A subsequent regression made <code>safe_read_csv()</code> call itself recursively. The repair changed it back to <code>pd.read_csv(path)</code> and strengthened the integrity check to reject the pattern in future.</p>
-<p>The lesson was larger than exception handling: dashboard stability comes from making known failures testable.</p>
-</section>
-<section id="what-this-stage-achievedand-what-it-did-not" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-stage-achievedand-what-it-did-not">What this stage achieved—and what it did not</h2>
+<section id="doubling-repeated-read-speed-without-replacing-csv" class="level2">
+<h2 class="anchored" data-anchor-id="doubling-repeated-read-speed-without-replacing-csv">Doubling repeated-read speed without replacing CSV</h2>
+<p>Repeated dashboard views made large CSV parsing increasingly expensive. Replacing CSV with a binary format would also replace the human-readable provenance, migration, and download contract.</p>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/COLUMNAR_CACHE.md">columnar-cache design</a> keeps CSV as the canonical source of truth and stores Arrow IPC in a hidden, disposable cache. A missing, corrupt, or stale cache is rebuilt from CSV. Systems without <code>pyarrow</code>, and tables below the default size threshold, continue to read CSV. Arrow is a rebuildable performance layer, not a scientific result.</p>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">benchmark</a> repeatedly read a real 101 × 505 result with 51,005 cells:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Before</th>
-<th>After PR #2</th>
+<th>Reader</th>
+<th style="text-align: right;">Median read</th>
+<th style="text-align: right;">Relative to CSV</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>Edit scripts for each condition</td>
-<td>Preserve question and configuration in YAML scenarios</td>
+<td>Raw CSV</td>
+<td style="text-align: right;">16.271 ms</td>
+<td style="text-align: right;">1.000×</td>
 </tr>
 <tr class="even">
-<td>Manually track result folders</td>
-<td>Link folders to scenario slugs and metadata</td>
+<td>Warm Arrow IPC</td>
+<td style="text-align: right;">8.076 ms</td>
+<td style="text-align: right;">2.015×</td>
 </tr>
 <tr class="odd">
-<td>Focus on single runs</td>
-<td>Support comparison, sweep, and ensemble workflows</td>
-</tr>
-<tr class="even">
-<td>Inspect final curves</td>
-<td>Follow process pathways and uncertainty</td>
-</tr>
-<tr class="odd">
-<td>Wait without context</td>
-<td>Report case- and member-level progress</td>
+<td>Parquet</td>
+<td style="text-align: right;">24.981 ms</td>
+<td style="text-align: right;">0.652×</td>
 </tr>
 </tbody>
 </table>
-<p>One important limitation remained. Some Growth Pathway columns were proxies inferred when the adapter did not expose native PySDM products. They were useful for validating the workflow, but they were not yet safe to interpret as direct physical output.</p>
-<p>That limitation defined the next development question: how can every plotted diagnostic disclose whether it is native, derived, proxied, or missing?</p>
+<p>Warm Arrow reduced latency by about 50.4%, reached break-even after roughly seven total reads, and occupied 1.2467 times the CSV storage. Parquet was not selected merely because it is familiar: it was slower than CSV for this result shape. Exact dataframe equality and measured behavior—not format preference—made the decision.</p>
+</section>
+<section id="separating-observation-ingestion-from-observational-validation" class="level2">
+<h2 class="anchored" data-anchor-id="separating-observation-ingestion-from-observational-validation">Separating observation ingestion from observational validation</h2>
+<p>Before comparing the model’s internal 1% rain-liquid transition with observed drizzle onset, the project needed to define what one observation event means. The new <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TRANSITION_OBSERVATION_VALIDATION.md">observation-event contract</a> requires event and case identity, onset and uncertainty, model-time offset, time origin, source ID, observation method, event definition, sampling context, and mapping status.</p>
+<p>An immutable comparison package records every threshold candidate, onset error, RMSE, within-uncertainty fraction, source hashes, and a manifest. The lowest-MAE candidate is never promoted automatically to a calibration. Synthetic rows test only software behavior; even real observations remain <code>spatiotemporal_proxy</code> when sampled volume and parcel time are not defensibly aligned.</p>
+<section id="bastalias-real-data-from-a-moving-volume" class="level3">
+<h3 class="anchored" data-anchor-id="bastalias-real-data-from-a-moving-volume">BASTALIAS: real data from a moving volume</h3>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/BASTALIAS_OBSERVATION_IMPORT.md">EUREC4A BASTALIAS importer</a> extracts persistent drizzle detections from approximately 1.5 s airborne radar–lidar NetCDF data. It retains the source file’s full SHA-256 and sensitivity across the -15, -17, and -20 dBZ cloud–drizzle boundaries. All 400 samples in the reviewed ten-minute window passed the time quality flag; the selected -20 dBZ event appeared 7.121 s after the window began.</p>
+<p>The aircraft, however, observes different horizontal volumes as it moves. A persistent echo is not necessarily the temporal history of one parcel. The importer therefore forces <code>mapping_status = spatiotemporal_proxy</code> even though the evidence class is observation. The pipeline compared the event against 27 model candidates, but produced zero direct-temporal rows. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/BASTALIAS_IMPORT_20260720.md">mapping audit</a> explicitly prevents those rankings from calibrating the operational 1% floor.</p>
+</section>
+<section id="arm-ena-a-fixed-column-is-still-not-a-parcel-history" class="level3">
+<h3 class="anchored" data-anchor-id="arm-ena-a-fixed-column-is-still-not-a-parcel-history">ARM ENA: a fixed column is still not a parcel history</h3>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/ARM_ENA_OBSERVATION_IMPORT.md">ARM ENA pipeline</a> selects fixed-column KAZR/KAZRARSCL data as the next candidate. Credentials are accepted only through environment variables; partial downloads are atomically replaced; source hashes, QC fields, height selection, and -20/-17/-15 dBZ sensitivity are retained in the package.</p>
+<p>A zenith radar is closer to a time series than a moving aircraft, but it observes an Eulerian column through which wind advects different parcels. Radar reflectivity is also not the model’s rain-liquid fraction. No ARM credential or real source file was available at this checkpoint, so a synthetic ARM-format NetCDF verified software behavior only. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">candidate audit</a> therefore closes the v1.0 investigation with a proxy disposition, not a successful external calibration.</p>
+</section>
+</section>
+<section id="the-finer-run-found-a-boundary-not-an-effect" class="level2">
+<h2 class="anchored" data-anchor-id="the-finer-run-found-a-boundary-not-an-effect">The finer run found a boundary, not an effect</h2>
+<p>The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">targeted-run evidence</a> completed all 20 case-seed pairs and all 40 physical executions, with zero failed cases and zero failed members.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Qualification family</th>
+<th style="text-align: right;">Within 5%</th>
+<th style="text-align: right;">Maximum error</th>
+<th>v1.0 decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Absolute control/seeding rain state</td>
+<td style="text-align: right;">60 / 60</td>
+<td style="text-align: right;">4.180%</td>
+<td>Supported for the tested profile</td>
+</tr>
+<tr class="even">
+<td>Seeding-minus-control response</td>
+<td style="text-align: right;">11 / 105</td>
+<td style="text-align: right;">2465.158%</td>
+<td>Quantitative response unsupported</td>
+</tr>
+</tbody>
+</table>
+<p>All five finest-reference seeds had a positive final rain-response direction, with a mean final difference of about 0.0001377 kg/kg. That 5/5 result is neither a confidence interval nor a significance test, and it is not a converged effect estimate. Every seed independently rejected response support. Maximum response errors along the timestep, seeded-SD, and background-SD axes were 1630.411%, 2272.468%, and 2465.158%, respectively.</p>
+<p>The turning point was refusing to rename a desirable sign as an effect. Absolute rain state is supported only for the reviewed collision-ON marine profile, its four OFAT cases, five common seeds, and finest-to-next-finest comparisons. The smaller difference between two states did not converge with resolution. Rather than launch all 70 executions in hope of a pass, the workflow preserves direction and spread as descriptive results and convergence as a separate rejected claim.</p>
+</section>
+<section id="managing-scientific-claims-with-a-schema" class="level2">
+<h2 class="anchored" data-anchor-id="managing-scientific-claims-with-a-schema">Managing scientific claims with a schema</h2>
+<p>A limitation written only in a paragraph is easy for the next analysis or UI to forget. PR #5 makes <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/release/v1_scientific_scope.json"><code>release/v1_scientific_scope.json</code></a> the machine-readable source of truth for claim order, status, scope, limitations, and evidence.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Claim</th>
+<th>Status</th>
+<th>Permitted interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Absolute rain state</td>
+<td><strong>Supported</strong></td>
+<td>Reviewed collision-ON marine profile and resolution gate</td>
+</tr>
+<tr class="even">
+<td>Positive response direction</td>
+<td><strong>Descriptive only</strong></td>
+<td>Five positive finest-reference directions</td>
+</tr>
+<tr class="odd">
+<td>1% rain-liquid fraction</td>
+<td><strong>Operational only</strong></td>
+<td>Internal transition exploration with sensitivity audits</td>
+</tr>
+<tr class="even">
+<td>Quantitative enhancement</td>
+<td><strong>Unsupported</strong></td>
+<td>Response convergence did not support it</td>
+</tr>
+<tr class="odd">
+<td>External calibration</td>
+<td><strong>Unsupported</strong></td>
+<td>Both datasets remain parcel-time proxies</td>
+</tr>
+<tr class="even">
+<td>Field efficacy</td>
+<td><strong>Unsupported</strong></td>
+<td>No matched field intervention evidence</td>
+</tr>
+</tbody>
+</table>
+<p>Tests now prevent “observation ingested” from silently becoming “model validated,” or “positive sign” from becoming “effect established.” Preserving evidence that cannot support a claim is part of reproducibility too.</p>
+</section>
+<section id="giving-v1.0-a-finite-finish-line" class="level2">
+<h2 class="anchored" data-anchor-id="giving-v1.0-a-finite-finish-line">Giving v1.0 a finite finish line</h2>
+<p>There is always another useful task in an expanding research codebase. The <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a> defines five dependency-ordered gates:</p>
+<ol type="1">
+<li>a reproducible simulation and analysis platform;</li>
+<li>real BASTALIAS observation ingestion and a mapping audit;</li>
+<li>a conservative external-validation disposition;</li>
+<li>a frozen scientific scope review; and</li>
+<li>a versioned, documented, CI-checked release candidate.</li>
+</ol>
+<p>All five gates are complete. The local fast-regression suite passed 77 tests. In the specified <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29796010627">GitHub Actions run</a>, Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.</p>
+<p>This does not mean the PR has already been merged into <code>main</code> or that the tag has been published. Under <a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/release/v1.0.0.json"><code>release/v1.0.0.json</code></a>, PR #5 is paused at the mandatory <strong>pre-merge Build the Lab checkpoint</strong>. Publishing this evidence-backed account comes before the <code>develop → main</code> merge, release-CI confirmation, and <code>v1.0.0</code> tag.</p>
+</section>
+<section id="not-avoiding-failure-but-making-it-interpretable" class="level2">
+<h2 class="anchored" data-anchor-id="not-avoiding-failure-but-making-it-interpretable">Not avoiding failure, but making it interpretable</h2>
+<p>Completing v1.0.0 does not mean every scientific question produced a positive answer. It means the workflow can reproduce where the answer stops.</p>
+<ul>
+<li>Absolute rain state is numerically supported within a limited tested profile.</li>
+<li>Response direction is descriptive, while quantitative response is unsupported.</li>
+<li>The 1% floor is an operational definition, not a universal drizzle-onset standard.</li>
+<li>BASTALIAS and ARM ENA are valuable observation proxies, not Lagrangian parcel calibrations.</li>
+<li>Surface rainfall gain, causal effect, and real-world cloud-seeding efficacy are outside v1.0’s claims.</li>
+</ul>
+<p>The project did not fail because the desired convergence did not appear. It learned how to decide, reproducibly, <strong>what the evidence permits us to say</strong>. Simulation code becomes a research workflow when the scope of each number survives alongside the number itself.</p>
+</section>
+<section id="questions-deliberately-left-for-v1.1-and-later-research" class="level2">
+<h2 class="anchored" data-anchor-id="questions-deliberately-left-for-v1.1-and-later-research">Questions deliberately left for v1.1 and later research</h2>
+<p>The following work remains outside the finite v1.0 gate:</p>
+<ul>
+<li>measuring real-PySDM server scaling for serial, four-worker, and eight-worker execution;</li>
+<li>direct Lagrangian observation mapping with parcel trajectories and residence times;</li>
+<li>additional datasets for transition-threshold and cadence review; and</li>
+<li>stronger convergence and matched-observation evidence before any quantitative seeding-response claim.</li>
+</ul>
+<p>v1.0.0 does not pretend to have answered these questions. It leaves an executable contract for what the next experiment must establish—and what language remains off limits until it does.</p>
 </section>
 <section id="related-material" class="level2">
 <h2 class="anchored" data-anchor-id="related-material">Related material</h2>
 <ul>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/2">Pull Request #2</a></li>
-<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab">PySDM-Seeding-Lab</a></li>
-<li><a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html">Next log: From Code That Produces Results to Code That Makes Them Trustworthy</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5">Pull Request #5</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TARGETED_RESPONSE_PLAN.md">Targeted response plan</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md">Targeted qualification evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/COLUMNAR_CACHE.md">Columnar cache design</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/COLUMNAR_CACHE_BENCHMARK_20260720.md">Arrow IPC benchmark</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/TRANSITION_OBSERVATION_VALIDATION.md">Transition observation validation</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/BASTALIAS_IMPORT_20260720.md">BASTALIAS import evidence</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/evidence/ARM_ENA_CANDIDATE_AUDIT_20260721.md">ARM ENA candidate audit</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_SCIENTIFIC_SCOPE.md">v1.0 scientific scope</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/docs/V1_RELEASE_CHECKLIST.md">v1.0 release checklist</a></li>
+<li><a href="https://github.com/Jinu219/PySDM-Seeding-Lab/blob/develop/CHANGELOG.md">Changelog</a></li>
+<li><a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html">Previous log: Qualifying Rain-Producing Experiments and Letting the Server Work Overnight</a></li>
 </ul>
 
 
@@ -1112,7 +1197,7 @@ config.yaml</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-13-scenario-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
