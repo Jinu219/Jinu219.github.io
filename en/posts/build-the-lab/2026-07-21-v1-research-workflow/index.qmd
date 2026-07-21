@@ -11,6 +11,11 @@ sidebar: pysdm-en
 lang: en
 ---
 
+> **Release update (21 July 2026).** PR #5 was merged into `main`, and merge commit
+> `d0fc97e` was published as [PySDM Seeding Lab v1.0.0](https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0).
+> The [main release CI](https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29800846731)
+> passed Windows and Ubuntu fast regression plus real PySDM integration on Ubuntu.
+
 [The previous development log](../2026-07-16-rain-server-execution/index.qmd) separated absolute rain-state qualification from seeding-response qualification, then connected common seeds, process isolation, detached jobs, and bounded parallel execution. Experiments could finally survive a long night on the lab server. What remained open was a project-level contract: **How much computation is enough, how should model transitions be compared with observations, and what can v1.0 actually claim?**
 
 [PySDM-Seeding-Lab PR #5](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5), at its 21 July 2026 checkpoint, answers those questions across 16 commits and 71 changed files, with 7,054 additions and 98 deletions. This was not a changelog-sized feature bundle. It was an effort to place execution planning, numerical qualification, observation-mapping review, reporting, and scientific limitations in one evidence chain.
@@ -122,9 +127,9 @@ There is always another useful task in an expanding research codebase. The [v1.0
 4. a frozen scientific scope review; and
 5. a versioned, documented, CI-checked release candidate.
 
-All five gates are complete. The local fast-regression suite passed 77 tests. In the specified [GitHub Actions run](https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29796010627), Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.
+All five gates are complete. The local fast-regression suite passed 77 tests. In the [release CI](https://github.com/Jinu219/PySDM-Seeding-Lab/actions/runs/29800846731), Windows fast regression, Ubuntu fast regression, and real PySDM integration on Ubuntu all passed. CI also checks the release manifest and scientific-scope contract.
 
-This does not mean the PR has already been merged into `main` or that the tag has been published. Under [`release/v1.0.0.json`](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json), PR #5 is paused at the mandatory **pre-merge Build the Lab checkpoint**. Publishing this evidence-backed account comes before the `develop → main` merge, release-CI confirmation, and `v1.0.0` tag.
+Following the policy in [`release/v1.0.0.json`](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/release/v1.0.0.json), this evidence-backed account was published before PR #5 was merged into `main` and release CI was confirmed. The verified merge commit `d0fc97e` is now fixed by the `v1.0.0` tag and [GitHub Release](https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0).
 
 ## Not avoiding failure, but making it interpretable
 
@@ -151,6 +156,7 @@ v1.0.0 does not pretend to have answered these questions. It leaves an executabl
 
 ## Related material
 
+- [PySDM Seeding Lab v1.0.0 Release](https://github.com/Jinu219/PySDM-Seeding-Lab/releases/tag/v1.0.0)
 - [Pull Request #5](https://github.com/Jinu219/PySDM-Seeding-Lab/pull/5)
 - [Targeted response plan](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/TARGETED_RESPONSE_PLAN.md)
 - [Targeted qualification evidence](https://github.com/Jinu219/PySDM-Seeding-Lab/blob/64d5924a44fa3eed7f1eba2c907e03cbbda19fe4/docs/evidence/RAIN_RESPONSE_TARGETED_20260720.md)
