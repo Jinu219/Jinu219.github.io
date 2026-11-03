@@ -11,10 +11,10 @@ listing:
   feed: true
 ---
 
-이 시리즈는 super-droplet 수치 표현에서 시작해 시딩 입자 특성, 배경 에어로졸 환경, κ–입자크기–주입시점 response surface로 확장됩니다. 각 글은 질문과 기준 실험을 먼저 밝히고, 변경 조건·관측 지표·해석 범위·실패를 구분해 기록합니다.
+이 시리즈는 super-droplet 수치 표현에서 시작해 시딩 입자 특성, 배경 에어로졸 환경, κ–입자크기–주입시점 response surface로 확장되고, 이어서 상승류·주입 시점 체제, 종단속도식 민감도, 논문 재현으로 이어집니다. 각 글은 질문과 기준 실험을 먼저 밝히고, 변경 조건·관측 지표·해석 범위·실패를 구분해 기록합니다.
 
 ::: {.callout-note title="PySDM-Seeding-Lab과의 관계"}
-아래 네 실험은 **연구실 서버 + Visual Studio Code**에서 수행한 독립 PySDM 연구입니다. PySDM-Seeding-Lab 앱에서 실행한 결과가 아니며, 이후 Lab의 실험·검증 구조를 설계하는 데 참고한 선행 실험으로 구분합니다.
+아래 실험은 모두 **연구실 서버 + Visual Studio Code**에서 수행한 독립 PySDM 연구입니다. PySDM-Seeding-Lab 앱에서 실행한 결과가 아닙니다. Experiment 1–4는 Lab의 실험·검증 구조를 설계하는 데 참고한 선행 실험이고, Experiment 5–7은 Lab 개발 이후 스크립트 기반으로 이어간 후속 실험입니다.
 :::
 
 ## 실험 흐름 {.section-heading}
@@ -27,6 +27,12 @@ Experiment 2  dry radius · κ · injection timing 민감도와 성장 경로
 Experiment 3  background aerosol · fixed number/mass 비교
       ↓
 Experiment 4  activation strength · timing response surface
+      ↓
+Experiment 5  updraft × injection timing이 응답의 부호를 가르는 체제
+      ↓
+Experiment 6  종단속도식(terminal velocity formula)에 대한 결론의 민감도
+      ↓
+Experiment 7  Ren et al. (2025) 입자 크기 실험의 0-D parcel 재현
 ```
 
 ## 실험 기록 {.section-heading}

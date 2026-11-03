@@ -27,6 +27,8 @@ website:
         text: WRF
       - href: article-review.qmd
         text: Article Review
+      - href: study-notes.qmd
+        text: Study Notes
     right:
       - text: "EN"
         href: en/index.qmd
@@ -70,6 +72,12 @@ website:
               text: "3. 현실 배경환경"
             - href: posts/experiments/2026-07-08-efficiency-response-surface/index.qmd
               text: "4. Response surface"
+            - href: posts/experiments/2026-08-06-updraft-timing-regimes/index.qmd
+              text: "5. 상승류 × 주입 시점"
+            - href: posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.qmd
+              text: "6. 종단속도식 민감도"
+            - href: posts/experiments/2026-09-07-ren2025-parcel-replication/index.qmd
+              text: "7. Ren (2025) 0-D 재현"
         - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"
           text: "Seeding Lab 코드 ↗"
     - id: pysdm-en
@@ -107,6 +115,12 @@ website:
               text: "3. Realistic backgrounds"
             - href: en/posts/experiments/2026-07-08-efficiency-response-surface/index.qmd
               text: "4. Response surface"
+            - href: en/posts/experiments/2026-08-06-updraft-timing-regimes/index.qmd
+              text: "5. Updraft × timing"
+            - href: en/posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.qmd
+              text: "6. Terminal velocity"
+            - href: en/posts/experiments/2026-09-07-ren2025-parcel-replication/index.qmd
+              text: "7. Ren (2025) replication"
         - href: "https://github.com/Jinu219/PySDM-Seeding-Lab"
           text: "Seeding Lab code ↗"
   page-footer:

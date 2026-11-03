@@ -1,0 +1,157 @@
+---
+title: "Same Mass, Different Size: When Hygroscopic Seeding Suppresses or Enhances Rain"
+description: "Reviewing the equal-mass seeding experiments of Ren et al. (2025) in a 2D bin-microphysics model: the critical diameter that sets the sign of the rain response and how it depends on background aerosol."
+date: 2026-09-10
+categories:
+  - Article Review
+  - hygroscopic seeding
+  - particle size
+  - bin microphysics
+  - warm rain
+citation: true
+---
+
+Ren et al. (2025) use the two-dimensional slab-symmetric bin-microphysics model of Tel Aviv University to simulate a warm convective cloud over Sanya, Hainan, China, on 11 May 2024. Keeping the **total seeding mass fixed**, they inject single-diameter KCl particles from 0.1 to 90 µm [@Ren2025ParticleSize]. The question: with the same amount of material, can particle size alone decide whether rain decreases or increases, and where is the boundary? I presented this paper at our lab meeting on 10 September 2026.
+
+::: {.review-verdict}
+**Verdict.** At equal mass, seeds of 1 µm diameter or smaller reduced rain and seeds of 2 µm or larger increased it, and the critical diameter at which the sign flips became smaller as background aerosol increased (about 6 µm maritime, 3 µm continental, 2 µm urban). With one case and one integration per configuration, the **sign and the trends** are what can be trusted; magnitudes such as −82% or +192% describe this case only.
+:::
+
+[Read the paper](https://doi.org/10.3390/atmos16121340)
+
+::: {.callout-note title="Size convention"}
+Following the paper, every seed size in this post is a **diameter**. My PySDM experiments label sizes by **dry radius**, so the factor of two must be matched first when comparing. For example, a 2 µm diameter here is a 1 µm radius.
+:::
+
+## The question: what must be fixed to see a size effect?
+
+Earlier studies proposed very different "optimal seed sizes": 0.5–6 µm, 1.5–2.5 µm, or larger than 10 µm. The authors attribute this to different background aerosols and seed spectra across studies, and to the inherently nonlinear rain response to CCN. So they fix the background and scan size alone. There are three questions.
+
+1. At equal total seeding mass, does the seed diameter suppress or enhance precipitation?
+2. Is there a critical diameter at which the sign flips?
+3. How does that critical diameter move with background aerosol?
+
+The key device is **mass-conserved monodisperse seeding**. The seed spectrum from the South African hygroscopic-flare experiments is used only as a total-mass reference; for each target diameter, the particle number is back-calculated to give that mass.
+
+$$
+N(D)=\frac{M_{\mathrm{seed}}}{\rho_{\mathrm{s}}\,\frac{\pi}{6}D^{3}}
+\quad\Rightarrow\quad
+N(D)=N(0.1\,\mu\mathrm{m})\left(\frac{0.1\,\mu\mathrm{m}}{D}\right)^{3}
+$$
+
+In words: "the number of seeds equals the total mass divided by the mass of one seed." $M_{\mathrm{seed}}$ is the fixed total seeding mass, $\rho_{\mathrm{s}}$ the KCl density, and $\frac{\pi}{6}D^3$ the volume of a sphere of diameter $D$. Because the mass of one particle scales with $D^3$, the number falls as $D^{-3}$. The seed concentrations in the paper's Table 2 follow exactly this ratio: $5.45\times10^{5}\ \mathrm{cm^{-3}}$ at 0.1 µm, $5.45\times10^{2}$ at 1 µm, $5.45\times10^{-1}$ at 10 µm, and $7.48\times10^{-4}\ \mathrm{cm^{-3}}$ at 90 µm. **A tenfold larger diameter means a thousandfold fewer particles.** This size–number trade-off is the key to reading every result below.
+
+## Model and experimental design
+
+| Item | Setting |
+|---|---|
+| Model | Tel Aviv University 2D slab-symmetric spectral bin-microphysics model (Yin et al., 2000); winds from the vorticity–stream-function formulation |
+| Grid and domain | $\Delta x=\Delta z=300$ m, 30 km wide, model top 12 km |
+| Time | 2.5 s for condensation/evaporation, 5 s for other processes, 40 min integration |
+| Hydrometeor bins | cloud drops, ice crystals, graupel, snow, each 34 mass bins (mass doubling between bins); liquid bins span 3.125–8064 µm in diameter |
+| CCN bins | natural CCN in 67 bins (minimum radius $4.1\times10^{-3}$ µm) plus a separate seed spectrum with its own prognostic equation |
+| Materials | natural CCN = (NH₄)₂SO₄, seed = KCl |
+| Case and initial state | warm convective cloud near Sanya around 14:00 Beijing Time on 2024-05-11; 12:00 Sanya radiosonde (WMO 59948); surface about 980 hPa, LCL about 900 m, 0 °C level about 5.5 km |
+| Convective trigger | thermal bubble at 900 m in the domain centre, maximum +3 °C |
+
+: Model setup (paper, Section 2) {.review-data}
+
+| Item | Setting |
+|---|---|
+| Time and place | 10 min into the run, a single level at cloud base (900 m), central three grid columns (900 m) |
+| Procedure | one release every 60 s (each within one 5 s dynamical step), five releases over 5 min; control volume 900 m × 300 m × 300 m (300 m width normal to the model plane assumed) |
+| Size experiments | C00 (unseeded) + 27 runs: 0.1–0.9 µm (C01–C09), 1–9 µm (C11–C19), 10–90 µm (C21–C29) |
+| Background aerosol | Jaenicke three-mode maritime, continental, urban; maximum cloud-drop number about 140, 400, 1400 cm⁻³ (Section 2.2) |
+
+: Seeding design (paper, Sections 3.2 and 4.5) {.review-data}
+
+The unseeded run C00 starts raining at about 15 min, peaks once at 23–24 min, and stops at about 35 min: a single-peaked episode of roughly 20 minutes. The cloud lies mainly between 1 and 4 km, below the 0 °C level, so although the model carries ice categories, in this case essentially **only warm processes** operate.
+
+## Result 1: size sets the sign
+
+| Group | Diameter | Seed concentration (cm⁻³) | Rain change (vs C00) | Pattern |
+|---|---:|---:|---:|---|
+| Sub-micrometer (C01–C09) | 0.1–0.9 µm | $5.45\times10^{5}$ → $7.48\times10^{2}$ | −82.00% → −7.99% | all 9 suppressed, stronger for smaller seeds |
+| Giant (C11–C19) | 1–9 µm | $5.45\times10^{2}$ → $7.48\times10^{-1}$ | −4.78% → +94.32% | sign flips between 1 µm (−4.78%) and 2 µm (+0.72%) |
+| Ultra-giant (C21–C29) | 10–90 µm | $5.45\times10^{-1}$ → $7.48\times10^{-4}$ | +110.59% to +192.34% | all 9 enhanced, maximum at 60 µm, earlier rain onset |
+
+: The paper's Table 2 summarised by group {.review-data}
+
+Read as one curve: deep suppression at 0.1 µm → suppression weakens toward 1 µm → zero crossing between 1 and 2 µm → enhancement grows to a maximum at 60 µm → then flattens near +160%.
+
+## Result 2: sharing the vapour versus building large collectors
+
+A hygroscopic seed acts in two directions. Activated seeds take up vapour and hold back the activation and growth of natural CCN (**competition for vapour**), and seeds that grow large sweep up the surrounding cloud drops (**collector effect**). Under equal mass, the diameter decides which one wins.
+
+**Sub-micrometer (0.1–0.9 µm).** Many small seeds activate → many drops share the vapour → the number spectrum peak shifts to smaller diameters, and 20–40 µm drops and the mass above 10 µm decrease → the maximum collision–coalescence rate in the cloud core is actually **earlier and larger** → but drops do not reach raindrop size, so surface rain falls. Onset and end times match C00; only the peak drops. Collisions are frequent but mass growth is blocked, which amounts to injecting polluted air.
+
+**Giant (1–9 µm).** Few seeds, so the spectrum below 10 µm is nearly identical to C00 → from 2 µm (C12) the number and mass of drops above 10 µm increase, most strongly at 7–9 µm → between 18 and 21 min, mass below 30 µm shifts to larger sizes → the collision–coalescence peak leads the rain peak by 3–4 min and grows → surface rain increases. At 1 µm (C11) there are slightly fewer large drops than in C00, so it is still on the suppression side.
+
+**Ultra-giant (10–90 µm).** Each seed is immediately a large collector → the collision–coalescence peak comes 3–5 min earlier than in C00 and is much larger → rain onset and peak move earlier (earlier for larger diameters). Beyond 60 µm, however, there are too few seeds → too few collectors → smaller enhancement. From 20 to 90 µm the number drops by a factor of about 91. In the spectra, 40–1000 µm drops are more abundant for smaller seeds and drops above 1000 µm for larger seeds.
+
+## Result 3: the more polluted, the smaller the critical diameter
+
+The authors repeated giant-range seeding under three background aerosols.
+
+| Background | Max cloud-drop number (cm⁻³) | Critical diameter | Response |
+|---|---:|---:|---|
+| Maritime (M) | 140 (Sec. 2.2) / 120 (Sec. 4.5) | about 6 µm | clear suppression only at 1 µm; otherwise small |
+| Continental (C) | 400 / 450 | about 3 µm | clearer than maritime |
+| Urban (U) | 1400 | about 2 µm | clearest; strongest enhancement after the flip |
+
+: Critical diameter by background aerosol (paper, Section 4.5 and Conclusions) {.review-data}
+
+The authors' explanation: clean cloud → few natural drops, and condensation alone already makes fairly large drops → a seed must be several micrometres to make a difference. Polluted cloud → many drops and a narrow spectrum → even a 2 µm seed starts collision–coalescence quickly. In my own words: to matter as a "large drop", a seed must be larger than its neighbours, and the background aerosol sets that bar.
+
+::: {.callout-warning title="Inconsistencies I found while reading"}
+- The text of Section 4.5 calls the thresholds a "radius of about 6 and 3 µm", while the Figure 11 caption and the Conclusions call the same values a **diameter**. Since the experimental variable is diameter, I read them as diameters.
+- Section 4.1 gives 30 µm as the optimal ultra-giant size; Table 2, Section 4.4, the Conclusions, and the Abstract give 60 µm. The Table 2 maximum (+192.34%) is at 60 µm.
+- Section 3.1 describes C00 as an urban background and Conclusion (2) gives "about 2 µm under the present polluted background", but Section 4.5 calls the same experiments the continental C series (critical about 3 µm). The Table 2 flip (1→2 µm) matches the urban value. The maximum cloud-drop numbers also differ between Sections 2.2 and 4.5.
+- Section 4.4 says the number falls "by a factor of about 27" from 10 to 60 µm, but at equal mass it is $(60/10)^3=216$, which the Table 2 values also give. A factor of 27 corresponds to 10→30 µm.
+:::
+
+## Why it matters for my research
+
+**A design that removes the dose confound.** In a fixed-number design, enlarging the seed also raises the total mass as $D^3$, so "larger seeds work better" gets mixed with "more material works better." The equal-mass design removes this confound. In exchange, size and number are tied by $N\propto D^{-3}$, so the size effect here is the effect of **how many pieces the same material is split into**. It has the same structure as my [Experiment 3](../../experiments/2026-07-06-realistic-warm-seeding/index.qmd), where large seeds were strongest under fixed number but a size–number trade-off appeared under fixed mass.
+
+**Coupling of κ and size.** The paper explains the seed's competitive advantage with Köhler theory: at equal size, KCl activates at a lower supersaturation than (NH₄)₂SO₄. In the language of my [κ-Köhler review](../2026-07-15-kappa-kohler/index.qmd), the seed has both a larger dry size and a larger $\kappa$ [@Petters2007Kappa]. Because the paper fixes the material to KCl, the relative roles of $\kappa$ and size remain an open question.
+
+**Accretion needs to be separated.** [Lin et al. (2023)](../2026-07-15-wrf-hygroscopic-seeding/index.qmd) diagnosed rain–cloud accretion as the main pathway to added rain from process rates [@Lin2023HygroscopicWRF]. Ren et al. show only one total collision–coalescence rate, so we cannot tell whether giant and ultra-giant seeds advanced autoconversion or strengthened accretion. Also, Lin's "larger than 0.4 µm" is a boundary within a trimodal flare distribution on radius bins, whereas Ren's values are monodisperse diameters; the numbers should not be compared directly.
+
+**The physical chain.** The chain emphasised by [Bruintjes (1999)](../2026-05-20-cloud-seeding-review/index.qmd), seed → drop spectrum → collision–coalescence → surface rain, is followed inside the model through spectra and collision rates [@Bruintjes1999Review]. The last link, observational verification, is missing.
+
+## Limitations: what was shown, and how far
+
+| Category | Content |
+|---|---|
+| Supported by the results | size dependence of the sign (0.1–0.9 µm: 9/9 suppressed; 10–90 µm: 9/9 enhanced); critical diameter decreasing maritime > continental > urban |
+| Descriptive values | −82%, +192%, the 60 µm optimum, the jagged magnitudes within 1–9 µm |
+| Authors' interpretation | vapour competition and collector shortage, inferred from spectra and the total collision–coalescence rate |
+| Not shown | autoconversion/accretion split, supersaturation or condensation-rate diagnostics, ensemble spread, observational verification |
+
+: What is and is not supported {.review-data}
+
+- **One case, 2D, idealised.** One Sanya sounding, 2D slab symmetry, a uniform lower boundary, a thermal bubble, and 40 min of integration. Generalisation to 3D clouds or other cloud systems was not shown.
+- **One integration per configuration.** Without an ensemble, the jaggedness within 1–9 µm (5 µm +24.11% → 6 µm +15.92% → 7 µm +74.70% → 8 µm +63.75%) cannot be separated into physical signal or numerical noise. The 60 µm optimum is also a single run (+192.34%) standing out while the other six runs from 30 to 90 µm cluster at +157–163%, so "saturation above 30 µm" is a safer reading than "optimal size."
+- **Resolution of the critical diameter.** The 1–9 µm range was scanned in 1 µm steps, and the responses at 2–4 µm (+0.72, +0.53, +2.98%) are close to zero. "About 2 µm" is closer to "the sign flips between 1 and 2 µm and stays nearly neutral up to 4 µm."
+- **Monodisperse, single injection.** Real flares produce broad distributions. Injection time (10 min), height (cloud base), and location were each tested once.
+- **Missing processes.** The authors note that entrainment–mixing and turbulence-enhanced collisions are absent and could change the quantitative response. The cloud stays below 0 °C, so ice processes were not tested.
+
+## Questions that lead to reproduction
+
+I chose this paper because its questions are almost the same as those of my PySDM seeding experiments. Alongside the presentation, I started reproducing it along two paths.
+
+- **0-D parcel reproduction.** In [Experiment 7](../../experiments/2026-09-07-ren2025-parcel-replication/index.qmd) I recomputed the same equal-mass diameter scan under the three backgrounds with a PySDM parcel. A parcel has no surface rain, so I compared shifts in rain-onset time. The ordering of the critical diameter (maritime > continental > urban) matched the paper, but the values were about half of the paper's, and the response sign agreed in 78 of 81 conditions (71/81 under the strict criterion where the confidence interval excludes zero).
+- **2D reproduction.** To build the same kind of 2D bin-microphysics setup in WRF, I am working through a tutorial track starting from [microphysics schemes and fast SBM](../../wrf/2026-09-29-microphysics-fsbm/index.qmd).
+
+Four questions remain.
+
+1. Do the 1–2 µm sign flip and the 60 µm optimum survive an ensemble that perturbs only the initial state?
+2. If a broad flare-like distribution replaces the monodisperse seed, do the suppressing and enhancing modes cancel?
+3. If the collision–coalescence rate is split into autoconversion and accretion, which one carries the ultra-giant enhancement?
+4. Is the halved critical diameter in 0-D due to the structure of a parcel without sedimentation and dynamics, or to the microphysics settings?
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

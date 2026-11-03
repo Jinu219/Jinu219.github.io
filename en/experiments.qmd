@@ -6,10 +6,10 @@ page-layout: article
 sidebar: pysdm-en
 ---
 
-This series begins with super-droplet representation, then moves through seeded-particle properties, background aerosol environments, and a κ–radius–timing response surface. Every note separates the question, baseline, changed conditions, diagnostics, limitations, and next hypothesis.
+This series begins with super-droplet representation, then moves through seeded-particle properties, background aerosol environments, and a κ–radius–timing response surface, before turning to updraft–timing regimes, terminal-velocity sensitivity, and a paper replication. Every note separates the question, baseline, changed conditions, diagnostics, limitations, and next hypothesis.
 
 ::: {.callout-note title="Relationship to PySDM-Seeding-Lab"}
-These four experiments were run independently on the **laboratory server with Visual Studio Code**. They were not executed through the PySDM-Seeding-Lab app; they are documented as precursor studies that later informed the Lab's experiment and validation design.
+All experiments below were run independently on the **laboratory server with Visual Studio Code**, not through the PySDM-Seeding-Lab app. Experiments 1–4 are precursor studies that informed the Lab's experiment and validation design; Experiments 5–7 are script-based follow-up studies carried out after the Lab was built.
 :::
 
 ## Experiment sequence
@@ -22,6 +22,12 @@ Experiment 2  dry radius · κ · timing sensitivity and growth pathway
 Experiment 3  background aerosol · fixed-number/mass comparison
       ↓
 Experiment 4  activation-strength · timing response surface
+      ↓
+Experiment 5  updraft × injection-timing regimes that set the sign of the response
+      ↓
+Experiment 6  sensitivity of the conclusions to the terminal-velocity formula
+      ↓
+Experiment 7  0-D parcel replication of the Ren et al. (2025) particle-size experiment
 ```
 
 ::: {.manual-post-list}
@@ -55,5 +61,29 @@ Clean marine, polluted continental, and warm-orographic backgrounds are compared
 ### [Experiment 4. A κ–Radius–Timing Response Surface](posts/experiments/2026-07-08-efficiency-response-surface/index.qmd)
 
 A dense 2,016-condition grid maps activation strength and injection timing into an empirical final rain-water response.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-08-06 · Jinu</div>
+
+### [Experiment 5. Updraft and Injection Timing Decide Enhancement or Suppression](posts/experiments/2026-08-06-updraft-timing-regimes/index.qmd)
+
+760 recipe runs and 810 environment runs show that updraft strength and injection timing set the sign of the seeding response.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-08-25 · Jinu</div>
+
+### [Experiment 6. Does the Seeding Conclusion Depend on the Terminal-Velocity Formula?](posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.qmd)
+
+Where the 6 mm limit comes from, and whether the sign pattern of Experiment 5 survives five terminal-velocity formulas (3,800 runs).
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-09-07 · Jinu</div>
+
+### [Experiment 7. Reproducing the Particle-Size Effect of Ren et al. (2025) in a 0-D Parcel](posts/experiments/2026-09-07-ren2025-parcel-replication/index.qmd)
+
+Rain-onset shifts in a PySDM parcel reproduce the suppression-to-enhancement switch and the regime ordering of the critical diameter, at about half the paper's values.
 :::
 :::

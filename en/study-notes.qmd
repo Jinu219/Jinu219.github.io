@@ -1,0 +1,28 @@
+---
+title: "Study Notes"
+description: "Notes on the basic concepts of cloud seeding and cloud microphysics"
+lang: en
+page-layout: article
+---
+
+These notes collect the concepts needed before the experiments and paper reviews make sense: which physical process cloud seeding targets, and what steps take an aerosol particle to a cloud droplet and a cloud droplet to a raindrop. They are rewritten from textbooks and lab-meeting presentations.
+
+Each note writes the equation first, reads it in words, unpacks it term by term, and ends with its physical meaning. The same concepts reappear in the [PySDM](pysdm.qmd) experiments, the [WRF](wrf.qmd) simulations, and the [Article Review](article-review.qmd) posts.
+
+::: {.manual-post-list}
+::: {.manual-post}
+<div class="manual-post-meta">2026-03-11 · Jinu</div>
+
+### [What Is Cloud Seeding? The Physics of Planting Seeds in a Cloud](posts/study-notes/2026-03-11-what-is-cloud-seeding/index.qmd)
+
+Cold-rain and warm-rain pathways, glaciogenic and hygroscopic seeding, the dry-ice and silver-iodide origins, and why warm hygroscopic seeding became my topic.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-04-08 · Jinu</div>
+
+### [From One CCN to a Raindrop: Warm-Cloud Microphysics](posts/study-notes/2026-04-08-warm-rain-microphysics/index.qmd)
+
+Kelvin and Raoult effects, Köhler curves, condensational growth, and collision–coalescence, and the size gap where hygroscopic seeding steps in.
+:::
+:::

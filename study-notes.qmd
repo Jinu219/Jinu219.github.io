@@ -1,0 +1,18 @@
+---
+title: "Study Notes"
+description: "인공강우와 구름 미세물리의 기본 개념을 직접 공부하며 정리한 노트"
+page-layout: article
+listing:
+  contents: posts/study-notes
+  sort: "date asc"
+  type: default
+  id: ko-study-notes
+  exclude:
+    lang: en
+  categories: false
+  feed: true
+---
+
+실험과 논문 리뷰를 읽기 위해 먼저 필요한 개념을 정리합니다. 인공강우가 어떤 물리 과정을 노리는지, 에어로졸이 구름방울이 되고 구름방울이 빗방울이 되기까지 어떤 단계를 거치는지를 교재와 랩미팅 발표 자료를 바탕으로 다시 씁니다.
+
+각 노트는 식을 먼저 쓰고, 말로 읽고, 항별로 풀고, 물리적 의미로 연결하는 순서를 따릅니다. 이 개념들은 [PySDM](pysdm.qmd) 실험과 [WRF](wrf.qmd) 모의, [Article Review](article-review.qmd)에서 그대로 다시 쓰입니다.

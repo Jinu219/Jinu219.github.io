@@ -18,7 +18,7 @@ Rather than presenting only finished conclusions, it records:
 
 ## How the notes are organized
 
-**PySDM** covers particle-based microphysics and experiments, **WRF** covers weather fields and case simulations, and **Article Review** examines research questions and methods. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.
+**PySDM** covers particle-based microphysics and experiments, **WRF** covers weather fields and case simulations, **Article Review** examines research questions and methods, and **Study Notes** collects the cloud-physics and cloud-seeding concepts underneath all of them. Papers and software are linked through citations, while experimental code points to fixed versions in a separate repository.
 
 ## Links
 

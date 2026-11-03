@@ -44,57 +44,65 @@ Read the questions, methods, assumptions, and limitations of cloud-seeding liter
 
 [Browse article reviews](article-review.qmd)
 :::
+
+::: {.track-item}
+<div class="track-index">04</div>
+### Study Notes
+
+Rebuild the basics of cloud seeding and warm-rain microphysics, from aerosol particles to raindrops, using textbooks and lab-meeting material.
+
+[Browse study notes](study-notes.qmd)
+:::
 ::::
 
 ## Recent notes {.section-heading}
 
 ::: {.manual-post-list}
 ::: {.manual-post}
-<div class="manual-post-meta">2026-07-21 · Jinu</div>
+<div class="manual-post-meta">2026-09-29 · Jinu</div>
 
-### [From Simulation Code to a Research Workflow: PySDM Seeding Lab v1.0.0](posts/build-the-lab/2026-07-21-v1-research-workflow/index.qmd)
+### [Microphysics Scheme Comparison and the Fast SBM 2-D Aerosol Reset Bug](posts/wrf/2026-09-29-microphysics-fsbm/index.qmd)
 
-Completing a reproducible release workflow without turning unconverged response or observation proxies into unsupported cloud-seeding claims.
+Lin, Morrison, and fast SBM on the same squall line, a 2-D boundary condition that reset aerosol every step, and a maritime-aerosol test.
 :::
 
 ::: {.manual-post}
-<div class="manual-post-meta">2026-07-16 · Jinu</div>
+<div class="manual-post-meta">2026-09-27 · Jinu</div>
 
-### [Qualifying Rain-Producing Experiments and Letting the Server Work Overnight](posts/build-the-lab/2026-07-16-rain-server-execution/index.qmd)
+### [Idealized 2-D Squall Line in WRF: What Shear and the Warm Bubble Change](posts/wrf/2026-09-27-idealized-squall-line/index.qmd)
 
-Why a converged absolute rain state does not yet make the seeding-minus-control response trustworthy—and how the Lab now runs persistent, resource-bounded server experiments.
+The idealized WRF workflow, 2-D namelist constraints, and one-at-a-time changes to wind shear and warm-bubble strength.
 :::
 
 ::: {.manual-post}
-<div class="manual-post-meta">2026-07-15 · Jinu</div>
+<div class="manual-post-meta">2026-09-10 · Jinu</div>
 
-### [Using WRF to Ask Where and How Widely Hygroscopic Seeding Should Occur](posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.qmd)
+### [Same Mass, Different Size: When Hygroscopic Seeding Suppresses or Enhances Rain](posts/article-review/2026-09-10-ren2025-particle-size/index.qmd)
 
-Reviewing altitude, treated area, particle size, and the warm-rain pathway in a hybrid microphysics model.
+Equal-mass KCl seeding in a 2-D bin model: a critical diameter sets the sign of the rain response and shrinks as the background gets more polluted.
 :::
 
 ::: {.manual-post}
-<div class="manual-post-meta">2026-07-15 · Jinu</div>
+<div class="manual-post-meta">2026-09-07 · Jinu</div>
 
-### [Connecting Aerosol Hygroscopicity and CCN Activity with One κ](posts/article-review/2026-07-15-kappa-kohler/index.qmd)
+### [Experiment 7. Reproducing the Particle-Size Effect of Ren et al. (2025) in a 0-D Parcel](posts/experiments/2026-09-07-ren2025-parcel-replication/index.qmd)
 
-The κ-Köhler equation as a bridge between aerosol water uptake, CCN activation, and PySDM experiments.
+Rain-onset shifts in a PySDM parcel reproduce the suppression-to-enhancement switch and the regime ordering of the critical diameter, at about half the paper's values.
 :::
 
 ::: {.manual-post}
-<div class="manual-post-meta">2026-07-15 · Jinu</div>
+<div class="manual-post-meta">2026-08-25 · Jinu</div>
 
-### [Starting with PySDM: First Coordinates for Cloud Microphysics Experiments](posts/learn-pysdm/2026-07-15-first-steps/index.qmd)
+### [Experiment 6. Does the Seeding Conclusion Depend on the Terminal-Velocity Formula?](posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.qmd)
 
-Introducing the Super-Droplet Method and PySDM, then mapping the learning and experimentation path ahead.
+Where the 6 mm limit comes from, and whether the sign pattern of Experiment 5 survives five terminal-velocity formulas (3,800 runs).
 :::
 
 ::: {.manual-post}
-<div class="manual-post-meta">2026-07-14 · Jinu</div>
+<div class="manual-post-meta">2026-08-06 · Jinu</div>
 
-### [From Code That Produces Results to Code That Makes Them Trustworthy](posts/build-the-lab/2026-07-14-research-quality/index.qmd)
+### [Experiment 5. Updraft and Injection Timing Decide Enhancement or Suppression](posts/experiments/2026-08-06-updraft-timing-regimes/index.qmd)
 
-How diagnostic provenance, numerical qualification, failure evidence, and portable reports turned PySDM Seeding Lab into a research tool.
+760 recipe runs and 810 environment runs show that updraft strength and injection timing set the sign of the seeding response.
 :::
-
 :::

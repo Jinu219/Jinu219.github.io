@@ -5,8 +5,30 @@ lang: en
 page-layout: article
 ---
 
-This section examines how WRF weather fields, physics parameterizations, and initial and boundary conditions affect simulations of clouds and precipitation. Case selection, sensitivity experiments, and interpretation will be documented as reproducible workflows.
+This section examines how WRF weather fields, physics parameterizations, and initial and boundary conditions affect simulations of clouds and precipitation. Case selection, sensitivity experiments, and interpretation are documented as reproducible workflows.
 
-::: {.callout-note}
-The first WRF setup and case-study note is in preparation.
+The first series starts from the idealized 2-D squall-line case. After checking how vertical shear and the warm bubble shape convection, it swaps microphysics schemes and background aerosol, then prepares bin microphysics (fast SBM) for hygroscopic seeding experiments. The goal is to recompute the particle-size experiment of [Ren et al. (2025)](posts/article-review/2026-09-10-ren2025-particle-size/index.qmd) in 2-D WRF.
+
+```text
+1. Basic 2-D squall line       →  vertical shear · warm-bubble sensitivity
+2. Microphysics comparison     →  fast SBM 2-D bug fix · maritime vs continental aerosol
+3. (in progress) Ren et al. (2025) case setup  →  KCl hygroscopic seeding
+```
+
+::: {.manual-post-list}
+::: {.manual-post}
+<div class="manual-post-meta">2026-09-27 · Jinu</div>
+
+### [Idealized 2-D Squall Line in WRF: What Shear and the Warm Bubble Change](posts/wrf/2026-09-27-idealized-squall-line/index.qmd)
+
+The idealized WRF workflow, 2-D namelist constraints, and one-at-a-time changes to wind shear and warm-bubble strength.
+:::
+
+::: {.manual-post}
+<div class="manual-post-meta">2026-09-29 · Jinu</div>
+
+### [Microphysics Scheme Comparison and the Fast SBM 2-D Aerosol Reset Bug](posts/wrf/2026-09-29-microphysics-fsbm/index.qmd)
+
+Lin, Morrison, and fast SBM on the same squall line, a 2-D boundary condition that reset aerosol every step, and a maritime-aerosol test.
+:::
 :::

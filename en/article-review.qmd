@@ -7,9 +7,17 @@ page-layout: article
 
 Rather than summarizing conclusions alone, each review separates the research question, method, key assumptions, observations or model data, reproducible elements, and remaining limitations. Ideas found in the literature will feed back into PySDM or WRF experiments.
 
-The collection currently covers six papers, from glaciogenic, hygroscopic, and negative-ion seeding to effect accounting and numerical evaluation. Each review separates **what the paper demonstrates** from **what remains unproven**.
+The collection currently covers seven papers, from glaciogenic, hygroscopic, and negative-ion seeding to effect accounting, numerical evaluation, and how seeding-particle size flips precipitation from suppression to enhancement. Each review separates **what the paper demonstrates** from **what remains unproven**.
 
 ::: {.manual-post-list}
+::: {.manual-post}
+<div class="manual-post-meta">2026-09-10 · Jinu</div>
+
+### [Same Mass, Different Size: When Hygroscopic Seeding Suppresses or Enhances Rain](posts/article-review/2026-09-10-ren2025-particle-size/index.qmd)
+
+Equal-mass KCl seeding in a 2-D bin model: a critical diameter sets the sign of the rain response and shrinks as the background gets more polluted.
+:::
+
 ::: {.manual-post}
 <div class="manual-post-meta">2026-07-15 · Jinu</div>
 
