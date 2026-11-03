@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Jinu&#39;s Cloud Seeding Blog</title>
+<link>https://jinu219.github.io/study-notes.html</link>
+<atom:link href="https://jinu219.github.io/study-notes.xml" rel="self" type="application/rss+xml"/>
+<description>인공강우와 구름 미세물리의 기본 개념을 직접 공부하며 정리한 노트</description>
+<generator>quarto-1.11.9</generator>
+<lastBuildDate>Wed, 08 Apr 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>CCN 하나가 빗방울이 되기까지: 따뜻한 구름의 미세물리</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/study-notes/2026-04-08-warm-rain-microphysics/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>4월 랩미팅에서 연구 현황으로 Houze의 <em>Cloud Dynamics</em> 3장(Cloud Microphysics) 중 따뜻한 구름 부분(3.1절)을 읽은 노트를 보고했다. 이 글은 그 노트를 교재 원문과 다시 대조해 쓴 정리다. 식 번호는 교재 2판(2014)을 따른다 <span class="citation" data-cites="Houze2014CloudMicrophysics">(Houze 2014년)</span>. 질문은 이것이다. <strong>0.1 µm 규모의 에어로졸이 어떻게 구름방울이 되고, 구름방울은 어떻게 빗방울이 되며, 흡습성 씨뿌리기는 그 사이 어디에 손을 대는가?</strong></p>
+<div class="review-verdict">
+<p><strong>핵심 정리.</strong> 순수한 물방울은 대기에서 스스로 생기지 못하므로 구름방울은 CCN 위에서 시작한다. 응결은 작은 방울을 빠르게 키우지만 클수록 느려지고(<img src="https://latex.codecogs.com/png.latex?R%5E2%20%5Cpropto%20t">), 충돌·병합은 주변보다 큰 collector가 있어야 시작된다. 이 두 과정 사이의 크기 틈이 따뜻한 비의 병목이고, 흡습성 씨뿌리기는 이 틈을 건너뛸 큰 방울을 만들거나 방울 사이의 수증기 경쟁을 바꾸려는 시도다.</p>
+</div>
+<section id="먼저-표기와-크기" class="level2">
+<h2 class="anchored" data-anchor-id="먼저-표기와-크기">먼저 표기와 크기</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>기호</th>
+<th>뜻</th>
+<th>주의</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="https://latex.codecogs.com/png.latex?S%20=%20e/e_s"></td>
+<td>포화비(saturation ratio). <img src="https://latex.codecogs.com/png.latex?e">는 수증기압, <img src="https://latex.codecogs.com/png.latex?e_s">는 평평한 순수 물 위 포화수증기압</td>
+<td><img src="https://latex.codecogs.com/png.latex?S=1">이 포화(RH 100%)</td>
+</tr>
+<tr class="even">
+<td><img src="https://latex.codecogs.com/png.latex?s%20=%20S-1"></td>
+<td>과포화도(supersaturation)</td>
+<td><img src="https://latex.codecogs.com/png.latex?s=0.01">이 1%. 교재 식 (3.15)의 <img src="https://latex.codecogs.com/png.latex?%5Ctilde%20S"></td>
+</tr>
+<tr class="odd">
+<td><img src="https://latex.codecogs.com/png.latex?R"></td>
+<td>물방울 반지름</td>
+<td>직경은 <img src="https://latex.codecogs.com/png.latex?D=2R"></td>
+</tr>
+<tr class="even">
+<td><img src="https://latex.codecogs.com/png.latex?r_d"></td>
+<td>건조 입자 반지름(dry radius)</td>
+<td>물을 흡수하기 전 에어로졸 크기</td>
+</tr>
+</tbody>
+</table>
+<table class="review-data caption-top table">
+<caption>표기와 입자 크기. 교재의 크기 분류는 직경, 식은 반지름 기준이다</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>입자</th>
+<th>대표 크기</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CCN(건조)</td>
+<td>반지름 약 0.01–1 µm</td>
+<td>교재는 “0.1 µm 규모”로 소개. 반지름 1 µm 이상은 흔히 giant CCN</td>
+</tr>
+<tr class="even">
+<td>구름방울</td>
+<td>직경 1–100 µm</td>
+<td>낙하속도 1 m s⁻¹ 미만</td>
+</tr>
+<tr class="odd">
+<td>이슬비(drizzle)</td>
+<td>직경 50 µm ~ 수백 µm</td>
+<td>가장 작은 액체 강수</td>
+</tr>
+<tr class="even">
+<td>빗방울</td>
+<td>직경 수백 ~ 수천 µm</td>
+<td>반지름 약 3 mm에서 낙하속도가 거의 일정</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="순수한-물방울은-스스로-생기지-못한다-kelvin-효과" class="level2">
+<h2 class="anchored" data-anchor-id="순수한-물방울은-스스로-생기지-못한다-kelvin-효과">1. 순수한 물방울은 스스로 생기지 못한다: Kelvin 효과</h2>
+<p>수증기 분자들이 우연히 모여 반지름 <img src="https://latex.codecogs.com/png.latex?R">의 순수한 물방울 씨앗을 만들 때 필요한 순에너지는 다음과 같다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5CDelta%20E%20=%204%5Cpi%20R%5E2%5Csigma_%7Bvl%7D%20-%20%5Ctfrac%7B4%7D%7B3%7D%5Cpi%20R%5E3%20n_l%5C,(%5Cmu_v-%5Cmu_l),%20%5Cqquad%20%5Cmu_v-%5Cmu_l%20=%20k_B%20T%20%5Cln%20S%20%5Ctag%7B3.1%E2%80%933.2%7D%0A"></p>
+<p>말로 읽으면 “씨앗을 만드는 순비용 = 표면을 새로 만드는 비용 − 분자가 액체로 들어가며 얻는 이득”이다. <img src="https://latex.codecogs.com/png.latex?%5Csigma_%7Bvl%7D">은 단위 면적의 수증기–물 경계면을 만드는 일(표면장력), <img src="https://latex.codecogs.com/png.latex?n_l">은 물방울의 단위 부피당 분자 수, <img src="https://latex.codecogs.com/png.latex?%5Cmu_v-%5Cmu_l">은 분자 하나가 기체에서 액체로 옮겨갈 때의 깁스 자유에너지 차이다. <img src="https://latex.codecogs.com/png.latex?S%3C1">이면 두 항이 모두 비용이 되어 씨앗은 늘 증발한다. <img src="https://latex.codecogs.com/png.latex?S%3E1">이면 작은 <img src="https://latex.codecogs.com/png.latex?R">에서는 표면 항(<img src="https://latex.codecogs.com/png.latex?R%5E2">)이, 큰 <img src="https://latex.codecogs.com/png.latex?R">에서는 부피 항(<img src="https://latex.codecogs.com/png.latex?R%5E3">)이 이겨 에너지 장벽이 생긴다. 장벽의 꼭대기를 <img src="https://latex.codecogs.com/png.latex?%5Cpartial(%5CDelta%20E)/%5Cpartial%20R=0">으로 찾으면 Kelvin 식이 나온다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AR_c%20=%20%5Cfrac%7B2%5Csigma_%7Bvl%7D%7D%7Bn_l%20k_B%20T%20%5Cln%20S%7D%0A%5Ctag%7B3.3%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?R_c">보다 작은 씨앗은 증발하고, 우연히 <img src="https://latex.codecogs.com/png.latex?R_c">를 넘은 씨앗만 자란다. 포화(<img src="https://latex.codecogs.com/png.latex?S=1">)에서는 <img src="https://latex.codecogs.com/png.latex?%5Cln%20S=0">이라 <img src="https://latex.codecogs.com/png.latex?R_c%5Cto%5Cinfty">이므로 반드시 과포화가 필요하다. 10 °C에서 직접 계산해 보면 차이가 분명하다.</p>
+<table class="review-data caption-top table">
+<caption>Kelvin 식 (3.3)으로 계산한 임계 반지름(T = 10 °C, σ = 0.072 J m⁻²)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?S"></th>
+<th style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?s"></th>
+<th style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?R_c"></th>
+<th style="text-align: right;">우연히 모여야 하는 분자 수</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1.01</td>
+<td style="text-align: right;">1%</td>
+<td style="text-align: right;">0.11 µm</td>
+<td style="text-align: right;">약 <img src="https://latex.codecogs.com/png.latex?2%5Ctimes10%5E%7B8%7D"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">100%</td>
+<td style="text-align: right;">1.6 nm</td>
+<td style="text-align: right;">약 560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">350%</td>
+<td style="text-align: right;">0.73 nm</td>
+<td style="text-align: right;">약 55</td>
+</tr>
+</tbody>
+</table>
+<p>교재에 따르면 균질 핵생성률은 <img src="https://latex.codecogs.com/png.latex?S">가 약 4–5에 이를 때 급격히 커진다. 즉 과포화도가 300–400%는 되어야 하는데, 대기의 과포화도는 1%를 넘는 일이 드물다. 그래서 <strong>균질 핵생성은 자연 구름에서 역할을 하지 않는다.</strong></p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>S와 s를 섞지 않기
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“과포화도 1%”는 <img src="https://latex.codecogs.com/png.latex?S=1.01">, <img src="https://latex.codecogs.com/png.latex?%5Cln%20S%5Capprox0.01">이다. <img src="https://latex.codecogs.com/png.latex?%5Cln%201=0">이 되는 것은 <img src="https://latex.codecogs.com/png.latex?S=1">(포화)일 때다. 균질 핵생성에 필요한 조건도 “<img src="https://latex.codecogs.com/png.latex?S%5Capprox4">–5”, 곧 RH 400–500%, <img src="https://latex.codecogs.com/png.latex?s%5Capprox"> 300–400%로 세 표기를 구분해 적어야 한다.</p>
+</div>
+</div>
+</section>
+<section id="에어로졸이-출발점을-바꾼다-raoult-효과와-köhler-곡선" class="level2">
+<h2 class="anchored" data-anchor-id="에어로졸이-출발점을-바꾼다-raoult-효과와-köhler-곡선">2. 에어로졸이 출발점을 바꾼다: Raoult 효과와 Köhler 곡선</h2>
+<p>실제 구름방울은 에어로졸 표면에 물이 모이는 불균질 핵생성으로 생긴다. 물에 잘 젖는 입자 위에서는 같은 수의 분자로도 곡률 반지름이 커서 Kelvin 장벽을 넘기 쉽다. 입자가 물에 녹으면 용액의 평형 수증기압이 순수한 물보다 낮아져(Raoult 효과) 더 유리하다. 교재는 그래서 <strong>가장 크고 가장 잘 녹는 CCN 위에 첫 구름방울이 생긴다</strong>고 정리한다. 이 두 효과를 함께 쓰면 물방울 표면의 평형 수증기 밀도는 다음과 같다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Crho_v(R)=%5Crho_%7Bvs%7D%5BT(R)%5D%5Cleft(1+%5Cfrac%7B%5Chat%20a%7D%7BR%7D-%5Cfrac%7B%5Chat%20b%7D%7BR%5E3%7D%5Cright),%20%5Cqquad%20%5Chat%20a=%5Cfrac%7B2%5Csigma_%7Bvl%7D%7D%7B%5Crho_L%20R_v%20T%7D,%20%5Cqquad%20%5Chat%20b=%5Cfrac%7B3%20i_%7BvH%7D%20m_s%20M_w%7D%7B4%5Cpi%5Crho_L%20M_s%7D%20%5Ctag%7B3.18%E2%80%933.20%7D%0A"></p>
+<p>말로 읽으면 “물방울 표면에서 평형을 이루는 수증기 = 평평한 순수 물 위 포화값 × (1 + 곡률 보정 − 용질 보정)”이다. <img src="https://latex.codecogs.com/png.latex?%5Chat%20a/R">은 작은 방울일수록 커지는 Kelvin 항, <img src="https://latex.codecogs.com/png.latex?%5Chat%20b/R%5E3">은 녹은 염의 질량 <img src="https://latex.codecogs.com/png.latex?m_s">와 이온 수(van’t Hoff 인자 <img src="https://latex.codecogs.com/png.latex?i_%7BvH%7D">)가 클수록, 염의 분자량 <img src="https://latex.codecogs.com/png.latex?M_s">가 작을수록 커지는 Raoult 항이다. 방울이 커지면 용액이 묽어져 <img src="https://latex.codecogs.com/png.latex?R%5E3">로 빠르게 줄어든다.</p>
+<p>평형 포화비 <img src="https://latex.codecogs.com/png.latex?S_%7Beq%7D(R)%5Capprox%201+%5Chat%20a/R-%5Chat%20b/R%5E3">를 그린 것이 Köhler 곡선이다. 작은 <img src="https://latex.codecogs.com/png.latex?R">에서는 용질 항이 이겨 <img src="https://latex.codecogs.com/png.latex?S_%7Beq%7D%3C1">인 haze 방울로 존재하고, 큰 <img src="https://latex.codecogs.com/png.latex?R">에서는 곡률 항이 남아 1보다 조금 크다. <img src="https://latex.codecogs.com/png.latex?dS_%7Beq%7D/dR=0">으로 찾은 최대점은 <img src="https://latex.codecogs.com/png.latex?R_c=%5Csqrt%7B3%5Chat%20b/%5Chat%20a%7D">, <img src="https://latex.codecogs.com/png.latex?s_c=%5Csqrt%7B4%5Chat%20a%5E3/(27%5Chat%20b)%7D">이다. 주변 과포화도가 임계 과포화도 <img src="https://latex.codecogs.com/png.latex?s_c">를 넘으면 방울은 <img src="https://latex.codecogs.com/png.latex?R_c">를 지나 계속 자라는데, 이것을 <strong>활성화(activation)</strong>라고 부른다. <img src="https://latex.codecogs.com/png.latex?%5Ckappa">-Köhler 이론에서는 묽은 용액에서 <img src="https://latex.codecogs.com/png.latex?%5Chat%20b%5Capprox%5Ckappa%20r_d%5E3">이므로 <img src="https://latex.codecogs.com/png.latex?s_c%20%5Cpropto%20r_d%5E%7B-3/2%7D%5Ckappa%5E%7B-1/2%7D">가 된다. 자세한 형태는 <a href="../../../posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler 리뷰</a>에 정리했다 <span class="citation" data-cites="Petters2007Kappa">(Petters 와/과 Kreidenweis 2007년)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/study-notes/2026-04-08-warm-rain-microphysics/images/kohler-curves.png" class="img-fluid figure-img" alt="Köhler curves for dry radii 0.03, 0.1, 0.3 and 1 micrometre with kappa 1.28; critical supersaturation falls from 0.24 percent to 0.0012 percent as dry radius increases"></p>
+<figcaption>NaCl에 해당하는 κ = 1.28에서 건조 반지름별 Köhler 곡선. κ-Köhler 식으로 직접 계산했다.</figcaption>
+</figure>
+</div>
+<table class="review-data caption-top table">
+<caption>κ-Köhler 식의 최대점을 수치로 찾은 값(T = 10 °C, σ = 0.072 J m⁻²). κ는 Petters &amp; Kreidenweis (2007)의 CCN 기반 값</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">건조 반지름 <img src="https://latex.codecogs.com/png.latex?r_d"></th>
+<th style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?s_c"> (κ = 0.61, 황산암모늄)</th>
+<th style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?s_c"> (κ = 1.28, NaCl)</th>
+<th style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?R_c"> (NaCl)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.03 µm</td>
+<td style="text-align: right;">0.35%</td>
+<td style="text-align: right;">0.24%</td>
+<td style="text-align: right;">0.31 µm</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.1 µm</td>
+<td style="text-align: right;">0.057%</td>
+<td style="text-align: right;">0.039%</td>
+<td style="text-align: right;">1.9 µm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.3 µm</td>
+<td style="text-align: right;">0.011%</td>
+<td style="text-align: right;">0.0076%</td>
+<td style="text-align: right;">9.7 µm</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1 µm</td>
+<td style="text-align: right;">0.0018%</td>
+<td style="text-align: right;">0.0012%</td>
+<td style="text-align: right;">59 µm</td>
+</tr>
+</tbody>
+</table>
+<p>건조 반지름이 10배 커지면 <img src="https://latex.codecogs.com/png.latex?s_c">는 약 30배 작아지고, κ가 두 배가 되어도 <img src="https://latex.codecogs.com/png.latex?s_c">는 약 0.7배가 될 뿐이다. 이 범위에서는 <strong>크기가 화학보다 활성화를 더 강하게 좌우한다.</strong> 반지름 1 µm인 giant CCN은 <img src="https://latex.codecogs.com/png.latex?s_c">가 0.001% 수준이라 사실상 어떤 구름에서도 활성화되지만, <img src="https://latex.codecogs.com/png.latex?R_c">가 수십 µm여서 “활성화되느냐”보다 “얼마나 빨리 collector 크기에 닿느냐”로 보는 편이 유용하다.</p>
+</section>
+<section id="응결-성장-작은-방울은-빨리-큰-방울은-느리게" class="level2">
+<h2 class="anchored" data-anchor-id="응결-성장-작은-방울은-빨리-큰-방울은-느리게">3. 응결 성장: 작은 방울은 빨리, 큰 방울은 느리게</h2>
+<p>활성화된 방울은 수증기 확산(Fick의 법칙)으로 자란다. 정상 상태의 구 대칭 확산과 열수지를 결합하면, 포화에 가까운 환경에서 질량 성장률은 다음과 같다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cdot%20m%20=%20%5Cfrac%7B4%5Cpi%20R%5C,%20s%7D%7BF_%5Ckappa%20+%20F_D%7D,%20%5Cqquad%20F_%5Ckappa=%5Cfrac%7BL%5E2%7D%7B%5Ckappa_a%20R_v%20T%5E2%7D,%20%5Cqquad%20F_D=%5Cfrac%7BR_v%20T%7D%7BD_v%20e_s%7D%20%5Ctag%7B3.14%E2%80%933.17%7D%0A"></p>
+<p>말로 읽으면 “질량 성장률 = <img src="https://latex.codecogs.com/png.latex?4%5Cpi%20R"> × 과포화도 ÷ (열전도 저항 + 수증기 확산 저항)”이다. <img src="https://latex.codecogs.com/png.latex?s">는 성장의 구동력이다. <img src="https://latex.codecogs.com/png.latex?F_%5Ckappa">는 응결로 나온 잠열(<img src="https://latex.codecogs.com/png.latex?L">)이 방울을 데워 표면 포화수증기압을 높이므로 그 열을 공기의 열전도(<img src="https://latex.codecogs.com/png.latex?%5Ckappa_a">)로 빼내야 한다는 제약이고, <img src="https://latex.codecogs.com/png.latex?F_D">는 수증기가 공기 속을 확산(<img src="https://latex.codecogs.com/png.latex?D_v">)해 와야 한다는 제약이다. 질량 대신 반지름으로 바꾸면(<img src="https://latex.codecogs.com/png.latex?m=%5Ctfrac43%5Cpi%20R%5E3%5Crho_L">),</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AR%5Cfrac%7BdR%7D%7Bdt%7D=%5Cfrac%7Bs%7D%7B%5Crho_L(F_%5Ckappa+F_D)%7D%5Cequiv%20G%5C,s%20%5Cquad%5CLongrightarrow%5Cquad%20R%5E2%20=%20R_0%5E2%20+%202Gs%5C,t%20.%0A"></p>
+<p>교과서에 따라 <img src="https://latex.codecogs.com/png.latex?%5Crho_L">을 <img src="https://latex.codecogs.com/png.latex?F"> 안에 넣어 <img src="https://latex.codecogs.com/png.latex?R%5C,dR/dt=(S-1)/(F_k+F_d)">로 쓰기도 한다. 핵심은 <img src="https://latex.codecogs.com/png.latex?dR/dt%20=%20Gs/R">, 즉 <strong>방울이 클수록 반지름 성장이 느려진다</strong>는 것이다. 작은 방울이 큰 방울을 따라잡으므로 응결은 크기 분포를 좁힌다. 아주 작은 방울에서는 곡률·용질 항을 넣은 식 (3.21)을, 떨어지는 방울에서는 통풍 인자를 곱한 식 (3.22)–(3.23)을 써야 한다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/study-notes/2026-04-08-warm-rain-microphysics/images/condensation-growth.png" class="img-fluid figure-img" alt="Droplet radius versus time for condensation growth from initial radii 2, 5 and 10 micrometres at 0.5 percent supersaturation; the curves converge and reach 40 micrometres only after roughly 26 to 28 minutes"></p>
+<figcaption>s = 0.5%에서 응결만으로 자라는 방울의 반지름. 출발 크기가 달라도 곡선이 빠르게 모인다.</figcaption>
+</figure>
+</div>
+<table class="review-data caption-top table">
+<caption>내가 계산한 응결 성장 시간(T = 10 °C, p = 800 hPa, <img src="https://latex.codecogs.com/png.latex?G%5Capprox9.7%5Ctimes10%5E%7B-11%7D"> m² s⁻¹, s 일정 가정)</caption>
+<thead>
+<tr class="header">
+<th>반지름 성장 구간</th>
+<th style="text-align: right;">s = 0.2%</th>
+<th style="text-align: right;">s = 0.5%</th>
+<th style="text-align: right;">s = 1%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5 → 10 µm</td>
+<td style="text-align: right;">3분</td>
+<td style="text-align: right;">1.3분</td>
+<td style="text-align: right;">0.6분</td>
+</tr>
+<tr class="even">
+<td>10 → 20 µm</td>
+<td style="text-align: right;">13분</td>
+<td style="text-align: right;">5분</td>
+<td style="text-align: right;">2.6분</td>
+</tr>
+<tr class="odd">
+<td>10 → 50 µm</td>
+<td style="text-align: right;">1.7시간</td>
+<td style="text-align: right;">41분</td>
+<td style="text-align: right;">21분</td>
+</tr>
+<tr class="even">
+<td>10 → 100 µm</td>
+<td style="text-align: right;">7.1시간</td>
+<td style="text-align: right;">2.8시간</td>
+<td style="text-align: right;">1.4시간</td>
+</tr>
+</tbody>
+</table>
+<p>전형적인 적운의 수명이 30분 정도라는 점 <span class="citation" data-cites="Bruintjes1999Review">(Bruintjes 1999년)</span>을 생각하면, 응결만으로 직경 수백 µm의 이슬비·빗방울을 만들기는 어렵다. 실제 구름에서는 <img src="https://latex.codecogs.com/png.latex?s">가 일정하지 않으므로 이 표는 규모를 보는 용도다.</p>
+</section>
+<section id="낙하속도와-충돌병합" class="level2">
+<h2 class="anchored" data-anchor-id="낙하속도와-충돌병합">4. 낙하속도와 충돌·병합</h2>
+<p>구름방울(직경 100 µm 미만)은 1 m s⁻¹보다 느리게 떨어진다. 낙하속도는 반지름 500 µm까지 거의 선형으로 커지다가 그보다 큰 방울에서는 증가가 둔해지고, 반지름 약 3 mm에서 방울이 납작한 원반처럼 찌그러지며 거의 일정해진다. 크기가 다른 방울은 낙하속도가 달라 서로 따라잡는다. 큰 방울 하나가 구름방울 사이를 떨어질 때의 연속 병합 식은 다음과 같다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cdot%20m_%7Bcol%7D%20=%20A_m%5C,%5Clvert%20V(m)-V(m')%5Crvert%5C,%5Crho%20q_%7Bm'%7D%5C,%5CSigma_c(m,m'),%20%5Cqquad%20A_m=%5Cpi(R+R')%5E2%20%5Ctag%7B3.24%E2%80%933.25%7D%0A"></p>
+<p>말로 읽으면 “병합 성장률 = 1초 동안 쓸고 지나가는 부피(단면적 × 상대 낙하속도) × 그 부피 속 구름물 질량 × 실제로 붙는 비율”이다. <img src="https://latex.codecogs.com/png.latex?A_m">은 두 반지름의 합으로 정한 유효 단면적, 절댓값은 상대 운동만 중요하다는 뜻, <img src="https://latex.codecogs.com/png.latex?%5Crho%20q_%7Bm'%7D">은 구름물 함량(g m⁻³)이다. 포집효율 <img src="https://latex.codecogs.com/png.latex?%5CSigma_c">는 <strong>충돌효율 × 병합효율</strong>이다. 충돌효율은 큰 방울 주위 기류가 작은 방울을 비켜 가게 하면 1보다 작고, 후류에 끌려 들어오면 1보다 클 수도 있다. 병합효율은 부딪힌 두 방울이 실제로 합쳐지는 비율로, 모형에서는 흔히 1로 두지만 강한 비에서는 잠시 붙었다가 떨어지기도 한다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?R%5Cgg%20R'">이면 <img src="https://latex.codecogs.com/png.latex?A_m%5Capprox%5Cpi%20R%5E2">이고 <img src="https://latex.codecogs.com/png.latex?m=%5Ctfrac43%5Cpi%20R%5E3%5Crho_L">이므로 <img src="https://latex.codecogs.com/png.latex?dR/dt%5Capprox%5CSigma_c%5Clvert%5CDelta%20V%5Crvert%5Crho%20q_c/(4%5Crho_L)">가 된다. 응결과 반대로 <strong>방울이 클수록 낙하속도와 충돌효율이 함께 커져 성장이 빨라진다.</strong> 문제는 시작이다. 교재 그림 3.5(Wallace &amp; Hobbs의 충돌효율 곡선)를 눈으로 읽으면, collector 반지름이 10 µm일 때 충돌효율은 최대 0.05 안팎, 20 µm일 때 0.2 안팎이고, 40 µm 이상이 되어야 0.7–1에 가까워진다. 실제 병합은 연속 과정이 아니라 확률 과정이라, 같은 크기에서 출발해도 운 좋게 먼저 충돌한 방울이 앞서 나간다(stochastic collection, 식 3.27–3.33). 교재가 소개한 계산 예에서는 약 30분 뒤 수로는 반지름 약 10 µm 구름방울이 압도적이지만, 물 질량의 상당 부분은 반지름 약 1 mm 빗방울로 옮겨 간다.</p>
+</section>
+<section id="두-과정-사이의-틈과-씨뿌리기가-들어가는-곳" class="level2">
+<h2 class="anchored" data-anchor-id="두-과정-사이의-틈과-씨뿌리기가-들어가는-곳">5. 두 과정 사이의 틈과 씨뿌리기가 들어가는 곳</h2>
+<table class="review-data caption-top table">
+<caption>따뜻한 비의 두 성장 과정 비교</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>응결</th>
+<th>충돌·병합</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>반지름 성장률</td>
+<td><img src="https://latex.codecogs.com/png.latex?dR/dt%20=%20Gs/R"></td>
+<td><img src="https://latex.codecogs.com/png.latex?dR/dt%20%5Capprox%20%5CSigma_c%5Clvert%5CDelta%20V%5Crvert%5Crho%20q_c/(4%5Crho_L)"></td>
+</tr>
+<tr class="even">
+<td>크기가 커지면</td>
+<td>느려짐</td>
+<td>빨라짐</td>
+</tr>
+<tr class="odd">
+<td>크기 분포에 주는 영향</td>
+<td>좁힘</td>
+<td>넓힘</td>
+</tr>
+<tr class="even">
+<td>효율적인 구간</td>
+<td>반지름 수 µm 이하</td>
+<td>collector 반지름 수십 µm 이상</td>
+</tr>
+</tbody>
+</table>
+<p>반지름 10 µm에서 수십 µm 사이에서는 응결은 이미 느려졌고 충돌효율은 아직 작다. 이 틈을 얼마나 빨리 건너는가가 따뜻한 구름의 강수 시작 시점을 정한다. Bruintjes (1999)가 정리한 흡습성 씨뿌리기의 두 방식은 바로 이 틈을 겨냥한다.</p>
+<ul>
+<li><strong>Embryo 방식:</strong> 직경 10 µm보다 큰 염 입자를 넣어 처음부터 collector 후보를 공급한다. 틈을 건너뛰는 전략이다.</li>
+<li><strong>Flare 방식:</strong> 직경 약 0.5 µm 염 입자를 구름 밑에서 공급한다. 큰 인공 CCN이 먼저 활성화되어 수증기를 가져가면 자연 CCN이 덜 활성화되고, 적은 수의 방울이 더 크게 자란다. 수증기 경쟁을 바꾸는 전략이다.</li>
+</ul>
+<p><img src="https://latex.codecogs.com/png.latex?R%5E2%5Cpropto%20t"> 그림에서 읽을 수 있는 점도 있다. 2 µm와 5 µm에서 출발한 방울은 20분 뒤 거의 같은 크기가 된다. 그래서 출발 크기가 조금 큰 것만으로는 이득이 금방 사라지고, collector에 가까운 크기를 직접 넣거나 경쟁자 수를 줄이는 쪽이 효과적이라는 것이 식에서 읽은 내 해석이다. 반대로 작은 흡습성 입자가 자연 CCN을 대체하지 못하고 방울 수만 늘리면 강수가 늦어질 수도 있다. 이후 읽은 Ren et al.&nbsp;(2025)은 2차원 bin 모형의 한 대류운 사례에서 같은 질량을 넣을 때 직경 0.1–0.9 µm 입자는 강수를 억제하고, 직경 약 2 µm를 넘으면 증대로 바뀐다고 보고했다 <span class="citation" data-cites="Ren2025ParticleSize">(Ren 기타 2025년)</span>. 이 질문은 <a href="../../../posts/experiments/2026-09-07-ren2025-parcel-replication/index.html">Ren (2025) 0차원 재현 실험</a>으로 이어진다.</p>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bruintjes1999Review" class="csl-entry">
+Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects”</span>. <em>Bulletin of the American Meteorological Society</em> 80 (5): 805–20. <a href="https://doi.org/10.1175/1520-0477(1999)080<0805:AROCSE>2.0.CO;2">https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Houze2014CloudMicrophysics" class="csl-entry">
+Houze, Robert A., Jr. 2014년. <span>“Cloud Microphysics”</span>. In <em>Cloud Dynamics</em>, 2nd ed, vol 104. International Geophysics. Elsevier. <a href="https://doi.org/10.1016/B978-0-12-374266-7.00003-2">https://doi.org/10.1016/B978-0-12-374266-7.00003-2</a>.
+</div>
+<div id="ref-Petters2007Kappa" class="csl-entry">
+Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”</span>. <em>Atmospheric Chemistry and Physics</em> 7: 1961–71. <a href="https://doi.org/10.5194/acp-7-1961-2007">https://doi.org/10.5194/acp-7-1961-2007</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Study Notes</category>
+  <category>cloud microphysics</category>
+  <category>warm rain</category>
+  <category>Köhler theory</category>
+  <category>collision–coalescence</category>
+  <guid>https://jinu219.github.io/posts/study-notes/2026-04-08-warm-rain-microphysics/</guid>
+  <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/study-notes/2026-04-08-warm-rain-microphysics/images/kohler-curves.png" medium="image" type="image/png" height="88" width="144"/>
+</item>
+<item>
+  <title>인공강우란 무엇인가: 구름에 씨를 뿌린다는 것의 물리</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/study-notes/2026-03-11-what-is-cloud-seeding/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>2026년 3월 첫 랩미팅에서 “What is Cloud Seeding?”이라는 제목으로 인공강우의 큰 그림을 발표했다. 이 글은 그 발표 자료와 질의응답 준비 노트를 원 논문·교재와 다시 대조해, 근거를 확인한 내용만 남긴 정리다. 질문은 하나다. <strong>구름에 무엇을 넣으면, 비가 만들어지는 사슬의 어느 고리가 바뀌는가?</strong></p>
+<div class="review-verdict">
+<p><strong>핵심 정리.</strong> 인공강우는 구름이 없는 곳에서 비를 만드는 기술이 아니다. 이미 있는 구름에서 강수를 막고 있는 병목, 즉 차가운 구름의 <strong>빙정핵 부족</strong>이나 따뜻한 구름의 <strong>느린 충돌·병합</strong>을 골라 그 병목을 푸는 입자를 넣는 기술이다. 병목이 없는 구름에서는 효과도 기대하기 어렵다.</p>
+</div>
+<section id="비가-내리는-두-가지-길" class="level2">
+<h2 class="anchored" data-anchor-id="비가-내리는-두-가지-길">비가 내리는 두 가지 길</h2>
+<p>반지름 10 µm 구름방울과 반지름 1 mm 빗방울은 부피가 약 100만 배 차이 난다. 구름방울 하나는 거의 떨어지지 않으므로, 비가 되려면 수많은 구름방울의 물이 한 입자로 모여야 한다. 그 길은 크게 두 가지다 <span class="citation" data-cites="Bruintjes1999Review Houze2014CloudMicrophysics">(Bruintjes 1999년; Houze 2014년)</span>.</p>
+<table class="review-data caption-top table">
+<caption>강수 형성의 두 경로와 씨뿌리기의 대응</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Warm rain (따뜻한 비)</th>
+<th>Cold rain (차가운 비, ice process)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>일어나는 구름</td>
+<td>구름 꼭대기까지 0 °C보다 따뜻한 구름</td>
+<td>꼭대기가 0 °C보다 차가운 구름</td>
+</tr>
+<tr class="even">
+<td>핵심 과정</td>
+<td>응결 → 충돌·병합(collision–coalescence)</td>
+<td>빙정 생성 → 증착 성장 → riming·aggregation</td>
+</tr>
+<tr class="odd">
+<td>출발에 필요한 것</td>
+<td>주변보다 큰 구름방울(collector)</td>
+<td>빙정핵(ice nucleating particle, INP)</td>
+</tr>
+<tr class="even">
+<td>대표 병목</td>
+<td>응결로 생긴 방울이 작고 크기가 고르면 충돌이 드묾</td>
+<td>0 °C 아래에서도 얼지 않는 과냉각 물방울과 부족한 빙정핵</td>
+</tr>
+<tr class="odd">
+<td>대응하는 씨뿌리기</td>
+<td>흡습성(hygroscopic) 씨뿌리기</td>
+<td>빙정핵(glaciogenic) 씨뿌리기</td>
+</tr>
+</tbody>
+</table>
+<p>실제 구름에서는 두 경로가 함께 작동하기도 한다. 그래서 그때 어떤 경로가 우세한지에 따라 씨뿌리기 반응도 달라진다는 것이 Bruintjes (1999)가 강조하는 점이다.</p>
+</section>
+<section id="차가운-구름-물방울은-0-c에서-얼지-않는다" class="level2">
+<h2 class="anchored" data-anchor-id="차가운-구름-물방울은-0-c에서-얼지-않는다">차가운 구름: 물방울은 0 °C에서 얼지 않는다</h2>
+<p>순수한 물방울이 다른 도움 없이 얼어붙는 균질 결빙(homogeneous freezing)은 약 −35 ~ −40 °C보다 차가워야 일어난다. 그래서 0 °C에서 약 −38 °C 사이의 구름에는 얼지 않은 과냉각 물방울이 흔히 남아 있다 <span class="citation" data-cites="Houze2014CloudMicrophysics">(Houze 2014년)</span>. 이 온도 범위에서 얼음이 생기려면 얼음과 비슷한 표면을 제공하는 입자, 즉 빙정핵이 필요하다.</p>
+<p>자연 빙정핵은 생각보다 드물다. Houze 교재의 정리에 따르면 점토 광물 먼지는 대략 −10 ~ −37 °C에서 작동하고, −1 ~ −10 °C처럼 따뜻한 과냉각에서는 식물 유래 박테리아가 매우 낮은 농도로만 얼음을 만든다. <strong>따뜻한 과냉각 구간에서 빙정핵이 부족하다는 사실</strong>이 인공 빙정핵을 뿌리게 된 출발점이다.</p>
+<p>얼음이 일단 생기면 빠르게 자란다. 같은 온도에서 얼음 위 포화수증기압이 물 위 포화수증기압보다 낮기 때문이다. 물에 대해 포화된 공기는 얼음 입장에서 과포화 상태이고, 빙정은 수증기를 흡수하며 자라고 주변 물방울은 증발한다. 이것이 Wegener–Bergeron–Findeisen(WBF) 과정이다. Schaefer (1946)도 실험 중 물방울을 더 넣으면 빙정만 커지는 현상을 같은 이유로 설명했다 <span class="citation" data-cites="Schaefer1946DryIce">(Schaefer 1946년)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/study-notes/2026-03-11-what-is-cloud-seeding/images/ice-vs-water-saturation.png" class="img-fluid figure-img" alt="Line chart of ice supersaturation of water-saturated air versus temperature from 0 to minus 40 degrees Celsius, about 10 percent at minus 10 and 22 percent at minus 20, with shaded bands for AgI activation, the static seeding window, and homogeneous freezing"></p>
+<figcaption>물에 대해 포화된 공기가 얼음에 대해 갖는 과포화도. Murphy &amp; Koop (2005)의 포화수증기압 식으로 직접 계산했다. 파란 띠는 대류운 static seeding의 구름 꼭대기 온도 창(Bruintjes 1999), 주황 띠는 Vonnegut (1947)의 AgI 연기 활성 시작 온도다.</figcaption>
+</figure>
+</div>
+<p>계산해 보면 이 차이는 −10 °C에서 약 10%, −20 °C에서 약 22%다 <span class="citation" data-cites="Murphy2005VapourPressure">(Murphy 와/과 Koop 2005년)</span>. 구름 속 과포화도가 보통 1%를 넘기 어렵다는 점을 생각하면, 빙정은 물방울에 비해 압도적으로 유리한 조건에서 자란다.</p>
+</section>
+<section id="얼음이-시작되는-네-가지-방식" class="level2">
+<h2 class="anchored" data-anchor-id="얼음이-시작되는-네-가지-방식">얼음이 시작되는 네 가지 방식</h2>
+<p>빙정핵이 얼음을 만드는 방식은 입자가 어디에 있느냐에 따라 나뉜다 <span class="citation" data-cites="Houze2014CloudMicrophysics">(Houze 2014년)</span>.</p>
+<table class="review-data caption-top table">
+<caption>불균질 빙정 핵생성의 네 가지 방식</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>방식</th>
+<th>일어나는 일</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Deposition nucleation</td>
+<td>수증기가 액체를 거치지 않고 입자 표면에 바로 얼음으로 붙는다</td>
+</tr>
+<tr class="even">
+<td>Condensation (-freezing) nucleation</td>
+<td>빙정핵이 CCN 역할도 해서, 그 위에 맺힌 물방울이 냉각되면 언다</td>
+</tr>
+<tr class="odd">
+<td>Immersion freezing</td>
+<td>이미 물방울 속에 들어간 다른 입자가 온도가 내려가면 결빙을 시작한다</td>
+</tr>
+<tr class="even">
+<td>Contact nucleation</td>
+<td>공기 중 빙정핵이 과냉각 물방울에 부딪히는 순간 물방울이 언다</td>
+</tr>
+</tbody>
+</table>
+<p>어느 방식이든 핵심은 <strong>결정 격자의 닮음</strong>이다. 얼음 결정은 분자가 매우 규칙적으로 배열되어 있어, 표면 격자가 얼음과 어긋날수록 경계면에 변형과 어긋남이 생기고 핵생성 효율이 떨어진다.</p>
+</section>
+<section id="드라이아이스와-요오드화은" class="level2">
+<h2 class="anchored" data-anchor-id="드라이아이스와-요오드화은">1946–1947: 드라이아이스와 요오드화은</h2>
+<p><strong>Schaefer (1946).</strong> 냉동 챔버(위 −10 °C, 아래 −20 °C, 중심 약 −15 °C)에 과냉각 구름을 만들고 탄소, 화산재, 활석 등 온갖 먼지를 넣었지만 구름은 얼지 않았다. 그런데 드라이아이스 조각을 넣자 10초도 안 되어 구름 전체가 빙정으로 바뀌었다 <span class="citation" data-cites="Schaefer1946DryIce">(Schaefer 1946년)</span>. 액체 공기로 식힌 막대나 −35 °C의 구리 막대를 −12 °C 구름에 넣어도 빙정이 쏟아졌다. 즉 드라이아이스는 빙정핵이 아니라 <strong>냉각제</strong>다. 주변 공기를 균질 결빙 한계 아래로 식혀 얼음 입자를 대량으로 만든다. 논문 끝에서 Schaefer는 비행기로 드라이아이스를 뿌리는 대규모 실험을 예고했고, 실제 구름에 대한 첫 씨뿌리기는 그해 이루어졌다 <span class="citation" data-cites="Bruintjes1999Review">(Bruintjes 1999년)</span>.</p>
+<p><strong>Vonnegut (1947).</strong> 같은 연구소의 Vonnegut은 결정학 자료에서 얼음을 가장 닮은 물질을 찾았다 <span class="citation" data-cites="Vonnegut1947AgI">(Vonnegut 1947년)</span>.</p>
+<table class="review-data caption-top table">
+<caption>Vonnegut (1947) Table I의 격자상수 비교</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">얼음 (ice)</th>
+<th style="text-align: right;">요오드화은 (AgI)</th>
+<th style="text-align: right;">차이</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>결정계</td>
+<td style="text-align: right;">hexagonal</td>
+<td style="text-align: right;">hexagonal</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr class="even">
+<td>격자상수 a</td>
+<td style="text-align: right;">4.535 Å</td>
+<td style="text-align: right;">4.585 Å</td>
+<td style="text-align: right;">약 1.1%</td>
+</tr>
+<tr class="odd">
+<td>격자상수 c</td>
+<td style="text-align: right;">7.41 Å</td>
+<td style="text-align: right;">7.490 Å</td>
+<td style="text-align: right;">약 1.1%</td>
+</tr>
+</tbody>
+</table>
+<p>두 방향 모두 약 1% 이내로 일치한다. 처음 시험한 AgI 분말은 효과가 없었는데, 나중에 시료가 수용성 염으로 오염되어 있었던 것으로 밝혀졌다. 이후 AgI를 불꽃이나 뜨거운 필라멘트로 기화시켜 만든 미세 연기가 엄청난 수의 빙정핵을 만들었다. 직경 약 1 µm 연기는 −4 °C부터, 직경 약 0.01 µm(100 Å) 연기는 −8 °C부터 효과적이었고, 당시 발생기는 AgI를 초당 1 mg 소비해 초당 약 <img src="https://latex.codecogs.com/png.latex?10%5E%7B13%7D">개의 유효 핵을 만들었다. −4 °C의 얇은 과냉각 안개에 연기를 흘리자 발생기에서 최소 150 ft(약 46 m)까지 안개가 빙정으로 바뀌었다.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+노트
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>초당 <img src="https://latex.codecogs.com/png.latex?10%5E%7B13%7D">개는 1947년 실험실 발생기 하나의 측정값이다. 같은 논문에서도 이론상 1 mg이 약 <img src="https://latex.codecogs.com/png.latex?3%5Ctimes10%5E%7B14%7D">개 입자를 만들어야 한다고 계산해 수십 배 차이를 인정한다. 실제 대기에서 AgI가 얼마나 활성화되는지는 별개의 문제이고, 이 글에서는 다루지 않는다. 또한 자료마다 격자상수가 조금씩 다르게 인용되므로 위 표는 Vonnegut 원문 값을 그대로 썼다.</p>
+</div>
+</div>
+</section>
+<section id="씨뿌리기의-세-갈래" class="level2">
+<h2 class="anchored" data-anchor-id="씨뿌리기의-세-갈래">씨뿌리기의 세 갈래</h2>
+<table class="review-data caption-top table">
+<caption>씨뿌리기 개념별 병목과 한계 <span class="citation" data-cites="Bruintjes1999Review Houze2014CloudMicrophysics">(Bruintjes 1999년; Houze 2014년)</span></caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>개념</th>
+<th>노리는 병목</th>
+<th>기대하는 인과 사슬</th>
+<th>주의할 점</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Static (빙정핵)</td>
+<td>빙정핵 부족</td>
+<td>AgI·드라이아이스 → 빙정 수 증가 → 증착·riming 성장 → 강수</td>
+<td>기회의 창이 좁다. 대류운의 경우 꼭대기 약 −10 ~ −20 °C의 대륙성 cold-based 구름에서 과냉각 액체수가 충분할 때로 제한된다</td>
+</tr>
+<tr class="even">
+<td>Dynamic (빙정핵)</td>
+<td>약한 상승류</td>
+<td>대량 결빙 → 융해잠열 방출 → 부력·상승류 강화 → 구름 성장</td>
+<td>사슬이 길고 대류운의 자연 변동이 크다. Houze 교재는 적운형 구름에서 이 효과가 입증된 적 없다고 정리한다</td>
+</tr>
+<tr class="odd">
+<td>Hygroscopic (흡습성)</td>
+<td>느린 충돌·병합</td>
+<td>큰 흡습성 입자 → 넓은 방울 스펙트럼 → 충돌·병합 조기 시작</td>
+<td>해양성 구름처럼 이미 병합이 효율적인 구름에서는 효과가 없다</td>
+</tr>
+</tbody>
+</table>
+<p>세 개념의 역사와 실험 평가는 <a href="../../../posts/article-review/2026-05-20-cloud-seeding-review/index.html">Bruintjes (1999) 리뷰</a>에서 따로 정리했다.</p>
+</section>
+<section id="무엇을-뿌리나" class="level2">
+<h2 class="anchored" data-anchor-id="무엇을-뿌리나">무엇을 뿌리나</h2>
+<table class="review-data caption-top table">
+<caption>대표 씨뿌리기 물질</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>물질</th>
+<th>대상 구름</th>
+<th>작용 방식</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>드라이아이스 (고체 CO₂)</td>
+<td>과냉각 구름</td>
+<td>핵이 아니라 냉각제. 국소적으로 공기를 매우 차갑게 만들어 빙정을 대량 생성</td>
+<td>Schaefer (1946)</td>
+</tr>
+<tr class="even">
+<td>요오드화은 (AgI)</td>
+<td>과냉각 구름</td>
+<td>얼음과 닮은 격자로 빙정핵 역할. 연소·기화로 미세 연기를 만들어 살포</td>
+<td>Vonnegut (1947), Houze (2014)</td>
+</tr>
+<tr class="odd">
+<td>흡습성 염 (NaCl 등)</td>
+<td>따뜻한 구름</td>
+<td>물을 끌어당겨 큰 방울이 되어 충돌·병합의 출발점이 됨</td>
+<td>Bruintjes (1999)</td>
+</tr>
+</tbody>
+</table>
+<p>발표에서는 BiI₃, TiO₂로 감싼 NaCl(core–shell), 전하를 띤 물방울 같은 연구 단계 물질도 소개했지만, 성능 수치의 원출처를 확인하지 못해 표에서 뺐다. 전하를 이용하는 방식은 <a href="../../../posts/article-review/2026-05-20-negative-ion-seeding/index.html">음이온 씨뿌리기 리뷰</a>에서 다뤘다.</p>
+</section>
+<section id="왜-따뜻한-구름의-흡습성-씨뿌리기인가" class="level2">
+<h2 class="anchored" data-anchor-id="왜-따뜻한-구름의-흡습성-씨뿌리기인가">왜 따뜻한 구름의 흡습성 씨뿌리기인가</h2>
+<p>따뜻한 비의 병목은 <strong>크기의 틈</strong>에 있다. 응결은 비슷한 크기의 작은 방울을 많이 만들고, 충돌·병합은 주변보다 확실히 큰 collector가 있어야 시작된다. Bruintjes (1999)는 이 틈을 메우는 흡습성 씨뿌리기를 두 방식으로 정리한다.</p>
+<ul>
+<li><strong>빗방울 씨앗(embryo) 방식:</strong> 직경 10 µm보다 큰 염 입자를 넣어 CCN 단계를 건너뛰고 바로 충돌·병합을 시작시킨다. 많은 양의 염이 필요하고 구름 전체에 고르게 퍼뜨리기 어렵다.</li>
+<li><strong>Flare 방식:</strong> 구름 밑에서 직경 약 0.5 µm 염 입자를 태워 공급한다. 큰 인공 CCN이 먼저 활성화되어 수증기를 가져가면 자연 CCN이 덜 활성화되고, 더 적은 방울이 더 크게 자라 방울 스펙트럼이 넓어진다. 남아프리카의 무작위 실험(1991–1996, 폭풍 127개)에서는 씨뿌린 폭풍의 강수량이 대조 폭풍보다 95% 신뢰수준에서 유의하게 컸다. 다만 Bruintjes는 입자의 확산·수송 같은 근본 문제가 아직 남아 있다고 덧붙인다.</li>
+</ul>
+<p>내가 이 경로를 고른 이유는 세 가지다. 첫째, 얼음 과정 없이 <strong>응결과 충돌·병합만으로 인과 사슬을 닫을 수 있어</strong> 0차원 parcel 모형에서 한 고리씩 검증하기 좋다. 둘째, 같은 물질도 입자 크기·흡습성(κ)·주입량·주입 시점과 배경 에어로졸·상승류에 따라 결과가 달라질 수 있어, 민감도 분석으로 물을 질문이 분명하다. 셋째, 수증기 경쟁이 핵심이라면 잘못된 조건에서는 오히려 강수를 늦출 가능성도 따져 봐야 한다. 이 질문들은 <a href="../../../posts/study-notes/2026-04-08-warm-rain-microphysics/index.html">따뜻한 구름의 미세물리 노트</a>와 <a href="../../../experiments.html">PySDM 실험</a>으로 이어진다.</p>
+</section>
+<section id="덧붙임-운형별로-다시-본-적합성" class="level2">
+<h2 class="anchored" data-anchor-id="덧붙임-운형별로-다시-본-적합성">덧붙임: 운형별로 다시 본 적합성</h2>
+<p>이후(2026년 9월) 운형별로 따뜻한 구름 흡습성 씨뿌리기의 연구 대상 적합성을 다시 정리했다. 문헌의 정량 기준이 아니라 대표 상(phase)과 주요 강수 과정에 근거한 <strong>내 정성적 판단</strong>이다.</p>
+<table class="review-data caption-top table">
+<caption>운형별 warm hygroscopic seeding 연구 적합성(정성적 정리)</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cloud type</th>
+<th>대표 phase</th>
+<th>주요 강수 과정</th>
+<th>적합성</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cumulus</td>
+<td>liquid, 경우에 따라 mixed</td>
+<td>condensation → collision–coalescence</td>
+<td>매우 적합</td>
+</tr>
+<tr class="even">
+<td>Stratocumulus</td>
+<td>주로 liquid, 추우면 mixed</td>
+<td>autoconversion + accretion → drizzle</td>
+<td>잠재적으로 적합</td>
+</tr>
+<tr class="odd">
+<td>Stratus</td>
+<td>주로 liquid</td>
+<td>약한 collision–coalescence → drizzle</td>
+<td>제한적</td>
+</tr>
+<tr class="even">
+<td>Altocumulus</td>
+<td>liquid / supercooled / mixed</td>
+<td>liquid coalescence 또는 ice process</td>
+<td>제한적</td>
+</tr>
+<tr class="odd">
+<td>Nimbostratus, Altostratus</td>
+<td>대개 mixed / ice</td>
+<td>deposition, aggregation, melting</td>
+<td>대체로 부적합</td>
+</tr>
+<tr class="even">
+<td>Cirrus 계열</td>
+<td>ice</td>
+<td>ice nucleation, deposition</td>
+<td>대체로 부적합</td>
+</tr>
+</tbody>
+</table>
+<p>“부적합”은 그 구름을 바꿀 수 없다는 뜻이 아니라, 따뜻한 구름 흡습성 경로의 연구 대상으로 맞지 않는다는 뜻이다.</p>
+</section>
+<section id="남은-질문" class="level2">
+<h2 class="anchored" data-anchor-id="남은-질문">남은 질문</h2>
+<ul>
+<li>실험실에서 측정한 빙정핵 활성이 실제 구름의 난류, 자연 빙정핵 경쟁, 입자 제거 속에서 얼마나 유지되는가?</li>
+<li>살포 물질이 목표 구름의 목표 부피에 실제로 도달했는지를 어떻게 확인하는가?</li>
+<li>강수의 큰 자연 변동 속에서 통계적 신호와 물리적 증거를 함께 닫으려면 무엇을 측정해야 하는가?</li>
+</ul>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bruintjes1999Review" class="csl-entry">
+Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects”</span>. <em>Bulletin of the American Meteorological Society</em> 80 (5): 805–20. <a href="https://doi.org/10.1175/1520-0477(1999)080<0805:AROCSE>2.0.CO;2">https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Houze2014CloudMicrophysics" class="csl-entry">
+Houze, Robert A., Jr. 2014년. <span>“Cloud Microphysics”</span>. In <em>Cloud Dynamics</em>, 2nd ed, vol 104. International Geophysics. Elsevier. <a href="https://doi.org/10.1016/B978-0-12-374266-7.00003-2">https://doi.org/10.1016/B978-0-12-374266-7.00003-2</a>.
+</div>
+<div id="ref-Murphy2005VapourPressure" class="csl-entry">
+Murphy, D. M., 와/과 T. Koop. 2005년. <span>“Review of the Vapour Pressures of Ice and Supercooled Water for Atmospheric Applications”</span>. <em>Quarterly Journal of the Royal Meteorological Society</em> 131 (608): 1539–65. <a href="https://doi.org/10.1256/qj.04.94">https://doi.org/10.1256/qj.04.94</a>.
+</div>
+<div id="ref-Schaefer1946DryIce" class="csl-entry">
+Schaefer, Vincent J. 1946년. <span>“The Production of Ice Crystals in a Cloud of Supercooled Water Droplets”</span>. <em>Science</em> 104 (2707): 457–59. <a href="https://doi.org/10.1126/science.104.2707.457">https://doi.org/10.1126/science.104.2707.457</a>.
+</div>
+<div id="ref-Vonnegut1947AgI" class="csl-entry">
+Vonnegut, Bernard. 1947년. <span>“The Nucleation of Ice Formation by Silver Iodide”</span>. <em>Journal of Applied Physics</em> 18 (7): 593–95. <a href="https://doi.org/10.1063/1.1697813">https://doi.org/10.1063/1.1697813</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Study Notes</category>
+  <category>cloud seeding</category>
+  <category>ice nucleation</category>
+  <category>hygroscopic seeding</category>
+  <guid>https://jinu219.github.io/posts/study-notes/2026-03-11-what-is-cloud-seeding/</guid>
+  <pubDate>Wed, 11 Mar 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/study-notes/2026-03-11-what-is-cloud-seeding/images/ice-vs-water-saturation.png" medium="image" type="image/png" height="84" width="144"/>
+</item>
+</channel>
+</rss>

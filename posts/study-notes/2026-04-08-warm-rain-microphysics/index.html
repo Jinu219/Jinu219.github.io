@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-04-08">
+<meta name="description" content="Houze의 Cloud Dynamics 3장을 따라 Kelvin·Raoult 효과, Köhler 곡선, 응결 성장식, 충돌·병합을 정리하고 흡습성 씨뿌리기가 어느 단계에 개입하는지 짚습니다.">
+
+<title>CCN 하나가 빗방울이 되기까지: 따뜻한 구름의 미세물리 – Jinu’s Cloud Seeding Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e7c2b2337504f807b65bdb21917a461.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "일치 없음",
+    "search-matching-documents-text": "일치된 문서",
+    "search-copy-link-title": "검색 링크 복사",
+    "search-hide-matches-text": "추가 검색 결과 숨기기",
+    "search-more-match-text": "추가 검색결과",
+    "search-more-matches-text": "추가 검색결과",
+    "search-clear-button-title": "제거",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "취소",
+    "search-submit-button-title": "검색",
+    "search-label": "검색"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="CCN 하나가 빗방울이 되기까지: 따뜻한 구름의 미세물리 – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Houze의 Cloud Dynamics 3장을 따라 Kelvin·Raoult 효과, Köhler 곡선, 응결 성장식, 충돌·병합을 정리하고 흡습성 씨뿌리기가 어느 단계에 개입하는지 짚습니다.">
+<meta property="og:image" content="https://jinu219.github.io/posts/study-notes/2026-04-08-warm-rain-microphysics/images/kohler-curves.png">
+<meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
+<meta property="og:image:height" content="704">
+<meta property="og:image:width" content="1152">
+<meta name="twitter:title" content="CCN 하나가 빗방울이 되기까지: 따뜻한 구름의 미세물리 – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Houze의 Cloud Dynamics 3장을 따라 Kelvin·Raoult 효과, Köhler 곡선, 응결 성장식, 충돌·병합을 정리하고 흡습성 씨뿌리기가 어느 단계에 개입하는지 짚습니다.">
+<meta name="twitter:image" content="https://jinu219.github.io/posts/study-notes/2026-04-08-warm-rain-microphysics/images/kohler-curves.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="웹사이트">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pysdm.html"> 
+<span class="menu-text">PySDM</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../wrf.html"> 
+<span class="menu-text">WRF</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../article-review.html"> 
+<span class="menu-text">Article Review</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../study-notes.html"> 
+<span class="menu-text">Study Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../en/index.html"> 
+<span class="menu-text">EN</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Jinu219"> <i class="bi bi-github" role="img" aria-label="Jinu219 GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환" aria-label="다크 모드 전환"><i class="bi"></i></button>
+</div>
+            <div id="quarto-search" class="" title="검색"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">목차</h2>
+   
+  <ul>
+  <li><a href="#먼저-표기와-크기" id="toc-먼저-표기와-크기" class="nav-link active" data-scroll-target="#먼저-표기와-크기">먼저 표기와 크기</a></li>
+  <li><a href="#순수한-물방울은-스스로-생기지-못한다-kelvin-효과" id="toc-순수한-물방울은-스스로-생기지-못한다-kelvin-효과" class="nav-link" data-scroll-target="#순수한-물방울은-스스로-생기지-못한다-kelvin-효과">1. 순수한 물방울은 스스로 생기지 못한다: Kelvin 효과</a></li>
+  <li><a href="#에어로졸이-출발점을-바꾼다-raoult-효과와-köhler-곡선" id="toc-에어로졸이-출발점을-바꾼다-raoult-효과와-köhler-곡선" class="nav-link" data-scroll-target="#에어로졸이-출발점을-바꾼다-raoult-효과와-köhler-곡선">2. 에어로졸이 출발점을 바꾼다: Raoult 효과와 Köhler 곡선</a></li>
+  <li><a href="#응결-성장-작은-방울은-빨리-큰-방울은-느리게" id="toc-응결-성장-작은-방울은-빨리-큰-방울은-느리게" class="nav-link" data-scroll-target="#응결-성장-작은-방울은-빨리-큰-방울은-느리게">3. 응결 성장: 작은 방울은 빨리, 큰 방울은 느리게</a></li>
+  <li><a href="#낙하속도와-충돌병합" id="toc-낙하속도와-충돌병합" class="nav-link" data-scroll-target="#낙하속도와-충돌병합">4. 낙하속도와 충돌·병합</a></li>
+  <li><a href="#두-과정-사이의-틈과-씨뿌리기가-들어가는-곳" id="toc-두-과정-사이의-틈과-씨뿌리기가-들어가는-곳" class="nav-link" data-scroll-target="#두-과정-사이의-틈과-씨뿌리기가-들어가는-곳">5. 두 과정 사이의 틈과 씨뿌리기가 들어가는 곳</a></li>
+  <li><a href="#참고문헌" id="toc-참고문헌" class="nav-link" data-scroll-target="#참고문헌">참고문헌</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/study-notes/2026-04-08-warm-rain-microphysics/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">CCN 하나가 빗방울이 되기까지: 따뜻한 구름의 미세물리</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Study Notes</div>
+    <div class="quarto-category">cloud microphysics</div>
+    <div class="quarto-category">warm rain</div>
+    <div class="quarto-category">Köhler theory</div>
+    <div class="quarto-category">collision–coalescence</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Houze의 Cloud Dynamics 3장을 따라 Kelvin·Raoult 효과, Köhler 곡선, 응결 성장식, 충돌·병합을 정리하고 흡습성 씨뿌리기가 어느 단계에 개입하는지 짚습니다.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">저자</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">공개</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-04-08</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>4월 랩미팅에서 연구 현황으로 Houze의 <em>Cloud Dynamics</em> 3장(Cloud Microphysics) 중 따뜻한 구름 부분(3.1절)을 읽은 노트를 보고했다. 이 글은 그 노트를 교재 원문과 다시 대조해 쓴 정리다. 식 번호는 교재 2판(2014)을 따른다 <span class="citation" data-cites="Houze2014CloudMicrophysics">(<a href="#ref-Houze2014CloudMicrophysics" role="doc-biblioref">Houze 2014년</a>)</span>. 질문은 이것이다. <strong>0.1 µm 규모의 에어로졸이 어떻게 구름방울이 되고, 구름방울은 어떻게 빗방울이 되며, 흡습성 씨뿌리기는 그 사이 어디에 손을 대는가?</strong></p>
+<div class="review-verdict">
+<p><strong>핵심 정리.</strong> 순수한 물방울은 대기에서 스스로 생기지 못하므로 구름방울은 CCN 위에서 시작한다. 응결은 작은 방울을 빠르게 키우지만 클수록 느려지고(<span class="math inline">\(R^2 \propto t\)</span>), 충돌·병합은 주변보다 큰 collector가 있어야 시작된다. 이 두 과정 사이의 크기 틈이 따뜻한 비의 병목이고, 흡습성 씨뿌리기는 이 틈을 건너뛸 큰 방울을 만들거나 방울 사이의 수증기 경쟁을 바꾸려는 시도다.</p>
+</div>
+<section id="먼저-표기와-크기" class="level2">
+<h2 class="anchored" data-anchor-id="먼저-표기와-크기">먼저 표기와 크기</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>기호</th>
+<th>뜻</th>
+<th>주의</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(S = e/e_s\)</span></td>
+<td>포화비(saturation ratio). <span class="math inline">\(e\)</span>는 수증기압, <span class="math inline">\(e_s\)</span>는 평평한 순수 물 위 포화수증기압</td>
+<td><span class="math inline">\(S=1\)</span>이 포화(RH 100%)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(s = S-1\)</span></td>
+<td>과포화도(supersaturation)</td>
+<td><span class="math inline">\(s=0.01\)</span>이 1%. 교재 식 (3.15)의 <span class="math inline">\(\tilde S\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(R\)</span></td>
+<td>물방울 반지름</td>
+<td>직경은 <span class="math inline">\(D=2R\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r_d\)</span></td>
+<td>건조 입자 반지름(dry radius)</td>
+<td>물을 흡수하기 전 에어로졸 크기</td>
+</tr>
+</tbody>
+</table>
+<table class="review-data caption-top table">
+<caption>표기와 입자 크기. 교재의 크기 분류는 직경, 식은 반지름 기준이다</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>입자</th>
+<th>대표 크기</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CCN(건조)</td>
+<td>반지름 약 0.01–1 µm</td>
+<td>교재는 “0.1 µm 규모”로 소개. 반지름 1 µm 이상은 흔히 giant CCN</td>
+</tr>
+<tr class="even">
+<td>구름방울</td>
+<td>직경 1–100 µm</td>
+<td>낙하속도 1 m s⁻¹ 미만</td>
+</tr>
+<tr class="odd">
+<td>이슬비(drizzle)</td>
+<td>직경 50 µm ~ 수백 µm</td>
+<td>가장 작은 액체 강수</td>
+</tr>
+<tr class="even">
+<td>빗방울</td>
+<td>직경 수백 ~ 수천 µm</td>
+<td>반지름 약 3 mm에서 낙하속도가 거의 일정</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="순수한-물방울은-스스로-생기지-못한다-kelvin-효과" class="level2">
+<h2 class="anchored" data-anchor-id="순수한-물방울은-스스로-생기지-못한다-kelvin-효과">1. 순수한 물방울은 스스로 생기지 못한다: Kelvin 효과</h2>
+<p>수증기 분자들이 우연히 모여 반지름 <span class="math inline">\(R\)</span>의 순수한 물방울 씨앗을 만들 때 필요한 순에너지는 다음과 같다.</p>
+<p><span class="math display">\[
+\Delta E = 4\pi R^2\sigma_{vl} - \tfrac{4}{3}\pi R^3 n_l\,(\mu_v-\mu_l), \qquad \mu_v-\mu_l = k_B T \ln S \tag{3.1–3.2}
+\]</span></p>
+<p>말로 읽으면 “씨앗을 만드는 순비용 = 표면을 새로 만드는 비용 − 분자가 액체로 들어가며 얻는 이득”이다. <span class="math inline">\(\sigma_{vl}\)</span>은 단위 면적의 수증기–물 경계면을 만드는 일(표면장력), <span class="math inline">\(n_l\)</span>은 물방울의 단위 부피당 분자 수, <span class="math inline">\(\mu_v-\mu_l\)</span>은 분자 하나가 기체에서 액체로 옮겨갈 때의 깁스 자유에너지 차이다. <span class="math inline">\(S&lt;1\)</span>이면 두 항이 모두 비용이 되어 씨앗은 늘 증발한다. <span class="math inline">\(S&gt;1\)</span>이면 작은 <span class="math inline">\(R\)</span>에서는 표면 항(<span class="math inline">\(R^2\)</span>)이, 큰 <span class="math inline">\(R\)</span>에서는 부피 항(<span class="math inline">\(R^3\)</span>)이 이겨 에너지 장벽이 생긴다. 장벽의 꼭대기를 <span class="math inline">\(\partial(\Delta E)/\partial R=0\)</span>으로 찾으면 Kelvin 식이 나온다.</p>
+<p><span class="math display">\[
+R_c = \frac{2\sigma_{vl}}{n_l k_B T \ln S}
+\tag{3.3}
+\]</span></p>
+<p><span class="math inline">\(R_c\)</span>보다 작은 씨앗은 증발하고, 우연히 <span class="math inline">\(R_c\)</span>를 넘은 씨앗만 자란다. 포화(<span class="math inline">\(S=1\)</span>)에서는 <span class="math inline">\(\ln S=0\)</span>이라 <span class="math inline">\(R_c\to\infty\)</span>이므로 반드시 과포화가 필요하다. 10 °C에서 직접 계산해 보면 차이가 분명하다.</p>
+<table class="review-data caption-top table">
+<caption>Kelvin 식 (3.3)으로 계산한 임계 반지름(T = 10 °C, σ = 0.072 J m⁻²)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\(S\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(s\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(R_c\)</span></th>
+<th style="text-align: right;">우연히 모여야 하는 분자 수</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1.01</td>
+<td style="text-align: right;">1%</td>
+<td style="text-align: right;">0.11 µm</td>
+<td style="text-align: right;">약 <span class="math inline">\(2\times10^{8}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">100%</td>
+<td style="text-align: right;">1.6 nm</td>
+<td style="text-align: right;">약 560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">350%</td>
+<td style="text-align: right;">0.73 nm</td>
+<td style="text-align: right;">약 55</td>
+</tr>
+</tbody>
+</table>
+<p>교재에 따르면 균질 핵생성률은 <span class="math inline">\(S\)</span>가 약 4–5에 이를 때 급격히 커진다. 즉 과포화도가 300–400%는 되어야 하는데, 대기의 과포화도는 1%를 넘는 일이 드물다. 그래서 <strong>균질 핵생성은 자연 구름에서 역할을 하지 않는다.</strong></p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>S와 s를 섞지 않기
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“과포화도 1%”는 <span class="math inline">\(S=1.01\)</span>, <span class="math inline">\(\ln S\approx0.01\)</span>이다. <span class="math inline">\(\ln 1=0\)</span>이 되는 것은 <span class="math inline">\(S=1\)</span>(포화)일 때다. 균질 핵생성에 필요한 조건도 “<span class="math inline">\(S\approx4\)</span>–5”, 곧 RH 400–500%, <span class="math inline">\(s\approx\)</span> 300–400%로 세 표기를 구분해 적어야 한다.</p>
+</div>
+</div>
+</section>
+<section id="에어로졸이-출발점을-바꾼다-raoult-효과와-köhler-곡선" class="level2">
+<h2 class="anchored" data-anchor-id="에어로졸이-출발점을-바꾼다-raoult-효과와-köhler-곡선">2. 에어로졸이 출발점을 바꾼다: Raoult 효과와 Köhler 곡선</h2>
+<p>실제 구름방울은 에어로졸 표면에 물이 모이는 불균질 핵생성으로 생긴다. 물에 잘 젖는 입자 위에서는 같은 수의 분자로도 곡률 반지름이 커서 Kelvin 장벽을 넘기 쉽다. 입자가 물에 녹으면 용액의 평형 수증기압이 순수한 물보다 낮아져(Raoult 효과) 더 유리하다. 교재는 그래서 <strong>가장 크고 가장 잘 녹는 CCN 위에 첫 구름방울이 생긴다</strong>고 정리한다. 이 두 효과를 함께 쓰면 물방울 표면의 평형 수증기 밀도는 다음과 같다.</p>
+<p><span class="math display">\[
+\rho_v(R)=\rho_{vs}[T(R)]\left(1+\frac{\hat a}{R}-\frac{\hat b}{R^3}\right), \qquad \hat a=\frac{2\sigma_{vl}}{\rho_L R_v T}, \qquad \hat b=\frac{3 i_{vH} m_s M_w}{4\pi\rho_L M_s} \tag{3.18–3.20}
+\]</span></p>
+<p>말로 읽으면 “물방울 표면에서 평형을 이루는 수증기 = 평평한 순수 물 위 포화값 × (1 + 곡률 보정 − 용질 보정)”이다. <span class="math inline">\(\hat a/R\)</span>은 작은 방울일수록 커지는 Kelvin 항, <span class="math inline">\(\hat b/R^3\)</span>은 녹은 염의 질량 <span class="math inline">\(m_s\)</span>와 이온 수(van’t Hoff 인자 <span class="math inline">\(i_{vH}\)</span>)가 클수록, 염의 분자량 <span class="math inline">\(M_s\)</span>가 작을수록 커지는 Raoult 항이다. 방울이 커지면 용액이 묽어져 <span class="math inline">\(R^3\)</span>로 빠르게 줄어든다.</p>
+<p>평형 포화비 <span class="math inline">\(S_{eq}(R)\approx 1+\hat a/R-\hat b/R^3\)</span>를 그린 것이 Köhler 곡선이다. 작은 <span class="math inline">\(R\)</span>에서는 용질 항이 이겨 <span class="math inline">\(S_{eq}&lt;1\)</span>인 haze 방울로 존재하고, 큰 <span class="math inline">\(R\)</span>에서는 곡률 항이 남아 1보다 조금 크다. <span class="math inline">\(dS_{eq}/dR=0\)</span>으로 찾은 최대점은 <span class="math inline">\(R_c=\sqrt{3\hat b/\hat a}\)</span>, <span class="math inline">\(s_c=\sqrt{4\hat a^3/(27\hat b)}\)</span>이다. 주변 과포화도가 임계 과포화도 <span class="math inline">\(s_c\)</span>를 넘으면 방울은 <span class="math inline">\(R_c\)</span>를 지나 계속 자라는데, 이것을 <strong>활성화(activation)</strong>라고 부른다. <span class="math inline">\(\kappa\)</span>-Köhler 이론에서는 묽은 용액에서 <span class="math inline">\(\hat b\approx\kappa r_d^3\)</span>이므로 <span class="math inline">\(s_c \propto r_d^{-3/2}\kappa^{-1/2}\)</span>가 된다. 자세한 형태는 <a href="../../../posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler 리뷰</a>에 정리했다 <span class="citation" data-cites="Petters2007Kappa">(<a href="#ref-Petters2007Kappa" role="doc-biblioref">Petters 와/과 Kreidenweis 2007년</a>)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/kohler-curves.png" class="img-fluid figure-img" alt="Köhler curves for dry radii 0.03, 0.1, 0.3 and 1 micrometre with kappa 1.28; critical supersaturation falls from 0.24 percent to 0.0012 percent as dry radius increases"></p>
+<figcaption>NaCl에 해당하는 κ = 1.28에서 건조 반지름별 Köhler 곡선. κ-Köhler 식으로 직접 계산했다.</figcaption>
+</figure>
+</div>
+<table class="review-data caption-top table">
+<caption>κ-Köhler 식의 최대점을 수치로 찾은 값(T = 10 °C, σ = 0.072 J m⁻²). κ는 Petters &amp; Kreidenweis (2007)의 CCN 기반 값</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">건조 반지름 <span class="math inline">\(r_d\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(s_c\)</span> (κ = 0.61, 황산암모늄)</th>
+<th style="text-align: right;"><span class="math inline">\(s_c\)</span> (κ = 1.28, NaCl)</th>
+<th style="text-align: right;"><span class="math inline">\(R_c\)</span> (NaCl)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.03 µm</td>
+<td style="text-align: right;">0.35%</td>
+<td style="text-align: right;">0.24%</td>
+<td style="text-align: right;">0.31 µm</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.1 µm</td>
+<td style="text-align: right;">0.057%</td>
+<td style="text-align: right;">0.039%</td>
+<td style="text-align: right;">1.9 µm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.3 µm</td>
+<td style="text-align: right;">0.011%</td>
+<td style="text-align: right;">0.0076%</td>
+<td style="text-align: right;">9.7 µm</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1 µm</td>
+<td style="text-align: right;">0.0018%</td>
+<td style="text-align: right;">0.0012%</td>
+<td style="text-align: right;">59 µm</td>
+</tr>
+</tbody>
+</table>
+<p>건조 반지름이 10배 커지면 <span class="math inline">\(s_c\)</span>는 약 30배 작아지고, κ가 두 배가 되어도 <span class="math inline">\(s_c\)</span>는 약 0.7배가 될 뿐이다. 이 범위에서는 <strong>크기가 화학보다 활성화를 더 강하게 좌우한다.</strong> 반지름 1 µm인 giant CCN은 <span class="math inline">\(s_c\)</span>가 0.001% 수준이라 사실상 어떤 구름에서도 활성화되지만, <span class="math inline">\(R_c\)</span>가 수십 µm여서 “활성화되느냐”보다 “얼마나 빨리 collector 크기에 닿느냐”로 보는 편이 유용하다.</p>
+</section>
+<section id="응결-성장-작은-방울은-빨리-큰-방울은-느리게" class="level2">
+<h2 class="anchored" data-anchor-id="응결-성장-작은-방울은-빨리-큰-방울은-느리게">3. 응결 성장: 작은 방울은 빨리, 큰 방울은 느리게</h2>
+<p>활성화된 방울은 수증기 확산(Fick의 법칙)으로 자란다. 정상 상태의 구 대칭 확산과 열수지를 결합하면, 포화에 가까운 환경에서 질량 성장률은 다음과 같다.</p>
+<p><span class="math display">\[
+\dot m = \frac{4\pi R\, s}{F_\kappa + F_D}, \qquad F_\kappa=\frac{L^2}{\kappa_a R_v T^2}, \qquad F_D=\frac{R_v T}{D_v e_s} \tag{3.14–3.17}
+\]</span></p>
+<p>말로 읽으면 “질량 성장률 = <span class="math inline">\(4\pi R\)</span> × 과포화도 ÷ (열전도 저항 + 수증기 확산 저항)”이다. <span class="math inline">\(s\)</span>는 성장의 구동력이다. <span class="math inline">\(F_\kappa\)</span>는 응결로 나온 잠열(<span class="math inline">\(L\)</span>)이 방울을 데워 표면 포화수증기압을 높이므로 그 열을 공기의 열전도(<span class="math inline">\(\kappa_a\)</span>)로 빼내야 한다는 제약이고, <span class="math inline">\(F_D\)</span>는 수증기가 공기 속을 확산(<span class="math inline">\(D_v\)</span>)해 와야 한다는 제약이다. 질량 대신 반지름으로 바꾸면(<span class="math inline">\(m=\tfrac43\pi R^3\rho_L\)</span>),</p>
+<p><span class="math display">\[
+R\frac{dR}{dt}=\frac{s}{\rho_L(F_\kappa+F_D)}\equiv G\,s \quad\Longrightarrow\quad R^2 = R_0^2 + 2Gs\,t .
+\]</span></p>
+<p>교과서에 따라 <span class="math inline">\(\rho_L\)</span>을 <span class="math inline">\(F\)</span> 안에 넣어 <span class="math inline">\(R\,dR/dt=(S-1)/(F_k+F_d)\)</span>로 쓰기도 한다. 핵심은 <span class="math inline">\(dR/dt = Gs/R\)</span>, 즉 <strong>방울이 클수록 반지름 성장이 느려진다</strong>는 것이다. 작은 방울이 큰 방울을 따라잡으므로 응결은 크기 분포를 좁힌다. 아주 작은 방울에서는 곡률·용질 항을 넣은 식 (3.21)을, 떨어지는 방울에서는 통풍 인자를 곱한 식 (3.22)–(3.23)을 써야 한다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/condensation-growth.png" class="img-fluid figure-img" alt="Droplet radius versus time for condensation growth from initial radii 2, 5 and 10 micrometres at 0.5 percent supersaturation; the curves converge and reach 40 micrometres only after roughly 26 to 28 minutes"></p>
+<figcaption>s = 0.5%에서 응결만으로 자라는 방울의 반지름. 출발 크기가 달라도 곡선이 빠르게 모인다.</figcaption>
+</figure>
+</div>
+<table class="review-data caption-top table">
+<caption>내가 계산한 응결 성장 시간(T = 10 °C, p = 800 hPa, <span class="math inline">\(G\approx9.7\times10^{-11}\)</span> m² s⁻¹, s 일정 가정)</caption>
+<thead>
+<tr class="header">
+<th>반지름 성장 구간</th>
+<th style="text-align: right;">s = 0.2%</th>
+<th style="text-align: right;">s = 0.5%</th>
+<th style="text-align: right;">s = 1%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5 → 10 µm</td>
+<td style="text-align: right;">3분</td>
+<td style="text-align: right;">1.3분</td>
+<td style="text-align: right;">0.6분</td>
+</tr>
+<tr class="even">
+<td>10 → 20 µm</td>
+<td style="text-align: right;">13분</td>
+<td style="text-align: right;">5분</td>
+<td style="text-align: right;">2.6분</td>
+</tr>
+<tr class="odd">
+<td>10 → 50 µm</td>
+<td style="text-align: right;">1.7시간</td>
+<td style="text-align: right;">41분</td>
+<td style="text-align: right;">21분</td>
+</tr>
+<tr class="even">
+<td>10 → 100 µm</td>
+<td style="text-align: right;">7.1시간</td>
+<td style="text-align: right;">2.8시간</td>
+<td style="text-align: right;">1.4시간</td>
+</tr>
+</tbody>
+</table>
+<p>전형적인 적운의 수명이 30분 정도라는 점 <span class="citation" data-cites="Bruintjes1999Review">(<a href="#ref-Bruintjes1999Review" role="doc-biblioref">Bruintjes 1999년</a>)</span>을 생각하면, 응결만으로 직경 수백 µm의 이슬비·빗방울을 만들기는 어렵다. 실제 구름에서는 <span class="math inline">\(s\)</span>가 일정하지 않으므로 이 표는 규모를 보는 용도다.</p>
+</section>
+<section id="낙하속도와-충돌병합" class="level2">
+<h2 class="anchored" data-anchor-id="낙하속도와-충돌병합">4. 낙하속도와 충돌·병합</h2>
+<p>구름방울(직경 100 µm 미만)은 1 m s⁻¹보다 느리게 떨어진다. 낙하속도는 반지름 500 µm까지 거의 선형으로 커지다가 그보다 큰 방울에서는 증가가 둔해지고, 반지름 약 3 mm에서 방울이 납작한 원반처럼 찌그러지며 거의 일정해진다. 크기가 다른 방울은 낙하속도가 달라 서로 따라잡는다. 큰 방울 하나가 구름방울 사이를 떨어질 때의 연속 병합 식은 다음과 같다.</p>
+<p><span class="math display">\[
+\dot m_{col} = A_m\,\lvert V(m)-V(m')\rvert\,\rho q_{m'}\,\Sigma_c(m,m'), \qquad A_m=\pi(R+R')^2 \tag{3.24–3.25}
+\]</span></p>
+<p>말로 읽으면 “병합 성장률 = 1초 동안 쓸고 지나가는 부피(단면적 × 상대 낙하속도) × 그 부피 속 구름물 질량 × 실제로 붙는 비율”이다. <span class="math inline">\(A_m\)</span>은 두 반지름의 합으로 정한 유효 단면적, 절댓값은 상대 운동만 중요하다는 뜻, <span class="math inline">\(\rho q_{m'}\)</span>은 구름물 함량(g m⁻³)이다. 포집효율 <span class="math inline">\(\Sigma_c\)</span>는 <strong>충돌효율 × 병합효율</strong>이다. 충돌효율은 큰 방울 주위 기류가 작은 방울을 비켜 가게 하면 1보다 작고, 후류에 끌려 들어오면 1보다 클 수도 있다. 병합효율은 부딪힌 두 방울이 실제로 합쳐지는 비율로, 모형에서는 흔히 1로 두지만 강한 비에서는 잠시 붙었다가 떨어지기도 한다.</p>
+<p><span class="math inline">\(R\gg R'\)</span>이면 <span class="math inline">\(A_m\approx\pi R^2\)</span>이고 <span class="math inline">\(m=\tfrac43\pi R^3\rho_L\)</span>이므로 <span class="math inline">\(dR/dt\approx\Sigma_c\lvert\Delta V\rvert\rho q_c/(4\rho_L)\)</span>가 된다. 응결과 반대로 <strong>방울이 클수록 낙하속도와 충돌효율이 함께 커져 성장이 빨라진다.</strong> 문제는 시작이다. 교재 그림 3.5(Wallace &amp; Hobbs의 충돌효율 곡선)를 눈으로 읽으면, collector 반지름이 10 µm일 때 충돌효율은 최대 0.05 안팎, 20 µm일 때 0.2 안팎이고, 40 µm 이상이 되어야 0.7–1에 가까워진다. 실제 병합은 연속 과정이 아니라 확률 과정이라, 같은 크기에서 출발해도 운 좋게 먼저 충돌한 방울이 앞서 나간다(stochastic collection, 식 3.27–3.33). 교재가 소개한 계산 예에서는 약 30분 뒤 수로는 반지름 약 10 µm 구름방울이 압도적이지만, 물 질량의 상당 부분은 반지름 약 1 mm 빗방울로 옮겨 간다.</p>
+</section>
+<section id="두-과정-사이의-틈과-씨뿌리기가-들어가는-곳" class="level2">
+<h2 class="anchored" data-anchor-id="두-과정-사이의-틈과-씨뿌리기가-들어가는-곳">5. 두 과정 사이의 틈과 씨뿌리기가 들어가는 곳</h2>
+<table class="review-data caption-top table">
+<caption>따뜻한 비의 두 성장 과정 비교</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>응결</th>
+<th>충돌·병합</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>반지름 성장률</td>
+<td><span class="math inline">\(dR/dt = Gs/R\)</span></td>
+<td><span class="math inline">\(dR/dt \approx \Sigma_c\lvert\Delta V\rvert\rho q_c/(4\rho_L)\)</span></td>
+</tr>
+<tr class="even">
+<td>크기가 커지면</td>
+<td>느려짐</td>
+<td>빨라짐</td>
+</tr>
+<tr class="odd">
+<td>크기 분포에 주는 영향</td>
+<td>좁힘</td>
+<td>넓힘</td>
+</tr>
+<tr class="even">
+<td>효율적인 구간</td>
+<td>반지름 수 µm 이하</td>
+<td>collector 반지름 수십 µm 이상</td>
+</tr>
+</tbody>
+</table>
+<p>반지름 10 µm에서 수십 µm 사이에서는 응결은 이미 느려졌고 충돌효율은 아직 작다. 이 틈을 얼마나 빨리 건너는가가 따뜻한 구름의 강수 시작 시점을 정한다. Bruintjes (1999)가 정리한 흡습성 씨뿌리기의 두 방식은 바로 이 틈을 겨냥한다.</p>
+<ul>
+<li><strong>Embryo 방식:</strong> 직경 10 µm보다 큰 염 입자를 넣어 처음부터 collector 후보를 공급한다. 틈을 건너뛰는 전략이다.</li>
+<li><strong>Flare 방식:</strong> 직경 약 0.5 µm 염 입자를 구름 밑에서 공급한다. 큰 인공 CCN이 먼저 활성화되어 수증기를 가져가면 자연 CCN이 덜 활성화되고, 적은 수의 방울이 더 크게 자란다. 수증기 경쟁을 바꾸는 전략이다.</li>
+</ul>
+<p><span class="math inline">\(R^2\propto t\)</span> 그림에서 읽을 수 있는 점도 있다. 2 µm와 5 µm에서 출발한 방울은 20분 뒤 거의 같은 크기가 된다. 그래서 출발 크기가 조금 큰 것만으로는 이득이 금방 사라지고, collector에 가까운 크기를 직접 넣거나 경쟁자 수를 줄이는 쪽이 효과적이라는 것이 식에서 읽은 내 해석이다. 반대로 작은 흡습성 입자가 자연 CCN을 대체하지 못하고 방울 수만 늘리면 강수가 늦어질 수도 있다. 이후 읽은 Ren et al.&nbsp;(2025)은 2차원 bin 모형의 한 대류운 사례에서 같은 질량을 넣을 때 직경 0.1–0.9 µm 입자는 강수를 억제하고, 직경 약 2 µm를 넘으면 증대로 바뀐다고 보고했다 <span class="citation" data-cites="Ren2025ParticleSize">(<a href="#ref-Ren2025ParticleSize" role="doc-biblioref">Ren 기타 2025년</a>)</span>. 이 질문은 <a href="../../../posts/experiments/2026-09-07-ren2025-parcel-replication/index.html">Ren (2025) 0차원 재현 실험</a>으로 이어진다.</p>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Bruintjes1999Review" class="csl-entry" role="listitem">
+Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects”</span>. <em>Bulletin of the American Meteorological Society</em> 80 (5): 805–20. <a href="https://doi.org/10.1175/1520-0477(1999)080<0805:AROCSE>2.0.CO;2">https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Houze2014CloudMicrophysics" class="csl-entry" role="listitem">
+Houze, Robert A., Jr. 2014년. <span>“Cloud Microphysics”</span>. In <em>Cloud Dynamics</em>, 2nd ed, vol 104. International Geophysics. Elsevier. <a href="https://doi.org/10.1016/B978-0-12-374266-7.00003-2">https://doi.org/10.1016/B978-0-12-374266-7.00003-2</a>.
+</div>
+<div id="ref-Petters2007Kappa" class="csl-entry" role="listitem">
+Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”</span>. <em>Atmospheric Chemistry and Physics</em> 7: 1961–71. <a href="https://doi.org/10.5194/acp-7-1961-2007">https://doi.org/10.5194/acp-7-1961-2007</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry" role="listitem">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+(() => {
+  const localizeNavigation = () => {
+    const path = window.location.pathname;
+    const isEnglish = path === "/en" || path.startsWith("/en/");
+    const switchLink =
+      document.querySelector('a[aria-label="Switch language"]') ||
+      [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
+        ["EN", "KO"].includes(link.textContent.trim())
+      );
+
+    if (switchLink) {
+      const englishPath = path === "/" || path === "/index.html"
+        ? "/en/"
+        : `/en${path}`;
+      const koreanPath = path === "/en" || path === "/en/" || path === "/en/index.html"
+        ? "/"
+        : path.replace(/^\/en/, "");
+      const label = switchLink.querySelector(".menu-text") || switchLink;
+
+      label.textContent = isEnglish ? "KO" : "EN";
+      switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
+      switchLink.setAttribute(
+        "aria-label",
+        isEnglish ? "한국어로 전환" : "Switch to English"
+      );
+      switchLink.classList.remove("active");
+      switchLink.removeAttribute("aria-current");
+    }
+
+    if (!isEnglish) return;
+
+    const brand = document.querySelector(".navbar-brand");
+    if (brand) brand.href = "/en/";
+
+    const menu = [
+      ["PySDM", "PySDM", "/en/pysdm.html"],
+      ["WRF", "WRF", "/en/wrf.html"],
+      ["Article Review", "Article Review", "/en/article-review.html"],
+      ["Study Notes", "Study Notes", "/en/study-notes.html"]
+    ];
+
+    document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
+      const label = link.querySelector(".menu-text") || link;
+      const item = menu.find(([korean]) => label.textContent.trim() === korean);
+      if (!item) return;
+      label.textContent = item[1];
+      link.href = item[2];
+
+      const isCurrent = path === item[2] ||
+        (item[2] === "/en/" && ["/en", "/en/", "/en/index.html"].includes(path));
+      link.classList.toggle("active", isCurrent);
+      if (isCurrent) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".nav-footer a").forEach((link) => {
+      if (link.textContent.trim() === "소개") {
+        link.textContent = "About";
+        link.href = "/en/about.html";
+      }
+      if (link.textContent.trim() === "RSS") link.href = "/index.xml";
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", localizeNavigation);
+  } else {
+    localizeNavigation();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "다크 모드 전환");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "다크 모드 전환");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "복사완료!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "복사완료!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jinu219\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"스크롤 가능한 코드","output":"스크롤 가능한 출력"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Jinu. Cloud seeding research notes.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/study-notes/2026-04-08-warm-rain-microphysics/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../../about.html">
+<p>소개</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../../../index.xml">
+<p>RSS</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/Jinu219">
+<p>GitHub</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

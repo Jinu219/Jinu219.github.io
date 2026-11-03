@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-09-29">
+<meta name="description" content="Comparing Lin, Morrison, and fast SBM on the same 2-D squall line, fixing a fast SBM problem that reset aerosol every step in 2-D, and switching the background aerosol to maritime.">
+
+<title>Microphysics Scheme Comparison and the Fast SBM 2-D Aerosol Reset Bug – Jinu’s Cloud Seeding Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e7c2b2337504f807b65bdb21917a461.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Microphysics Scheme Comparison and the Fast SBM 2-D Aerosol Reset Bug – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Comparing Lin, Morrison, and fast SBM on the same 2-D squall line, fixing a fast SBM problem that reset aerosol every step in 2-D, and switching the background aerosol to maritime.">
+<meta property="og:image" content="https://jinu219.github.io/en/posts/wrf/2026-09-29-microphysics-fsbm/images/L3-L35-timeseries.png">
+<meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
+<meta property="og:image:height" content="770">
+<meta property="og:image:width" content="1210">
+<meta name="twitter:title" content="Microphysics Scheme Comparison and the Fast SBM 2-D Aerosol Reset Bug – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Comparing Lin, Morrison, and fast SBM on the same 2-D squall line, fixing a fast SBM problem that reset aerosol every step in 2-D, and switching the background aerosol to maritime.">
+<meta name="twitter:image" content="https://jinu219.github.io/en/posts/wrf/2026-09-29-microphysics-fsbm/images/L3-L35-timeseries.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../pysdm.html"> 
+<span class="menu-text">PySDM</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../wrf.html"> 
+<span class="menu-text">WRF</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../article-review.html"> 
+<span class="menu-text">Article Review</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../study-notes.html"> 
+<span class="menu-text">Study Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../en/index.html"> 
+<span class="menu-text">EN</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Jinu219"> <i class="bi bi-github" role="img" aria-label="Jinu219 GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-the-three-schemes-differ" id="toc-how-the-three-schemes-differ" class="nav-link active" data-scroll-target="#how-the-three-schemes-differ">How the three schemes differ</a></li>
+  <li><a href="#getting-fast-sbm-to-run" id="toc-getting-fast-sbm-to-run" class="nav-link" data-scroll-target="#getting-fast-sbm-to-run">Getting fast SBM to run</a></li>
+  <li><a href="#problem-1-stopping-at-15-min-with-dt-3-s" id="toc-problem-1-stopping-at-15-min-with-dt-3-s" class="nav-link" data-scroll-target="#problem-1-stopping-at-15-min-with-dt-3-s">Problem 1: stopping at 15 min with dt 3 s</a></li>
+  <li><a href="#problem-2-it-finished-but-no-rain-the-2-d-aerosol-reset-bug" id="toc-problem-2-it-finished-but-no-rain-the-2-d-aerosol-reset-bug" class="nav-link" data-scroll-target="#problem-2-it-finished-but-no-rain-the-2-d-aerosol-reset-bug">Problem 2: it finished, but no rain — the 2-D aerosol reset bug</a></li>
+  <li><a href="#four-runs-at-the-same-dt-2-s" id="toc-four-runs-at-the-same-dt-2-s" class="nav-link" data-scroll-target="#four-runs-at-the-same-dt-2-s">Four runs at the same dt 2 s</a></li>
+  <li><a href="#l3.5-changing-only-the-background-aerosol-to-maritime" id="toc-l3.5-changing-only-the-background-aerosol-to-maritime" class="nav-link" data-scroll-target="#l3.5-changing-only-the-background-aerosol-to-maritime">L3.5: changing only the background aerosol to maritime</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next steps</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/wrf/2026-09-29-microphysics-fsbm/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Microphysics Scheme Comparison and the Fast SBM 2-D Aerosol Reset Bug</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">WRF</div>
+    <div class="quarto-category">microphysics</div>
+    <div class="quarto-category">fast SBM</div>
+    <div class="quarto-category">aerosol</div>
+    <div class="quarto-category">troubleshooting</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Comparing Lin, Morrison, and fast SBM on the same 2-D squall line, fixing a fast SBM problem that reset aerosol every step in 2-D, and switching the background aerosol to maritime.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-09-29</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Lin, used in the <a href="../../../../en/posts/wrf/2026-09-27-idealized-squall-line/index.html">previous post</a>, is a single-moment scheme with no droplet number and no CCN, so it cannot represent an experiment that “changes the aerosol size distribution”, such as hygroscopic seeding. Seeding needs bin microphysics with aerosol bins, so I chose WRF’s fast SBM (<code>mp_physics = 30</code>). First, I ran the same squall line with Lin → Morrison → fast SBM to see how the schemes differ, and finally changed only the fast SBM background aerosol to maritime. Along the way I hit a bug that appears only when fast SBM is used in 2-D.</p>
+<section id="how-the-three-schemes-differ" class="level2">
+<h2 class="anchored" data-anchor-id="how-the-three-schemes-differ">How the three schemes differ</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Lin (2)</th>
+<th>Morrison (10)</th>
+<th>fast SBM (30)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Predicts</td>
+<td>mass per hydrometeor (single-moment)</td>
+<td>mass + number (double-moment)</td>
+<td>size distribution in bins</td>
+</tr>
+<tr class="even">
+<td>Droplet number</td>
+<td>none</td>
+<td>fixed at the default 250 cm⁻³</td>
+<td>computed from aerosol activation</td>
+</tr>
+<tr class="odd">
+<td>Aerosol</td>
+<td>none</td>
+<td>none (default setup)</td>
+<td>43 bins; continental over land, maritime over sea</td>
+</tr>
+<tr class="even">
+<td>Wall time for 60 min (4 cores)</td>
+<td>~75 s (dt 3 s)</td>
+<td>—</td>
+<td>~25 min (dt 2 s)</td>
+</tr>
+</tbody>
+</table>
+<p>The original papers for the Lin and Morrison schemes are Lin et al.&nbsp;(1983) and Morrison et al.&nbsp;(2009) <span class="citation" data-cites="Lin1983BulkSnow Morrison2009SquallLine">(<a href="#ref-Lin1983BulkSnow" role="doc-biblioref">Lin et al. 1983</a>; <a href="#ref-Morrison2009SquallLine" role="doc-biblioref">Morrison et al. 2009</a>)</span>. Fast SBM represents liquid drops with 33 bins (radius ~2 µm – 3.25 mm); bins 1–14 are cloud and bin 15 (radius ~50 µm) and above are rain. Full SBM (<code>mp_physics = 32</code>) was not available in my build, so I used fast SBM only.</p>
+</section>
+<section id="getting-fast-sbm-to-run" class="level2">
+<h2 class="anchored" data-anchor-id="getting-fast-sbm-to-run">Getting fast SBM to run</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Item</th>
+<th>Setting</th>
+<th>Without it</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lookup tables</td>
+<td>link <code>SBM_input_33/</code> and <code>scattering_tables_2layer_high_quad_1dT_1%fw_110/</code> into the run directory</td>
+<td>stops right at startup</td>
+</tr>
+<tr class="even">
+<td>Advection</td>
+<td><code>moist_adv_opt = 2</code>, <code>scalar_adv_opt = 2</code></td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Time step</td>
+<td><strong>2 s</strong></td>
+<td>stops around 15 min at 3 s (below)</td>
+</tr>
+<tr class="even">
+<td>Bin output</td>
+<td>add <code>ff1i01–33</code>, <code>ff8i01–43</code> with <code>iofields_filename</code></td>
+<td>they are auxiliary-stream (<code>h3</code>) variables in the Registry, so not in the default wrfout</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">{</span> <span class="bu">printf</span> <span class="st">'+:h:0:'</span><span class="kw">;</span> <span class="cf">for</span> k <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> <span class="at">-w</span> 1 33<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span> <span class="bu">printf</span> <span class="st">'ff1i%s,'</span> <span class="va">$k</span><span class="kw">;</span> <span class="cf">done</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> k <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> <span class="at">-w</span> 1 43<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span> <span class="bu">printf</span> <span class="st">'ff8i%s,'</span> <span class="va">$k</span><span class="kw">;</span> <span class="cf">done</span><span class="kw">;</span> <span class="kw">}</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/,$/\n/'</span> <span class="op">&gt;</span> sbm_iofields.txt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># add to &amp;time_control:  iofields_filename = "sbm_iofields.txt",  ignore_iofields_warning = .true.,</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>ff1i</code> is the drop mass mixing ratio per bin (kg/kg) and <code>ff8i</code> is the aerosol <span class="math inline">\(dN/d\ln r\)</span> per bin (#/kg). <code>ff8i</code> is exactly where seeding particles will go.</p>
+</section>
+<section id="problem-1-stopping-at-15-min-with-dt-3-s" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1-stopping-at-15-min-with-dt-3-s">Problem 1: stopping at 15 min with dt 3 s</h2>
+<p><code>rsl.error.0000</code> simply stopped at model time 00:15:33; the error was only in rank 1’s log <code>rsl.error.0001</code> (the region where the cloud was growing): <code>fatal error in ONECOND1-in (ABS(DAL1*DELMASSL1) &gt; 3.0)</code>. The check in the source means:</p>
+<p><span class="math display">\[\Delta T = \frac{L}{c_p}\,\Delta q_l, \qquad |\Delta T| &gt; 3\ \mathrm{K} \;\Rightarrow\; \text{stop}\]</span></p>
+<p>Multiplying the change in liquid mixing ratio from one condensation step, <span class="math inline">\(\Delta q_l\)</span>, by latent heat <span class="math inline">\(L\)</span> divided by the specific heat at constant pressure <span class="math inline">\(c_p\)</span> gives the warming <span class="math inline">\(\Delta T\)</span> of the air from that condensation. If it exceeds 3 K in one step, the scheme treats the calculation as untrustworthy and stops itself. In a strong updraft a long time step lumps too much condensation into one step, so I reduced dt to 2 s and the run finished. I did not re-test 3 s after the patch below, so I do not know whether this error was related to the reset bug.</p>
+</section>
+<section id="problem-2-it-finished-but-no-rain-the-2-d-aerosol-reset-bug" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2-it-finished-but-no-rain-the-2-d-aerosol-reset-bug">Problem 2: it finished, but no rain — the 2-D aerosol reset bug</h2>
+<p>With dt 2 s the run reached the end, but the result was strange, and there was not a single error.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Symptom (before patch)</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Surface rain, rain water</td>
+<td>zero for 60 min</td>
+</tr>
+<tr class="even">
+<td>Max cloud water</td>
+<td>flat at 13.5 g/kg</td>
+</tr>
+<tr class="odd">
+<td>Droplet number</td>
+<td>~30,000 cm⁻³ (normally a few hundred)</td>
+</tr>
+<tr class="even">
+<td>Drop size</td>
+<td>all at 2–6 µm radius</td>
+</tr>
+<tr class="odd">
+<td>Aerosol at 0–1 km (30 → 60 min)</td>
+<td>1774 → 1775 cm⁻³, not consumed</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fsbm-before-patch-timeseries.png" class="img-fluid figure-img" alt="Before the patch: time series where the fast SBM line shows maximum cloud water stuck near 13.5 g/kg and zero rain water and zero surface rain for 60 minutes, compared with Lin and Morrison lines from older 3-second time-step runs"></p>
+<figcaption>Comparison before the patch. FastSBM (green, dt 2 s) has max cloud water flat near 13.5 g/kg and zero rain water and surface rain. The Lin and Morrison lines in this figure are dt 3 s runs, so read only the green line.</figcaption>
+</figure>
+</div>
+<p>Once rain forms, aerosol below cloud should decrease through activation and scavenging, but it stayed constant. Something was refilling the aerosol every step. I found the cause in <code>phys/module_mp_fast_sbm.F</code> (WRF 4.6.0, around line ~4320).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode fortran code-with-copy"><code class="sourceCode fortranfixed"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">! when itimestep &gt; 1 and domain_id == 1 (in my source, a block compiled only for MPI builds)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> (i <span class="op">&lt;=</span> <span class="dv">5</span> <span class="op">.or.</span> i <span class="op">&gt;=</span> IDE<span class="kw">-</span><span class="dv">5</span> <span class="op">.OR.</span> <span class="kw">&amp;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&amp;</span> j <span class="op">&lt;=</span> <span class="dv">5</span> <span class="op">.or.</span> j <span class="op">&gt;=</span> JDE<span class="kw">-</span><span class="dv">5</span>)<span class="kw">THEN</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>   <span class="co">! reset the aerosol bins (ff8i) to the initial distribution</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This is a lateral boundary condition that keeps supplying aerosol to the outer 5 cells of a 3-D real-case domain. In the 2-D setup, however, <code>e_sn = 10</code>, so <span class="math inline">\(JDE = 10\)</span> and <span class="math inline">\(JDE - 5 = 5\)</span>. Every y row j = 1–9 satisfies “j ≤ 5 or j ≥ 5”, so the aerosol of the <strong>whole domain</strong> is reset to its initial value every step. Working through the condition, any setup with <code>e_sn</code> of 11 or less is affected. With aerosol refilled without limit, new droplets kept forming; water shared among tens of thousands of droplets could not grow by collision–coalescence into rain. For seeding it is even worse: seeding particles placed in <code>ff8i</code> are overwritten at the next step.</p>
+<p>The patch turns off only the y condition and keeps the aerosol supply at the open x boundaries.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> phys/module_mp_fast_sbm.F phys/module_mp_fast_sbm.F.orig</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="at">-i</span> <span class="st">'s/&amp; j &lt;= 5 .or. j &gt;= JDE-5)THEN/\&amp; .false.)THEN   ! 2D patch: y-edge aerosol reset off (e_sn=10)/'</span> phys/module_mp_fast_sbm.F</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./compile</span> em_quarter_ss <span class="op">&gt;</span> compile_fsbm_patch.log <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Before patch</th>
+<th>After patch</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Droplet number</td>
+<td>~30,000 cm⁻³</td>
+<td>438 / 341 / 292 cm⁻³ (10 / 20 / 30 min)</td>
+</tr>
+<tr class="even">
+<td>Aerosol at 0–1 km (30 → 60 min)</td>
+<td>1774 → 1775 cm⁻³</td>
+<td>1759 → 1729 cm⁻³ (consumed)</td>
+</tr>
+<tr class="odd">
+<td>60-min point-max rain</td>
+<td>0 mm</td>
+<td>10.6 mm</td>
+</tr>
+<tr class="even">
+<td>Drop distribution</td>
+<td>only at 2–6 µm radius</td>
+<td>a raindrop mode near 1 mm radius</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>For other 2-D fast SBM users
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This patch is a local change applied only to <strong>my working copy</strong> of WRF 4.6.0, not to the lab’s original WRF installation, and I checked it only in this 2-D setup with <code>e_sn = 10</code>. It is not an official fix, and I have not looked at the source of other versions. If you see the same symptoms (no errors, zero rain, tens of thousands of droplets per cm³, aerosol that never decreases), this condition is a good first place to look.</p>
+</div>
+</div>
+</section>
+<section id="four-runs-at-the-same-dt-2-s" class="level2">
+<h2 class="anchored" data-anchor-id="four-runs-at-the-same-dt-2-s">Four runs at the same dt 2 s</h2>
+<p>Morrison is also sensitive to dt (below), so all comparisons use dt 2 s. The numbers come from re-aggregating all runs with the same script in late October, and domain means average over all y rows.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>60 min, squall2d, dt 2 s</th>
+<th style="text-align: right;">Lin</th>
+<th style="text-align: right;">Morrison</th>
+<th style="text-align: right;">SBM continental</th>
+<th style="text-align: right;">SBM maritime</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Domain-mean rain</td>
+<td style="text-align: right;">3.57 mm</td>
+<td style="text-align: right;">3.82 mm</td>
+<td style="text-align: right;"><strong>1.38 mm</strong></td>
+<td style="text-align: right;"><strong>2.29 mm</strong></td>
+</tr>
+<tr class="even">
+<td>Point-max rain (range over y rows)</td>
+<td style="text-align: right;">34.2 mm</td>
+<td style="text-align: right;">36.1 mm</td>
+<td style="text-align: right;">10.6 (9.9–10.6) mm</td>
+<td style="text-align: right;">24.1 (22.2–24.1) mm</td>
+</tr>
+<tr class="odd">
+<td>Width with ≥ 1 mm</td>
+<td style="text-align: right;">15.2 km</td>
+<td style="text-align: right;">14.0 km</td>
+<td style="text-align: right;">10.5 km</td>
+<td style="text-align: right;">11.2 km</td>
+</tr>
+<tr class="even">
+<td>Surface rain onset (10-min output)</td>
+<td style="text-align: right;">20–30 min</td>
+<td style="text-align: right;">20–30 min</td>
+<td style="text-align: right;">30–40 min</td>
+<td style="text-align: right;">20–30 min</td>
+</tr>
+<tr class="odd">
+<td>Max cloud water at 20 min</td>
+<td style="text-align: right;">3.3 g/kg</td>
+<td style="text-align: right;">5.8 g/kg</td>
+<td style="text-align: right;">10.7 g/kg</td>
+<td style="text-align: right;">3.1 g/kg</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/L3-L35-timeseries.png" class="img-fluid figure-img" alt="Time series for Lin, Morrison, fast SBM continental, and fast SBM maritime at dt 2 s: fast SBM continental keeps high cloud water and produces the least domain-mean rain, maritime is intermediate"></p>
+<figcaption>Max W, max cloud water, max rain water, and domain-mean accumulated rain for Lin, Morrison, and fast SBM continental and maritime (dt 2 s).</figcaption>
+</figure>
+</div>
+<p><strong>Morrison was sensitive to the time step.</strong> From the first dt 3 s results I had concluded that “Morrison rains less than Lin and has a weaker early updraft”, and I withdrew that.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Max W at 10 min</th>
+<th style="text-align: right;">Max W</th>
+<th style="text-align: right;">60-min point max</th>
+<th style="text-align: right;">Domain mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lin dt 3 → 2 s</td>
+<td style="text-align: right;">11.7 → 11.7</td>
+<td style="text-align: right;">35.8 → 35.8</td>
+<td style="text-align: right;">37.0 → 34.2 mm</td>
+<td style="text-align: right;">3.66 → 3.57 mm (−2 %)</td>
+</tr>
+<tr class="even">
+<td>Morrison dt 3 → 2 s</td>
+<td style="text-align: right;"><strong>4.0 → 11.4</strong></td>
+<td style="text-align: right;">43.6 → 30.0</td>
+<td style="text-align: right;">29.0 → 36.1 mm</td>
+<td style="text-align: right;">2.61 → 3.82 mm (<strong>+46 %</strong>)</td>
+</tr>
+</tbody>
+</table>
+<p>The difference is already large at 10 min, when convection is just starting, so I treat it as numerical rather than chaotic noise (which process is responsible is still unknown). Two lessons: compare experiments at the same dt, and check convergence once by reducing dt when using a new setup. And a seeding effect is meaningful only if it is clearly larger than numerical sensitivity like this.</p>
+<p><strong>Morrison makes rain aloft later.</strong> Max rain water at 10 min is about 1 g/kg for Lin and almost zero for Morrison (surface onset falls in the same 10-min window). I think the explanation lies in the autoconversion formula; WRF’s Morrison scheme uses the Khairoutdinov–Kogan form <span class="citation" data-cites="Khairoutdinov2000Autoconversion">(<a href="#ref-Khairoutdinov2000Autoconversion" role="doc-biblioref">Khairoutdinov and Kogan 2000</a>)</span>.</p>
+<p><span class="math display">\[P_{aut} = 1350\, q_c^{2.47}\, N_c^{-1.79}\]</span></p>
+<p>The rate <span class="math inline">\(P_{aut}\)</span> at which cloud droplets first merge into raindrops grows with the 2.47 power of the cloud water mixing ratio <span class="math inline">\(q_c\)</span> (kg/kg) and falls with the −1.79 power of droplet number concentration <span class="math inline">\(N_c\)</span> (cm⁻³). When the same cloud water is shared by more droplets, each droplet is smaller and converts to rain less easily. The fixed <span class="math inline">\(N_c\)</span> = 250 cm⁻³ appears to delay the first rain, but I did not break it down process by process.</p>
+<p><strong>Fast SBM rains less and later.</strong> Its default background aerosol is continental (~1760 cm⁻³ at 0–1 km), so droplets are many and small. Cloud water piles up to 10.7 g/kg at 20 min, and rain reaches the ground only at 30–40 min. If this interpretation is right, reducing only the aerosol should make rain earlier and heavier.</p>
+</section>
+<section id="l3.5-changing-only-the-background-aerosol-to-maritime" class="level2">
+<h2 class="anchored" data-anchor-id="l3.5-changing-only-the-background-aerosol-to-maritime">L3.5: changing only the background aerosol to maritime</h2>
+<p>Fast SBM chooses its aerosol distribution from the grid’s surface type (<code>XLAND</code>: 1 = land → continental, 2 = sea → maritime). At first I changed <code>XLAND</code> in <code>wrfinput_d01</code> to 2 after <code>ideal.exe</code>, but the result table and figure files were <strong>byte-for-byte</strong> identical to the continental run. The reason: <code>wrf.exe</code> overwrites <code>XLAND</code> at startup with the namelist value <code>ideal_xland</code> (default 1). I added <code>ideal_xland = 2</code> to <code>&amp;physics</code> and confirmed it with <code>grep -i ideal_xland namelist.output</code>. When two experiments are completely identical, suspect “the setting never got in” before “no effect”, because convection amplifies even tiny differences.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Continental → maritime</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Aerosol at 0–1 km (30 min)</td>
+<td>1759 → 394 cm⁻³</td>
+</tr>
+<tr class="even">
+<td>Droplet number (10 / 20 / 30 min)</td>
+<td>438 / 341 / 292 → 47 / 28 / 39 cm⁻³</td>
+</tr>
+<tr class="odd">
+<td>Drop mass mode at 10 min (radius)</td>
+<td>~13 µm → ~20 µm</td>
+</tr>
+<tr class="even">
+<td>Max rain water at 10 min</td>
+<td>0 → 1.3 g/kg</td>
+</tr>
+<tr class="odd">
+<td>60-min domain-mean rain</td>
+<td>1.38 → 2.29 mm (+66 %)</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fsbm-continental-dsd.png" class="img-fluid figure-img" alt="Fast SBM continental run after the patch: drop mass and number distributions every 10 minutes with a cloud mode near 13 micrometers radius at 10 minutes and a rain mode near 1 millimeter later, and the near-surface aerosol distribution with totals 1759 and 1729 per cubic centimeter"></p>
+<figcaption>Continental fast SBM: (a) drop mass distribution, (b) number distribution, (c) aerosol distribution at 0–1 km. The x-axis is radius.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/fsbm-maritime-dsd.png" class="img-fluid figure-img" alt="Fast SBM maritime run: the 10-minute cloud mode sits near 20 micrometers radius, rain-size drops grow earlier, and the near-surface aerosol total is about 390 per cubic centimeter"></p>
+<figcaption>The same figure for maritime fast SBM. The 10-min cloud mode sits at a larger radius and the raindrop mode grows earlier.</figcaption>
+</figure>
+</div>
+<pre><code>aerosol ↓ → droplet number ↓ (~1/10) → each droplet larger (13 → 20 µm)
+  → collision–coalescence starts earlier → rain aloft from 10 min → surface rain earlier and heavier</code></pre>
+<p>The 0 cm⁻³ aerosol at 00:00 in the size-distribution figures appears to be because the bins are not yet filled in the initial output, so I used only the 30- and 60-min values. Even the maritime run produces less surface rain than Lin. Why it has plenty of rain aloft but less at the ground (evaporation below cloud, or ice processes?) is still unresolved.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Addendum (checked in late October): y rows differ slightly
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Although the runs are 2-D, fast SBM rain differed slightly between y rows (60-min domain mean: continental 1.34–1.42 mm, maritime 2.21–2.40 mm). Lin and Morrison show zero difference between rows. Reading the source, the likely cause is a part of the ice-process block that treats the last y row as the “domain edge” and computes the wind average differently there — the same kind of “3-D real-case assumption” as the reset bug. I have only proposed a patch; no confirmation run yet. So all comparisons above use the average over all y rows, and point maxima are given with their row range. The row-to-row spread (about ±3–4 %) is far smaller than the continental → maritime difference (+66 %).</p>
+</div>
+</div>
+<div class="review-verdict">
+<p><strong>Conclusion.</strong> On the same squall line, fast SBM (continental) produced about 60 % less rain than Lin and Morrison, and later; switching only the background aerosol to maritime increased rain about 1.7-fold and made it earlier. The model responds to aerosol changes — but only after turning off the condition that reset aerosol every step in 2-D, and scheme comparisons were meaningful only at the same dt.</p>
+</div>
+</section>
+<section id="next-steps" class="level2">
+<h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
+<p>Next, I plan to move one setting at a time toward <a href="../../../../en/posts/article-review/2026-09-10-ren2025-particle-size/index.html">Ren et al.&nbsp;(2025)</a> <span class="citation" data-cites="Ren2025ParticleSize">(<a href="#ref-Ren2025ParticleSize" role="doc-biblioref">Ren et al. 2025</a>)</span>. The paper used the Tel Aviv University 2-D slab-symmetric bin model, so fast SBM is an approximation.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>What to change (paper setting)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sounding</td>
+<td>radiosonde from Sanya station, Hainan (WMO 59948), 2024-05-11 12:00 (BT)</td>
+</tr>
+<tr class="even">
+<td>Grid and run length</td>
+<td>dx = dz = 300 m, 30 km wide × 12 km top, 40 min</td>
+</tr>
+<tr class="odd">
+<td>Warm bubble</td>
+<td>+3 °C, centered at 900 m (edit source → rebuild <code>ideal.exe</code>)</td>
+</tr>
+<tr class="even">
+<td>Seeding</td>
+<td>inject KCl particles into the aerosol bins (<code>ff8i</code>) of the patched fast SBM at cloud base (900 m) at 10 min</td>
+</tr>
+</tbody>
+</table>
+<p>Before reading any seeding signal, I first need to measure the size of numerical noise from dt and from small initial perturbations.</p>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Khairoutdinov2000Autoconversion" class="csl-entry" role="listitem">
+Khairoutdinov, Marat, and Yefim Kogan. 2000. <span>“A New Cloud Physics Parameterization in a Large-Eddy Simulation Model of Marine Stratocumulus.”</span> <em>Monthly Weather Review</em> 128 (1): 229–43. <a href="https://doi.org/10.1175/1520-0493(2000)128<0229:ANCPPI>2.0.CO;2">https://doi.org/10.1175/1520-0493(2000)128&lt;0229:ANCPPI&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Lin1983BulkSnow" class="csl-entry" role="listitem">
+Lin, Yuh-Lang, Richard D. Farley, and Harold D. Orville. 1983. <span>“Bulk Parameterization of the Snow Field in a Cloud Model.”</span> <em>Journal of Climate and Applied Meteorology</em> 22 (6): 1065–92. <a href="https://doi.org/10.1175/1520-0450(1983)022<1065:BPOTSF>2.0.CO;2">https://doi.org/10.1175/1520-0450(1983)022&lt;1065:BPOTSF&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Morrison2009SquallLine" class="csl-entry" role="listitem">
+Morrison, H., G. Thompson, and V. Tatarskii. 2009. <span>“Impact of Cloud Microphysics on the Development of Trailing Stratiform Precipitation in a Simulated Squall Line: Comparison of One- and Two-Moment Schemes.”</span> <em>Monthly Weather Review</em> 137 (3): 991–1007. <a href="https://doi.org/10.1175/2008MWR2556.1">https://doi.org/10.1175/2008MWR2556.1</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry" role="listitem">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, and Baojun Chen. 2025. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds.”</span> <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+(() => {
+  const localizeNavigation = () => {
+    const path = window.location.pathname;
+    const isEnglish = path === "/en" || path.startsWith("/en/");
+    const switchLink =
+      document.querySelector('a[aria-label="Switch language"]') ||
+      [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
+        ["EN", "KO"].includes(link.textContent.trim())
+      );
+
+    if (switchLink) {
+      const englishPath = path === "/" || path === "/index.html"
+        ? "/en/"
+        : `/en${path}`;
+      const koreanPath = path === "/en" || path === "/en/" || path === "/en/index.html"
+        ? "/"
+        : path.replace(/^\/en/, "");
+      const label = switchLink.querySelector(".menu-text") || switchLink;
+
+      label.textContent = isEnglish ? "KO" : "EN";
+      switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
+      switchLink.setAttribute(
+        "aria-label",
+        isEnglish ? "한국어로 전환" : "Switch to English"
+      );
+      switchLink.classList.remove("active");
+      switchLink.removeAttribute("aria-current");
+    }
+
+    if (!isEnglish) return;
+
+    const brand = document.querySelector(".navbar-brand");
+    if (brand) brand.href = "/en/";
+
+    const menu = [
+      ["PySDM", "PySDM", "/en/pysdm.html"],
+      ["WRF", "WRF", "/en/wrf.html"],
+      ["Article Review", "Article Review", "/en/article-review.html"],
+      ["Study Notes", "Study Notes", "/en/study-notes.html"]
+    ];
+
+    document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
+      const label = link.querySelector(".menu-text") || link;
+      const item = menu.find(([korean]) => label.textContent.trim() === korean);
+      if (!item) return;
+      label.textContent = item[1];
+      link.href = item[2];
+
+      const isCurrent = path === item[2] ||
+        (item[2] === "/en/" && ["/en", "/en/", "/en/index.html"].includes(path));
+      link.classList.toggle("active", isCurrent);
+      if (isCurrent) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".nav-footer a").forEach((link) => {
+      if (link.textContent.trim() === "소개") {
+        link.textContent = "About";
+        link.href = "/en/about.html";
+      }
+      if (link.textContent.trim() === "RSS") link.href = "/index.xml";
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", localizeNavigation);
+  } else {
+    localizeNavigation();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jinu219\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Jinu. Cloud seeding research notes.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/wrf/2026-09-29-microphysics-fsbm/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../../../about.html">
+<p>소개</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../../../../index.xml">
+<p>RSS</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/Jinu219">
+<p>GitHub</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

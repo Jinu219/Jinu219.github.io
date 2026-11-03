@@ -1,27 +1,40 @@
 [
   {
-    "listing": "/index.html",
+    "listing": "/wrf.html",
     "items": [
-      "/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html",
-      "/posts/build-the-lab/2026-07-16-rain-server-execution/index.html",
-      "/posts/article-review/2026-07-15-kappa-kohler/index.html",
-      "/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
-      "/posts/learn-pysdm/2026-07-15-first-steps/index.html",
-      "/posts/build-the-lab/2026-07-14-research-quality/index.html",
-      "/posts/build-the-lab/2026-07-13-scenario-workflow/index.html",
-      "/posts/experiments/2026-07-08-efficiency-response-surface/index.html",
-      "/posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
-      "/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+      "/posts/wrf/2026-09-27-idealized-squall-line/index.html",
+      "/posts/wrf/2026-09-29-microphysics-fsbm/index.html"
+    ]
+  },
+  {
+    "listing": "/pysdm.html",
+    "items": [
+      "/posts/learn-pysdm/2026-07-15-first-steps/index.html"
+    ]
+  },
+  {
+    "listing": "/experiments.html",
+    "items": [
+      "/en/posts/experiments/2026-06-30-numerical-representation/index.html",
       "/posts/experiments/2026-06-30-numerical-representation/index.html",
-      "/posts/article-review/2026-05-20-cloud-seeding-review/index.html",
-      "/posts/article-review/2026-05-20-negative-ion-seeding/index.html",
-      "/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
-      "/posts/article-review/2026-04-08-orographic-bin-seeding/index.html"
+      "/en/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+      "/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+      "/en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
+      "/posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
+      "/en/posts/experiments/2026-07-08-efficiency-response-surface/index.html",
+      "/posts/experiments/2026-07-08-efficiency-response-surface/index.html",
+      "/en/posts/experiments/2026-08-06-updraft-timing-regimes/index.html",
+      "/posts/experiments/2026-08-06-updraft-timing-regimes/index.html",
+      "/en/posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html",
+      "/posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html",
+      "/en/posts/experiments/2026-09-07-ren2025-parcel-replication/index.html",
+      "/posts/experiments/2026-09-07-ren2025-parcel-replication/index.html"
     ]
   },
   {
     "listing": "/article-review.html",
     "items": [
+      "/posts/article-review/2026-09-10-ren2025-particle-size/index.html",
       "/posts/article-review/2026-07-15-kappa-kohler/index.html",
       "/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
       "/posts/article-review/2026-05-20-cloud-seeding-review/index.html",
@@ -40,22 +53,38 @@
     ]
   },
   {
-    "listing": "/experiments.html",
+    "listing": "/index.html",
     "items": [
-      "/en/posts/experiments/2026-06-30-numerical-representation/index.html",
-      "/posts/experiments/2026-06-30-numerical-representation/index.html",
-      "/en/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
-      "/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
-      "/en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
+      "/posts/wrf/2026-09-29-microphysics-fsbm/index.html",
+      "/posts/wrf/2026-09-27-idealized-squall-line/index.html",
+      "/posts/article-review/2026-09-10-ren2025-particle-size/index.html",
+      "/posts/experiments/2026-09-07-ren2025-parcel-replication/index.html",
+      "/posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html",
+      "/posts/experiments/2026-08-06-updraft-timing-regimes/index.html",
+      "/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html",
+      "/posts/build-the-lab/2026-07-16-rain-server-execution/index.html",
+      "/posts/article-review/2026-07-15-kappa-kohler/index.html",
+      "/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html",
+      "/posts/learn-pysdm/2026-07-15-first-steps/index.html",
+      "/posts/build-the-lab/2026-07-14-research-quality/index.html",
+      "/posts/build-the-lab/2026-07-13-scenario-workflow/index.html",
+      "/posts/experiments/2026-07-08-efficiency-response-surface/index.html",
       "/posts/experiments/2026-07-06-realistic-warm-seeding/index.html",
-      "/en/posts/experiments/2026-07-08-efficiency-response-surface/index.html",
-      "/posts/experiments/2026-07-08-efficiency-response-surface/index.html"
+      "/posts/experiments/2026-07-03-parameter-sensitivity/index.html",
+      "/posts/experiments/2026-06-30-numerical-representation/index.html",
+      "/posts/article-review/2026-05-20-cloud-seeding-review/index.html",
+      "/posts/article-review/2026-05-20-negative-ion-seeding/index.html",
+      "/posts/article-review/2026-04-08-enhanced-rainfall-accounting/index.html",
+      "/posts/article-review/2026-04-08-orographic-bin-seeding/index.html",
+      "/posts/study-notes/2026-04-08-warm-rain-microphysics/index.html",
+      "/posts/study-notes/2026-03-11-what-is-cloud-seeding/index.html"
     ]
   },
   {
-    "listing": "/pysdm.html",
+    "listing": "/study-notes.html",
     "items": [
-      "/posts/learn-pysdm/2026-07-15-first-steps/index.html"
+      "/posts/study-notes/2026-03-11-what-is-cloud-seeding/index.html",
+      "/posts/study-notes/2026-04-08-warm-rain-microphysics/index.html"
     ]
   }
 ]

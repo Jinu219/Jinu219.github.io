@@ -1,0 +1,1084 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Jinu&#39;s Cloud Seeding Blog</title>
+<link>https://jinu219.github.io/wrf.html</link>
+<atom:link href="https://jinu219.github.io/wrf.xml" rel="self" type="application/rss+xml"/>
+<description>중규모 기상 모델과 구름 씨뿌리기 수치 실험 노트</description>
+<generator>quarto-1.11.9</generator>
+<lastBuildDate>Tue, 29 Sep 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>미세물리 스킴 비교와 fast SBM 2-D 에어로졸 리셋 버그</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="../../../posts/wrf/2026-09-27-idealized-squall-line/index.html">앞 글</a>의 Lin은 구름방울 수와 CCN을 모르는 1-모멘트 스킴이라, 흡습성 시딩처럼 “에어로졸 크기분포를 바꾸는” 실험을 표현할 수 없다. 시딩까지 가려면 에어로졸 bin을 가진 bin 미세물리가 필요해서 WRF의 fast SBM(<code>mp_physics = 30</code>)을 골랐다. 그 전에 같은 스콜선을 Lin → Morrison → fast SBM으로 바꿔 돌려 스킴마다 무엇이 다른지 보고, 마지막으로 fast SBM의 배경 에어로졸만 해양성으로 바꿨다. 가는 길에 fast SBM을 2-D로 쓸 때만 생기는 버그를 만났다.</p>
+<section id="세-스킴은-무엇이-다른가" class="level2">
+<h2 class="anchored" data-anchor-id="세-스킴은-무엇이-다른가">세 스킴은 무엇이 다른가</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Lin (2)</th>
+<th>Morrison (10)</th>
+<th>fast SBM (30)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>예측하는 것</td>
+<td>수상체별 질량 (1-모멘트)</td>
+<td>질량 + 수농도 (2-모멘트)</td>
+<td>크기 bin별 분포</td>
+</tr>
+<tr class="even">
+<td>구름방울 수</td>
+<td>없음</td>
+<td>기본값 250 cm⁻³로 고정</td>
+<td>에어로졸 활성화로 계산</td>
+</tr>
+<tr class="odd">
+<td>에어로졸</td>
+<td>없음</td>
+<td>없음 (기본 설정)</td>
+<td>43 bin, 육지면 대륙성·바다면 해양성 분포</td>
+</tr>
+<tr class="even">
+<td>60분 적분 시간 (4코어)</td>
+<td>약 75초 (dt 3 s)</td>
+<td>—</td>
+<td>약 25분 (dt 2 s)</td>
+</tr>
+</tbody>
+</table>
+<p>Lin과 Morrison 스킴의 원 논문은 각각 Lin et al.&nbsp;(1983), Morrison et al.&nbsp;(2009)이다 <span class="citation" data-cites="Lin1983BulkSnow Morrison2009SquallLine">(Lin 기타 1983년; Morrison 기타 2009년)</span>. fast SBM의 물방울은 33 bin(반경 약 2 µm – 3.25 mm)으로, bin 1–14가 구름, bin 15(반경 약 50 µm)부터가 비다. 내 빌드에서는 full SBM(<code>mp_physics = 32</code>)을 쓸 수 없어 fast SBM만 썼다.</p>
+</section>
+<section id="fast-sbm을-켜기-위한-준비" class="level2">
+<h2 class="anchored" data-anchor-id="fast-sbm을-켜기-위한-준비">fast SBM을 켜기 위한 준비</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+<th>없으면</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>조견표</td>
+<td><code>SBM_input_33/</code>, <code>scattering_tables_2layer_high_quad_1dT_1%fw_110/</code>를 런 폴더에 링크</td>
+<td>시작하자마자 멈춤</td>
+</tr>
+<tr class="even">
+<td>이류</td>
+<td><code>moist_adv_opt = 2</code>, <code>scalar_adv_opt = 2</code></td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>time step</td>
+<td><strong>2 s</strong></td>
+<td>3 s에서 15분쯤 멈춤 (아래)</td>
+</tr>
+<tr class="even">
+<td>bin 출력</td>
+<td><code>iofields_filename</code>으로 <code>ff1i01–33</code>, <code>ff8i01–43</code> 추가</td>
+<td>Registry상 보조 스트림(<code>h3</code>) 변수라 기본 wrfout에 없음</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">{</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">printf</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'+:h:0:'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span> 1 33<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">)</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">printf</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'ff1i%s,'</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$k</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span></span>
+<span id="cb1-2">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span> 1 43<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">)</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">printf</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'ff8i%s,'</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$k</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">}</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sed</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'s/,$/\n/'</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> sbm_iofields.txt</span>
+<span id="cb1-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &amp;time_control 에 추가:  iofields_filename = "sbm_iofields.txt",  ignore_iofields_warning = .true.,</span></span></code></pre></div></div>
+<p><code>ff1i</code>는 물방울 bin별 질량 혼합비(kg/kg), <code>ff8i</code>는 에어로졸 bin별 <img src="https://latex.codecogs.com/png.latex?dN/d%5Cln%20r">(#/kg)이다. 시딩 입자를 넣을 곳이 바로 <code>ff8i</code>다.</p>
+</section>
+<section id="문제-1-dt-3-s에서-15분에-멈춤" class="level2">
+<h2 class="anchored" data-anchor-id="문제-1-dt-3-s에서-15분에-멈춤">문제 1: dt 3 s에서 15분에 멈춤</h2>
+<p><code>rsl.error.0000</code>은 모델 시각 00:15:33에서 그냥 멈춰 있었고, 에러는 1번 프로세스(구름이 자라던 구역) 로그 <code>rsl.error.0001</code>에만 있었다: <code>fatal error in ONECOND1-in (ABS(DAL1*DELMASSL1) &gt; 3.0)</code>. 소스의 검사는 이런 뜻이다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5CDelta%20T%20=%20%5Cfrac%7BL%7D%7Bc_p%7D%5C,%5CDelta%20q_l,%20%5Cqquad%20%7C%5CDelta%20T%7C%20%3E%203%5C%20%5Cmathrm%7BK%7D%20%5C;%5CRightarrow%5C;%20%5Ctext%7B%EC%A0%95%EC%A7%80%7D"></p>
+<p>한 번의 응결 계산에서 생긴 액체 혼합비 변화 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20q_l">에 잠열 <img src="https://latex.codecogs.com/png.latex?L">을 정압비열 <img src="https://latex.codecogs.com/png.latex?c_p">로 나눈 값을 곱하면, 그 응결로 공기가 데워진 온도 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20T">가 된다. 이 값이 한 스텝에 3 K를 넘으면 계산을 믿을 수 없다고 보고 스스로 멈춘다. 강한 상승류에서 time step이 길면 응결을 한 번에 몰아 계산하게 되므로, dt를 2 s로 줄여 완주했다. 이 오류가 아래 리셋 버그와 관련 있는지는 패치 뒤 3 s로 다시 확인하지 않았다.</p>
+</section>
+<section id="문제-2-완주했는데-비가-0-2-d-에어로졸-리셋-버그" class="level2">
+<h2 class="anchored" data-anchor-id="문제-2-완주했는데-비가-0-2-d-에어로졸-리셋-버그">문제 2: 완주했는데 비가 0 — 2-D 에어로졸 리셋 버그</h2>
+<p>dt 2 s로 끝까지 돌았지만 결과가 이상했다. 에러는 하나도 없었다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>증상 (패치 전)</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>지면 강수, 빗물</td>
+<td>60분 동안 0</td>
+</tr>
+<tr class="even">
+<td>최대 구름물</td>
+<td>13.5 g/kg에서 평평</td>
+</tr>
+<tr class="odd">
+<td>구름방울 수</td>
+<td>약 30,000 cm⁻³ (보통 수백)</td>
+</tr>
+<tr class="even">
+<td>물방울 크기</td>
+<td>전부 반경 2–6 µm</td>
+</tr>
+<tr class="odd">
+<td>지면–1 km 에어로졸 (30 → 60분)</td>
+<td>1774 → 1775 cm⁻³, 소모가 없음</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/fsbm-before-patch-timeseries.png" class="img-fluid figure-img" alt="Before the patch: time series where the fast SBM line shows maximum cloud water stuck near 13.5 g/kg and zero rain water and zero surface rain for 60 minutes, compared with Lin and Morrison lines from older 3-second time-step runs"></p>
+<figcaption>패치 전 비교 그림. FastSBM(초록, dt 2 s)은 최대 구름물이 13.5 g/kg 근처에서 평평하고 빗물과 지면 강수가 0이다. 이 그림의 Lin·Morrison 선은 dt 3 s 런이므로 초록 선만 본다.</figcaption>
+</figure>
+</div>
+<p>비가 내리면 구름 밑 에어로졸은 활성화와 세정으로 줄어야 하는데 그대로였다. 누군가 매 스텝 에어로졸을 다시 채우고 있다는 뜻이다. <code>phys/module_mp_fast_sbm.F</code>(WRF 4.6.0, 약 4320행 부근)에서 원인을 찾았다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode fortran code-with-copy"><code class="sourceCode fortranfixed"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">! itimestep &gt; 1 이고 domain_id == 1 일 때 (내 소스에서는 MPI 빌드에서만 컴파일되는 블록)</span></span>
+<span id="cb2-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> (i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.or.</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> IDE<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.OR.</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">&amp;</span></span>
+<span id="cb2-3">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">&amp;</span> j <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.or.</span> j <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> JDE<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">THEN</span></span>
+<span id="cb2-4">   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">! 에어로졸 bin(ff8i)을 초기 분포로 되돌림</span></span></code></pre></div></div>
+<p>3-D 실제 사례에서 영역 가장자리 5칸에 에어로졸을 계속 공급하는 측면 경계조건이다. 그런데 2-D 설정은 <code>e_sn = 10</code>이라 <img src="https://latex.codecogs.com/png.latex?JDE%20=%2010">, <img src="https://latex.codecogs.com/png.latex?JDE%20-%205%20=%205">다. y 줄 j = 1–9는 모두 “j ≤ 5 또는 j ≥ 5”를 만족하므로 <strong>영역 전체</strong>의 에어로졸이 매 스텝 초기값으로 돌아간다. 조건식으로 따지면 <code>e_sn</code>이 11 이하인 모든 설정이 그렇다. 에어로졸이 무한히 다시 채워지니 새 구름방울이 계속 생기고, 수만 개로 나눠 가진 물방울은 충돌·병합으로 자라지 못해 비가 되지 않았다. 시딩에는 더 치명적이다. <code>ff8i</code>에 넣은 시딩 입자가 다음 스텝에 덮어써진다.</p>
+<p>패치는 y 조건만 끄고 x 방향 열린 경계의 에어로졸 공급은 그대로 두었다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cp</span> phys/module_mp_fast_sbm.F phys/module_mp_fast_sbm.F.orig</span>
+<span id="cb3-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sed</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-i</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'s/&amp; j &lt;= 5 .or. j &gt;= JDE-5)THEN/\&amp; .false.)THEN   ! 2D patch: y-edge aerosol reset off (e_sn=10)/'</span> phys/module_mp_fast_sbm.F</span>
+<span id="cb3-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">./compile</span> em_quarter_ss <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> compile_fsbm_patch.log <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&amp;</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span></code></pre></div></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>패치 전</th>
+<th>패치 후</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>구름방울 수</td>
+<td>약 30,000 cm⁻³</td>
+<td>438 / 341 / 292 cm⁻³ (10 / 20 / 30분)</td>
+</tr>
+<tr class="even">
+<td>지면–1 km 에어로졸 (30 → 60분)</td>
+<td>1774 → 1775 cm⁻³</td>
+<td>1759 → 1729 cm⁻³ (소모됨)</td>
+</tr>
+<tr class="odd">
+<td>60분 지점 최대 강수</td>
+<td>0 mm</td>
+<td>10.6 mm</td>
+</tr>
+<tr class="even">
+<td>물방울 분포</td>
+<td>반경 2–6 µm에만</td>
+<td>반경 약 1 mm에 빗방울 봉우리</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>다른 2-D fast SBM 사용자에게
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 패치는 연구실 원본 WRF가 아니라 <strong>내 작업용 사본</strong>(WRF 4.6.0)에만 적용한 국소 수정이며, <code>e_sn = 10</code>인 이 2-D 설정에서만 확인했다. 공식 수정이 아니고 다른 버전의 소스는 보지 않았다. 증상(에러 없이 비 0, 구름방울 수만 개, 에어로졸이 줄지 않음)이 같다면 이 조건부터 확인해 볼 만하다.</p>
+</div>
+</div>
+</section>
+<section id="같은-dt-2-s에서-네-런-비교" class="level2">
+<h2 class="anchored" data-anchor-id="같은-dt-2-s에서-네-런-비교">같은 dt 2 s에서 네 런 비교</h2>
+<p>Morrison도 dt에 민감해서(아래) 비교는 모두 dt 2 s로 맞췄다. 숫자는 10월 말에 모든 런을 같은 스크립트로 다시 집계한 값이고, 영역 평균은 모든 y 줄 평균이다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>60분, squall2d, dt 2 s</th>
+<th style="text-align: right;">Lin</th>
+<th style="text-align: right;">Morrison</th>
+<th style="text-align: right;">SBM 대륙성</th>
+<th style="text-align: right;">SBM 해양성</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>영역 평균 강수</td>
+<td style="text-align: right;">3.57 mm</td>
+<td style="text-align: right;">3.82 mm</td>
+<td style="text-align: right;"><strong>1.38 mm</strong></td>
+<td style="text-align: right;"><strong>2.29 mm</strong></td>
+</tr>
+<tr class="even">
+<td>지점 최대 강수 (y 줄 범위)</td>
+<td style="text-align: right;">34.2 mm</td>
+<td style="text-align: right;">36.1 mm</td>
+<td style="text-align: right;">10.6 (9.9–10.6) mm</td>
+<td style="text-align: right;">24.1 (22.2–24.1) mm</td>
+</tr>
+<tr class="odd">
+<td>1 mm 이상 내린 폭</td>
+<td style="text-align: right;">15.2 km</td>
+<td style="text-align: right;">14.0 km</td>
+<td style="text-align: right;">10.5 km</td>
+<td style="text-align: right;">11.2 km</td>
+</tr>
+<tr class="even">
+<td>지면 강수 시작 (10분 출력)</td>
+<td style="text-align: right;">20–30분</td>
+<td style="text-align: right;">20–30분</td>
+<td style="text-align: right;">30–40분</td>
+<td style="text-align: right;">20–30분</td>
+</tr>
+<tr class="odd">
+<td>20분 최대 구름물</td>
+<td style="text-align: right;">3.3 g/kg</td>
+<td style="text-align: right;">5.8 g/kg</td>
+<td style="text-align: right;">10.7 g/kg</td>
+<td style="text-align: right;">3.1 g/kg</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/L3-L35-timeseries.png" class="img-fluid figure-img" alt="Time series for Lin, Morrison, fast SBM continental, and fast SBM maritime at dt 2 s: fast SBM continental keeps high cloud water and produces the least domain-mean rain, maritime is intermediate"></p>
+<figcaption>Lin, Morrison, fast SBM 대륙성·해양성의 최대 W, 최대 구름물, 최대 빗물, 영역 평균 누적강수 (dt 2 s).</figcaption>
+</figure>
+</div>
+<p><strong>Morrison은 time step에 민감했다.</strong> 처음 dt 3 s 결과로 “Morrison은 Lin보다 비가 적고 초반 상승류가 약하다”고 정리했다가 철회했다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">10분 최대 W</th>
+<th style="text-align: right;">최대 W</th>
+<th style="text-align: right;">60분 지점 최대</th>
+<th style="text-align: right;">영역 평균</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lin dt 3 → 2 s</td>
+<td style="text-align: right;">11.7 → 11.7</td>
+<td style="text-align: right;">35.8 → 35.8</td>
+<td style="text-align: right;">37.0 → 34.2 mm</td>
+<td style="text-align: right;">3.66 → 3.57 mm (−2 %)</td>
+</tr>
+<tr class="even">
+<td>Morrison dt 3 → 2 s</td>
+<td style="text-align: right;"><strong>4.0 → 11.4</strong></td>
+<td style="text-align: right;">43.6 → 30.0</td>
+<td style="text-align: right;">29.0 → 36.1 mm</td>
+<td style="text-align: right;">2.61 → 3.82 mm (<strong>+46 %</strong>)</td>
+</tr>
+</tbody>
+</table>
+<p>대류가 막 시작되는 10분에 이미 차이가 크므로 혼돈 잡음이 아니라 수치적 원인으로 본다(어느 과정인지는 아직 모른다). 교훈은 두 가지다. 비교 실험은 같은 dt로 맞추고, 새 설정은 dt를 줄여 수렴을 한 번 확인한다. 그리고 시딩 효과는 이런 수치 민감도보다 확실히 커야 의미가 있다.</p>
+<p><strong>Morrison의 비는 공중에서 늦게 생긴다.</strong> 10분 최대 빗물이 Lin 약 1 g/kg, Morrison 거의 0이다(지면 강수 시작은 같은 10분 구간). 해석은 자동변환(autoconversion) 식에 있다고 본다. WRF Morrison은 Khairoutdinov–Kogan 식을 쓴다 <span class="citation" data-cites="Khairoutdinov2000Autoconversion">(Khairoutdinov 와/과 Kogan 2000년)</span>.</p>
+<p><img src="https://latex.codecogs.com/png.latex?P_%7Baut%7D%20=%201350%5C,%20q_c%5E%7B2.47%7D%5C,%20N_c%5E%7B-1.79%7D"></p>
+<p>구름방울끼리 뭉쳐 빗방울이 처음 생기는 속도 <img src="https://latex.codecogs.com/png.latex?P_%7Baut%7D">가 구름물 혼합비 <img src="https://latex.codecogs.com/png.latex?q_c">(kg/kg)에는 2.47제곱으로 커지고, 구름방울 수농도 <img src="https://latex.codecogs.com/png.latex?N_c">(cm⁻³)에는 −1.79제곱으로 작아진다는 뜻이다. 같은 구름물을 더 많은 방울이 나눠 가지면 방울이 작아서 비로 넘어가기 어렵다. <img src="https://latex.codecogs.com/png.latex?N_c"> = 250 cm⁻³ 고정이 첫 비를 늦춘 것으로 보이지만, 과정별로 분해해 확인하지는 않았다.</p>
+<p><strong>fast SBM은 비가 적고 늦다.</strong> 기본 배경 에어로졸이 대륙성(지면–1 km 약 1760 cm⁻³)이라 구름방울이 많고 작다. 그래서 구름물이 20분에 10.7 g/kg까지 쌓이고 비는 30–40분에야 땅에 닿았다. 이 해석이 맞다면 에어로졸만 줄였을 때 비가 빨라지고 늘어야 한다.</p>
+</section>
+<section id="l3.5-배경-에어로졸만-해양성으로" class="level2">
+<h2 class="anchored" data-anchor-id="l3.5-배경-에어로졸만-해양성으로">L3.5: 배경 에어로졸만 해양성으로</h2>
+<p>fast SBM은 격자의 지표 종류(<code>XLAND</code>)로 에어로졸 분포를 고른다(1 = 육지 → 대륙성, 2 = 바다 → 해양성). 처음에는 <code>ideal.exe</code> 뒤에 <code>wrfinput_d01</code>의 <code>XLAND</code>를 2로 고쳤는데, 결과 표와 그림 파일이 대륙성 런과 <strong>바이트 단위까지</strong> 같았다. <code>wrf.exe</code>가 시작할 때 <code>XLAND</code>를 namelist의 <code>ideal_xland</code>(기본 1)로 덮어쓰기 때문이었다. <code>&amp;physics</code>에 <code>ideal_xland = 2</code>를 넣고 <code>grep -i ideal_xland namelist.output</code>으로 적용을 확인했다. 두 실험이 완전히 같으면 “효과 없음”이 아니라 “설정이 안 들어감”을 먼저 의심해야 한다. 대류는 작은 차이도 키우기 때문이다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>대륙성 → 해양성</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>지면–1 km 에어로졸 (30분)</td>
+<td>1759 → 394 cm⁻³</td>
+</tr>
+<tr class="even">
+<td>구름방울 수 (10 / 20 / 30분)</td>
+<td>438 / 341 / 292 → 47 / 28 / 39 cm⁻³</td>
+</tr>
+<tr class="odd">
+<td>10분 물방울 질량 봉우리 (반경)</td>
+<td>약 13 µm → 약 20 µm</td>
+</tr>
+<tr class="even">
+<td>10분 최대 빗물</td>
+<td>0 → 1.3 g/kg</td>
+</tr>
+<tr class="odd">
+<td>60분 영역 평균 강수</td>
+<td>1.38 → 2.29 mm (+66 %)</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/fsbm-continental-dsd.png" class="img-fluid figure-img" alt="Fast SBM continental run after the patch: drop mass and number distributions every 10 minutes with a cloud mode near 13 micrometers radius at 10 minutes and a rain mode near 1 millimeter later, and the near-surface aerosol distribution with totals 1759 and 1729 per cubic centimeter"></p>
+<figcaption>대륙성 fast SBM의 (a) 물방울 질량 분포, (b) 수 분포, (c) 지면–1 km 에어로졸 분포. 가로축은 반경.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/fsbm-maritime-dsd.png" class="img-fluid figure-img" alt="Fast SBM maritime run: the 10-minute cloud mode sits near 20 micrometers radius, rain-size drops grow earlier, and the near-surface aerosol total is about 390 per cubic centimeter"></p>
+<figcaption>해양성 fast SBM의 같은 그림. 10분 구름 봉우리가 더 큰 반경에 있고 빗방울 봉우리가 일찍 자란다.</figcaption>
+</figure>
+</div>
+<pre><code>에어로졸 ↓ → 구름방울 수 ↓ (약 1/10) → 방울 하나가 더 큼 (13 → 20 µm)
+  → 충돌·병합이 일찍 시작 → 10분부터 공중에 비 → 지면 강수가 빨라지고 늘어남</code></pre>
+<p>크기분포 그림의 00:00 에어로졸이 0 cm⁻³인 것은 초기 출력에 bin이 아직 채워지지 않아서로 보이며, 비교는 30분과 60분 값만 썼다. 해양성에서도 지면 강수는 여전히 Lin보다 적다. 공중 빗물은 많은데 지면 비가 적은 이유(구름 밑 증발인지 얼음 과정인지)는 아직 풀지 못했다.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>덧붙임 (10월 말 확인): y 줄끼리 결과가 조금 다르다
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>2-D인데도 fast SBM 런은 y 줄마다 강수가 조금 달랐다(60분 영역 평균: 대륙성 1.34–1.42 mm, 해양성 2.21–2.40 mm). Lin·Morrison은 줄 차이가 0이다. 소스를 읽어 보니 얼음 과정 블록이 y 마지막 줄을 “영역 끝”으로 보고 바람 평균을 다르게 계산하는 부분이 원인으로 보인다. 리셋 버그와 같은 종류의 “3-D 실제 사례용 가정”이다. 패치는 제안만 했고 확인 런은 아직이다. 그래서 위 비교는 모두 y 줄 전체 평균을 쓰고 지점 최대는 줄 범위를 같이 적었다. 줄 사이 차이(약 ±3–4 %)는 대륙성 → 해양성 차이(+66 %)보다 훨씬 작다.</p>
+</div>
+</div>
+<div class="review-verdict">
+<p><strong>결론.</strong> 같은 스콜선에서 fast SBM(대륙성)은 Lin·Morrison보다 비가 약 60 % 적고 늦었고, 배경 에어로졸만 해양성으로 바꾸자 비가 약 1.7배로 늘고 빨라졌다. 이 모델은 에어로졸 변화에 반응한다. 단, 2-D에서 매 스텝 에어로졸을 리셋하던 조건을 끈 뒤에야 그렇고, 스킴 비교는 같은 dt에서만 의미가 있었다.</p>
+</div>
+</section>
+<section id="다음-단계" class="level2">
+<h2 class="anchored" data-anchor-id="다음-단계">다음 단계</h2>
+<p>이제 <a href="../../../posts/article-review/2026-09-10-ren2025-particle-size/index.html">Ren et al.&nbsp;(2025)</a>의 설정으로 한 번에 하나씩 옮겨 갈 계획이다 <span class="citation" data-cites="Ren2025ParticleSize">(Ren 기타 2025년)</span>. 논문은 Tel Aviv University의 2-D slab-symmetric bin 모델을 썼으므로 fast SBM은 근사다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>단계</th>
+<th>바꿀 것 (논문 설정)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>사운딩</td>
+<td>하이난 Sanya 관측소(WMO 59948) 2024-05-11 12:00 (BT) 라디오존데</td>
+</tr>
+<tr class="even">
+<td>격자·적분</td>
+<td>dx = dz = 300 m, 가로 30 km × 꼭대기 12 km, 40분</td>
+</tr>
+<tr class="odd">
+<td>열기포</td>
+<td>+3 °C, 중심 고도 900 m (소스 수정 → <code>ideal.exe</code> 다시 빌드)</td>
+</tr>
+<tr class="even">
+<td>시딩</td>
+<td>패치한 fast SBM의 에어로졸 bin(<code>ff8i</code>)에 KCl 입자를 10분에 운저(900 m)로 주입</td>
+</tr>
+</tbody>
+</table>
+<p>시딩 신호를 읽기 전에 dt와 작은 초기 섭동에 따른 수치 잡음 크기부터 재야 한다.</p>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Khairoutdinov2000Autoconversion" class="csl-entry">
+Khairoutdinov, Marat, 와/과 Yefim Kogan. 2000년. <span>“A New Cloud Physics Parameterization in a Large-Eddy Simulation Model of Marine Stratocumulus”</span>. <em>Monthly Weather Review</em> 128 (1): 229–43. <a href="https://doi.org/10.1175/1520-0493(2000)128<0229:ANCPPI>2.0.CO;2">https://doi.org/10.1175/1520-0493(2000)128&lt;0229:ANCPPI&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Lin1983BulkSnow" class="csl-entry">
+Lin, Yuh-Lang, Richard D. Farley, 와/과 Harold D. Orville. 1983년. <span>“Bulk Parameterization of the Snow Field in a Cloud Model”</span>. <em>Journal of Climate and Applied Meteorology</em> 22 (6): 1065–92. <a href="https://doi.org/10.1175/1520-0450(1983)022<1065:BPOTSF>2.0.CO;2">https://doi.org/10.1175/1520-0450(1983)022&lt;1065:BPOTSF&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Morrison2009SquallLine" class="csl-entry">
+Morrison, H., G. Thompson, 와/과 V. Tatarskii. 2009년. <span>“Impact of Cloud Microphysics on the Development of Trailing Stratiform Precipitation in a Simulated Squall Line: Comparison of One- and Two-Moment Schemes”</span>. <em>Monthly Weather Review</em> 137 (3): 991–1007. <a href="https://doi.org/10.1175/2008MWR2556.1">https://doi.org/10.1175/2008MWR2556.1</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>WRF</category>
+  <category>microphysics</category>
+  <category>fast SBM</category>
+  <category>aerosol</category>
+  <category>troubleshooting</category>
+  <guid>https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/</guid>
+  <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/L3-L35-timeseries.png" medium="image" type="image/png" height="92" width="144"/>
+</item>
+<item>
+  <title>WRF 이상화 2-D 스콜선: 시어와 열기포가 바꾸는 것</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>목표는 <a href="../../../posts/article-review/2026-09-10-ren2025-particle-size/index.html">Ren et al.&nbsp;(2025)</a>의 2-D 흡습성 시딩 실험을 WRF로 다시 해 보는 것이다. 이 논문도 사운딩 하나와 열기포(warm bubble)로 구름을 만드는 <strong>이상화(idealized)</strong> 구성이라, 실제 사례용 전처리(WPS) 없이 WRF에 들어 있는 2-D 스콜선 예제 <code>em_squall2d_x</code>부터 시작했다. 이 글은 기본 예제를 연구실 서버에서 돌린 L1, 바람 시어와 열기포 세기를 바꾼 L2, 그리고 곁가지로 돌린 3-D 슈퍼셀 예제를 정리한다.</p>
+<section id="이상화-wrf의-실행-흐름" class="level2">
+<h2 class="anchored" data-anchor-id="이상화-wrf의-실행-흐름">이상화 WRF의 실행 흐름</h2>
+<pre><code>실제 사례:  재분석 자료 → WPS → real.exe → wrfinput + wrfbdy → wrf.exe → wrfout
+이상화:     input_sounding + namelist.input → ideal.exe → wrfinput → wrf.exe → wrfout</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>파일</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>input_sounding</code></td>
+<td>연직 프로파일 한 개(고도별 온위, 혼합비, u, v). <code>ideal.exe</code>가 모든 격자점에 똑같이 깐다</td>
+</tr>
+<tr class="even">
+<td><code>namelist.input</code></td>
+<td>격자, 시간, 물리 옵션. <code>ideal.exe</code>와 <code>wrf.exe</code>가 함께 읽는다</td>
+</tr>
+<tr class="odd">
+<td><code>ideal.exe</code></td>
+<td>사운딩 위에 열기포를 얹어 초기장 <code>wrfinput_d01</code>을 만든다</td>
+</tr>
+<tr class="even">
+<td><code>wrf.exe</code></td>
+<td>시간 적분 후 <code>wrfout_d01_*</code>(NetCDF)을 쓴다</td>
+</tr>
+<tr class="odd">
+<td><code>rsl.out.*</code>, <code>rsl.error.*</code></td>
+<td>MPI 프로세스마다 하나씩 생기는 로그</td>
+</tr>
+<tr class="even">
+<td><code>namelist.output</code></td>
+<td>WRF가 <strong>실제로 적용한</strong> 모든 설정(직접 쓰지 않은 기본값 포함)</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mpirun</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-np</span> 4 ./ideal.exe</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-p</span> log_ideal<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mv</span> rsl.<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">*</span> log_ideal/        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ideal.exe 로그는 wrf.exe가 덮어쓰기 전에 옮겨 둔다</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-q</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SUCCESS COMPLETE IDEAL INIT"</span> log_ideal/rsl.error.0000 <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">||</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ideal.exe 실패"</span></span>
+<span id="cb2-4"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mpirun</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-np</span> 4 ./wrf.exe</span>
+<span id="cb2-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-1</span> rsl.out.0000                           <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># SUCCESS COMPLETE WRF 이면 성공</span></span>
+<span id="cb2-6"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> rsl.error.<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"== </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$f</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-3</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$f</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span>   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0번만 보지 말 것</span></span>
+<span id="cb2-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-iE</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mp_physics|time_step|e_sn"</span> namelist.output       <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 실제로 들어간 값</span></span></code></pre></div></div>
+<p><code>rsl.error.0000</code>에 에러가 없어도 다른 프로세스 로그에만 에러가 찍힐 수 있다(다음 글의 fast SBM이 그랬다). 그리고 “이 옵션 기본값이 뭐였지?”는 문서보다 <code>namelist.output</code>을 grep하는 편이 빠르다.</p>
+</section>
+<section id="d-예제를-그대로-돌리면-멈춘-곳" class="level2">
+<h2 class="anchored" data-anchor-id="d-예제를-그대로-돌리면-멈춘-곳">2-D 예제를 그대로 돌리면 멈춘 곳</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>위치</th>
+<th>예제 값 → 바꾼 값</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&amp;domains e_sn</code></td>
+<td>3 → <strong>10</strong></td>
+<td>MPI(dmpar) 빌드는 한 프로세스가 맡는 조각이 각 방향 10칸 이상이어야 해서 <code>ideal.exe</code>가 거부한다</td>
+</tr>
+<tr class="even">
+<td><code>&amp;domains</code> 끝</td>
+<td><code>nproc_x = 4</code>, <code>nproc_y = 1</code> 추가</td>
+<td>지정하지 않으면 2 × 2로 나누려다 y가 다시 10칸 미만이 된다</td>
+</tr>
+<tr class="odd">
+<td><code>&amp;physics</code> 끝</td>
+<td><code>ghg_input = 0</code> 추가</td>
+<td>WRF 4.6 기본값(1)은 온실가스 입력을 쓰는 복사 설정을 요구한다. 이 실험은 복사를 끈다</td>
+</tr>
+<tr class="even">
+<td>컴파일</td>
+<td><code>./compile em_squall2d_x</code> 대신 <code>./compile em_quarter_ss</code></td>
+<td>이름에 <code>2d</code>가 들어간 케이스는 dmpar 빌드에서 거부되고, 그 전에 기존 실행 파일까지 지워진다. <code>ideal.exe</code>는 실행 시 <code>&amp;ideal ideal_case = 4</code>로 squall2d_x 초기장을 고른다</td>
+</tr>
+</tbody>
+</table>
+<p>y는 주기 경계이고 열기포도 y로 균일해서, <code>e_sn</code>을 10으로 늘려도 결과는 2-D 그대로다. Lin 런의 y 줄끼리 강수 차이가 0인 것을 확인했다. 나머지 설정은 예제 기본값이다: dx = 250 m로 201칸(50 km), 연직 80층(꼭대기 20 km), dt = 3 s, 60분 적분, 10분 출력. 물리 과정은 미세물리(Lin, <code>mp_physics = 2</code>)만 켜고 복사·지표·경계층·적운 모수화는 끈다. 난류는 1.5차 TKE, x는 열린 경계, 위쪽 5 km는 Rayleigh 감쇠층이다. 4코어로 약 75초 걸렸다.</p>
+</section>
+<section id="초기장-weismanklemp-사운딩과-열기포" class="level2">
+<h2 class="anchored" data-anchor-id="초기장-weismanklemp-사운딩과-열기포">초기장: Weisman–Klemp 사운딩과 열기포</h2>
+<p>예제 사운딩의 온위·습도는 대류 모델링의 표준인 Weisman–Klemp 해석적 사운딩이다 <span class="citation" data-cites="Weisman1982Shear">(Weisman 와/과 Klemp 1982년)</span>. 첫 줄은 지면 기압 1000 hPa, 온위 300.5 K, 혼합비 14 g/kg이고, 그 아래로 250 m 간격 80줄이 이어진다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Ctheta(z)%20=%20%5Ctheta_0%20+%20(%5Ctheta_%7Btr%7D%20-%20%5Ctheta_0)%5Cleft(%5Cfrac%7Bz%7D%7Bz_%7Btr%7D%7D%5Cright)%5E%7B5/4%7D,%20%5Cqquad%20%5Cmathrm%7BRH%7D(z)%20=%201%20-%20%5Cfrac%7B3%7D%7B4%7D%5Cleft(%5Cfrac%7Bz%7D%7Bz_%7Btr%7D%7D%5Cright)%5E%7B5/4%7D%20%5Cquad%20(z%20%5Cle%20z_%7Btr%7D)"></p>
+<p>온위는 기준값 <img src="https://latex.codecogs.com/png.latex?%5Ctheta_0%20=%20300"> K에서 권계면 값 <img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Btr%7D%20=%20343"> K까지 고도 <img src="https://latex.codecogs.com/png.latex?z">의 5/4제곱으로 서서히 커진다는 뜻이다. <img src="https://latex.codecogs.com/png.latex?z_%7Btr%7D%20=%2012"> km는 권계면 고도이고, 그 위는 213 K 등온층이라 온위가 급격히 커진다(매우 안정). 맨 아래 약 350 m는 300.5 K로 일정한 혼합층이다. 상대습도는 지면 근처 거의 100 %에서 권계면 25 %까지 줄어든다. 하층 혼합비는 14 g/kg에서 잘려 1 km 남짓까지 일정하다. 정리하면 <strong>하층은 습하고, 대류권은 조건부 불안정하고, 12 km에 뚜껑</strong>이 있는 대기다. 파일 값으로 검산하면 375 m에서 <img src="https://latex.codecogs.com/png.latex?300%20+%2043%20%5Ctimes%20(375/12000)%5E%7B5/4%7D%20=%20300.565"> K로 일치한다.</p>
+<p>바람은 0–2.5 km에만 선형 시어가 있다: <img src="https://latex.codecogs.com/png.latex?u(z)%20=%20-12%20+%2012%5C,z/2500"> m/s (2.5 km 위는 0). 첫 층(125 m)의 u는 −11.4 m/s다. 절댓값보다 <strong>고도에 따른 차이 12 m/s</strong>가 물리적으로 중요하다.</p>
+<p>열기포는 namelist가 아니라 <code>dyn_em/module_initialize_ideal.F</code>에 하드코딩되어 있다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>세기 (중심 온위 편차)</td>
+<td>+3 K (<code>delt = 3.</code>)</td>
+</tr>
+<tr class="even">
+<td>중심</td>
+<td>영역 가운데, 고도 1.5 km</td>
+</tr>
+<tr class="odd">
+<td>반경</td>
+<td>수평 4 km, 연직 1.5 km (가장자리로 갈수록 0)</td>
+</tr>
+</tbody>
+</table>
+<p>그래서 기포 세기를 바꾸려면 소스를 고치고 <code>ideal.exe</code>를 다시 빌드해야 한다. 되돌릴 때도 예전 파일을 복사해 오면 수정 시각이 과거라 <code>make</code>가 다시 컴파일하지 않으므로, <code>sed</code>로 값을 되돌렸다.</p>
+</section>
+<section id="실험-구성" class="level2">
+<h2 class="anchored" data-anchor-id="실험-구성">실험 구성</h2>
+<p>모든 런은 Lin, dt = 3 s, 60분이며 바꾼 것은 한 번에 하나다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>런</th>
+<th>사운딩 바람</th>
+<th>열기포</th>
+<th>확인하려던 것</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L1</td>
+<td>예제 그대로 (시어 있음)</td>
+<td>+3 K</td>
+<td>서버에서 예제가 제대로 재현되는가</td>
+</tr>
+<tr class="even">
+<td>L2A</td>
+<td>u = v = 0 (시어 없음)</td>
+<td>+3 K</td>
+<td>시어는 비의 양을 바꾸는가, 위치를 바꾸는가</td>
+</tr>
+<tr class="odd">
+<td>L2B</td>
+<td>시어 있음</td>
+<td>+1.5 K</td>
+<td>방아쇠를 절반으로 줄이면 비도 줄어드는가</td>
+</tr>
+<tr class="even">
+<td>L2B-noshear</td>
+<td>u = v = 0</td>
+<td>+1.5 K</td>
+<td>두 효과가 겹치면 어떻게 되는가 (2 × 2 완성)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l1-기본-스콜선의-한-시간" class="level2">
+<h2 class="anchored" data-anchor-id="l1-기본-스콜선의-한-시간">L1: 기본 스콜선의 한 시간</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>시각</th>
+<th style="text-align: right;">최대 W (m/s)</th>
+<th style="text-align: right;">최대 구름물 (g/kg)</th>
+<th style="text-align: right;">최대 빗물 (g/kg)</th>
+<th style="text-align: right;">지점 최대 누적강수 (mm)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10분</td>
+<td style="text-align: right;">11.7</td>
+<td style="text-align: right;">3.29</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+<tr class="even">
+<td>20분</td>
+<td style="text-align: right;">35.8</td>
+<td style="text-align: right;">3.34</td>
+<td style="text-align: right;">5.53</td>
+<td style="text-align: right;">0.04</td>
+</tr>
+<tr class="odd">
+<td>30분</td>
+<td style="text-align: right;">15.4</td>
+<td style="text-align: right;">1.44</td>
+<td style="text-align: right;">4.90</td>
+<td style="text-align: right;">8.94</td>
+</tr>
+<tr class="even">
+<td>60분</td>
+<td style="text-align: right;">25.3</td>
+<td style="text-align: right;">2.95</td>
+<td style="text-align: right;">3.70</td>
+<td style="text-align: right;">37.02</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L1-xz-lifecycle.png" class="img-fluid figure-img" alt="L1 em_squall2d_x with Lin microphysics: x-z sections of cloud water with vertical velocity contours, rain water, and potential temperature perturbation every 10 minutes from 0 to 60 minutes"></p>
+<figcaption>L1 x–z 단면. 왼쪽 구름물과 연직속도, 가운데 빗물, 오른쪽 환경 대비 온위 편차, 위에서 아래로 0–60분.</figcaption>
+</figure>
+</div>
+<p>0분에는 1.5 km 근처의 따뜻한 기포뿐이다. 10분에 2.5–5 km에 구름이 생기고, 20분에 상승류가 35.8 m/s로 정점을 찍으며 12 km 권계면 근처까지 솟는다. 지면 강수는 20–30분 사이에 시작한다(10분 출력 간격이라 “사이”로만 말할 수 있다). 비가 떨어진 뒤 지면 근처에 찬 공기(음의 온위 편차)가 퍼지고, 40분 이후 서쪽(x ≈ 5–10 km)에 새 구름이 자란다. 값이 예제 검증값과 같아서 서버 환경은 믿고 다음으로 넘어갔다.</p>
+</section>
+<section id="l2-시어를-끄고-열기포를-줄이고" class="level2">
+<h2 class="anchored" data-anchor-id="l2-시어를-끄고-열기포를-줄이고">L2: 시어를 끄고, 열기포를 줄이고</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>60분, 영역 평균 / 지점 최대</th>
+<th>열기포 +3 K</th>
+<th>열기포 +1.5 K</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>시어 있음</td>
+<td>3.66 / 37.0 mm</td>
+<td>2.78 / 29.7 mm</td>
+</tr>
+<tr class="even">
+<td>시어 없음</td>
+<td>3.82 / 61.5 mm</td>
+<td>2.78 / 48.3 mm</td>
+</tr>
+</tbody>
+</table>
+<p>표와 그림은 10월 말에 같은 비교 스크립트로 네 런을 다시 집계한 값이다. 처음 정리 때의 해석 일부(강수 시작 시각 등)를 이 재집계로 고쳤다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2-timeseries.png" class="img-fluid figure-img" alt="Time series of maximum vertical velocity, maximum cloud water, maximum rain water, and domain-mean accumulated rain for four runs: shear or no shear, with 3 K or 1.5 K warm bubble"></p>
+<figcaption>L2 2 × 2 런의 최대 W, 최대 구름물, 최대 빗물, 영역 평균 누적강수 시계열.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2-rain-x.png" class="img-fluid figure-img" alt="Surface accumulated rain along x at 60 minutes for the four L2 runs; no-shear runs peak sharply near x = 25 km while shear runs peak near x = 22 km"></p>
+<figcaption>60분 지면 누적강수의 x 분포. 시어가 없으면 기포 중심(x = 25 km)에 좁고 높은 봉우리가 생긴다.</figcaption>
+</figure>
+</div>
+<p><strong>시어는 양보다 위치와 집중도를 바꿨다.</strong> 영역 평균은 시어 유무에 따라 −4 %(3 K), 0 %(1.5 K)로 거의 같았다. 대신 시어가 없으면 구름이 기울지 않고 기포 중심에 서 있어서, 같은 양의 비가 한곳(x ≈ 25 km)에 떨어져 지점 최대가 약 1.6배가 됐다. 시어가 있으면 구름이 기울며 비가 x ≈ 22 km 쪽으로 치우쳤다. “시어가 비를 넓게 퍼뜨린다”는 3 K에서만 맞았다(1 mm 이상 내린 폭: 3 K 14.8 vs 11.0 km, 1.5 K 9.0 vs 10.5 km).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L1-shear-xz-40min.png" class="img-fluid figure-img" alt="L1 with wind shear at 40 minutes: tilted updraft and rain shaft, new cloud forming on the west side"></p>
+<figcaption>L1(시어 있음) 40분 단면: 상승류와 빗물이 기울어 있다.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2A-noshear-xz-40min.png" class="img-fluid figure-img" alt="L2A without wind shear at 40 minutes: cloud, rain, and temperature perturbation are left-right symmetric about the domain center"></p>
+<figcaption>L2A(시어 없음) 40분 단면: 구름과 비가 좌우 대칭이다.</figcaption>
+</figure>
+</div>
+<p><strong>열기포 세기는 총량을 바꿨다.</strong> +3 K → +1.5 K에서 영역 평균은 −24 %(시어 있음), −27 %(시어 없음), 지점 최대는 약 −20 % 줄었다. 10분 상승류가 12–14 m/s에서 4–6 m/s로 느리게 출발했고, 30분 영역 평균은 1/3–1/4 수준(0.48 → 0.14, 0.42 → 0.10 mm)이었다. 다만 지면 강수 시작은 10분 출력 간격 안에서 구분되지 않았다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>1.5 K 첫 실행은 바람이 빠져 있었다
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>1.5 K 실험을 처음 돌렸을 때, 시어가 있는 사운딩을 넣었다고 생각했는데 구름이 좌우 대칭으로 나왔다. <code>input_sounding</code>을 열어 보니 u가 전부 0이었다. WRF 예제 원본 파일까지 u = 0으로 바뀌어 있어서 “원본에서 다시 복사”해도 바람 없는 사운딩이 들어간 것이다. 원본 사운딩(둘째 줄 u = −11.4 m/s)을 되살려 다시 돌린 것이 위 표의 “시어 있음 + 1.5 K”이고, 최종 네 런은 다시 집계할 때 wrfout 초기장에서 열기포 세기와 바람을 확인했다. 그 뒤로 파일 이름이 아니라 <strong>내용</strong>을 확인한다: <code>sed -n 2p input_sounding</code>, 그리고 기준 런과 <code>diff namelist.input</code>.</p>
+</div>
+</div>
+</section>
+<section id="곁가지-3-d-슈퍼셀에서-시어가-하는-일" class="level2">
+<h2 class="anchored" data-anchor-id="곁가지-3-d-슈퍼셀에서-시어가-하는-일">곁가지: 3-D 슈퍼셀에서 시어가 하는 일</h2>
+<p>3-D 결과를 어떻게 보는지, 2-D와 무엇이 다른지 익히려고 3-D 예제 <code>em_quarter_ss</code>(Kessler, dx = 2 km, 약 80 km 정사각 영역, 120분)를 예제 namelist·사운딩 그대로 돌리고, 사운딩의 u, v만 0으로 바꾼 런과 비교했다. 실행 파일은 이미 <code>em_quarter_ss</code>로 빌드한 것이라 다시 컴파일하지 않았다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>120분</th>
+<th>시어 있음 (예제)</th>
+<th>바람 없음 (u = v = 0)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>최대 W</td>
+<td>40–100분 약 41–43 m/s 유지</td>
+<td>20분 45 m/s 정점 → 40분 21 m/s</td>
+</tr>
+<tr class="even">
+<td>5 km 최대 소용돌이도</td>
+<td>20분부터 약 0.01 s⁻¹</td>
+<td>약 0.002 s⁻¹ 이하</td>
+</tr>
+<tr class="odd">
+<td>폭풍 모양</td>
+<td>남북으로 분열, 동쪽으로 이동</td>
+<td>제자리, 분열 없음</td>
+</tr>
+<tr class="even">
+<td>지면 강수</td>
+<td>V자 두 갈래, 지점 최대 약 80 mm</td>
+<td>가운데 원형 + 바깥 고리, 지점 최대 약 100 mm</td>
+</tr>
+<tr class="odd">
+<td>영역 평균 강수</td>
+<td>약 9.7 mm</td>
+<td>약 2.2 mm</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/3D-shear-80min.png" class="img-fluid figure-img" alt="3-D quarter-circle shear supercell at 80 minutes: split storms with a V-shaped rain swath, updrafts overlapping positive and negative vertical vorticity at 5.1 km"></p>
+<figcaption>시어 있는 3-D 런 80분: 위에서 본 구름과 강수, 5.1 km 연직속도와 소용돌이도, 두 연직 단면.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/3D-nowind-80min.png" class="img-fluid figure-img" alt="3-D no-wind run at 80 minutes: stationary storm with circular rain pattern at the domain center and a ring of weak cells, no significant vorticity"></p>
+<figcaption>바람 없는 3-D 런 80분: 구름과 강수가 가운데에 원형으로 모이고 소용돌이도가 거의 없다.</figcaption>
+</figure>
+</div>
+<p>초반 20분은 오히려 바람 없는 쪽이 더 셌다. 시어가 있으면 상승류가 기울고 옆바람과 섞여 출발이 느리다. 그러나 바람이 없으면 비가 상승류 바로 위에서 떨어져 40분 안에 상승류를 끄는 단일 세포로 끝났다. 시어가 하는 일은 “처음에 세게”가 아니라 <strong>“오래, 넓게”</strong>였고, 영역 평균 강수가 약 4배였다. 바람 없는 런의 고리가 8각형인 것은 정사각 격자의 흔적이다. 2-D는 y로 끝없는 띠 모양이라 소용돌이도가 원리상 0이고, 2-D와 3-D의 “영역 평균”은 뜻이 달라 직접 비교하지 않는다.</p>
+<div class="review-verdict">
+<p><strong>결론.</strong> 이 2-D 스콜선(Lin, 60분, 단일 런)에서 바람 시어는 비가 <strong>어디에 얼마나 몰리는지</strong>를, 열기포 세기는 비의 <strong>총량</strong>을 바꿨다. 3-D에서는 시어가 폭풍을 회전시키고 오래 유지시켜 총량까지 바꿨다.</p>
+</div>
+</section>
+<section id="남은-질문" class="level2">
+<h2 class="anchored" data-anchor-id="남은-질문">남은 질문</h2>
+<ul>
+<li>시어 유무에서 2-D 총강수가 거의 같은 이유는 확인하지 않았다. 런마다 한 번씩만 돌렸고, Lin 하나, 10분 출력이라 강수 시작 시각은 거칠다.</li>
+<li>Lin은 1-모멘트라 구름방울 수와 CCN이 없다. 시딩을 다루려면 미세물리를 바꿔야 한다 → <a href="../../../posts/wrf/2026-09-29-microphysics-fsbm/index.html">다음 글: 미세물리 스킴 비교와 fast SBM</a></li>
+</ul>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Weisman1982Shear" class="csl-entry">
+Weisman, M. L., 와/과 J. B. Klemp. 1982년. <span>“The Dependence of Numerically Simulated Convective Storms on Vertical Wind Shear and Buoyancy”</span>. <em>Monthly Weather Review</em> 110 (6): 504–20. <a href="https://doi.org/10.1175/1520-0493(1982)110<0504:TDONSC>2.0.CO;2">https://doi.org/10.1175/1520-0493(1982)110&lt;0504:TDONSC&gt;2.0.CO;2</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>WRF</category>
+  <category>idealized</category>
+  <category>squall line</category>
+  <category>em_squall2d_x</category>
+  <guid>https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/</guid>
+  <pubDate>Sun, 27 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2-rain-x.png" medium="image" type="image/png" height="64" width="144"/>
+</item>
+</channel>
+</rss>

@@ -9,7 +9,7 @@
 <link>https://jinu219.github.io/pysdm.html</link>
 <atom:link href="https://jinu219.github.io/pysdm.xml" rel="self" type="application/rss+xml"/>
 <description>입자 기반 구름 미세물리 모델을 배우고 실험하는 노트</description>
-<generator>quarto-1.9.38</generator>
+<generator>quarto-1.11.9</generator>
 <lastBuildDate>Wed, 15 Jul 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표</title>
@@ -117,14 +117,14 @@ Shima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintar
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표},
   date = {2026-07-15},
   url = {https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“PySDM을 시작하며: 구름 미세물리 실험의 첫
 좌표.”</span> July 15. <a href="https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/">https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/</a>.
 </div></div></section></div> ]]></description>

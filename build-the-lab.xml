@@ -9,7 +9,7 @@
 <link>https://jinu219.github.io/build-the-lab.html</link>
 <atom:link href="https://jinu219.github.io/build-the-lab.xml" rel="self" type="application/rss+xml"/>
 <description>다시 실행할 수 있는 연구 환경과 실험 파이프라인 구축 기록</description>
-<generator>quarto-1.9.38</generator>
+<generator>quarto-1.11.9</generator>
 <lastBuildDate>Tue, 21 Jul 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>실험 코드를 연구 워크플로로: PySDM Seeding Lab v1.0.0</title>

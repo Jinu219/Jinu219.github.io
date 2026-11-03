@@ -9,8 +9,2516 @@
 <link>https://jinu219.github.io/</link>
 <atom:link href="https://jinu219.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>PySDM, WRF, 논문 리뷰로 이어가는 구름 씨뿌리기 연구 기록</description>
-<generator>quarto-1.9.38</generator>
-<lastBuildDate>Tue, 21 Jul 2026 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.11.9</generator>
+<lastBuildDate>Tue, 29 Sep 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>미세물리 스킴 비교와 fast SBM 2-D 에어로졸 리셋 버그</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p><a href="../../../posts/wrf/2026-09-27-idealized-squall-line/index.html">앞 글</a>의 Lin은 구름방울 수와 CCN을 모르는 1-모멘트 스킴이라, 흡습성 시딩처럼 “에어로졸 크기분포를 바꾸는” 실험을 표현할 수 없다. 시딩까지 가려면 에어로졸 bin을 가진 bin 미세물리가 필요해서 WRF의 fast SBM(<code>mp_physics = 30</code>)을 골랐다. 그 전에 같은 스콜선을 Lin → Morrison → fast SBM으로 바꿔 돌려 스킴마다 무엇이 다른지 보고, 마지막으로 fast SBM의 배경 에어로졸만 해양성으로 바꿨다. 가는 길에 fast SBM을 2-D로 쓸 때만 생기는 버그를 만났다.</p>
+<section id="세-스킴은-무엇이-다른가" class="level2">
+<h2 class="anchored" data-anchor-id="세-스킴은-무엇이-다른가">세 스킴은 무엇이 다른가</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Lin (2)</th>
+<th>Morrison (10)</th>
+<th>fast SBM (30)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>예측하는 것</td>
+<td>수상체별 질량 (1-모멘트)</td>
+<td>질량 + 수농도 (2-모멘트)</td>
+<td>크기 bin별 분포</td>
+</tr>
+<tr class="even">
+<td>구름방울 수</td>
+<td>없음</td>
+<td>기본값 250 cm⁻³로 고정</td>
+<td>에어로졸 활성화로 계산</td>
+</tr>
+<tr class="odd">
+<td>에어로졸</td>
+<td>없음</td>
+<td>없음 (기본 설정)</td>
+<td>43 bin, 육지면 대륙성·바다면 해양성 분포</td>
+</tr>
+<tr class="even">
+<td>60분 적분 시간 (4코어)</td>
+<td>약 75초 (dt 3 s)</td>
+<td>—</td>
+<td>약 25분 (dt 2 s)</td>
+</tr>
+</tbody>
+</table>
+<p>Lin과 Morrison 스킴의 원 논문은 각각 Lin et al.&nbsp;(1983), Morrison et al.&nbsp;(2009)이다 <span class="citation" data-cites="Lin1983BulkSnow Morrison2009SquallLine">(Lin 기타 1983년; Morrison 기타 2009년)</span>. fast SBM의 물방울은 33 bin(반경 약 2 µm – 3.25 mm)으로, bin 1–14가 구름, bin 15(반경 약 50 µm)부터가 비다. 내 빌드에서는 full SBM(<code>mp_physics = 32</code>)을 쓸 수 없어 fast SBM만 썼다.</p>
+</section>
+<section id="fast-sbm을-켜기-위한-준비" class="level2">
+<h2 class="anchored" data-anchor-id="fast-sbm을-켜기-위한-준비">fast SBM을 켜기 위한 준비</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+<th>없으면</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>조견표</td>
+<td><code>SBM_input_33/</code>, <code>scattering_tables_2layer_high_quad_1dT_1%fw_110/</code>를 런 폴더에 링크</td>
+<td>시작하자마자 멈춤</td>
+</tr>
+<tr class="even">
+<td>이류</td>
+<td><code>moist_adv_opt = 2</code>, <code>scalar_adv_opt = 2</code></td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>time step</td>
+<td><strong>2 s</strong></td>
+<td>3 s에서 15분쯤 멈춤 (아래)</td>
+</tr>
+<tr class="even">
+<td>bin 출력</td>
+<td><code>iofields_filename</code>으로 <code>ff1i01–33</code>, <code>ff8i01–43</code> 추가</td>
+<td>Registry상 보조 스트림(<code>h3</code>) 변수라 기본 wrfout에 없음</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">{</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">printf</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'+:h:0:'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span> 1 33<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">)</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">printf</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'ff1i%s,'</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$k</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span></span>
+<span id="cb1-2">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> k <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$(</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span> 1 43<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">)</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">printf</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'ff8i%s,'</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$k</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">}</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">|</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sed</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'s/,$/\n/'</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> sbm_iofields.txt</span>
+<span id="cb1-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &amp;time_control 에 추가:  iofields_filename = "sbm_iofields.txt",  ignore_iofields_warning = .true.,</span></span></code></pre></div></div>
+<p><code>ff1i</code>는 물방울 bin별 질량 혼합비(kg/kg), <code>ff8i</code>는 에어로졸 bin별 <img src="https://latex.codecogs.com/png.latex?dN/d%5Cln%20r">(#/kg)이다. 시딩 입자를 넣을 곳이 바로 <code>ff8i</code>다.</p>
+</section>
+<section id="문제-1-dt-3-s에서-15분에-멈춤" class="level2">
+<h2 class="anchored" data-anchor-id="문제-1-dt-3-s에서-15분에-멈춤">문제 1: dt 3 s에서 15분에 멈춤</h2>
+<p><code>rsl.error.0000</code>은 모델 시각 00:15:33에서 그냥 멈춰 있었고, 에러는 1번 프로세스(구름이 자라던 구역) 로그 <code>rsl.error.0001</code>에만 있었다: <code>fatal error in ONECOND1-in (ABS(DAL1*DELMASSL1) &gt; 3.0)</code>. 소스의 검사는 이런 뜻이다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5CDelta%20T%20=%20%5Cfrac%7BL%7D%7Bc_p%7D%5C,%5CDelta%20q_l,%20%5Cqquad%20%7C%5CDelta%20T%7C%20%3E%203%5C%20%5Cmathrm%7BK%7D%20%5C;%5CRightarrow%5C;%20%5Ctext%7B%EC%A0%95%EC%A7%80%7D"></p>
+<p>한 번의 응결 계산에서 생긴 액체 혼합비 변화 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20q_l">에 잠열 <img src="https://latex.codecogs.com/png.latex?L">을 정압비열 <img src="https://latex.codecogs.com/png.latex?c_p">로 나눈 값을 곱하면, 그 응결로 공기가 데워진 온도 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20T">가 된다. 이 값이 한 스텝에 3 K를 넘으면 계산을 믿을 수 없다고 보고 스스로 멈춘다. 강한 상승류에서 time step이 길면 응결을 한 번에 몰아 계산하게 되므로, dt를 2 s로 줄여 완주했다. 이 오류가 아래 리셋 버그와 관련 있는지는 패치 뒤 3 s로 다시 확인하지 않았다.</p>
+</section>
+<section id="문제-2-완주했는데-비가-0-2-d-에어로졸-리셋-버그" class="level2">
+<h2 class="anchored" data-anchor-id="문제-2-완주했는데-비가-0-2-d-에어로졸-리셋-버그">문제 2: 완주했는데 비가 0 — 2-D 에어로졸 리셋 버그</h2>
+<p>dt 2 s로 끝까지 돌았지만 결과가 이상했다. 에러는 하나도 없었다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>증상 (패치 전)</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>지면 강수, 빗물</td>
+<td>60분 동안 0</td>
+</tr>
+<tr class="even">
+<td>최대 구름물</td>
+<td>13.5 g/kg에서 평평</td>
+</tr>
+<tr class="odd">
+<td>구름방울 수</td>
+<td>약 30,000 cm⁻³ (보통 수백)</td>
+</tr>
+<tr class="even">
+<td>물방울 크기</td>
+<td>전부 반경 2–6 µm</td>
+</tr>
+<tr class="odd">
+<td>지면–1 km 에어로졸 (30 → 60분)</td>
+<td>1774 → 1775 cm⁻³, 소모가 없음</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/fsbm-before-patch-timeseries.png" class="img-fluid figure-img" alt="Before the patch: time series where the fast SBM line shows maximum cloud water stuck near 13.5 g/kg and zero rain water and zero surface rain for 60 minutes, compared with Lin and Morrison lines from older 3-second time-step runs"></p>
+<figcaption>패치 전 비교 그림. FastSBM(초록, dt 2 s)은 최대 구름물이 13.5 g/kg 근처에서 평평하고 빗물과 지면 강수가 0이다. 이 그림의 Lin·Morrison 선은 dt 3 s 런이므로 초록 선만 본다.</figcaption>
+</figure>
+</div>
+<p>비가 내리면 구름 밑 에어로졸은 활성화와 세정으로 줄어야 하는데 그대로였다. 누군가 매 스텝 에어로졸을 다시 채우고 있다는 뜻이다. <code>phys/module_mp_fast_sbm.F</code>(WRF 4.6.0, 약 4320행 부근)에서 원인을 찾았다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode fortran code-with-copy"><code class="sourceCode fortranfixed"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">! itimestep &gt; 1 이고 domain_id == 1 일 때 (내 소스에서는 MPI 빌드에서만 컴파일되는 블록)</span></span>
+<span id="cb2-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> (i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.or.</span> i <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> IDE<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.OR.</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">&amp;</span></span>
+<span id="cb2-3">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">&amp;</span> j <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.or.</span> j <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> JDE<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">THEN</span></span>
+<span id="cb2-4">   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">! 에어로졸 bin(ff8i)을 초기 분포로 되돌림</span></span></code></pre></div></div>
+<p>3-D 실제 사례에서 영역 가장자리 5칸에 에어로졸을 계속 공급하는 측면 경계조건이다. 그런데 2-D 설정은 <code>e_sn = 10</code>이라 <img src="https://latex.codecogs.com/png.latex?JDE%20=%2010">, <img src="https://latex.codecogs.com/png.latex?JDE%20-%205%20=%205">다. y 줄 j = 1–9는 모두 “j ≤ 5 또는 j ≥ 5”를 만족하므로 <strong>영역 전체</strong>의 에어로졸이 매 스텝 초기값으로 돌아간다. 조건식으로 따지면 <code>e_sn</code>이 11 이하인 모든 설정이 그렇다. 에어로졸이 무한히 다시 채워지니 새 구름방울이 계속 생기고, 수만 개로 나눠 가진 물방울은 충돌·병합으로 자라지 못해 비가 되지 않았다. 시딩에는 더 치명적이다. <code>ff8i</code>에 넣은 시딩 입자가 다음 스텝에 덮어써진다.</p>
+<p>패치는 y 조건만 끄고 x 방향 열린 경계의 에어로졸 공급은 그대로 두었다.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cp</span> phys/module_mp_fast_sbm.F phys/module_mp_fast_sbm.F.orig</span>
+<span id="cb3-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sed</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-i</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'s/&amp; j &lt;= 5 .or. j &gt;= JDE-5)THEN/\&amp; .false.)THEN   ! 2D patch: y-edge aerosol reset off (e_sn=10)/'</span> phys/module_mp_fast_sbm.F</span>
+<span id="cb3-3"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">./compile</span> em_quarter_ss <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> compile_fsbm_patch.log <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;&amp;</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span></code></pre></div></div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>패치 전</th>
+<th>패치 후</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>구름방울 수</td>
+<td>약 30,000 cm⁻³</td>
+<td>438 / 341 / 292 cm⁻³ (10 / 20 / 30분)</td>
+</tr>
+<tr class="even">
+<td>지면–1 km 에어로졸 (30 → 60분)</td>
+<td>1774 → 1775 cm⁻³</td>
+<td>1759 → 1729 cm⁻³ (소모됨)</td>
+</tr>
+<tr class="odd">
+<td>60분 지점 최대 강수</td>
+<td>0 mm</td>
+<td>10.6 mm</td>
+</tr>
+<tr class="even">
+<td>물방울 분포</td>
+<td>반경 2–6 µm에만</td>
+<td>반경 약 1 mm에 빗방울 봉우리</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>다른 2-D fast SBM 사용자에게
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 패치는 연구실 원본 WRF가 아니라 <strong>내 작업용 사본</strong>(WRF 4.6.0)에만 적용한 국소 수정이며, <code>e_sn = 10</code>인 이 2-D 설정에서만 확인했다. 공식 수정이 아니고 다른 버전의 소스는 보지 않았다. 증상(에러 없이 비 0, 구름방울 수만 개, 에어로졸이 줄지 않음)이 같다면 이 조건부터 확인해 볼 만하다.</p>
+</div>
+</div>
+</section>
+<section id="같은-dt-2-s에서-네-런-비교" class="level2">
+<h2 class="anchored" data-anchor-id="같은-dt-2-s에서-네-런-비교">같은 dt 2 s에서 네 런 비교</h2>
+<p>Morrison도 dt에 민감해서(아래) 비교는 모두 dt 2 s로 맞췄다. 숫자는 10월 말에 모든 런을 같은 스크립트로 다시 집계한 값이고, 영역 평균은 모든 y 줄 평균이다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>60분, squall2d, dt 2 s</th>
+<th style="text-align: right;">Lin</th>
+<th style="text-align: right;">Morrison</th>
+<th style="text-align: right;">SBM 대륙성</th>
+<th style="text-align: right;">SBM 해양성</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>영역 평균 강수</td>
+<td style="text-align: right;">3.57 mm</td>
+<td style="text-align: right;">3.82 mm</td>
+<td style="text-align: right;"><strong>1.38 mm</strong></td>
+<td style="text-align: right;"><strong>2.29 mm</strong></td>
+</tr>
+<tr class="even">
+<td>지점 최대 강수 (y 줄 범위)</td>
+<td style="text-align: right;">34.2 mm</td>
+<td style="text-align: right;">36.1 mm</td>
+<td style="text-align: right;">10.6 (9.9–10.6) mm</td>
+<td style="text-align: right;">24.1 (22.2–24.1) mm</td>
+</tr>
+<tr class="odd">
+<td>1 mm 이상 내린 폭</td>
+<td style="text-align: right;">15.2 km</td>
+<td style="text-align: right;">14.0 km</td>
+<td style="text-align: right;">10.5 km</td>
+<td style="text-align: right;">11.2 km</td>
+</tr>
+<tr class="even">
+<td>지면 강수 시작 (10분 출력)</td>
+<td style="text-align: right;">20–30분</td>
+<td style="text-align: right;">20–30분</td>
+<td style="text-align: right;">30–40분</td>
+<td style="text-align: right;">20–30분</td>
+</tr>
+<tr class="odd">
+<td>20분 최대 구름물</td>
+<td style="text-align: right;">3.3 g/kg</td>
+<td style="text-align: right;">5.8 g/kg</td>
+<td style="text-align: right;">10.7 g/kg</td>
+<td style="text-align: right;">3.1 g/kg</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/L3-L35-timeseries.png" class="img-fluid figure-img" alt="Time series for Lin, Morrison, fast SBM continental, and fast SBM maritime at dt 2 s: fast SBM continental keeps high cloud water and produces the least domain-mean rain, maritime is intermediate"></p>
+<figcaption>Lin, Morrison, fast SBM 대륙성·해양성의 최대 W, 최대 구름물, 최대 빗물, 영역 평균 누적강수 (dt 2 s).</figcaption>
+</figure>
+</div>
+<p><strong>Morrison은 time step에 민감했다.</strong> 처음 dt 3 s 결과로 “Morrison은 Lin보다 비가 적고 초반 상승류가 약하다”고 정리했다가 철회했다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">10분 최대 W</th>
+<th style="text-align: right;">최대 W</th>
+<th style="text-align: right;">60분 지점 최대</th>
+<th style="text-align: right;">영역 평균</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lin dt 3 → 2 s</td>
+<td style="text-align: right;">11.7 → 11.7</td>
+<td style="text-align: right;">35.8 → 35.8</td>
+<td style="text-align: right;">37.0 → 34.2 mm</td>
+<td style="text-align: right;">3.66 → 3.57 mm (−2 %)</td>
+</tr>
+<tr class="even">
+<td>Morrison dt 3 → 2 s</td>
+<td style="text-align: right;"><strong>4.0 → 11.4</strong></td>
+<td style="text-align: right;">43.6 → 30.0</td>
+<td style="text-align: right;">29.0 → 36.1 mm</td>
+<td style="text-align: right;">2.61 → 3.82 mm (<strong>+46 %</strong>)</td>
+</tr>
+</tbody>
+</table>
+<p>대류가 막 시작되는 10분에 이미 차이가 크므로 혼돈 잡음이 아니라 수치적 원인으로 본다(어느 과정인지는 아직 모른다). 교훈은 두 가지다. 비교 실험은 같은 dt로 맞추고, 새 설정은 dt를 줄여 수렴을 한 번 확인한다. 그리고 시딩 효과는 이런 수치 민감도보다 확실히 커야 의미가 있다.</p>
+<p><strong>Morrison의 비는 공중에서 늦게 생긴다.</strong> 10분 최대 빗물이 Lin 약 1 g/kg, Morrison 거의 0이다(지면 강수 시작은 같은 10분 구간). 해석은 자동변환(autoconversion) 식에 있다고 본다. WRF Morrison은 Khairoutdinov–Kogan 식을 쓴다 <span class="citation" data-cites="Khairoutdinov2000Autoconversion">(Khairoutdinov 와/과 Kogan 2000년)</span>.</p>
+<p><img src="https://latex.codecogs.com/png.latex?P_%7Baut%7D%20=%201350%5C,%20q_c%5E%7B2.47%7D%5C,%20N_c%5E%7B-1.79%7D"></p>
+<p>구름방울끼리 뭉쳐 빗방울이 처음 생기는 속도 <img src="https://latex.codecogs.com/png.latex?P_%7Baut%7D">가 구름물 혼합비 <img src="https://latex.codecogs.com/png.latex?q_c">(kg/kg)에는 2.47제곱으로 커지고, 구름방울 수농도 <img src="https://latex.codecogs.com/png.latex?N_c">(cm⁻³)에는 −1.79제곱으로 작아진다는 뜻이다. 같은 구름물을 더 많은 방울이 나눠 가지면 방울이 작아서 비로 넘어가기 어렵다. <img src="https://latex.codecogs.com/png.latex?N_c"> = 250 cm⁻³ 고정이 첫 비를 늦춘 것으로 보이지만, 과정별로 분해해 확인하지는 않았다.</p>
+<p><strong>fast SBM은 비가 적고 늦다.</strong> 기본 배경 에어로졸이 대륙성(지면–1 km 약 1760 cm⁻³)이라 구름방울이 많고 작다. 그래서 구름물이 20분에 10.7 g/kg까지 쌓이고 비는 30–40분에야 땅에 닿았다. 이 해석이 맞다면 에어로졸만 줄였을 때 비가 빨라지고 늘어야 한다.</p>
+</section>
+<section id="l3.5-배경-에어로졸만-해양성으로" class="level2">
+<h2 class="anchored" data-anchor-id="l3.5-배경-에어로졸만-해양성으로">L3.5: 배경 에어로졸만 해양성으로</h2>
+<p>fast SBM은 격자의 지표 종류(<code>XLAND</code>)로 에어로졸 분포를 고른다(1 = 육지 → 대륙성, 2 = 바다 → 해양성). 처음에는 <code>ideal.exe</code> 뒤에 <code>wrfinput_d01</code>의 <code>XLAND</code>를 2로 고쳤는데, 결과 표와 그림 파일이 대륙성 런과 <strong>바이트 단위까지</strong> 같았다. <code>wrf.exe</code>가 시작할 때 <code>XLAND</code>를 namelist의 <code>ideal_xland</code>(기본 1)로 덮어쓰기 때문이었다. <code>&amp;physics</code>에 <code>ideal_xland = 2</code>를 넣고 <code>grep -i ideal_xland namelist.output</code>으로 적용을 확인했다. 두 실험이 완전히 같으면 “효과 없음”이 아니라 “설정이 안 들어감”을 먼저 의심해야 한다. 대류는 작은 차이도 키우기 때문이다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>대륙성 → 해양성</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>지면–1 km 에어로졸 (30분)</td>
+<td>1759 → 394 cm⁻³</td>
+</tr>
+<tr class="even">
+<td>구름방울 수 (10 / 20 / 30분)</td>
+<td>438 / 341 / 292 → 47 / 28 / 39 cm⁻³</td>
+</tr>
+<tr class="odd">
+<td>10분 물방울 질량 봉우리 (반경)</td>
+<td>약 13 µm → 약 20 µm</td>
+</tr>
+<tr class="even">
+<td>10분 최대 빗물</td>
+<td>0 → 1.3 g/kg</td>
+</tr>
+<tr class="odd">
+<td>60분 영역 평균 강수</td>
+<td>1.38 → 2.29 mm (+66 %)</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/fsbm-continental-dsd.png" class="img-fluid figure-img" alt="Fast SBM continental run after the patch: drop mass and number distributions every 10 minutes with a cloud mode near 13 micrometers radius at 10 minutes and a rain mode near 1 millimeter later, and the near-surface aerosol distribution with totals 1759 and 1729 per cubic centimeter"></p>
+<figcaption>대륙성 fast SBM의 (a) 물방울 질량 분포, (b) 수 분포, (c) 지면–1 km 에어로졸 분포. 가로축은 반경.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/fsbm-maritime-dsd.png" class="img-fluid figure-img" alt="Fast SBM maritime run: the 10-minute cloud mode sits near 20 micrometers radius, rain-size drops grow earlier, and the near-surface aerosol total is about 390 per cubic centimeter"></p>
+<figcaption>해양성 fast SBM의 같은 그림. 10분 구름 봉우리가 더 큰 반경에 있고 빗방울 봉우리가 일찍 자란다.</figcaption>
+</figure>
+</div>
+<pre><code>에어로졸 ↓ → 구름방울 수 ↓ (약 1/10) → 방울 하나가 더 큼 (13 → 20 µm)
+  → 충돌·병합이 일찍 시작 → 10분부터 공중에 비 → 지면 강수가 빨라지고 늘어남</code></pre>
+<p>크기분포 그림의 00:00 에어로졸이 0 cm⁻³인 것은 초기 출력에 bin이 아직 채워지지 않아서로 보이며, 비교는 30분과 60분 값만 썼다. 해양성에서도 지면 강수는 여전히 Lin보다 적다. 공중 빗물은 많은데 지면 비가 적은 이유(구름 밑 증발인지 얼음 과정인지)는 아직 풀지 못했다.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>덧붙임 (10월 말 확인): y 줄끼리 결과가 조금 다르다
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>2-D인데도 fast SBM 런은 y 줄마다 강수가 조금 달랐다(60분 영역 평균: 대륙성 1.34–1.42 mm, 해양성 2.21–2.40 mm). Lin·Morrison은 줄 차이가 0이다. 소스를 읽어 보니 얼음 과정 블록이 y 마지막 줄을 “영역 끝”으로 보고 바람 평균을 다르게 계산하는 부분이 원인으로 보인다. 리셋 버그와 같은 종류의 “3-D 실제 사례용 가정”이다. 패치는 제안만 했고 확인 런은 아직이다. 그래서 위 비교는 모두 y 줄 전체 평균을 쓰고 지점 최대는 줄 범위를 같이 적었다. 줄 사이 차이(약 ±3–4 %)는 대륙성 → 해양성 차이(+66 %)보다 훨씬 작다.</p>
+</div>
+</div>
+<div class="review-verdict">
+<p><strong>결론.</strong> 같은 스콜선에서 fast SBM(대륙성)은 Lin·Morrison보다 비가 약 60 % 적고 늦었고, 배경 에어로졸만 해양성으로 바꾸자 비가 약 1.7배로 늘고 빨라졌다. 이 모델은 에어로졸 변화에 반응한다. 단, 2-D에서 매 스텝 에어로졸을 리셋하던 조건을 끈 뒤에야 그렇고, 스킴 비교는 같은 dt에서만 의미가 있었다.</p>
+</div>
+</section>
+<section id="다음-단계" class="level2">
+<h2 class="anchored" data-anchor-id="다음-단계">다음 단계</h2>
+<p>이제 <a href="../../../posts/article-review/2026-09-10-ren2025-particle-size/index.html">Ren et al.&nbsp;(2025)</a>의 설정으로 한 번에 하나씩 옮겨 갈 계획이다 <span class="citation" data-cites="Ren2025ParticleSize">(Ren 기타 2025년)</span>. 논문은 Tel Aviv University의 2-D slab-symmetric bin 모델을 썼으므로 fast SBM은 근사다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>단계</th>
+<th>바꿀 것 (논문 설정)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>사운딩</td>
+<td>하이난 Sanya 관측소(WMO 59948) 2024-05-11 12:00 (BT) 라디오존데</td>
+</tr>
+<tr class="even">
+<td>격자·적분</td>
+<td>dx = dz = 300 m, 가로 30 km × 꼭대기 12 km, 40분</td>
+</tr>
+<tr class="odd">
+<td>열기포</td>
+<td>+3 °C, 중심 고도 900 m (소스 수정 → <code>ideal.exe</code> 다시 빌드)</td>
+</tr>
+<tr class="even">
+<td>시딩</td>
+<td>패치한 fast SBM의 에어로졸 bin(<code>ff8i</code>)에 KCl 입자를 10분에 운저(900 m)로 주입</td>
+</tr>
+</tbody>
+</table>
+<p>시딩 신호를 읽기 전에 dt와 작은 초기 섭동에 따른 수치 잡음 크기부터 재야 한다.</p>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Khairoutdinov2000Autoconversion" class="csl-entry">
+Khairoutdinov, Marat, 와/과 Yefim Kogan. 2000년. <span>“A New Cloud Physics Parameterization in a Large-Eddy Simulation Model of Marine Stratocumulus”</span>. <em>Monthly Weather Review</em> 128 (1): 229–43. <a href="https://doi.org/10.1175/1520-0493(2000)128<0229:ANCPPI>2.0.CO;2">https://doi.org/10.1175/1520-0493(2000)128&lt;0229:ANCPPI&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Lin1983BulkSnow" class="csl-entry">
+Lin, Yuh-Lang, Richard D. Farley, 와/과 Harold D. Orville. 1983년. <span>“Bulk Parameterization of the Snow Field in a Cloud Model”</span>. <em>Journal of Climate and Applied Meteorology</em> 22 (6): 1065–92. <a href="https://doi.org/10.1175/1520-0450(1983)022<1065:BPOTSF>2.0.CO;2">https://doi.org/10.1175/1520-0450(1983)022&lt;1065:BPOTSF&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Morrison2009SquallLine" class="csl-entry">
+Morrison, H., G. Thompson, 와/과 V. Tatarskii. 2009년. <span>“Impact of Cloud Microphysics on the Development of Trailing Stratiform Precipitation in a Simulated Squall Line: Comparison of One- and Two-Moment Schemes”</span>. <em>Monthly Weather Review</em> 137 (3): 991–1007. <a href="https://doi.org/10.1175/2008MWR2556.1">https://doi.org/10.1175/2008MWR2556.1</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>WRF</category>
+  <category>microphysics</category>
+  <category>fast SBM</category>
+  <category>aerosol</category>
+  <category>troubleshooting</category>
+  <guid>https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/</guid>
+  <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/wrf/2026-09-29-microphysics-fsbm/images/L3-L35-timeseries.png" medium="image" type="image/png" height="92" width="144"/>
+</item>
+<item>
+  <title>WRF 이상화 2-D 스콜선: 시어와 열기포가 바꾸는 것</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>목표는 <a href="../../../posts/article-review/2026-09-10-ren2025-particle-size/index.html">Ren et al.&nbsp;(2025)</a>의 2-D 흡습성 시딩 실험을 WRF로 다시 해 보는 것이다. 이 논문도 사운딩 하나와 열기포(warm bubble)로 구름을 만드는 <strong>이상화(idealized)</strong> 구성이라, 실제 사례용 전처리(WPS) 없이 WRF에 들어 있는 2-D 스콜선 예제 <code>em_squall2d_x</code>부터 시작했다. 이 글은 기본 예제를 연구실 서버에서 돌린 L1, 바람 시어와 열기포 세기를 바꾼 L2, 그리고 곁가지로 돌린 3-D 슈퍼셀 예제를 정리한다.</p>
+<section id="이상화-wrf의-실행-흐름" class="level2">
+<h2 class="anchored" data-anchor-id="이상화-wrf의-실행-흐름">이상화 WRF의 실행 흐름</h2>
+<pre><code>실제 사례:  재분석 자료 → WPS → real.exe → wrfinput + wrfbdy → wrf.exe → wrfout
+이상화:     input_sounding + namelist.input → ideal.exe → wrfinput → wrf.exe → wrfout</code></pre>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>파일</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>input_sounding</code></td>
+<td>연직 프로파일 한 개(고도별 온위, 혼합비, u, v). <code>ideal.exe</code>가 모든 격자점에 똑같이 깐다</td>
+</tr>
+<tr class="even">
+<td><code>namelist.input</code></td>
+<td>격자, 시간, 물리 옵션. <code>ideal.exe</code>와 <code>wrf.exe</code>가 함께 읽는다</td>
+</tr>
+<tr class="odd">
+<td><code>ideal.exe</code></td>
+<td>사운딩 위에 열기포를 얹어 초기장 <code>wrfinput_d01</code>을 만든다</td>
+</tr>
+<tr class="even">
+<td><code>wrf.exe</code></td>
+<td>시간 적분 후 <code>wrfout_d01_*</code>(NetCDF)을 쓴다</td>
+</tr>
+<tr class="odd">
+<td><code>rsl.out.*</code>, <code>rsl.error.*</code></td>
+<td>MPI 프로세스마다 하나씩 생기는 로그</td>
+</tr>
+<tr class="even">
+<td><code>namelist.output</code></td>
+<td>WRF가 <strong>실제로 적용한</strong> 모든 설정(직접 쓰지 않은 기본값 포함)</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mpirun</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-np</span> 4 ./ideal.exe</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mkdir</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-p</span> log_ideal<span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mv</span> rsl.<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">*</span> log_ideal/        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ideal.exe 로그는 wrf.exe가 덮어쓰기 전에 옮겨 둔다</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-q</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SUCCESS COMPLETE IDEAL INIT"</span> log_ideal/rsl.error.0000 <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">||</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ideal.exe 실패"</span></span>
+<span id="cb2-4"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">mpirun</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-np</span> 4 ./wrf.exe</span>
+<span id="cb2-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-1</span> rsl.out.0000                           <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># SUCCESS COMPLETE WRF 이면 성공</span></span>
+<span id="cb2-6"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> f <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> rsl.error.<span class="pp" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">*</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">do</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">echo</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"== </span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$f</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-3</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">$f</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">;</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">done</span>   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0번만 보지 말 것</span></span>
+<span id="cb2-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-iE</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mp_physics|time_step|e_sn"</span> namelist.output       <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 실제로 들어간 값</span></span></code></pre></div></div>
+<p><code>rsl.error.0000</code>에 에러가 없어도 다른 프로세스 로그에만 에러가 찍힐 수 있다(다음 글의 fast SBM이 그랬다). 그리고 “이 옵션 기본값이 뭐였지?”는 문서보다 <code>namelist.output</code>을 grep하는 편이 빠르다.</p>
+</section>
+<section id="d-예제를-그대로-돌리면-멈춘-곳" class="level2">
+<h2 class="anchored" data-anchor-id="d-예제를-그대로-돌리면-멈춘-곳">2-D 예제를 그대로 돌리면 멈춘 곳</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>위치</th>
+<th>예제 값 → 바꾼 값</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&amp;domains e_sn</code></td>
+<td>3 → <strong>10</strong></td>
+<td>MPI(dmpar) 빌드는 한 프로세스가 맡는 조각이 각 방향 10칸 이상이어야 해서 <code>ideal.exe</code>가 거부한다</td>
+</tr>
+<tr class="even">
+<td><code>&amp;domains</code> 끝</td>
+<td><code>nproc_x = 4</code>, <code>nproc_y = 1</code> 추가</td>
+<td>지정하지 않으면 2 × 2로 나누려다 y가 다시 10칸 미만이 된다</td>
+</tr>
+<tr class="odd">
+<td><code>&amp;physics</code> 끝</td>
+<td><code>ghg_input = 0</code> 추가</td>
+<td>WRF 4.6 기본값(1)은 온실가스 입력을 쓰는 복사 설정을 요구한다. 이 실험은 복사를 끈다</td>
+</tr>
+<tr class="even">
+<td>컴파일</td>
+<td><code>./compile em_squall2d_x</code> 대신 <code>./compile em_quarter_ss</code></td>
+<td>이름에 <code>2d</code>가 들어간 케이스는 dmpar 빌드에서 거부되고, 그 전에 기존 실행 파일까지 지워진다. <code>ideal.exe</code>는 실행 시 <code>&amp;ideal ideal_case = 4</code>로 squall2d_x 초기장을 고른다</td>
+</tr>
+</tbody>
+</table>
+<p>y는 주기 경계이고 열기포도 y로 균일해서, <code>e_sn</code>을 10으로 늘려도 결과는 2-D 그대로다. Lin 런의 y 줄끼리 강수 차이가 0인 것을 확인했다. 나머지 설정은 예제 기본값이다: dx = 250 m로 201칸(50 km), 연직 80층(꼭대기 20 km), dt = 3 s, 60분 적분, 10분 출력. 물리 과정은 미세물리(Lin, <code>mp_physics = 2</code>)만 켜고 복사·지표·경계층·적운 모수화는 끈다. 난류는 1.5차 TKE, x는 열린 경계, 위쪽 5 km는 Rayleigh 감쇠층이다. 4코어로 약 75초 걸렸다.</p>
+</section>
+<section id="초기장-weismanklemp-사운딩과-열기포" class="level2">
+<h2 class="anchored" data-anchor-id="초기장-weismanklemp-사운딩과-열기포">초기장: Weisman–Klemp 사운딩과 열기포</h2>
+<p>예제 사운딩의 온위·습도는 대류 모델링의 표준인 Weisman–Klemp 해석적 사운딩이다 <span class="citation" data-cites="Weisman1982Shear">(Weisman 와/과 Klemp 1982년)</span>. 첫 줄은 지면 기압 1000 hPa, 온위 300.5 K, 혼합비 14 g/kg이고, 그 아래로 250 m 간격 80줄이 이어진다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%5Ctheta(z)%20=%20%5Ctheta_0%20+%20(%5Ctheta_%7Btr%7D%20-%20%5Ctheta_0)%5Cleft(%5Cfrac%7Bz%7D%7Bz_%7Btr%7D%7D%5Cright)%5E%7B5/4%7D,%20%5Cqquad%20%5Cmathrm%7BRH%7D(z)%20=%201%20-%20%5Cfrac%7B3%7D%7B4%7D%5Cleft(%5Cfrac%7Bz%7D%7Bz_%7Btr%7D%7D%5Cright)%5E%7B5/4%7D%20%5Cquad%20(z%20%5Cle%20z_%7Btr%7D)"></p>
+<p>온위는 기준값 <img src="https://latex.codecogs.com/png.latex?%5Ctheta_0%20=%20300"> K에서 권계면 값 <img src="https://latex.codecogs.com/png.latex?%5Ctheta_%7Btr%7D%20=%20343"> K까지 고도 <img src="https://latex.codecogs.com/png.latex?z">의 5/4제곱으로 서서히 커진다는 뜻이다. <img src="https://latex.codecogs.com/png.latex?z_%7Btr%7D%20=%2012"> km는 권계면 고도이고, 그 위는 213 K 등온층이라 온위가 급격히 커진다(매우 안정). 맨 아래 약 350 m는 300.5 K로 일정한 혼합층이다. 상대습도는 지면 근처 거의 100 %에서 권계면 25 %까지 줄어든다. 하층 혼합비는 14 g/kg에서 잘려 1 km 남짓까지 일정하다. 정리하면 <strong>하층은 습하고, 대류권은 조건부 불안정하고, 12 km에 뚜껑</strong>이 있는 대기다. 파일 값으로 검산하면 375 m에서 <img src="https://latex.codecogs.com/png.latex?300%20+%2043%20%5Ctimes%20(375/12000)%5E%7B5/4%7D%20=%20300.565"> K로 일치한다.</p>
+<p>바람은 0–2.5 km에만 선형 시어가 있다: <img src="https://latex.codecogs.com/png.latex?u(z)%20=%20-12%20+%2012%5C,z/2500"> m/s (2.5 km 위는 0). 첫 층(125 m)의 u는 −11.4 m/s다. 절댓값보다 <strong>고도에 따른 차이 12 m/s</strong>가 물리적으로 중요하다.</p>
+<p>열기포는 namelist가 아니라 <code>dyn_em/module_initialize_ideal.F</code>에 하드코딩되어 있다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>세기 (중심 온위 편차)</td>
+<td>+3 K (<code>delt = 3.</code>)</td>
+</tr>
+<tr class="even">
+<td>중심</td>
+<td>영역 가운데, 고도 1.5 km</td>
+</tr>
+<tr class="odd">
+<td>반경</td>
+<td>수평 4 km, 연직 1.5 km (가장자리로 갈수록 0)</td>
+</tr>
+</tbody>
+</table>
+<p>그래서 기포 세기를 바꾸려면 소스를 고치고 <code>ideal.exe</code>를 다시 빌드해야 한다. 되돌릴 때도 예전 파일을 복사해 오면 수정 시각이 과거라 <code>make</code>가 다시 컴파일하지 않으므로, <code>sed</code>로 값을 되돌렸다.</p>
+</section>
+<section id="실험-구성" class="level2">
+<h2 class="anchored" data-anchor-id="실험-구성">실험 구성</h2>
+<p>모든 런은 Lin, dt = 3 s, 60분이며 바꾼 것은 한 번에 하나다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>런</th>
+<th>사운딩 바람</th>
+<th>열기포</th>
+<th>확인하려던 것</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>L1</td>
+<td>예제 그대로 (시어 있음)</td>
+<td>+3 K</td>
+<td>서버에서 예제가 제대로 재현되는가</td>
+</tr>
+<tr class="even">
+<td>L2A</td>
+<td>u = v = 0 (시어 없음)</td>
+<td>+3 K</td>
+<td>시어는 비의 양을 바꾸는가, 위치를 바꾸는가</td>
+</tr>
+<tr class="odd">
+<td>L2B</td>
+<td>시어 있음</td>
+<td>+1.5 K</td>
+<td>방아쇠를 절반으로 줄이면 비도 줄어드는가</td>
+</tr>
+<tr class="even">
+<td>L2B-noshear</td>
+<td>u = v = 0</td>
+<td>+1.5 K</td>
+<td>두 효과가 겹치면 어떻게 되는가 (2 × 2 완성)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="l1-기본-스콜선의-한-시간" class="level2">
+<h2 class="anchored" data-anchor-id="l1-기본-스콜선의-한-시간">L1: 기본 스콜선의 한 시간</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>시각</th>
+<th style="text-align: right;">최대 W (m/s)</th>
+<th style="text-align: right;">최대 구름물 (g/kg)</th>
+<th style="text-align: right;">최대 빗물 (g/kg)</th>
+<th style="text-align: right;">지점 최대 누적강수 (mm)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10분</td>
+<td style="text-align: right;">11.7</td>
+<td style="text-align: right;">3.29</td>
+<td style="text-align: right;">0.95</td>
+<td style="text-align: right;">0.00</td>
+</tr>
+<tr class="even">
+<td>20분</td>
+<td style="text-align: right;">35.8</td>
+<td style="text-align: right;">3.34</td>
+<td style="text-align: right;">5.53</td>
+<td style="text-align: right;">0.04</td>
+</tr>
+<tr class="odd">
+<td>30분</td>
+<td style="text-align: right;">15.4</td>
+<td style="text-align: right;">1.44</td>
+<td style="text-align: right;">4.90</td>
+<td style="text-align: right;">8.94</td>
+</tr>
+<tr class="even">
+<td>60분</td>
+<td style="text-align: right;">25.3</td>
+<td style="text-align: right;">2.95</td>
+<td style="text-align: right;">3.70</td>
+<td style="text-align: right;">37.02</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L1-xz-lifecycle.png" class="img-fluid figure-img" alt="L1 em_squall2d_x with Lin microphysics: x-z sections of cloud water with vertical velocity contours, rain water, and potential temperature perturbation every 10 minutes from 0 to 60 minutes"></p>
+<figcaption>L1 x–z 단면. 왼쪽 구름물과 연직속도, 가운데 빗물, 오른쪽 환경 대비 온위 편차, 위에서 아래로 0–60분.</figcaption>
+</figure>
+</div>
+<p>0분에는 1.5 km 근처의 따뜻한 기포뿐이다. 10분에 2.5–5 km에 구름이 생기고, 20분에 상승류가 35.8 m/s로 정점을 찍으며 12 km 권계면 근처까지 솟는다. 지면 강수는 20–30분 사이에 시작한다(10분 출력 간격이라 “사이”로만 말할 수 있다). 비가 떨어진 뒤 지면 근처에 찬 공기(음의 온위 편차)가 퍼지고, 40분 이후 서쪽(x ≈ 5–10 km)에 새 구름이 자란다. 값이 예제 검증값과 같아서 서버 환경은 믿고 다음으로 넘어갔다.</p>
+</section>
+<section id="l2-시어를-끄고-열기포를-줄이고" class="level2">
+<h2 class="anchored" data-anchor-id="l2-시어를-끄고-열기포를-줄이고">L2: 시어를 끄고, 열기포를 줄이고</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>60분, 영역 평균 / 지점 최대</th>
+<th>열기포 +3 K</th>
+<th>열기포 +1.5 K</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>시어 있음</td>
+<td>3.66 / 37.0 mm</td>
+<td>2.78 / 29.7 mm</td>
+</tr>
+<tr class="even">
+<td>시어 없음</td>
+<td>3.82 / 61.5 mm</td>
+<td>2.78 / 48.3 mm</td>
+</tr>
+</tbody>
+</table>
+<p>표와 그림은 10월 말에 같은 비교 스크립트로 네 런을 다시 집계한 값이다. 처음 정리 때의 해석 일부(강수 시작 시각 등)를 이 재집계로 고쳤다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2-timeseries.png" class="img-fluid figure-img" alt="Time series of maximum vertical velocity, maximum cloud water, maximum rain water, and domain-mean accumulated rain for four runs: shear or no shear, with 3 K or 1.5 K warm bubble"></p>
+<figcaption>L2 2 × 2 런의 최대 W, 최대 구름물, 최대 빗물, 영역 평균 누적강수 시계열.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2-rain-x.png" class="img-fluid figure-img" alt="Surface accumulated rain along x at 60 minutes for the four L2 runs; no-shear runs peak sharply near x = 25 km while shear runs peak near x = 22 km"></p>
+<figcaption>60분 지면 누적강수의 x 분포. 시어가 없으면 기포 중심(x = 25 km)에 좁고 높은 봉우리가 생긴다.</figcaption>
+</figure>
+</div>
+<p><strong>시어는 양보다 위치와 집중도를 바꿨다.</strong> 영역 평균은 시어 유무에 따라 −4 %(3 K), 0 %(1.5 K)로 거의 같았다. 대신 시어가 없으면 구름이 기울지 않고 기포 중심에 서 있어서, 같은 양의 비가 한곳(x ≈ 25 km)에 떨어져 지점 최대가 약 1.6배가 됐다. 시어가 있으면 구름이 기울며 비가 x ≈ 22 km 쪽으로 치우쳤다. “시어가 비를 넓게 퍼뜨린다”는 3 K에서만 맞았다(1 mm 이상 내린 폭: 3 K 14.8 vs 11.0 km, 1.5 K 9.0 vs 10.5 km).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L1-shear-xz-40min.png" class="img-fluid figure-img" alt="L1 with wind shear at 40 minutes: tilted updraft and rain shaft, new cloud forming on the west side"></p>
+<figcaption>L1(시어 있음) 40분 단면: 상승류와 빗물이 기울어 있다.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2A-noshear-xz-40min.png" class="img-fluid figure-img" alt="L2A without wind shear at 40 minutes: cloud, rain, and temperature perturbation are left-right symmetric about the domain center"></p>
+<figcaption>L2A(시어 없음) 40분 단면: 구름과 비가 좌우 대칭이다.</figcaption>
+</figure>
+</div>
+<p><strong>열기포 세기는 총량을 바꿨다.</strong> +3 K → +1.5 K에서 영역 평균은 −24 %(시어 있음), −27 %(시어 없음), 지점 최대는 약 −20 % 줄었다. 10분 상승류가 12–14 m/s에서 4–6 m/s로 느리게 출발했고, 30분 영역 평균은 1/3–1/4 수준(0.48 → 0.14, 0.42 → 0.10 mm)이었다. 다만 지면 강수 시작은 10분 출력 간격 안에서 구분되지 않았다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>1.5 K 첫 실행은 바람이 빠져 있었다
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>1.5 K 실험을 처음 돌렸을 때, 시어가 있는 사운딩을 넣었다고 생각했는데 구름이 좌우 대칭으로 나왔다. <code>input_sounding</code>을 열어 보니 u가 전부 0이었다. WRF 예제 원본 파일까지 u = 0으로 바뀌어 있어서 “원본에서 다시 복사”해도 바람 없는 사운딩이 들어간 것이다. 원본 사운딩(둘째 줄 u = −11.4 m/s)을 되살려 다시 돌린 것이 위 표의 “시어 있음 + 1.5 K”이고, 최종 네 런은 다시 집계할 때 wrfout 초기장에서 열기포 세기와 바람을 확인했다. 그 뒤로 파일 이름이 아니라 <strong>내용</strong>을 확인한다: <code>sed -n 2p input_sounding</code>, 그리고 기준 런과 <code>diff namelist.input</code>.</p>
+</div>
+</div>
+</section>
+<section id="곁가지-3-d-슈퍼셀에서-시어가-하는-일" class="level2">
+<h2 class="anchored" data-anchor-id="곁가지-3-d-슈퍼셀에서-시어가-하는-일">곁가지: 3-D 슈퍼셀에서 시어가 하는 일</h2>
+<p>3-D 결과를 어떻게 보는지, 2-D와 무엇이 다른지 익히려고 3-D 예제 <code>em_quarter_ss</code>(Kessler, dx = 2 km, 약 80 km 정사각 영역, 120분)를 예제 namelist·사운딩 그대로 돌리고, 사운딩의 u, v만 0으로 바꾼 런과 비교했다. 실행 파일은 이미 <code>em_quarter_ss</code>로 빌드한 것이라 다시 컴파일하지 않았다.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>120분</th>
+<th>시어 있음 (예제)</th>
+<th>바람 없음 (u = v = 0)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>최대 W</td>
+<td>40–100분 약 41–43 m/s 유지</td>
+<td>20분 45 m/s 정점 → 40분 21 m/s</td>
+</tr>
+<tr class="even">
+<td>5 km 최대 소용돌이도</td>
+<td>20분부터 약 0.01 s⁻¹</td>
+<td>약 0.002 s⁻¹ 이하</td>
+</tr>
+<tr class="odd">
+<td>폭풍 모양</td>
+<td>남북으로 분열, 동쪽으로 이동</td>
+<td>제자리, 분열 없음</td>
+</tr>
+<tr class="even">
+<td>지면 강수</td>
+<td>V자 두 갈래, 지점 최대 약 80 mm</td>
+<td>가운데 원형 + 바깥 고리, 지점 최대 약 100 mm</td>
+</tr>
+<tr class="odd">
+<td>영역 평균 강수</td>
+<td>약 9.7 mm</td>
+<td>약 2.2 mm</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/3D-shear-80min.png" class="img-fluid figure-img" alt="3-D quarter-circle shear supercell at 80 minutes: split storms with a V-shaped rain swath, updrafts overlapping positive and negative vertical vorticity at 5.1 km"></p>
+<figcaption>시어 있는 3-D 런 80분: 위에서 본 구름과 강수, 5.1 km 연직속도와 소용돌이도, 두 연직 단면.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/3D-nowind-80min.png" class="img-fluid figure-img" alt="3-D no-wind run at 80 minutes: stationary storm with circular rain pattern at the domain center and a ring of weak cells, no significant vorticity"></p>
+<figcaption>바람 없는 3-D 런 80분: 구름과 강수가 가운데에 원형으로 모이고 소용돌이도가 거의 없다.</figcaption>
+</figure>
+</div>
+<p>초반 20분은 오히려 바람 없는 쪽이 더 셌다. 시어가 있으면 상승류가 기울고 옆바람과 섞여 출발이 느리다. 그러나 바람이 없으면 비가 상승류 바로 위에서 떨어져 40분 안에 상승류를 끄는 단일 세포로 끝났다. 시어가 하는 일은 “처음에 세게”가 아니라 <strong>“오래, 넓게”</strong>였고, 영역 평균 강수가 약 4배였다. 바람 없는 런의 고리가 8각형인 것은 정사각 격자의 흔적이다. 2-D는 y로 끝없는 띠 모양이라 소용돌이도가 원리상 0이고, 2-D와 3-D의 “영역 평균”은 뜻이 달라 직접 비교하지 않는다.</p>
+<div class="review-verdict">
+<p><strong>결론.</strong> 이 2-D 스콜선(Lin, 60분, 단일 런)에서 바람 시어는 비가 <strong>어디에 얼마나 몰리는지</strong>를, 열기포 세기는 비의 <strong>총량</strong>을 바꿨다. 3-D에서는 시어가 폭풍을 회전시키고 오래 유지시켜 총량까지 바꿨다.</p>
+</div>
+</section>
+<section id="남은-질문" class="level2">
+<h2 class="anchored" data-anchor-id="남은-질문">남은 질문</h2>
+<ul>
+<li>시어 유무에서 2-D 총강수가 거의 같은 이유는 확인하지 않았다. 런마다 한 번씩만 돌렸고, Lin 하나, 10분 출력이라 강수 시작 시각은 거칠다.</li>
+<li>Lin은 1-모멘트라 구름방울 수와 CCN이 없다. 시딩을 다루려면 미세물리를 바꿔야 한다 → <a href="../../../posts/wrf/2026-09-29-microphysics-fsbm/index.html">다음 글: 미세물리 스킴 비교와 fast SBM</a></li>
+</ul>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Weisman1982Shear" class="csl-entry">
+Weisman, M. L., 와/과 J. B. Klemp. 1982년. <span>“The Dependence of Numerically Simulated Convective Storms on Vertical Wind Shear and Buoyancy”</span>. <em>Monthly Weather Review</em> 110 (6): 504–20. <a href="https://doi.org/10.1175/1520-0493(1982)110<0504:TDONSC>2.0.CO;2">https://doi.org/10.1175/1520-0493(1982)110&lt;0504:TDONSC&gt;2.0.CO;2</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>WRF</category>
+  <category>idealized</category>
+  <category>squall line</category>
+  <category>em_squall2d_x</category>
+  <guid>https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/</guid>
+  <pubDate>Sun, 27 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/wrf/2026-09-27-idealized-squall-line/images/L2-rain-x.png" medium="image" type="image/png" height="64" width="144"/>
+</item>
+<item>
+  <title>같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제 늘리나</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Ren et al.&nbsp;(2025)은 Tel Aviv University의 2차원 slab-symmetric bin 미세물리 모형으로 2024년 5월 11일 중국 하이난 싼야(Sanya)의 온난 대류운을 모의하고, <strong>총 시딩 질량을 같게 둔 채</strong> 단일 직경의 KCl 입자를 0.1–90 µm 범위에서 바꿔 넣었다 <span class="citation" data-cites="Ren2025ParticleSize">(Ren 기타 2025년)</span>. 같은 양의 물질을 뿌려도 입자 크기만으로 비가 줄 수도, 늘 수도 있는지, 그 경계가 어디인지를 묻는다. 2026년 9월 10일 랩미팅에서 발표한 논문이다.</p>
+<div class="review-verdict">
+<p><strong>한 문장 결론.</strong> 같은 질량이면 직경 1 µm 이하의 시딩은 비를 줄이고 2 µm 이상은 늘렸으며, 부호가 바뀌는 임계 직경은 배경 에어로졸이 많을수록 작아졌다(해양성 약 6, 대륙성 약 3, 도시성 약 2 µm). 단일 사례·조건당 1회 적분이므로 믿을 수 있는 것은 <strong>부호와 경향</strong>이고, −82%나 +192% 같은 크기는 이 사례의 서술값이다.</p>
+</div>
+<p><a href="https://doi.org/10.3390/atmos16121340">원문 보기</a></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>크기 표기
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 글의 시딩 입자 크기는 모두 논문을 따라 <strong>직경(diameter)</strong>이다. 내 PySDM 실험은 <strong>dry radius</strong>로 크기를 적으므로 비교할 때 2배를 먼저 맞춰야 한다. 예를 들어 이 논문의 직경 2 µm는 반지름 1 µm다.</p>
+</div>
+</div>
+<section id="질문-크기-효과만-보려면-무엇을-고정할까" class="level2">
+<h2 class="anchored" data-anchor-id="질문-크기-효과만-보려면-무엇을-고정할까">질문: 크기 효과만 보려면 무엇을 고정할까</h2>
+<p>선행 연구가 제시한 “최적 시딩 크기”는 0.5–6 µm, 1.5–2.5 µm, 10 µm 이상 등으로 제각각이다. 저자들은 실험마다 배경 에어로졸과 시딩 입자 분포가 달랐고, CCN에 대한 강수 반응이 본질적으로 비선형이기 때문이라고 본다. 그래서 배경을 고정하고 크기만 훑는다. 질문은 세 가지다.</p>
+<ol type="1">
+<li>총 시딩 질량이 같을 때, 시딩 직경에 따라 강수가 억제되는가 증대되는가?</li>
+<li>부호가 바뀌는 임계 직경이 있는가?</li>
+<li>그 임계 직경은 배경 에어로졸에 따라 어떻게 움직이는가?</li>
+</ol>
+<p>핵심 장치는 <strong>등질량(mass-conserved) 단분산 시딩</strong>이다. 남아공 hygroscopic flare 실험의 시딩 스펙트럼을 총 질량 기준으로만 쓰고, 목표 직경마다 그 질량이 되도록 입자 수를 역산했다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AN(D)=%5Cfrac%7BM_%7B%5Cmathrm%7Bseed%7D%7D%7D%7B%5Crho_%7B%5Cmathrm%7Bs%7D%7D%5C,%5Cfrac%7B%5Cpi%7D%7B6%7DD%5E%7B3%7D%7D%0A%5Cquad%5CRightarrow%5Cquad%0AN(D)=N(0.1%5C,%5Cmu%5Cmathrm%7Bm%7D)%5Cleft(%5Cfrac%7B0.1%5C,%5Cmu%5Cmathrm%7Bm%7D%7D%7BD%7D%5Cright)%5E%7B3%7D%0A"></p>
+<p>말로 읽으면 “시딩 입자 수는 총 질량을 입자 하나의 질량으로 나눈 값”이다. <img src="https://latex.codecogs.com/png.latex?M_%7B%5Cmathrm%7Bseed%7D%7D">는 고정된 총 시딩 질량, <img src="https://latex.codecogs.com/png.latex?%5Crho_%7B%5Cmathrm%7Bs%7D%7D">는 KCl 밀도, <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cpi%7D%7B6%7DD%5E3">는 직경 <img src="https://latex.codecogs.com/png.latex?D">인 구의 부피다. 입자 하나의 질량이 <img src="https://latex.codecogs.com/png.latex?D%5E3">에 비례하므로 개수는 <img src="https://latex.codecogs.com/png.latex?D%5E%7B-3%7D">으로 줄어든다. 논문 Table 2의 시딩 수농도도 정확히 이 비율을 따른다. 0.1 µm에서 <img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B5%7D%5C%20%5Cmathrm%7Bcm%5E%7B-3%7D%7D">, 1 µm에서 <img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B2%7D">, 10 µm에서 <img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B-1%7D">, 90 µm에서 <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B-4%7D%5C%20%5Cmathrm%7Bcm%5E%7B-3%7D%7D">이다. <strong>직경이 10배 커지면 개수는 1000배 줄어든다.</strong> 이 크기–개수 맞교환이 뒤의 모든 결과를 읽는 열쇠다.</p>
+</section>
+<section id="모형과-실험-설계" class="level2">
+<h2 class="anchored" data-anchor-id="모형과-실험-설계">모형과 실험 설계</h2>
+<table class="review-data caption-top table">
+<caption>모형 설정 (논문 2절)</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>모형</td>
+<td>Tel Aviv University 2D slab-symmetric spectral bin 미세물리 모형(Yin et al., 2000), 바람은 vorticity–stream function으로 계산</td>
+</tr>
+<tr class="even">
+<td>격자·영역</td>
+<td><img src="https://latex.codecogs.com/png.latex?%5CDelta%20x=%5CDelta%20z=300"> m, 수평 30 km, 모형 상단 12 km</td>
+</tr>
+<tr class="odd">
+<td>시간</td>
+<td>응결·증발 2.5 s, 그 밖의 과정 5 s, 적분 40분</td>
+</tr>
+<tr class="even">
+<td>수상체 bin</td>
+<td>cloud drop·ice crystal·graupel·snow 각 34개 질량 bin(인접 bin 질량 2배), 액체 bin 직경 3.125–8064 µm</td>
+</tr>
+<tr class="odd">
+<td>CCN bin</td>
+<td>자연 CCN 67 bin(최소 반지름 <img src="https://latex.codecogs.com/png.latex?4.1%5Ctimes10%5E%7B-3%7D"> µm) + 별도의 시딩 스펙트럼과 예측 방정식</td>
+</tr>
+<tr class="even">
+<td>물질</td>
+<td>자연 CCN = (NH₄)₂SO₄, seed = KCl</td>
+</tr>
+<tr class="odd">
+<td>사례·초기장</td>
+<td>2024-05-11 14시(베이징 시) 무렵 싼야 온난 대류운, 12시 싼야 라디오존데(WMO 59948), 지표 약 980 hPa, LCL 약 900 m, 0 °C 고도 약 5.5 km</td>
+</tr>
+<tr class="even">
+<td>대류 유발</td>
+<td>영역 중앙 900 m 고도의 thermal bubble, 최대 +3 °C</td>
+</tr>
+</tbody>
+</table>
+<table class="review-data caption-top table">
+<caption>시딩 설계 (논문 3.2절, 4.5절)</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>시점·위치</td>
+<td>모의 10분, 운저 900 m의 한 층, 수평 중앙 3개 격자열(900 m)</td>
+</tr>
+<tr class="even">
+<td>방식</td>
+<td>60 s마다 1회(각 1 dynamic step = 5 s), 5분 동안 5회, 제어 체적 900 m × 300 m × 300 m(모형 면에 수직한 폭 300 m 가정)</td>
+</tr>
+<tr class="odd">
+<td>크기 실험</td>
+<td>C00(무시딩) + 27개: 0.1–0.9 µm(C01–C09), 1–9 µm(C11–C19), 10–90 µm(C21–C29)</td>
+</tr>
+<tr class="even">
+<td>배경 에어로졸</td>
+<td>Jaenicke 3-mode 해양성·대륙성·도시성, 최대 구름방울 수농도 약 140·400·1400 cm⁻³(2.2절)</td>
+</tr>
+</tbody>
+</table>
+<p>무시딩 C00은 약 15분에 비가 시작되어 23–24분에 단일 최대를 찍고 약 35분에 그치는, 약 20분짜리 단일 피크 강수를 만든다. 구름은 주로 1–4 km에 있고 0 °C 고도보다 아래이므로, 모형에 얼음 범주가 있어도 이 사례에서는 사실상 <strong>온난 과정만</strong> 작동한다.</p>
+</section>
+<section id="결과-1-크기가-부호를-정한다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-1-크기가-부호를-정한다">결과 1: 크기가 부호를 정한다</h2>
+<table class="review-data caption-top table">
+<caption>논문 Table 2를 실험군별로 요약</caption>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>실험군</th>
+<th style="text-align: right;">직경</th>
+<th style="text-align: right;">시딩 수농도 (cm⁻³)</th>
+<th style="text-align: right;">강수 변화 (C00 대비)</th>
+<th>양상</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sub-micrometer (C01–C09)</td>
+<td style="text-align: right;">0.1–0.9 µm</td>
+<td style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B5%7D"> → <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B2%7D"></td>
+<td style="text-align: right;">−82.00% → −7.99%</td>
+<td>9개 모두 억제, 작을수록 강함</td>
+</tr>
+<tr class="even">
+<td>Giant (C11–C19)</td>
+<td style="text-align: right;">1–9 µm</td>
+<td style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B2%7D"> → <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B-1%7D"></td>
+<td style="text-align: right;">−4.78% → +94.32%</td>
+<td>1 µm(−4.78%)와 2 µm(+0.72%) 사이에서 부호 전환</td>
+</tr>
+<tr class="odd">
+<td>Ultra-giant (C21–C29)</td>
+<td style="text-align: right;">10–90 µm</td>
+<td style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B-1%7D"> → <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B-4%7D"></td>
+<td style="text-align: right;">+110.59% ~ +192.34%</td>
+<td>9개 모두 증대, 60 µm에서 최대, 강수 개시가 빨라짐</td>
+</tr>
+</tbody>
+</table>
+<p>하나의 곡선으로 읽으면, 0.1 µm에서 깊게 억제 → 1 µm로 갈수록 억제가 얕아짐 → 1–2 µm 사이에서 0을 통과 → 증대가 커지다가 60 µm에서 최대 → 그 뒤 약 +160% 수준으로 평평해진다.</p>
+</section>
+<section id="결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁" class="level2">
+<h2 class="anchored" data-anchor-id="결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁">결과 2: 수증기 나눠 갖기와 큰 collector 만들기의 경쟁</h2>
+<p>흡습성 seed는 두 방향으로 작용한다. 활성화된 seed가 수증기를 가져가 자연 CCN의 활성화와 성장을 억누르는 <strong>수증기 경쟁</strong>, 그리고 크게 자란 seed 방울이 주변 구름방울을 쓸어 모으는 <strong>collector 효과</strong>다. 등질량 조건에서는 직경이 둘 중 어느 쪽이 이길지를 정한다.</p>
+<p><strong>Sub-micrometer (0.1–0.9 µm).</strong> 작은 seed가 대량 활성화 → 많은 방울이 수증기를 나눠 가짐 → 수농도 스펙트럼 peak가 작은 직경 쪽으로 이동하고 20–40 µm 방울과 10 µm 초과 질량이 감소 → 구름 핵심부의 최대 충돌–병합률은 오히려 <strong>더 이르고 더 큼</strong> → 그러나 빗방울 크기까지 자라지 못해 지표 강수 감소. 강수 개시·종료 시각은 C00과 거의 같고 피크 크기만 줄었다. 충돌은 잦지만 질량 성장이 막힌, 사실상 오염 공기를 주입한 것과 같은 결과다.</p>
+<p><strong>Giant (1–9 µm).</strong> seed 수가 적어 10 µm 미만 스펙트럼은 C00과 거의 같음 → 2 µm(C12)부터 10 µm 초과 방울의 수·질량이 늘고 7–9 µm에서 가장 큼 → 18–21분 동안 30 µm 미만 질량이 큰 쪽으로 이동 → 충돌–병합률 피크가 강수 피크보다 3–4분 앞서 커짐 → 지표 강수 증가. 1 µm(C11)는 큰 방울이 C00보다 약간 적어 여전히 억제 쪽이다.</p>
+<p><strong>Ultra-giant (10–90 µm).</strong> seed 하나하나가 곧바로 큰 collector → 충돌–병합률 피크가 C00보다 3–5분 이르고 훨씬 큼 → 강수 개시와 피크가 앞당겨짐(직경이 클수록 더 빨리). 하지만 60 µm를 넘으면 개수가 너무 적다 → collector 부족 → 증대 폭 감소. 20 µm에서 90 µm로 가면 개수는 약 91배 줄어든다. 스펙트럼에서도 40–1000 µm 방울은 작은 seed일수록, 1000 µm 초과 방울은 큰 seed일수록 많았다.</p>
+</section>
+<section id="결과-3-오염될수록-임계-직경이-작아진다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-3-오염될수록-임계-직경이-작아진다">결과 3: 오염될수록 임계 직경이 작아진다</h2>
+<p>저자들은 giant 범위 시딩을 세 배경 에어로졸에서 반복했다.</p>
+<table class="review-data caption-top table">
+<caption>배경 에어로졸별 임계 직경 (논문 4.5절, 결론)</caption>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>배경</th>
+<th style="text-align: right;">최대 구름방울 수농도 (cm⁻³)</th>
+<th style="text-align: right;">임계 직경</th>
+<th>반응</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>해양성 (M)</td>
+<td style="text-align: right;">140 (2.2절) / 120 (4.5절)</td>
+<td style="text-align: right;">약 6 µm</td>
+<td>1 µm에서만 뚜렷한 억제, 나머지는 작음</td>
+</tr>
+<tr class="even">
+<td>대륙성 (C)</td>
+<td style="text-align: right;">400 / 450</td>
+<td style="text-align: right;">약 3 µm</td>
+<td>해양성보다 뚜렷</td>
+</tr>
+<tr class="odd">
+<td>도시성 (U)</td>
+<td style="text-align: right;">1400</td>
+<td style="text-align: right;">약 2 µm</td>
+<td>가장 뚜렷, 전환 뒤 증대도 가장 강함</td>
+</tr>
+</tbody>
+</table>
+<p>저자들의 설명은 이렇다. 깨끗한 구름 → 자연 방울 수가 적고 응결만으로 이미 비교적 큰 방울이 생김 → seed가 수 µm는 되어야 차이를 만든다. 오염된 구름 → 방울이 많고 스펙트럼이 좁음 → 2 µm seed만으로도 충돌–병합을 빨리 시작한다. 내 식으로 정리하면, seed가 “큰 방울”로 의미를 가지려면 주변 방울보다 커야 하고 그 기준을 배경 에어로졸이 정한다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>읽으면서 발견한 표기 불일치
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>4.5절 본문은 임계값을 “radius 약 6·3 µm”라고 쓰지만, Figure 11 캡션과 결론은 같은 값을 <strong>diameter</strong>라 부른다. 실험 변수가 직경이므로 이 글은 직경으로 읽었다.</li>
+<li>Ultra-giant 최적 크기를 4.1절은 30 µm, Table 2·4.4절·결론·초록은 60 µm로 적는다. Table 2의 최대값(+192.34%)은 60 µm다.</li>
+<li>3.1절은 C00을 도시성 배경이라 하고 결론(2)도 “오염된 배경에서 약 2 µm”라 하지만, 4.5절은 같은 실험을 대륙성 C series(임계 약 3 µm)라 부른다. Table 2의 전환(1→2 µm)은 도시성 값과 맞는다. 최대 구름방울 수농도도 2.2절과 4.5절이 다르다.</li>
+<li>4.4절은 10→60 µm에서 개수가 “약 27배” 준다고 쓰지만, 등질량이면 <img src="https://latex.codecogs.com/png.latex?(60/10)%5E3=216">배이고 Table 2 값도 216배다. 27배는 10→30 µm에 해당한다.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="내-연구에-왜-중요한가" class="level2">
+<h2 class="anchored" data-anchor-id="내-연구에-왜-중요한가">내 연구에 왜 중요한가</h2>
+<p><strong>dose 교란을 없앤 설계.</strong> fixed-number 설계에서는 입자를 키우면 총 질량도 <img src="https://latex.codecogs.com/png.latex?D%5E3">로 늘어서 “큰 입자가 좋다”가 “많이 뿌리면 좋다”와 섞인다. 등질량 설계는 이 교란을 없앤다. 대신 크기와 개수가 <img src="https://latex.codecogs.com/png.latex?N%5Cpropto%20D%5E%7B-3%7D">로 묶이므로, 여기서 말하는 크기 효과는 <strong>같은 재료를 몇 개로 나눌 것인가</strong>의 효과다. 내 <a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html">Experiment 3</a>에서 fixed-number에서는 큰 입자가 강했지만 fixed-mass에서는 크기–개수 맞교환이 나타난 것과 같은 구조다.</p>
+<p><strong>κ와 크기의 결합.</strong> 논문은 KCl이 같은 크기에서 (NH₄)₂SO₄보다 낮은 과포화도에서 활성화된다는 Köhler 이론으로 seed의 경쟁 우위를 설명한다. <a href="../../../posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler 리뷰</a>의 언어로 쓰면 seed는 더 큰 dry size와 더 큰 <img src="https://latex.codecogs.com/png.latex?%5Ckappa">를 동시에 가진다 <span class="citation" data-cites="Petters2007Kappa">(Petters 와/과 Kreidenweis 2007년)</span>. 이 논문은 물질을 KCl 하나로 고정했으므로 <img src="https://latex.codecogs.com/png.latex?%5Ckappa">와 크기의 상대 기여는 열린 질문이다.</p>
+<p><strong>accretion을 따로 봐야 한다.</strong> <a href="../../../posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html">Lin et al.&nbsp;(2023)</a>은 과정별 생성률로 강수 증가의 핵심 경로가 rain–cloud accretion임을 진단했다 <span class="citation" data-cites="Lin2023HygroscopicWRF">(Lin 기타 2023년)</span>. Ren은 총 충돌–병합률 하나만 보여 주므로 giant·ultra-giant seed가 autoconversion을 앞당긴 것인지 accretion을 키운 것인지 구분할 수 없다. 또 Lin의 “0.4 µm 이상”은 반지름 bin 위에서 삼봉형 flare 분포를 나눈 경계이고 Ren의 값은 단분산 직경이라, 숫자를 그대로 비교하면 안 된다.</p>
+<p><strong>물리 사슬.</strong> <a href="../../../posts/article-review/2026-05-20-cloud-seeding-review/index.html">Bruintjes (1999)</a>가 강조한 seed → 방울 스펙트럼 → 충돌–병합 → 지표 강수의 사슬을 이 논문은 모형 안에서 스펙트럼과 충돌률로 따라간다 <span class="citation" data-cites="Bruintjes1999Review">(Bruintjes 1999년)</span>. 마지막 고리인 관측 검증은 없다.</p>
+</section>
+<section id="한계-무엇이-어디까지-보였나" class="level2">
+<h2 class="anchored" data-anchor-id="한계-무엇이-어디까지-보였나">한계: 무엇이 어디까지 보였나</h2>
+<table class="review-data caption-top table">
+<caption>지지되는 것과 아닌 것</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>결과로 지지됨</td>
+<td>부호의 크기 의존성(0.1–0.9 µm 9/9 억제, 10–90 µm 9/9 증대), 임계 직경이 해양성 &gt; 대륙성 &gt; 도시성 순으로 작아지는 방향</td>
+</tr>
+<tr class="even">
+<td>서술값</td>
+<td>−82%, +192%, 60 µm 최적, 1–9 µm 구간의 들쭉날쭉한 크기</td>
+</tr>
+<tr class="odd">
+<td>저자 해석</td>
+<td>수증기 경쟁과 collector 부족 — 스펙트럼과 총 충돌–병합률에서 추론</td>
+</tr>
+<tr class="even">
+<td>보이지 않음</td>
+<td>autoconversion·accretion 분리, 과포화도·응결률 진단, 앙상블 spread, 관측 검증</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>단일 사례·2D·이상화.</strong> 싼야 사운딩 하나, 2D slab-symmetric, 균일한 하부 경계, thermal bubble, 40분 적분이다. 3D 구름이나 다른 구름 체계로의 일반화는 보이지 않았다.</li>
+<li><strong>조건당 1회 적분.</strong> 앙상블이 없어 1–9 µm 구간의 들쭉날쭉함(5 µm +24.11% → 6 µm +15.92% → 7 µm +74.70% → 8 µm +63.75%)이 물리 신호인지 수치 잡음인지 판단할 수 없다. 60 µm 최적도 30–90 µm의 다른 여섯 실험이 +157–163%에 모인 가운데 한 실험(+192.34%)만 튀어나온 것이라, “최적 크기”보다 “30 µm 이상에서 포화”로 읽는 편이 안전하다.</li>
+<li><strong>임계 직경의 해상도.</strong> 1–9 µm를 1 µm 간격으로 훑었고 2–4 µm의 반응이 +0.72·+0.53·+2.98%로 0에 가깝다. “약 2 µm”는 “1과 2 µm 사이에서 부호가 바뀌고 4 µm까지 거의 중립”에 가깝다.</li>
+<li><strong>단분산·단일 주입.</strong> 실제 flare는 넓은 분포다. 주입 시점(10분)·고도(운저)·위치도 하나씩만 시험했다.</li>
+<li><strong>빠진 과정.</strong> 저자들도 entrainment–mixing과 난류에 의한 충돌 강화가 빠져 정량 반응이 달라질 수 있다고 적었다. 구름이 0 °C 아래라 얼음 과정은 시험되지 않았다.</li>
+</ul>
+</section>
+<section id="재현으로-이어지는-질문" class="level2">
+<h2 class="anchored" data-anchor-id="재현으로-이어지는-질문">재현으로 이어지는 질문</h2>
+<p>이 논문을 고른 이유는 내 PySDM 시딩 실험과 질문이 거의 같았기 때문이다. 발표 준비와 함께 두 갈래의 재현을 시작했다.</p>
+<ul>
+<li><strong>0-D parcel 재현.</strong> <a href="../../../posts/experiments/2026-09-07-ren2025-parcel-replication/index.html">Experiment 7</a>에서 PySDM parcel로 같은 등질량 직경 스캔을 세 배경에서 다시 계산했다. parcel에는 지표 강수가 없어 강수 개시 시각의 변화로 비교했다. 임계 직경의 순서(해양성 &gt; 대륙성 &gt; 도시성)는 논문과 같았지만 값은 논문의 약 절반이었고, 반응 부호는 81개 조건 중 78개에서 일치했다(신뢰구간이 0을 배제하는 엄밀 기준으로는 71/81).</li>
+<li><strong>2D 재현.</strong> 논문과 같은 2D bin 미세물리 틀을 WRF로 만들기 위해 <a href="../../../posts/wrf/2026-09-29-microphysics-fsbm/index.html">미세물리 스킴과 fast SBM</a>부터 튜토리얼을 이어 가고 있다.</li>
+</ul>
+<p>남은 질문은 네 가지다.</p>
+<ol type="1">
+<li>초기 섭동만 바꾼 앙상블에서도 1–2 µm 부호 전환과 60 µm 최적이 유지되는가?</li>
+<li>단분산 대신 실제 flare처럼 넓은 분포를 넣으면 억제 모드와 증대 모드가 서로 상쇄되는가?</li>
+<li>충돌–병합률을 autoconversion과 accretion으로 나누면 ultra-giant의 증대는 어느 쪽에서 오는가?</li>
+<li>0-D에서 임계 직경이 절반으로 나온 차이는 침강·역학이 없는 parcel의 구조 때문인가, 미세물리 설정 때문인가?</li>
+</ol>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bruintjes1999Review" class="csl-entry">
+Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects”</span>. <em>Bulletin of the American Meteorological Society</em> 80 (5): 805–20. <a href="https://doi.org/10.1175/1520-0477(1999)080<0805:AROCSE>2.0.CO;2">https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Lin2023HygroscopicWRF" class="csl-entry">
+Lin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, 기타. 2023년. <span>“Evaluation of Hygroscopic Cloud Seeding in Warm-Rain Processes by a Hybrid Microphysics Scheme Using a Weather Research and Forecasting (<span>WRF</span>) Model: A Real Case Study”</span>. <em>Atmospheric Chemistry and Physics</em> 23: 10423–38. <a href="https://doi.org/10.5194/acp-23-10423-2023">https://doi.org/10.5194/acp-23-10423-2023</a>.
+</div>
+<div id="ref-Petters2007Kappa" class="csl-entry">
+Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”</span>. <em>Atmospheric Chemistry and Physics</em> 7: 1961–71. <a href="https://doi.org/10.5194/acp-7-1961-2007">https://doi.org/10.5194/acp-7-1961-2007</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제
+    늘리나},
+  date = {2026-09-10},
+  url = {https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/},
+  langid = {ko}
+}
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+Jinu. 2026. <span>“같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고
+언제 늘리나.”</span> September 10. <a href="https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/">https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/</a>.
+</div></div></section></div> ]]></description>
+  <category>Article Review</category>
+  <category>hygroscopic seeding</category>
+  <category>particle size</category>
+  <category>bin microphysics</category>
+  <category>warm rain</category>
+  <guid>https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/</guid>
+  <pubDate>Thu, 10 Sep 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Experiment 7. Ren et al. (2025)의 입자 크기 효과를 0-D parcel로 재현하기</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/experiments/2026-09-07-ren2025-parcel-replication/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>실험 출처
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 실험은 <strong>PySDM-Seeding-Lab 외부</strong>에서 수행했다. 연구실 서버에서 별도 PySDM parcel 스크립트로 실행한 논문 재현 실험이며, 결과는 랩미팅 추가자료로 발표했다. Seeding Lab 결과로 표기하지 않는다.</p>
+</div>
+</div>
+<section id="질문-논문의-크기-효과는-모델이-바뀌어도-살아남는가" class="level2">
+<h2 class="anchored" data-anchor-id="질문-논문의-크기-효과는-모델이-바뀌어도-살아남는가">질문: 논문의 크기 효과는 모델이 바뀌어도 살아남는가</h2>
+<p>Ren et al.&nbsp;(2025)은 2-D slab-symmetric bin 미세물리 모델로 온난 대류운을 모의하고, <strong>총 시딩 질량을 고정한 채</strong> KCl 입자의 직경만 0.1–90 µm 사이 27개 값으로 바꿨다 <span class="citation" data-cites="Ren2025ParticleSize">(Ren 기타 2025년)</span>. 결론은 세 단계다. Submicron(0.1–0.9 µm)은 강수를 억제하고, 1–9 µm에서 억제가 증대로 바뀌며, 10 µm 이상은 강수를 늘린다. 그리고 부호가 바뀌는 <strong>임계직경 <img src="https://latex.codecogs.com/png.latex?D_c">는 배경이 오염될수록 작아진다</strong>(maritime 약 6, continental 약 3, urban 약 2 µm). 논문 내용은 <a href="../../../posts/article-review/2026-09-10-ren2025-particle-size/index.html">Ren et al.&nbsp;(2025) 리뷰</a>에 따로 정리했다.</p>
+<p>이번 실험의 질문은 하나다. <strong>2-D 동역학과 침강을 빼고, bin 대신 super-droplet method를 쓰는 0-D parcel에서도 억제→증대 전환과 <img src="https://latex.codecogs.com/png.latex?D_c">의 순서가 나오는가?</strong> 나오면 기작이 모델 종류에 강건하다는 근거가 되고, 안 나오면 부호를 정하는 데 2-D 동역학이나 침강이 필요하다는 뜻이다. 둘 다 결과다. 논문의 지표 강수량 수치를 맞추는 것은 처음부터 목표가 아니었다.</p>
+</section>
+<section id="무엇을-맞추고-무엇을-근사했나" class="level2">
+<h2 class="anchored" data-anchor-id="무엇을-맞추고-무엇을-근사했나">무엇을 맞추고 무엇을 근사했나</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>Ren et al.&nbsp;(2025)</th>
+<th>이번 재현 (v1)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Seed 크기</td>
+<td>단분산 27개 <strong>직경</strong> 0.1–90 µm</td>
+<td>같은 27개 직경</td>
+</tr>
+<tr class="even">
+<td>Seed 수농도</td>
+<td>등질량 제약</td>
+<td>같은 등질량 법칙 (논문 Table 2와 코드에서 대조)</td>
+</tr>
+<tr class="odd">
+<td>Seed 물질</td>
+<td>KCl</td>
+<td>κ = 0.9</td>
+</tr>
+<tr class="even">
+<td>배경 CCN</td>
+<td>(NH₄)₂SO₄, Jaenicke 3-mode</td>
+<td>κ = 0.61, 단일 lognormal</td>
+</tr>
+<tr class="odd">
+<td>주입</td>
+<td>10분, 운저, 60초마다 5회</td>
+<td>10–15분 창에 균등 분산</td>
+</tr>
+<tr class="even">
+<td>동역학</td>
+<td>2-D, thermal bubble, 40분</td>
+<td>0-D 단열 parcel, 처방 상승류, 45분</td>
+</tr>
+<tr class="odd">
+<td>열역학</td>
+<td>Sanya 라디오존데</td>
+<td>300 K, 1000 hPa, 수증기 22.2 g/kg (RH 약 97.5%)</td>
+</tr>
+<tr class="even">
+<td>충돌</td>
+<td>bin collision–coalescence + breakup</td>
+<td>SDM <code>Geometric</code> kernel, 효율 1, breakup 없음</td>
+</tr>
+<tr class="odd">
+<td>강수 지표</td>
+<td>지표 누적 강수 변화 (%)</td>
+<td><strong>강수 개시 시각 이동</strong></td>
+</tr>
+<tr class="even">
+<td>반복</td>
+<td>결정론적 1 run</td>
+<td>20-member paired ensemble</td>
+</tr>
+</tbody>
+</table>
+<p>등질량 제약은 다음 식 하나로 요약된다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AN(D)%20=%205.4508%5Ctimes10%5E%7B5%7D%5Cleft(%5Cfrac%7B0.1%7D%7BD%7D%5Cright)%5E%7B3%7D%5C%20%5Ctext%7Bcm%7D%5E%7B-3%7D%0A"></p>
+<p>말로 읽으면 “seed 수농도는 직경의 세제곱에 반비례한다”이다. <img src="https://latex.codecogs.com/png.latex?N">은 seed 수농도, <img src="https://latex.codecogs.com/png.latex?D">는 µm 단위 건조 직경, 0.1과 <img src="https://latex.codecogs.com/png.latex?5.4508%5Ctimes10%5E5">은 논문의 가장 작은 경우(0.1 µm)를 기준점으로 잡은 값이다. 입자 하나의 질량이 <img src="https://latex.codecogs.com/png.latex?D%5E3">에 비례하므로 <img src="https://latex.codecogs.com/png.latex?N%20D%5E3">이 일정하면 총 질량이 같다. 직경이 10배 커지면 개수는 1,000배 줄어, 0.1 µm는 <img src="https://latex.codecogs.com/png.latex?5.5%5Ctimes10%5E5"> cm⁻³, 90 µm는 <img src="https://latex.codecogs.com/png.latex?7.5%5Ctimes10%5E%7B-4%7D"> cm⁻³이 된다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>반지름과 직경
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 글의 크기 축은 모두 <strong>건조 직경 <img src="https://latex.codecogs.com/png.latex?D"></strong>다. 코드도 직경으로 설계하고 PySDM에 넣을 때만 dry radius <img src="https://latex.codecogs.com/png.latex?=%20D/2">로 바꾼다. 이전 Experiment들은 dry radius 축이었으므로 숫자를 그대로 비교하면 안 된다.</p>
+</div>
+</div>
+<p>상승류는 <img src="https://latex.codecogs.com/png.latex?w(t)=w_%7Bmin%7D+(w_%7Bpeak%7D-w_%7Bmin%7D)%5Csin%5E2(%5Cpi%20t/15%5C,%5Ctext%7Bmin%7D)">로 처방했다. 처음 15분 동안 최대 1 m/s까지 올랐다가 내려오고, 이후에는 0.025 m/s로 유지된다. 배경 수농도는 seed 없는 control의 최대 구름방울 수농도(<img src="https://latex.codecogs.com/png.latex?N_%7Bd,max%7D">)가 논문 4.5절 값에 맞도록 보정했다. KCl seed의 κ = 0.9는 설계 선택이고, 배경 (NH₄)₂SO₄의 κ = 0.61은 Petters &amp; Kreidenweis (2007)의 CCN 기반 값이다 <span class="citation" data-cites="Petters2007Kappa">(Petters 와/과 Kreidenweis 2007년)</span>. κ의 의미는 <a href="../../../posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler 리뷰</a>에 정리했다. 종단속도식은 Rogers–Yau를 썼다(<a href="../../../posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html">이전 실험</a>).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Regime</th>
+<th style="text-align: right;">배경 mode radius</th>
+<th style="text-align: right;">σ_g</th>
+<th style="text-align: right;">목표 <img src="https://latex.codecogs.com/png.latex?N_%7Bd,max%7D"></th>
+<th style="text-align: right;">Control <img src="https://latex.codecogs.com/png.latex?N_%7Bd,max%7D"></th>
+<th style="text-align: right;">Control 강수 개시</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Maritime</td>
+<td style="text-align: right;">90 nm</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">120 cm⁻³</td>
+<td style="text-align: right;">123.7 cm⁻³</td>
+<td style="text-align: right;">17.4분</td>
+</tr>
+<tr class="even">
+<td>Continental</td>
+<td style="text-align: right;">70 nm</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">450 cm⁻³</td>
+<td style="text-align: right;">448.7 cm⁻³</td>
+<td style="text-align: right;">23.8분</td>
+</tr>
+<tr class="odd">
+<td>Urban</td>
+<td style="text-align: right;">55 nm</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">1,400 cm⁻³</td>
+<td style="text-align: right;">1,423.5 cm⁻³</td>
+<td style="text-align: right;">27.0분</td>
+</tr>
+</tbody>
+</table>
+<p>실행 규모는 3 regime × (control 1 + seeded 27) × 20 member = <strong>1,680 run</strong>이고 모두 끝까지 돌았다. Super-droplet 수는 배경 4,096, seed 2,048이며, seeded run과 control은 같은 random seed(100–119)로 짝지었다. PySDM과 SDM 자체는 <span class="citation" data-cites="Bartman2022PySDM Shima2009SDM">(Bartman 기타 2022년; Shima 기타 2009년)</span>을 따른다.</p>
+</section>
+<section id="왜-강수량이-아니라-강수-개시-시각인가" class="level2">
+<h2 class="anchored" data-anchor-id="왜-강수량이-아니라-강수-개시-시각인가">왜 강수량이 아니라 강수 개시 시각인가</h2>
+<p>0-D parcel에는 침강, 강수 제거, entrainment, 유한한 구름 수명이 없다. 시간이 충분하면 응결수는 결국 거의 다 rain water가 되고, 큰 방울은 breakup 없이 계속 자란다. 그래서 분석은 어떤 방울이든 반지름 6 mm(PySDM Gunn–Kinzer 표의 상한)를 넘기 전까지로 제한했다. 상승류 최대값을 1 m/s로 약하게 둔 것도 같은 이유다. 설계 단계의 보정에서 더 강한 상승류는 control이 응결수를 거의 다 비로 바꿔 시딩이 움직일 여지가 없었다. 이는 빠진 손실 과정을 보정하려는 선택이지 논문 동역학의 재현이 아니다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-09-07-ren2025-parcel-replication/images/rain-water-timeseries-urban.png" class="img-fluid figure-img" alt="Urban-regime rain-water mixing ratio time series for control and 27 seed diameters; all curves saturate near 1 g/kg while their rise times differ by up to about 16 minutes"></p>
+<figcaption>Urban regime 한 member(seed 100)의 rain-water 시계열. 범례의 값은 seed 건조 직경이다. 모든 경우가 약 1 g/kg 근처로 수렴하고, 달라지는 것은 비가 시작되는 시각이다.</figcaption>
+</figure>
+</div>
+<p>그림처럼 control의 최대 rain water는 세 regime 모두 0.99–1.01 g/kg에서 포화했다. 81개 seeded 경우의 최대 rain-water 변화는 −3.2…+5.9%뿐이었고, 논문의 지표 강수 변화(−82…+192%)와 비교할 수 있는 축이 아니었다. 논문의 퍼센트는 2-D 모델이 떨어지는 방울을 지면으로 빼내기 때문에 의미가 생기는 값이다.</p>
+<p>반면 <strong>비가 언제 시작되는지</strong>는 seed 크기에 따라 분명히 달랐다. 그래서 주지표를 다음처럼 정했다.</p>
+<ul>
+<li>강수 개시 <img src="https://latex.codecogs.com/png.latex?t_%7Bonset%7D">: 습윤 반지름 40 µm 이상 방울의 rain-water mixing ratio가 처음 <img src="https://latex.codecogs.com/png.latex?10%5E%7B-8%7D"> kg/kg를 넘는 시각(출력 간격 30초)</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D%20=%20t_%7Bonset%7D%5E%7Bseeded%7D%20-%20t_%7Bonset%7D%5E%7Bcontrol%7D">, 같은 random seed끼리 짝지어 계산</li>
+<li><strong>부호 규약: <img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D%20%3E%200">은 지연 = 억제 방향, <img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D%20%3C%200">은 앞당김 = 증대 방향</strong></li>
+<li>임계직경 <img src="https://latex.codecogs.com/png.latex?D_c">: 평균 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D">이 양에서 음으로 바뀌는 직경, <img src="https://latex.codecogs.com/png.latex?%5Clog%20D">에서 선형 보간</li>
+</ul>
+<p>개시가 빨라졌다고 강수량이 늘었다는 뜻은 아니다. 이 지표는 논문 부호와 같은 <strong>방향</strong>을 가리키는지 보는 대리 지표다.</p>
+</section>
+<section id="결과-1.-부호-전환과-d_c-순서는-재현됐다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-1.-부호-전환과-d_c-순서는-재현됐다">결과 1. 부호 전환과 <img src="https://latex.codecogs.com/png.latex?D_c"> 순서는 재현됐다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-09-07-ren2025-parcel-replication/images/onset-shift-vs-diameter.png" class="img-fluid figure-img" alt="Three-panel figure: critical diameters of the replication versus the paper for three regimes; rain-onset shift versus seed diameter crossing zero near 3.0, 1.7 and 1.0 micrometres; and nearly flat max rain-water change"></p>
+<figcaption>(a) 재현 <img src="https://latex.codecogs.com/png.latex?D_c">(채움)와 논문 <img src="https://latex.codecogs.com/png.latex?D_c">(빈 기호). (b) Seed 직경별 강수 개시 시각 이동, 20-member 평균과 95% 신뢰구간. (c) 6 mm 도달 전 최대 rain-water 변화. 회색 영역(D ≥ 20 µm)은 지표가 포화된 구간이다.</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Regime</th>
+<th style="text-align: right;">재현 <img src="https://latex.codecogs.com/png.latex?D_c"></th>
+<th style="text-align: right;">논문 <img src="https://latex.codecogs.com/png.latex?D_c"></th>
+<th style="text-align: right;">비</th>
+<th style="text-align: right;">Submicron 최대 지연</th>
+<th style="text-align: right;">10 µm에서</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Maritime</td>
+<td style="text-align: right;">≈ 3.0 µm</td>
+<td style="text-align: right;">≈ 6 µm</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">+2.0분</td>
+<td style="text-align: right;">−3.6분</td>
+</tr>
+<tr class="even">
+<td>Continental</td>
+<td style="text-align: right;">≈ 1.7 µm</td>
+<td style="text-align: right;">≈ 3 µm</td>
+<td style="text-align: right;">0.55</td>
+<td style="text-align: right;">+3.3분</td>
+<td style="text-align: right;">−9.8분</td>
+</tr>
+<tr class="odd">
+<td>Urban</td>
+<td style="text-align: right;">≈ 1.0 µm</td>
+<td style="text-align: right;">≈ 2 µm</td>
+<td style="text-align: right;">0.49</td>
+<td style="text-align: right;">+2.4분</td>
+<td style="text-align: right;">−13.1분</td>
+</tr>
+</tbody>
+</table>
+<p>세 regime 모두 작은 seed는 비를 조금 늦추고, 큰 seed는 비를 크게 앞당겼다. 곡선은 0을 한 번 가로질렀고, <img src="https://latex.codecogs.com/png.latex?D_c">는 maritime &gt; continental &gt; urban 순서로 작아졌다. <strong>순서와 방향은 논문과 같고, 값은 일관되게 약 0.5배</strong>다. 0.5배의 원인(단일모드 배경, 침강 없음, 이상화된 열역학, 효율 1 충돌)은 가설일 뿐 따로 검증하지 않았다. 1–10 µm 구간의 격자 간격이 1 µm라서 <img src="https://latex.codecogs.com/png.latex?D_c">는 한 칸 정도 불확실하다. Continental은 1과 2 µm 사이, urban은 0.9와 1.0 µm 사이를 보간한 값이고, maritime은 3 µm에서 평균이 정확히 0이었다. Urban만 따로 50 member로 돌린 run에서도 <img src="https://latex.codecogs.com/png.latex?D_c">는 약 1.0 µm였다.</p>
+<p>20 µm 이상에서 곡선이 평평해지는 것은 물리가 아니라 지표의 한계다. 40 µm 이상에서는 세 regime 모두 개시가 10.5분, 즉 주입 시작 직후 첫 출력 시각이었다. Seed 자체가 들어오자마자 rain 크기로 계산된 것이다. 따라서 물리적 해석은 <img src="https://latex.codecogs.com/png.latex?D%20%5Clesssim%2010"> µm로 제한하고, 논문의 60 µm 최적점은 이 실험으로 판단할 수 없다.</p>
+</section>
+<section id="결과-2.-부호-일치는-7881-엄밀-기준-7181" class="level2">
+<h2 class="anchored" data-anchor-id="결과-2.-부호-일치는-7881-엄밀-기준-7181">결과 2. 부호 일치는 78/81, 엄밀 기준 71/81</h2>
+<p>평균 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D">의 부호를 논문 Table 2의 강수 변화 부호와 비교했다. 논문이 음(억제)이면 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D%3E0">, 양(증대)이면 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D%3C0">일 때 일치로 센다. “엄밀” 기준은 여기에 95% 신뢰구간이 0을 포함하지 않는다는 조건을 더한 것이다.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Regime</th>
+<th style="text-align: right;">부호 일치</th>
+<th style="text-align: right;">엄밀 기준</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Maritime</td>
+<td style="text-align: right;">25/27</td>
+<td style="text-align: right;">23/27</td>
+</tr>
+<tr class="even">
+<td>Continental</td>
+<td style="text-align: right;">27/27</td>
+<td style="text-align: right;">26/27</td>
+</tr>
+<tr class="odd">
+<td>Urban</td>
+<td style="text-align: right;">26/27</td>
+<td style="text-align: right;">22/27</td>
+</tr>
+<tr class="even">
+<td><strong>합계</strong></td>
+<td style="text-align: right;"><strong>78/81</strong></td>
+<td style="text-align: right;"><strong>71/81</strong></td>
+</tr>
+</tbody>
+</table>
+<p>어긋난 세 경우는 모두 전환점 근처다. Maritime 2 µm은 +0.6분 지연(신뢰구간 ±0.45분)인데 Table 2는 +0.72%다. Maritime 3 µm은 평균이 정확히 0이라 일치로 세지 않았다. Urban 1 µm은 −0.1분(±0.9분)으로 사실상 0인데 Table 2는 −4.78%다. 엄밀 기준에서 추가로 빠진 7개는 세 regime의 0.1 µm, urban 0.4·0.5·0.9 µm, maritime 4 µm로, 평균 이동이 신뢰구간보다 작은 경우였다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>집계를 다시 한 이유
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>랩미팅 추가자료의 집계는 maritime 3 µm의 tie를 일치로 셌고, urban은 별도 50-member run 결과를 섞었다. 이 글의 78/81과 71/81은 같은 20-member 세트 하나로 tie를 빼고 다시 센 값이다.</p>
+<p>또 Table 2는 논문의 주 실험 세트(배경 하나)의 결과다. 따라서 maritime과 continental의 비교 기준은 그 세트에서 빌려 온 부호다. Regime별 비교는 <img src="https://latex.codecogs.com/png.latex?D_c">로 하는 것이 맞다. 예를 들어 maritime 2 µm의 지연은 Table 2와는 어긋나지만, 논문의 maritime <img src="https://latex.codecogs.com/png.latex?D_c">(약 6 µm)보다 작은 직경이므로 논문 maritime 결과와는 같은 방향이다.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>논문을 읽으며 걸린 점
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>논문은 Table 2 세트의 배경을 3.1절에서는 urban, 4.5절에서는 continental(C series)로 부른다. Table 2의 전환(1→2 µm)이 urban <img src="https://latex.codecogs.com/png.latex?D_c">(약 2 µm)와 맞아서 이 재현에서는 urban으로 읽었다. 목표 <img src="https://latex.codecogs.com/png.latex?N_%7Bd,max%7D">도 2.2절(140/400/1400 cm⁻³)과 4.5절(120/450/1400 cm⁻³)이 다르며, 여기서는 4.5절 값을 썼다. 4.5절 일부는 “critical radius”라고 쓰지만 Figure 11 설명과 결론은 직경이므로 직경으로 해석했다.</p>
+</div>
+</div>
+</section>
+<section id="재현되지-않은-것" class="level2">
+<h2 class="anchored" data-anchor-id="재현되지-않은-것">재현되지 않은 것</h2>
+<ul>
+<li><strong>강수량 크기.</strong> 최대 rain water는 구조적으로 평평하다. 논문의 −82…+192%에 대응하는 값은 parcel에 없다.</li>
+<li><strong>Submicron 안의 크기 의존성.</strong> 논문은 0.1 µm에서 억제가 가장 강하지만, parcel에서 0.1 µm는 지연이 +0.1~+0.3분으로 가장 작았고 세 regime 모두 신뢰구간이 0을 포함했다.</li>
+<li><strong>Ultragiant 최적점.</strong> 위에서 설명한 지표 포화 때문에 판단할 수 없다.</li>
+</ul>
+</section>
+<section id="v2-현실적인-충돌을-켜자-전환-곡선이-사라졌다" class="level2">
+<h2 class="anchored" data-anchor-id="v2-현실적인-충돌을-켜자-전환-곡선이-사라졌다">v2: 현실적인 충돌을 켜자 전환 곡선이 사라졌다</h2>
+<p>v1의 <code>Geometric</code> kernel은 충돌효율과 병합효율을 1로 둔다. 실제보다 충돌이 쉬운 설정이다. 그래서 논문의 bin 모델에 더 가깝게 v2를 만들었다. 충돌 kernel을 <code>Hydrodynamic</code>(충돌효율 &lt; 1) 또는 <code>Geometric</code>으로 두고, 두 경우 모두 <code>Berry1967</code> 병합효율과 collisional breakup(<code>Straub2010Nf</code> fragmentation)을 켰다 <span class="citation" data-cites="deJong2023PySDM">(Jong 기타 2023년)</span>. Urban, 8개 직경, 4 member의 preview로만 시험했다.</p>
+<p>결과는 이분법이었다. 시험한 모든 상승류(<code>Hydrodynamic</code> 조합 3 m/s, <code>Geometric</code> 조합 1.0/1.5/2.0 m/s)에서 <strong>control이 비를 전혀 만들지 못했다.</strong> 비는 seed 자체가 이미 큰 경우(<code>Geometric</code> 조합은 30 µm 이상, <code>Hydrodynamic</code> 조합은 10 µm 이상)에만 생겼고, 개시 시각을 비교할 control이 없으니 전환 곡선도 정의되지 않았다. 실제 구름이 autoconversion 병목을 넘는 수단(긴 체류 시간, 구름 두께, 혼합)이 parcel에는 없기 때문이라고 해석했지만, 이것도 검증한 것은 아니다. v2는 여기서 멈췄다. 즉 <strong>v1의 매끄러운 전환 곡선은 효율 1 가정 위에서만 확인된 결과</strong>다.</p>
+</section>
+<section id="다음-단계-1-d-column" class="level2">
+<h2 class="anchored" data-anchor-id="다음-단계-1-d-column">다음 단계: 1-D column</h2>
+<p>다음은 PySDM <code>Kinematic1D</code> column으로 침강과 지면 강수 누적을 넣는 것이다. 그러면 처음으로 논문의 “Precipitation Variation (%)”과 같은 종류의 값을 만들 수 있고, 현실적인 충돌효율로도 control이 비를 만들 수 있는지 볼 수 있다. 코드 작업은 시작했지만 control column이 아직 구름과 비를 유지하지 못해 결과는 없다. 이후 주력 작업이 WRF로 옮겨가 지금은 멈춰 있다.</p>
+<div class="review-verdict">
+<p><strong>결론.</strong> 0-D PySDM parcel에서도 등질량 KCl seed의 직경이 강수 개시를 늦추느냐 당기느냐를 갈랐고, 임계직경은 maritime ≈ 3.0 &gt; continental ≈ 1.7 &gt; urban ≈ 1.0 µm로 논문(6/3/2 µm)과 같은 순서를 보였다. 부호 일치는 78/81(엄밀 71/81)이다. 다만 이 전환은 충돌효율 1 가정 위에서만 확인됐고, 강수량 크기는 parcel 구조상 재현할 수 없었다.</p>
+</div>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>지지됨 (방향)</td>
+<td>Submicron 지연 / giant 앞당김, <img src="https://latex.codecogs.com/png.latex?D_c">가 오염될수록 작아지는 순서</td>
+</tr>
+<tr class="even">
+<td>서술적 (크기)</td>
+<td><img src="https://latex.codecogs.com/png.latex?%5CDelta%20t_%7Bonset%7D"> 크기, <img src="https://latex.codecogs.com/png.latex?D_c"> 값과 0.5배 비율. Super-droplet 수에 대한 수렴을 확인하지 않았고 직경 격자도 거칠다</td>
+</tr>
+<tr class="odd">
+<td>보이지 않음</td>
+<td>지표 강수량 변화, 60 µm 최적점, 현실적 충돌효율에서의 전환</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
+<ul>
+<li><a href="../../../posts/article-review/2026-09-10-ren2025-particle-size/index.html">Ren et al.&nbsp;(2025) 논문 리뷰</a></li>
+<li><a href="../../../posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html">이전 실험: 종단속도식 민감도</a></li>
+<li><a href="../../../posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler 이론 리뷰</a></li>
+<li><a href="../../../experiments.html">Experiments 목록</a></li>
+</ul>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bartman2022PySDM" class="csl-entry">
+Bartman, Piotr, Oleg Bulenok, Tomasz Gierczak, 기타. 2022년. <span>“<span>PySDM</span> v1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry”</span>. <em>Journal of Open Source Software</em> 7 (72): 3219. <a href="https://doi.org/10.21105/joss.03219">https://doi.org/10.21105/joss.03219</a>.
+</div>
+<div id="ref-deJong2023PySDM" class="csl-entry">
+Jong, Emma K. de, Christian E. Singer, Sepideh Azimi, Hugh Morrison, Anna Jaruga, 와/과 Sylwester Arabas. 2023년. <span>“<span>PySDM</span> v2: Package for Warm-Rain Microphysics, Immersed in Moist Air and Aqueous Chemistry”</span>. <em>Journal of Open Source Software</em> 8 (84): 4968. <a href="https://doi.org/10.21105/joss.04968">https://doi.org/10.21105/joss.04968</a>.
+</div>
+<div id="ref-Petters2007Kappa" class="csl-entry">
+Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”</span>. <em>Atmospheric Chemistry and Physics</em> 7: 1961–71. <a href="https://doi.org/10.5194/acp-7-1961-2007">https://doi.org/10.5194/acp-7-1961-2007</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+<div id="ref-Shima2009SDM" class="csl-entry">
+Shima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintaro Kawahara. 2009년. <span>“The Super-Droplet Method for the Numerical Simulation of Clouds and Precipitation: A Particle-Based and Probabilistic Microphysics Model Coupled with a Non-Hydrostatic Model”</span>. <em>Quarterly Journal of the Royal Meteorological Society</em> 135 (642): 1307–20. <a href="https://doi.org/10.1002/qj.441">https://doi.org/10.1002/qj.441</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Experiments</category>
+  <category>PySDM</category>
+  <category>paper replication</category>
+  <category>hygroscopic seeding</category>
+  <category>particle size</category>
+  <guid>https://jinu219.github.io/posts/experiments/2026-09-07-ren2025-parcel-replication/</guid>
+  <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/experiments/2026-09-07-ren2025-parcel-replication/images/onset-shift-vs-diameter.png" medium="image" type="image/png" height="145" width="144"/>
+</item>
+<item>
+  <title>Experiment 6. 종단속도식을 바꾸면 시딩 결론도 바뀔까</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/experiments/2026-08-25-terminal-velocity-sensitivity/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>실험 출처
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 실험도 <strong>PySDM-Seeding-Lab 외부</strong>에서 수행했다. Experiment 5와 같은 parcel 코드에 종단속도식만 바꿔 끼운 별도 스크립트를 연구실 서버에서 실행했으며, Seeding Lab 결과로 표기하지 않는다.</p>
+</div>
+</div>
+<section id="질문-6-mm는-어디서-왔고-결론은-종단속도식에-기대고-있나" class="level2">
+<h2 class="anchored" data-anchor-id="질문-6-mm는-어디서-왔고-결론은-종단속도식에-기대고-있나">질문: 6 mm는 어디서 왔고, 결론은 종단속도식에 기대고 있나</h2>
+<p><a href="../../../posts/experiments/2026-08-06-updraft-timing-regimes/index.html">Experiment 5</a>의 모든 지표는 “가장 큰 방울이 6 mm를 넘기 전”의 최대 rain water였다. 이 실험은 두 가지를 묻는다.</p>
+<ol type="1">
+<li>6 mm라는 숫자는 물리적 한계인가, 코드의 한계인가?</li>
+<li>종단속도식을 바꾸면 Experiment 5의 부호 패턴(상승류 × 주입 시점)이 유지되는가, 그리고 효과 크기는 얼마나 달라지는가?</li>
+</ol>
+<p>목표는 “가장 정확한 식”을 고르는 것이 아니라, 기존 결론이 식 선택에 얼마나 강건한지 보는 것이다.</p>
+</section>
+<section id="mm는-물리가-아니라-구현의-상한이었다" class="level2">
+<h2 class="anchored" data-anchor-id="mm는-물리가-아니라-구현의-상한이었다">6 mm는 물리가 아니라 구현의 상한이었다</h2>
+<p>Gunn과 Kinzer는 정지한 공기(760 mmHg, 20 °C, RH 50%)에서 1,500개가 넘는 물방울의 낙하속도를 측정했다 <span class="citation" data-cites="GunnKinzer1949">(Gunn 와/과 Kinzer 1949년)</span>. 표에 실린 가장 큰 방울은 <strong>지름 5.8 mm</strong>, 낙하속도 9.17 m s⁻¹이다. 지름 5.8 mm는 <strong>반지름 2.9 mm</strong>다.</p>
+<p>PySDM의 <code>GunnKinzer1949</code>는 이 표를 반지름으로 바꾼 뒤 RBF로 보간해 <strong>반지름 0–6 mm</strong> 격자의 조회표를 만들고, 입력 반지름이 6 mm를 넘으면 <code>ValueError</code>를 낸다(반지름 40 µm 미만은 작은 방울용 근사식으로 덮어쓴다). 즉 반지름 2.9–6 mm 구간은 측정이 아니라 외삽이고, 6 mm는 조회표를 만든 코드의 상한이다. 이전 실험에서는 이 식을 썼기 때문에 방울이 6 mm를 넘는 순간 run이 오류로 멈췄다. Experiment 5는 상한이 없는 Rogers–Yau로 바꾸고 6 mm 이전 값만 해석했다.</p>
+<p>하지만 진짜 문제는 식이 아니다. Parcel에 침강과 breakup이 없어서 한 번 커진 방울이 계속 자란다. Experiment 5의 강한 상승류 control에서 가장 큰 방울은 반지름 약 3 cm까지 자랐다. 종단속도식을 바꿔도 이 빠진 물리는 채워지지 않는다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>반지름과 지름
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>PySDM 코드와 이 블로그의 실험은 <strong>반지름</strong>을 쓰고, Gunn–Kinzer 표는 <strong>지름</strong>을 쓴다. “6 mm”는 반지름 6 mm(지름 12 mm), “2.9 mm”는 반지름 2.9 mm(지름 5.8 mm)다.</p>
+</div>
+</div>
+</section>
+<section id="종단속도가-충돌을-바꾸는-경로" class="level2">
+<h2 class="anchored" data-anchor-id="종단속도가-충돌을-바꾸는-경로">종단속도가 충돌을 바꾸는 경로</h2>
+<p><img src="https://latex.codecogs.com/png.latex?%0AK_%7Bij%7D=%5Cpi%5C,(r_i+r_j)%5E%7B2%7D%5C,%5Cleft%7CV(r_i)-V(r_j)%5Cright%7C%5C,E_%7Bij%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?K_%7Bij%7D">는 두 방울 <img src="https://latex.codecogs.com/png.latex?i">, <img src="https://latex.codecogs.com/png.latex?j">의 collision kernel, 즉 단위 시간에 두 방울이 함께 “쓸고 지나가는” 부피다. <img src="https://latex.codecogs.com/png.latex?%5Cpi(r_i+r_j)%5E2">는 두 반지름의 합을 반지름으로 하는 충돌 단면적, <img src="https://latex.codecogs.com/png.latex?%7CV(r_i)-V(r_j)%7C">는 두 방울의 낙하속도 차이(차등 침강), <img src="https://latex.codecogs.com/png.latex?E_%7Bij%7D">는 충돌 효율로 이 실험에서는 1이다. 종단속도식 <img src="https://latex.codecogs.com/png.latex?V(r)">이 바뀌면 큰 collector drop과 작은 방울 사이의 속도 차가 바뀌고, 그만큼 충돌·병합 속도가 직접 바뀐다.</p>
+<p>기준인 Rogers–Yau 식은 반지름 구간마다 다른 거듭제곱을 쓴다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AV_%7BRY%7D(r)=%5Cbegin%7Bcases%7Dk_1%20r%5E%7B2%7D%20&amp;%20r%3C35%5C%20%5Cmu%5Ctext%7Bm%7D%5C%5C%20k_2%5C,%20r%20&amp;%2035%5C%20%5Cmu%5Ctext%7Bm%7D%5Cle%20r%3C0.6%5C%20%5Ctext%7Bmm%7D%5C%5C%20k_3%5C,%20r%5E%7B1/2%7D%20&amp;%20r%5Cge%200.6%5C%20%5Ctext%7Bmm%7D%5Cend%7Bcases%7D%0A%5Cqquad%20k_1=1.19%5Ctimes10%5E%7B8%7D%5C%20%5Ctext%7Bm%7D%5E%7B-1%7D%5Ctext%7Bs%7D%5E%7B-1%7D,%5C%20k_2=8%5Ctimes10%5E%7B3%7D%5C%20%5Ctext%7Bs%7D%5E%7B-1%7D,%5C%20k_3=201%5C%20%5Ctext%7Bm%7D%5E%7B1/2%7D%5Ctext%7Bs%7D%5E%7B-1%7D%0A"></p>
+<p>작은 방울은 Stokes 영역이라 속도가 <img src="https://latex.codecogs.com/png.latex?r%5E2">에, 중간 방울은 <img src="https://latex.codecogs.com/png.latex?r">에, 큰 방울은 <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Br%7D">에 비례한다. 마지막 구간에는 상한이 없어서 반지름 6 mm에서 15.6 m s⁻¹까지 커진다. 반면 Gunn–Kinzer 측정에서는 지름 5 mm를 넘으면 낙하속도가 9.1–9.2 m s⁻¹에서 거의 늘지 않는다.</p>
+</section>
+<section id="다섯-가지-식과-실험-설계" class="level2">
+<h2 class="anchored" data-anchor-id="다섯-가지-식과-실험-설계">다섯 가지 식과 실험 설계</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 23%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>식</th>
+<th>형태</th>
+<th>이 실험의 구현</th>
+<th style="text-align: right;">반지름 2.9 mm에서의 <img src="https://latex.codecogs.com/png.latex?V"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rogers–Yau</td>
+<td>반지름 구간별 거듭제곱식(위)</td>
+<td>PySDM 기본, Experiment 5 기준</td>
+<td style="text-align: right;">10.82 m s⁻¹</td>
+</tr>
+<tr class="even">
+<td>Gunn–Kinzer (1949)</td>
+<td>관측표</td>
+<td>PySDM의 RBF 조회표</td>
+<td style="text-align: right;">9.17 m s⁻¹</td>
+</tr>
+<tr class="odd">
+<td>Atlas et al.&nbsp;(1973) hybrid</td>
+<td><img src="https://latex.codecogs.com/png.latex?V=9.65-10.3%5C,e%5E%7B-0.6D_%7Bmm%7D%7D"> (지름 0.86 mm 이상)</td>
+<td>작은 방울 식과 이어 붙인 실험용 조합</td>
+<td style="text-align: right;">9.33 m s⁻¹</td>
+</tr>
+<tr class="even">
+<td>Beard (1976) fixed</td>
+<td>세 유동 영역의 물리식</td>
+<td>공기 물성을 초기 300 K·1000 hPa로 고정</td>
+<td style="text-align: right;">9.32 m s⁻¹</td>
+</tr>
+<tr class="odd">
+<td>Atlas–Ulbrich (1977) hybrid</td>
+<td><img src="https://latex.codecogs.com/png.latex?V=3.78%5C,D_%7Bmm%7D%5E%7B0.67%7D"> (지름 0.86 mm 이상)</td>
+<td>작은 방울 식과 이어 붙인 실험용 조합</td>
+<td style="text-align: right;">12.27 m s⁻¹</td>
+</tr>
+</tbody>
+</table>
+<p><img src="https://latex.codecogs.com/png.latex?D_%7Bmm%7D">은 mm 단위 지름이다. 두 Atlas 계열은 원 논문의 식을 전 크기 범위에 쓴 것이 아니라 이 실험에서 작은 방울 branch와 연결한 비교용 조합이고, Beard 식은 parcel의 온도·압력 변화와 결합하지 않았다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-08-25-terminal-velocity-sensitivity/images/velocity-formulations.png" class="img-fluid figure-img" alt="Four panels comparing five terminal-velocity formulations: velocity, ratio to Rogers-Yau, differential settling speed against a 2 mm collector, and geometric collision kernel versus wet radius"></p>
+<figcaption>다섯 종단속도식의 속도(왼쪽 위), Rogers–Yau 대비 비율(오른쪽 위), 반지름 2 mm collector와의 차등 침강속도(왼쪽 아래), geometric collision kernel(오른쪽 아래). 점선은 공통 종료 반지름 2.9 mm.</figcaption>
+</figure>
+</div>
+<p>실험 조건은 Experiment 5의 recipe 실험(76개 시나리오 × 10회)을 그대로 쓰고 식만 바꿨다. 5 × 760 = <strong>3,800 run</strong>, 오류 0건이다. 다섯 식을 모두 관측 범위 안에서 비교하기 위해, 가장 큰 방울의 반지름이 <strong>2.9 mm</strong>에 닿으면 run을 끝냈다. 주 지표는 이 공통 한계 이전의 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20RWC_%7Bmax%7D">(seeded − control 최대 rain water 차이)다.</p>
+</section>
+<section id="결과-1.-부호는-거의-그대로였다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-1.-부호는-거의-그대로였다">결과 1. 부호는 거의 그대로였다</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 20%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>식</th>
+<th style="text-align: right;">평균 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20RWC_%7Bmax%7D"> (g kg⁻¹)</th>
+<th style="text-align: right;">중앙값</th>
+<th style="text-align: right;">강화 비율</th>
+<th style="text-align: center;">Rogers–Yau와 부호 일치</th>
+<th style="text-align: right;">RY 평균 / 이 식 평균</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rogers–Yau</td>
+<td style="text-align: right;">+0.0352</td>
+<td style="text-align: right;">+0.0006</td>
+<td style="text-align: right;">56.9%</td>
+<td style="text-align: center;">—</td>
+<td style="text-align: right;">1.0</td>
+</tr>
+<tr class="even">
+<td>Gunn–Kinzer</td>
+<td style="text-align: right;">+0.0183</td>
+<td style="text-align: right;">+0.0016</td>
+<td style="text-align: right;">56.9%</td>
+<td style="text-align: center;">72 / 72</td>
+<td style="text-align: right;">1.9</td>
+</tr>
+<tr class="odd">
+<td>Atlas hybrid</td>
+<td style="text-align: right;">+0.0266</td>
+<td style="text-align: right;">+0.0001</td>
+<td style="text-align: right;">52.8%</td>
+<td style="text-align: center;">69 / 72</td>
+<td style="text-align: right;">1.3</td>
+</tr>
+<tr class="even">
+<td>Beard fixed</td>
+<td style="text-align: right;">+0.0224</td>
+<td style="text-align: right;">+0.0008</td>
+<td style="text-align: right;">55.6%</td>
+<td style="text-align: center;">69 / 72</td>
+<td style="text-align: right;">1.6</td>
+</tr>
+<tr class="odd">
+<td>Atlas–Ulbrich hybrid</td>
+<td style="text-align: right;">+0.0222</td>
+<td style="text-align: right;">+0.0024</td>
+<td style="text-align: right;">56.9%</td>
+<td style="text-align: center;">72 / 72</td>
+<td style="text-align: right;">1.6</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-08-25-terminal-velocity-sensitivity/images/agreement-vs-rogers-yau.png" class="img-fluid figure-img" alt="Four scatter plots of scenario-mean seeding effects from alternative terminal-velocity formulas against Rogers-Yau, with sign agreement of 95.8 to 100 percent"></p>
+<figcaption>72개 시나리오의 10회 평균 효과를 Rogers–Yau(가로축)와 다른 식(세로축)으로 비교. 대각선 밖 사분면은 부호 반전, 파랑은 약한 상승류, 빨강은 강한 상승류.</figcaption>
+</figure>
+</div>
+<p>부호 일치는 95.8–100%였다. 그러나 중앙값은 모든 식에서 거의 0이고 강화 비율도 절반 남짓이다. 평균이 양수인 이유는 약한 상승류의 coarse·giant 조건 몇 개가 크게 끌어올렸기 때문이며, “대부분의 조건에서 비가 늘었다”는 뜻이 아니다.</p>
+<p>Experiment 5의 regime 표를 식별로 다시 세면 다음과 같다(강화 / 중립 / 억제).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Regime</th>
+<th style="text-align: center;">Rogers–Yau</th>
+<th style="text-align: center;">Gunn–Kinzer</th>
+<th style="text-align: center;">Atlas hybrid</th>
+<th style="text-align: center;">Beard fixed</th>
+<th style="text-align: center;">Atlas–Ulbrich</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>weak + early</td>
+<td style="text-align: center;">12 / 3 / 3</td>
+<td style="text-align: center;">12 / 3 / 3</td>
+<td style="text-align: center;">12 / 3 / 3</td>
+<td style="text-align: center;">12 / 3 / 3</td>
+<td style="text-align: center;">12 / 3 / 3</td>
+</tr>
+<tr class="even">
+<td>weak + late</td>
+<td style="text-align: center;">9 / 3 / 6</td>
+<td style="text-align: center;">9 / 3 / 6</td>
+<td style="text-align: center;">9 / 3 / 6</td>
+<td style="text-align: center;">10 / 3 / 5</td>
+<td style="text-align: center;">9 / 3 / 6</td>
+</tr>
+<tr class="odd">
+<td>strong + early</td>
+<td style="text-align: center;">2 / 0 / 16</td>
+<td style="text-align: center;">2 / 0 / 16</td>
+<td style="text-align: center;">2 / 0 / 16</td>
+<td style="text-align: center;">2 / 0 / 16</td>
+<td style="text-align: center;">2 / 0 / 16</td>
+</tr>
+<tr class="even">
+<td>strong + late</td>
+<td style="text-align: center;">18 / 0 / 0</td>
+<td style="text-align: center;">18 / 0 / 0</td>
+<td style="text-align: center;">15 / 0 / 3</td>
+<td style="text-align: center;">16 / 0 / 2</td>
+<td style="text-align: center;">18 / 0 / 0</td>
+</tr>
+</tbody>
+</table>
+<p>2.9 mm 종료를 쓴 Rogers–Yau 결과는 6 mm 컷을 쓴 Experiment 5와 72개 시나리오 모두 부호가 같았다. 부호가 갈린 여섯 경우(Atlas 3, Beard 3)는 모두 <strong>늦은 주입</strong>이었고 크기가 0.007 g kg⁻¹ 이하였다.</p>
+</section>
+<section id="그런데-strong-late는-거의-검사되지-않았다" class="level2">
+<h2 class="anchored" data-anchor-id="그런데-strong-late는-거의-검사되지-않았다">그런데 strong + late는 거의 검사되지 않았다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-08-25-terminal-velocity-sensitivity/images/common-limit-time.png" class="img-fluid figure-img" alt="Cumulative distribution of the time at which strong-updraft runs reached the 2.9 mm wet-radius limit, for five terminal-velocity formulas"></p>
+<figcaption>강한 상승류 run이 반지름 2.9 mm 공통 한계에 도달한 시각의 누적 분포. 왼쪽은 control, 오른쪽은 seeded run.</figcaption>
+</figure>
+</div>
+<p>약한 상승류 run은 어느 식에서도 2.9 mm에 닿지 않고 40분을 다 돌았다. 반대로 강한 상승류 run은 다섯 식 모두 380개 전부가 약 12–26분 사이에 2.9 mm에서 끝났다. Late 주입은 15분에 시작하므로, strong + late의 분석 구간은 식에 따라 중앙값 15.5–16.8분에 끝났다. Rogers–Yau에서는 strong + late run의 40%가 <strong>주입이 시작되기도 전에</strong> 종료됐고, clean 배경의 세 조건(coarse low, giant low, giant medium)은 seed 크기·dose가 달라도 값이 +0.0006 g kg⁻¹로 똑같았다. Seed가 지표에 닿기 전에 run이 끝났다는 뜻이다. 따라서 위 표의 strong + late 칸은 Experiment 5의 “strong + late 강화”를 검증하지 못한다. 이 실험이 실제로 확인한 것은 weak 두 칸과 strong + early다.</p>
+</section>
+<section id="결과-2.-크기는-식마다-달랐다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-2.-크기는-식마다-달랐다">결과 2. 크기는 식마다 달랐다</h2>
+<ul>
+<li>전체 평균은 Rogers–Yau가 다른 식보다 <strong>1.3–1.9배</strong> 컸다. Rogers–Yau는 약한 상승류에서 가장 큰 강화를, strong + early에서 가장 약한 억제를 계산했다.</li>
+<li>식에 가장 민감한 조건은 clean · strong · early · fine · medium이었다. 다섯 식 모두 억제였지만 크기는 −0.24(Rogers–Yau)에서 −0.69 g kg⁻¹(Gunn–Kinzer)까지 약 2.8배 차이 났다.</li>
+<li>가장 강건한 조건은 polluted · weak · early · giant · high로, 다섯 식 모두 +0.387–+0.393 g kg⁻¹였다.</li>
+</ul>
+<p>종단속도식은 부호보다 <strong>크기</strong>에 영향을 줬다. Experiment 5의 크기 값을 서술적으로만 읽어야 하는 이유가 하나 더 생긴 셈이다.</p>
+</section>
+<section id="어떤-식을-기준으로-쓸까" class="level2">
+<h2 class="anchored" data-anchor-id="어떤-식을-기준으로-쓸까">어떤 식을 기준으로 쓸까</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>역할</th>
+<th>식</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>주 기준선</td>
+<td>Gunn–Kinzer</td>
+<td>관측표 기반, Rogers–Yau와 부호 72/72 일치, 평균 효과가 가장 보수적</td>
+</tr>
+<tr class="even">
+<td>기존 결과 재현</td>
+<td>Rogers–Yau</td>
+<td>Experiment 4–5와 같은 식으로 비교</td>
+</tr>
+<tr class="odd">
+<td>물리 민감도</td>
+<td>Beard fixed</td>
+<td>유동 영역을 나눈 물리식</td>
+</tr>
+<tr class="even">
+<td>범위 진단</td>
+<td>Atlas 계열 hybrid</td>
+<td>큰 방울 속도 가정의 폭 확인</td>
+</tr>
+</tbody>
+</table>
+<p>이것은 운영상의 선택이지 정확도 검증이 아니다. 관측과 직접 비교하지 않았으므로 평균이 작다는 이유만으로 Gunn–Kinzer가 더 정확하다고 말할 수 없다. 또 Gunn–Kinzer를 기준으로 쓰면 반지름 6 mm 상한(관측 범위로는 2.9 mm)이 그대로 남는다. 상한 문제를 실제로 풀려면 침강·제거와 breakup이 필요하다.</p>
+</section>
+<section id="말할-수-있는-것과-없는-것" class="level2">
+<h2 class="anchored" data-anchor-id="말할-수-있는-것과-없는-것">말할 수 있는 것과 없는 것</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>지지됨</td>
+<td>6 mm는 PySDM 조회표의 상한(관측표는 반지름 2.9 mm까지) · 다섯 식 모두 strong + early 억제 16/18, weak + early 강화 12/18 · 시나리오 부호 일치 95.8–100%</td>
+</tr>
+<tr class="even">
+<td>서술적</td>
+<td>평균 효과의 1.3–1.9배 차이, 민감 조건의 약 2.8배 차이 — 수렴 미검증이며 평균은 소수 조건에 끌려감</td>
+</tr>
+<tr class="odd">
+<td>보여주지 않음</td>
+<td>strong + late의 강건성(공통 종료로 대부분 잘림) · 어느 식이 관측에 가장 맞는지 · 2.9 mm 이후 성장 · 침강·breakup을 넣었을 때의 결과</td>
+</tr>
+</tbody>
+</table>
+<div class="review-verdict">
+<p><strong>결론.</strong> 종단속도식을 다섯 가지로 바꿔도 strong + early 억제(16/18)와 weak + early 강화(12/18)는 그대로였고, 시나리오 부호는 Rogers–Yau와 95.8–100% 일치했다. 그러나 평균 효과 크기는 식에 따라 1.3–1.9배 달랐고, strong + late는 2.9 mm 공통 종료 때문에 사실상 검사되지 못했다. 종단속도식은 부호보다 크기의 불확실성 축이다.</p>
+</div>
+</section>
+<section id="다음-질문" class="level2">
+<h2 class="anchored" data-anchor-id="다음-질문">다음 질문</h2>
+<p>지금까지는 내가 정한 설계 안에서 결론의 강건성을 봤다. 다음에는 같은 0-D parcel을 출판된 연구와 맞대 본다. Ren et al.&nbsp;(2025)은 2-D bin 모델에서 등질량 seed의 크기에 따라 강수가 억제에서 증대로 바뀌는 전환을 보였다 <span class="citation" data-cites="Ren2025ParticleSize">(Ren 기타 2025년)</span>. 이 논문은 seed 크기를 <strong>지름</strong>으로 표기하므로, 반지름을 쓰던 지금까지의 실험과 단위를 주의해서 맞춰야 한다.</p>
+<p><a href="../../../posts/experiments/2026-09-07-ren2025-parcel-replication/index.html">Experiment 7로 이어서 읽기</a></p>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
+<ul>
+<li><a href="../../../experiments.html">Experiments 목록</a></li>
+</ul>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-GunnKinzer1949" class="csl-entry">
+Gunn, Ross, 와/과 Gilbert D. Kinzer. 1949년. <span>“The Terminal Velocity of Fall for Water Droplets in Stagnant Air”</span>. <em>Journal of Meteorology</em> 6: 243–48. <a href="https://doi.org/10.1175/1520-0469(1949)006<0243:TTVOFF>2.0.CO;2">https://doi.org/10.1175/1520-0469(1949)006&lt;0243:TTVOFF&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Experiments</category>
+  <category>PySDM</category>
+  <category>terminal velocity</category>
+  <category>sensitivity</category>
+  <guid>https://jinu219.github.io/posts/experiments/2026-08-25-terminal-velocity-sensitivity/</guid>
+  <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/experiments/2026-08-25-terminal-velocity-sensitivity/images/agreement-vs-rogers-yau.png" medium="image" type="image/png" height="125" width="144"/>
+</item>
+<item>
+  <title>Experiment 5. 상승류와 주입 시점이 가르는 강화와 억제</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/experiments/2026-08-06-updraft-timing-regimes/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>실험 출처
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 실험은 <strong>PySDM-Seeding-Lab 외부</strong>에서 수행했다. Visual Studio Code로 작성한 별도 PySDM parcel 스크립트를 연구실 서버에서 20개 worker로 병렬 실행했으며, Seeding Lab 결과로 표기하지 않는다.</p>
+</div>
+</div>
+<section id="질문-같은-시딩이-왜-어떤-구름에서는-비를-줄이나" class="level2">
+<h2 class="anchored" data-anchor-id="질문-같은-시딩이-왜-어떤-구름에서는-비를-줄이나">질문: 같은 시딩이 왜 어떤 구름에서는 비를 줄이나</h2>
+<p><a href="../../../posts/experiments/2026-07-08-efficiency-response-surface/index.html">Experiment 4</a>는 하나의 배경과 하나의 상승류에서 “큰 κ, 큰 dry radius, 늦은 주입일수록 강하다”는 단조로운 그림을 얻었다. 그 글 끝에 남긴 숙제는 공정한 dose 기준, 배경 에어로졸, 그리고 절대 시간 대신 구름 상태를 반영하는 주입 시점이었다. 이번에는 이 숙제를 <strong>상승류 세기</strong>와 묶어서 묻는다.</p>
+<ol type="1">
+<li>시딩 효과의 <strong>부호</strong>(강화/억제)는 무엇이 정하는가 — seed 크기, 상승류, 주입 시점?</li>
+<li>강한 상승류에서 나온 “억제”는 비가 적다는 뜻인가?</li>
+<li>Seed recipe를 하나로 고정하고 환경만 바꾸면 부호 지도는 어떻게 생기는가?</li>
+</ol>
+</section>
+<section id="설계-recipe를-바꾸는-실험과-환경을-바꾸는-실험" class="level2">
+<h2 class="anchored" data-anchor-id="설계-recipe를-바꾸는-실험과-환경을-바꾸는-실험">설계: recipe를 바꾸는 실험과 환경을 바꾸는 실험</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Recipe 실험</th>
+<th>환경 실험</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>바꾼 것</td>
+<td>배경 × 상승류 × 주입 시점 × seed dry radius × dose</td>
+<td>초기 RH × 상승류 × 배경 × 열역학 조건</td>
+</tr>
+<tr class="even">
+<td>수준</td>
+<td>clean 50 / polluted 1,000 mg⁻¹; peak 0.5 / 5 m s⁻¹; 2–4 / 15–20분; 0.1 / 1 / 5 µm; low / medium / high</td>
+<td>90 / 95 / 99%; 0.5 / 2 / 5 m s⁻¹; 50 / 200 / 1,000 mg⁻¹; 300 K·1000 hPa / 290 K·900 hPa / 280 K·800 hPa</td>
+</tr>
+<tr class="odd">
+<td>고정</td>
+<td>300 K, 1000 hPa, 수증기 22.2 g kg⁻¹</td>
+<td>seed dry radius 1 µm, κ 0.8, medium dose, 2–4분 주입</td>
+</tr>
+<tr class="even">
+<td>시나리오</td>
+<td>72 seeded + 4 control</td>
+<td>81개 환경 × (seeded + control)</td>
+</tr>
+<tr class="odd">
+<td>반복 × 시나리오</td>
+<td>10 × 76 = <strong>760 run</strong></td>
+<td>5 × 162 = <strong>810 run</strong></td>
+</tr>
+</tbody>
+</table>
+<p>공통 설정은 PySDM 0-D adiabatic parcel <span class="citation" data-cites="Bartman2022PySDM">(Bartman 기타 2022년)</span>, condensation + coalescence(geometric kernel, 충돌하면 모두 합체), Rogers–Yau 종단속도, Δt 10 s, 40분 적분, super-droplet 4,096개(배경) + 2,048개(seed)다. 배경 에어로졸은 mode dry radius 75 nm, σg 1.6, κ 0.5의 lognormal, seed는 σg 1.2, κ 0.8이다. <strong>침강(sedimentation)과 breakup은 없다.</strong> Seeded run과 control은 같은 random seed로 짝지었다.</p>
+<section id="dose는-같은-건조부피로-맞췄다" class="level3">
+<h3 class="anchored" data-anchor-id="dose는-같은-건조부피로-맞췄다">Dose는 같은 건조부피로 맞췄다</h3>
+<p><img src="https://latex.codecogs.com/png.latex?%0AN_%7Bseed%7D(r_d)=N_%7Bref%7D%5Cleft(%5Cfrac%7B1%5C%20%5Cmu%5Ctext%7Bm%7D%7D%7Br_d%7D%5Cright)%5E%7B3%7D,%5Cqquad%20N_%7Bref%7D=1,%5C%2010,%5C%20100%5C%20%5Ctext%7Bmg%7D%5E%7B-1%7D%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?N_%7Bseed%7D">는 건조공기 1 mg당 넣는 seed 입자 수, <img src="https://latex.codecogs.com/png.latex?r_d">는 seed의 median dry radius, <img src="https://latex.codecogs.com/png.latex?N_%7Bref%7D">는 1 µm 기준 입자 수(low/medium/high)다. 입자 하나의 부피가 <img src="https://latex.codecogs.com/png.latex?r_d%5E3">에 비례하므로 입자 수를 <img src="https://latex.codecogs.com/png.latex?r_d%5E%7B-3%7D">로 줄이면 <strong>총 건조부피(투입 물질량)가 크기와 상관없이 같아진다.</strong> 그래서 fine(0.1 µm)은 coarse(1 µm)보다 입자가 1,000배 많고, giant(5 µm)는 1/125이다. 크기와 투입량이 함께 바뀌는 fixed-number 설계의 혼동을 피하려는 선택이다.</p>
+</section>
+<section id="상승류는-12.5분짜리-펄스다" class="level3">
+<h3 class="anchored" data-anchor-id="상승류는-12.5분짜리-펄스다">상승류는 12.5분짜리 펄스다</h3>
+<p><img src="https://latex.codecogs.com/png.latex?%0Aw(t)=w_%7Bmin%7D+%5Cleft(w_%7Bpeak%7D-w_%7Bmin%7D%5Cright)%5Csin%5E%7B2%7D%5C!%5Cleft(%5Cfrac%7B%5Cpi%20t%7D%7BT%7D%5Cright)%5Cquad(0%5Cle%20t%5Cle%20T=12.5%5C%20%5Ctext%7Bmin%7D),%5Cqquad%20w=w_%7Bmin%7D%5C%20%5C%20(t%3ET)%0A"></p>
+<p><img src="https://latex.codecogs.com/png.latex?w_%7Bpeak%7D">는 최대 상승속도, <img src="https://latex.codecogs.com/png.latex?w_%7Bmin%7D=0.025"> m s⁻¹는 펄스 뒤에 남는 아주 약한 상승이다. <img src="https://latex.codecogs.com/png.latex?%5Csin%5E2"> 항 때문에 상승류는 최소값에서 출발해 6.25분에 최대가 되고 12.5분에 최소로 돌아온다. 40분 동안 parcel이 올라가는 높이는 0.5 m s⁻¹에서 약 0.24 km, 5 m s⁻¹에서 약 1.9 km다. <strong>Early active</strong>(2–4분)는 상승류가 커지는 중에, <strong>late quiescent</strong>(15–20분)는 펄스가 끝나 거의 멈춘 parcel에 seed를 넣는다.</p>
+</section>
+<section id="지표-6-mm-이전의-최대-rain-water" class="level3">
+<h3 class="anchored" data-anchor-id="지표-6-mm-이전의-최대-rain-water">지표: 6 mm 이전의 최대 rain water</h3>
+<p>Rain은 wet radius 40 µm 이상 물방울이고, 주 지표는 seeded와 control의 <strong>6 mm 이전 최대 rain-water mixing ratio 차이</strong> <img src="https://latex.codecogs.com/png.latex?%5CDelta%20RWC_%7Bmax%7D">다. Parcel에는 침강과 breakup이 없어서, 한 번 커진 물방울이 빠져나가지 않고 계속 다른 방울을 먹는다. Recipe 실험의 강한 상승류 run 380개는 모두 16–27분 사이에 가장 큰 방울의 반지름이 6 mm를 넘었고, 40분 끝에는 반지름이 약 3 cm까지 자랐다. 약한 상승류 run은 하나도 넘지 않았다. 6 mm라는 숫자의 출처는 <a href="../../../posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html">Experiment 6</a>에서 따로 다룬다. 6 mm 컷 대신 run 전체의 최대값을 써도 72개 recipe 중 71개는 부호가 같았다.</p>
+<p>부호 분류는 두 실험이 조금 다르다. Recipe 실험은 10회 평균 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20RWC_%7Bmax%7D">의 부호로 강화/억제를 나눴고, seeded와 control 모두 비가 없을 때만 “중립”이다. 환경 실험은 짝지은 run마다 +1(강화)/−1(억제)/0(둘 다 비 없음)을 매기고 5회 평균이 +0.2보다 크면 강화, −0.2보다 작으면 억제로 분류했다.</p>
+</section>
+</section>
+<section id="결과-1.-비의-양은-상승류가-정한다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-1.-비의-양은-상승류가-정한다">결과 1. 비의 양은 상승류가 정한다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-08-06-updraft-timing-regimes/images/absolute-vs-relative.png" class="img-fluid figure-img" alt="Bar chart of control maximum rain water before 6 mm by updraft and background, with seeded values as markers, for the fixed-recipe and recipe experiments"></p>
+<figcaption>두 실험의 control 최대 rain water(막대)와 seeded 값(점). 강한 상승류의 control은 약한 상승류보다 rain water가 두 자릿수 많다.</figcaption>
+</figure>
+</div>
+<p>환경 실험 clean 배경 control의 6 mm 이전 최대 rain water는 상승류 0.5 → 2 → 5 m s⁻¹에서 0.04 → 1.39 → 3.73 g kg⁻¹로 커졌다. Parcel이 높이 올라갈수록 응결되는 물 자체가 많기 때문이다. 따라서 강한 상승류의 “억제”는 비가 적은 구름이라는 뜻이 아니다. 이미 rain water가 4 g kg⁻¹ 넘게 생기는 control보다 seeded가 <strong>조금</strong> 작다는 상대적 의미다. Recipe 실험에서 강한 상승류의 seeded − control 차이는 control 대비 −5.5%에서 +1.4% 사이였다.</p>
+</section>
+<section id="결과-2.-부호는-상승류-주입-시점의-조합이-갈랐다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-2.-부호는-상승류-주입-시점의-조합이-갈랐다">결과 2. 부호는 상승류 × 주입 시점의 조합이 갈랐다</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 20%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>상승류</th>
+<th>주입 시점</th>
+<th style="text-align: right;">평균 <img src="https://latex.codecogs.com/png.latex?%5CDelta%20RWC_%7Bmax%7D"> (g kg⁻¹)</th>
+<th style="text-align: center;">강화 / 중립 / 억제</th>
+<th style="text-align: center;">10회 중 9회 이상 같은 부호</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>weak 0.5 m s⁻¹</td>
+<td>early 2–4분</td>
+<td style="text-align: right;">+0.136</td>
+<td style="text-align: center;">12 / 3 / 3</td>
+<td style="text-align: center;">15 / 15</td>
+</tr>
+<tr class="even">
+<td>weak 0.5 m s⁻¹</td>
+<td>late 15–20분</td>
+<td style="text-align: right;">+0.059</td>
+<td style="text-align: center;">9 / 3 / 6</td>
+<td style="text-align: center;">10 / 15</td>
+</tr>
+<tr class="odd">
+<td>strong 5 m s⁻¹</td>
+<td>early 2–4분</td>
+<td style="text-align: right;">−0.044</td>
+<td style="text-align: center;">2 / 0 / 16</td>
+<td style="text-align: center;">15 / 18</td>
+</tr>
+<tr class="even">
+<td>strong 5 m s⁻¹</td>
+<td>late 15–20분</td>
+<td style="text-align: right;">+0.024</td>
+<td style="text-align: center;">18 / 0 / 0</td>
+<td style="text-align: center;">14 / 18</td>
+</tr>
+</tbody>
+</table>
+<p>마지막 열은 평균이 0이 아닌 시나리오 가운데, 10회 반복 중 9회 이상이 평균과 같은 부호였던 개수다.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-08-06-updraft-timing-regimes/images/regime-interactions.png" class="img-fluid figure-img" alt="Four panels of seeded minus control pre-6-mm rain water versus dose for weak and strong updraft and early and late injection, coloured by seed size"></p>
+<figcaption>상승류 × 주입 시점 네 칸에서 dose와 seed 크기에 따른 seeded − control 차이. 색은 seed 크기(fine 0.1, coarse 1, giant 5 µm dry radius), 작은 원은 clean, 작은 사각형은 polluted 배경, 큰 점과 선은 두 배경의 평균이다.</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>Strong + early:</strong> 18개 중 16개가 억제였다. 예외는 fine seed의 low dose 두 개(clean +0.035, polluted +0.003 g kg⁻¹)뿐이다. Fine seed는 강수 개시를 0.7–7.8분 늦췄고(Δonset &gt; 0 = 지연), giant seed는 개시를 1.7–5.7분 앞당겼는데도 최대값은 control보다 약간 낮았다.</li>
+<li><strong>Strong + late:</strong> 18개 모두 강화였지만 크기는 control 대비 1.4% 이하다. 아래 주의를 함께 읽어야 한다.</li>
+<li><strong>Weak + early:</strong> coarse·giant 12개가 모두 강화였다. Polluted 배경의 control은 비를 전혀 만들지 못했는데, coarse·giant seed는 비를 만들어냈다. Fine seed는 clean 배경에서 control의 약한 비마저 없앴고(억제 3), polluted에서는 양쪽 모두 비가 없었다(중립 3).</li>
+<li><strong>Weak + late:</strong> giant 6개는 모두 강화, coarse·fine은 작은 억제 또는 중립이었다.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>strong + late의 ’모두 강화’를 읽을 때
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>분석 구간이 짧다.</strong> 6 mm 이전 구간이 control 기준 약 18분(clean)·21분(polluted)에 끝나므로, 15분에 들어간 seed가 지표에 기여할 시간은 몇 분뿐이다.</li>
+<li><strong>주입 전에도 차이가 있었다.</strong> 같은 random seed를 썼지만 seeded run은 주입 전에도 control과 완전히 같지 않았다(14.5분 rain water 차이: clean +0.0035, polluted −0.0006 g kg⁻¹, 원인 미확인). Clean giant seed의 low·medium dose 값(+0.0035, +0.0046 g kg⁻¹)은 이 차이와 크기가 비슷해 부호를 믿기 어렵다.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="결과-3.-recipe를-고정하면-상승류가-부호를-거의-혼자-정했다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-3.-recipe를-고정하면-상승류가-부호를-거의-혼자-정했다">결과 3. Recipe를 고정하면 상승류가 부호를 거의 혼자 정했다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-08-06-updraft-timing-regimes/images/environment-sign-map.png" class="img-fluid figure-img" alt="Grid of effect-direction maps for 81 environments: suppression in red, neutral in grey, enhancement in blue, by relative humidity and updraft"></p>
+<figcaption>환경 실험 81개 환경의 부호 지도. 행은 열역학 조건, 열은 배경 에어로졸, 각 칸 안은 RH × 상승류이며 숫자는 평균 방향 점수다.</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>초기 RH</th>
+<th>0.5 m s⁻¹</th>
+<th>2 m s⁻¹</th>
+<th>5 m s⁻¹</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>90%</td>
+<td>중립 9</td>
+<td>강화 3 / 억제 6</td>
+<td>억제 9</td>
+</tr>
+<tr class="even">
+<td>95%</td>
+<td>강화 9</td>
+<td>강화 1 / 억제 8</td>
+<td>억제 9</td>
+</tr>
+<tr class="odd">
+<td>99%</td>
+<td>강화 9</td>
+<td>억제 9</td>
+<td>억제 9</td>
+</tr>
+</tbody>
+</table>
+<p>81개 환경 중 강화 22, 억제 50, 중립 9였다. 중립 9개는 효과가 상쇄된 것이 아니라 RH 90% + 0.5 m s⁻¹에서 seeded와 control 모두 비가 생기지 않은 경우다. 2 m s⁻¹의 강화 4개는 모두 RH 90–95%, moderate·polluted 배경, 290 K 이하의 열역학 조건에서 나왔다. 같은 RH·열역학 조건에서 배경만 바꾸면 0.5와 5 m s⁻¹에서는 부호가 바뀌지 않았다. 배경 에어로졸은 부호보다 크기를 조절했다.</p>
+<p>이 실험은 <strong>2–4분 early 주입만</strong> 썼다. 그래서 “강한 상승류 = 억제”는 recipe 실험의 strong + early와 같은 이야기이고, 늦은 주입에도 그렇다는 뜻이 아니다.</p>
+</section>
+<section id="깨끗한-구름은-비를-더-일찍-만든다" class="level2">
+<h2 class="anchored" data-anchor-id="깨끗한-구름은-비를-더-일찍-만든다">깨끗한 구름은 비를 더 일찍 만든다</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>환경 실험 control</th>
+<th style="text-align: right;">clean 50 mg⁻¹</th>
+<th style="text-align: right;">moderate 200 mg⁻¹</th>
+<th style="text-align: right;">polluted 1,000 mg⁻¹</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.5 m s⁻¹: 비가 생긴 환경</td>
+<td style="text-align: right;">3 / 9</td>
+<td style="text-align: right;">2 / 9 (일부 run)</td>
+<td style="text-align: right;">0 / 9</td>
+</tr>
+<tr class="even">
+<td>2 m s⁻¹: 평균 강수 개시</td>
+<td style="text-align: right;">11.3분</td>
+<td style="text-align: right;">16.2분</td>
+<td style="text-align: right;">23.5분</td>
+</tr>
+<tr class="odd">
+<td>5 m s⁻¹: 평균 강수 개시</td>
+<td style="text-align: right;">7.4분</td>
+<td style="text-align: right;">9.4분</td>
+<td style="text-align: right;">12.1분</td>
+</tr>
+<tr class="even">
+<td>5 m s⁻¹: 평균 최대 rain water</td>
+<td style="text-align: right;">3.73 g kg⁻¹</td>
+<td style="text-align: right;">3.74 g kg⁻¹</td>
+<td style="text-align: right;">3.75 g kg⁻¹</td>
+</tr>
+</tbody>
+</table>
+<p>배경 입자가 적음 → 구름방울 수가 적음(recipe 실험 5 m s⁻¹ control 최대 약 56 vs 990 cm⁻³) → 같은 물을 적은 방울이 나눠 가져 방울이 빨리 커짐 → 충돌·병합이 일찍 시작된다. 0.5 m s⁻¹에서는 RH 99%일 때만 비가 생겼다. 하지만 5 m s⁻¹에서는 최대 rain water가 거의 같았다. 이 parcel에서 깨끗한 배경은 비를 <strong>빨리</strong> 만들 뿐, <strong>많이</strong> 만들지는 않았다. 여기서 강수 개시는 rain water가 10⁻⁵ g kg⁻¹을 처음 넘는 시각이며, 지상 강수 시작이 아니다.</p>
+</section>
+<section id="skew-t-위의-한-쌍-시딩은-열역학을-거의-바꾸지-않았다" class="level2">
+<h2 class="anchored" data-anchor-id="skew-t-위의-한-쌍-시딩은-열역학을-거의-바꾸지-않았다">Skew-T 위의 한 쌍: 시딩은 열역학을 거의 바꾸지 않았다</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://jinu219.github.io/posts/experiments/2026-08-06-updraft-timing-regimes/images/skewt-pair.png" class="img-fluid figure-img" alt="Skew-T log-p diagram of one paired parcel trajectory and the seeded minus control temperature and dew-point differences in millikelvin"></p>
+<figcaption>300 K·1000 hPa, RH 95%, moderate 배경, 5 m s⁻¹, 고정 recipe의 control–seeded 한 쌍. 왼쪽은 parcel 경로, 오른쪽은 seeded − control 온도·이슬점 차이(mK).</figcaption>
+</figure>
+</div>
+<p>Parcel은 1000 hPa에서 약 794 hPa(약 1.93 km)까지 올라갔고 대부분은 상승류 펄스 동안 올라갔다. Seeded − control 온도 차이는 −21에서 +2 mK, 즉 1000분의 몇 도에 불과했다. 시딩 반응은 parcel 열역학이 아니라 <strong>방울 크기 분포</strong>에서 일어난다. 게다가 상승류를 처방했으므로 이 작은 차이조차 부력·상승류로 되먹임되지 않는다. 이 쌍에서 seeded는 비가 1분 일찍 시작했지만(8.0 vs 9.0분) 최대 rain water는 0.15% 작아 환경 지도에서는 “억제” 칸에 속한다. 개시 시각과 최대값은 서로 다른 질문에 답한다. 이 그림은 parcel 경로일 뿐 환경 sounding이 아니므로 CAPE/CIN을 진단할 수 없다.</p>
+</section>
+<section id="말할-수-있는-것과-없는-것" class="level2">
+<h2 class="anchored" data-anchor-id="말할-수-있는-것과-없는-것">말할 수 있는 것과 없는 것</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>지지됨 (부호, 반복 간 일관)</td>
+<td>상승류 × 주입 시점이 부호를 가름 (strong + early 억제 16/18, weak + early 강화 12/18) · early 주입 고정 recipe에서 2–5 m s⁻¹ 환경 54개 중 50개 억제 · 절대 rain water는 상승류가 지배 · clean 배경에서 강수 개시가 빠름</td>
+</tr>
+<tr class="even">
+<td>서술적 (크기)</td>
+<td><img src="https://latex.codecogs.com/png.latex?%5CDelta%20RWC_%7Bmax%7D"> 값, 상대 변화율, “가장 강한 조건” 순위 — super-droplet 수·timestep 수렴을 확인하지 않았다</td>
+</tr>
+<tr class="odd">
+<td>보여주지 않음</td>
+<td>지상 강수량(침강 없음) · cloud invigoration(상승류 처방이라 잠열 → 부력 → 상승류 되먹임 없음) · 6 mm 이후의 방울 · 충돌 효율·breakup을 넣었을 때의 결과 · 억제 메커니즘(수증기 경쟁 등은 추정)</td>
+</tr>
+</tbody>
+</table>
+<div class="review-verdict">
+<p><strong>결론.</strong> 시딩 반응의 부호는 seed 크기보다 먼저 상승류와 주입 시점의 조합에서 갈렸다. 강한 상승류에 일찍 넣으면 18개 중 16개가 억제, 늦게 넣으면 18개 모두 강화(단, control 대비 1.4% 이하)였고, 약한 상승류에 일찍 넣은 coarse·giant seed는 모두 강화였다. 여기서 “억제”는 비가 적다는 뜻이 아니라 이미 비가 많은 control보다 조금 작다는 상대적 의미다.</p>
+</div>
+</section>
+<section id="다음-질문" class="level2">
+<h2 class="anchored" data-anchor-id="다음-질문">다음 질문</h2>
+<p>모든 결론은 “6 mm 이전”이라는 컷 위에 서 있다. 이 6 mm는 종단속도 조회표의 상한에서 온 숫자이고, 종단속도는 충돌 kernel에 직접 들어간다. 그렇다면 종단속도식을 바꿔도 위의 부호 패턴이 유지될까?</p>
+<p><a href="../../../posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html">Experiment 6로 이어서 읽기</a></p>
+</section>
+<section id="연결-자료" class="level2">
+<h2 class="anchored" data-anchor-id="연결-자료">연결 자료</h2>
+<ul>
+<li><a href="../../../experiments.html">Experiments 목록</a></li>
+</ul>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bartman2022PySDM" class="csl-entry">
+Bartman, Piotr, Oleg Bulenok, Tomasz Gierczak, 기타. 2022년. <span>“<span>PySDM</span> v1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry”</span>. <em>Journal of Open Source Software</em> 7 (72): 3219. <a href="https://doi.org/10.21105/joss.03219">https://doi.org/10.21105/joss.03219</a>.
+</div>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Experiments</category>
+  <category>PySDM</category>
+  <category>updraft</category>
+  <category>injection timing</category>
+  <guid>https://jinu219.github.io/posts/experiments/2026-08-06-updraft-timing-regimes/</guid>
+  <pubDate>Thu, 06 Aug 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://jinu219.github.io/posts/experiments/2026-08-06-updraft-timing-regimes/images/regime-interactions.png" medium="image" type="image/png" height="102" width="144"/>
+</item>
 <item>
   <title>실험 코드를 연구 워크플로로: PySDM Seeding Lab v1.0.0</title>
   <dc:creator>Jinu </dc:creator>
@@ -682,14 +3190,14 @@ Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기},
   date = {2026-07-15},
   url = {https://jinu219.github.io/posts/article-review/2026-07-15-kappa-kohler/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“κ 하나로 에어로졸의 흡습성과 CCN 활성을
 연결하기.”</span> July 15. <a href="https://jinu219.github.io/posts/article-review/2026-07-15-kappa-kohler/">https://jinu219.github.io/posts/article-review/2026-07-15-kappa-kohler/</a>.
 </div></div></section></div> ]]></description>
@@ -781,14 +3289,14 @@ Lin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, 기타. 2023년. <span>“Evaluat
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적},
   date = {2026-07-15},
   url = {https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“WRF로 묻는 흡습성 씨뿌리기의 최적 고도와
 면적.”</span> July 15. <a href="https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/">https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/</a>.
 </div></div></section></div> ]]></description>
@@ -906,14 +3414,14 @@ Shima, Shin-ichiro, Kanya Kusano, Akio Kawano, Tatsuya Sugiyama, 와/과 Shintar
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {PySDM을 시작하며: 구름 미세물리 실험의 첫 좌표},
   date = {2026-07-15},
   url = {https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“PySDM을 시작하며: 구름 미세물리 실험의 첫
 좌표.”</span> July 15. <a href="https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/">https://jinu219.github.io/posts/learn-pysdm/2026-07-15-first-steps/</a>.
 </div></div></section></div> ]]></description>
@@ -1327,7 +3835,7 @@ font-style: inherit;">return</span> pd.read_csv(path)</span></code></pre></div><
 
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="실험 출처">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1484,7 +3992,7 @@ t_max = 30 min</code></pre>
 
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="실험 출처">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1620,7 +4128,7 @@ t_max = 30 min</code></pre>
 
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="실험 출처">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1762,7 +4270,7 @@ t_max = 30 min</code></pre>
 
 
 
-<div class="callout callout-style-default callout-note callout-titled" title="실험 출처">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -1949,14 +4457,14 @@ Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬},
   date = {2026-05-20},
   url = {https://jinu219.github.io/posts/article-review/2026-05-20-cloud-seeding-review/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저
 물리 사슬.”</span> May 20. <a href="https://jinu219.github.io/posts/article-review/2026-05-20-cloud-seeding-review/">https://jinu219.github.io/posts/article-review/2026-05-20-cloud-seeding-review/</a>.
 </div></div></section></div> ]]></description>
@@ -2049,14 +4557,14 @@ Zheng, Wei, Hengben Ma, Ming Zhang, 기타. 2021년. <span>“Evaluation of the 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기},
   date = {2026-05-20},
   url = {https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시
 읽기.”</span> May 20. <a href="https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/">https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/</a>.
 </div></div></section></div> ]]></description>
@@ -2161,14 +4669,14 @@ Ro, Yonghun, Ki-Ho Chang, Sanghee Chae, Yun-Kyu Lim, Jung Mo Ku, 와/과 Woonseo
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까},
   date = {2026-04-08},
   url = {https://jinu219.github.io/posts/article-review/2026-04-08-enhanced-rainfall-accounting/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“씨뿌리기로 늘어난 비의 총량은 어떻게
 계산할까.”</span> April 8. <a href="https://jinu219.github.io/posts/article-review/2026-04-08-enhanced-rainfall-accounting/">https://jinu219.github.io/posts/article-review/2026-04-08-enhanced-rainfall-accounting/</a>.
 </div></div></section></div> ]]></description>
@@ -2177,108 +4685,6 @@ Jinu. 2026. <span>“씨뿌리기로 늘어난 비의 총량은 어떻게
   <category>enhanced rainfall</category>
   <category>Korea</category>
   <guid>https://jinu219.github.io/posts/article-review/2026-04-08-enhanced-rainfall-accounting/</guid>
-  <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다</title>
-  <dc:creator>Jinu </dc:creator>
-  <link>https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<p>Geresdi et al.&nbsp;(2020)은 Wyoming Weather Modification Pilot Project의 실제 네 사례를 3차원 WRF와 bin 미세물리 모형으로 다시 계산했다 <span class="citation" data-cites="Geresdi2020Orographic">(Geresdi 기타 2020년)</span>. 질문은 단순하다. 지상에서 방출한 AgI가 산악 구름 안으로 들어갔을 때, <strong>어떤 조건에서 실제 지상 강수 증가까지 이어지는가?</strong></p>
-<div class="review-verdict">
-<p><strong>한 문장 결론.</strong> AgI를 많이 방출하는 것만으로는 부족하다. AgI 플룸이 충분한 과냉각 액체수와 같은 시간·공간에 놓이고, 새로 생긴 얼음이 확산 성장과 착빙을 거쳐 눈으로 성장할 시간이 있어야 지상 강수가 늘어난다.</p>
-</div>
-<p><a href="https://doi.org/10.1175/JAMC-D-19-0278.1">원문 보기</a></p>
-<section id="연구가-풀려는-문제" class="level2">
-<h2 class="anchored" data-anchor-id="연구가-풀려는-문제">연구가 풀려는 문제</h2>
-<p>빙정핵 씨뿌리기의 개념적 사슬은 익숙하다. AgI가 얼음핵으로 활성화되고, 빙정 수가 늘고, 수증기 증착과 착빙으로 입자가 성장해 눈이나 비가 된다. 그러나 실제 산악 지형에서는 바람, 경계층 난류, 지형에 따른 상승류가 AgI 플룸을 계속 변형한다. 구름 속 액체수도 균일하지 않다. 사슬의 한 단계라도 끊기면 지상 강수 증가는 나타나지 않는다.</p>
-<p>이 연구는 네 실험 단위(RSE023, RSE077, RSE114, RSE149)에 대해 자연 구름을 모의한 CTRL과 AgI를 투입한 SEED를 비교했다. 실제 지형과 지상 발생기 위치를 사용하고, University of Pécs–NCAR bin 미세물리 모형으로 수상체 스펙트럼과 미세물리 전환을 추적했다.</p>
-</section>
-<section id="왜-3차원-계산이-필요한가" class="level2">
-<h2 class="anchored" data-anchor-id="왜-3차원-계산이-필요한가">왜 3차원 계산이 필요한가</h2>
-<p>2차원 단면 모의에서는 물질이 옆 방향으로 빠져나갈 수 없다. 3차원에서는 지형과 난류가 AgI를 수평·연직으로 동시에 퍼뜨린다. 같은 방출률이어도 3차원 플룸의 최대 농도가 2차원보다 대략 한 자릿수 낮아질 수 있다는 것이 핵심이다. 즉, 2차원에서 효과가 커 보였던 설정이 실제 산악 지형에서는 희석될 수 있다.</p>
-<p>반대로 3차원 지형은 단순히 효과를 약화시키기만 하는 것이 아니다. 계곡과 사면을 따라 형성된 흐름이 플룸을 과냉각 구름으로 운반할 수도 있다. 따라서 발생기 위치는 “산 위인가 아래인가”보다 <strong>방출된 입자가 어느 유선을 따라 액체수 영역과 만나는가</strong>로 평가해야 한다.</p>
-</section>
-<section id="핵심-진단량-수평-액체수-경로" class="level2">
-<h2 class="anchored" data-anchor-id="핵심-진단량-수평-액체수-경로">핵심 진단량: 수평 액체수 경로</h2>
-<p>저자들은 바람 방향을 따라 구름 속 액체수를 적분한 수평 액체수 경로(horizontal liquid water path, h-LWP)를 제안한다. 비행기가 연직으로 측정하는 LWP와 달리, 씨뿌리기 물질과 성장 중인 입자가 실제로 지나가는 경로에 얼마나 많은 액체수가 있는지를 나타낸다.</p>
-<table class="review-data caption-top table">
-<caption>연구가 제안한 h-LWP 해석 범위</caption>
-<thead>
-<tr class="header">
-<th>최대 h-LWP</th>
-<th>모의에서 나타난 경향</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><img src="https://latex.codecogs.com/png.latex?%3C0.1%5C%20%5Cmathrm%7Bmm%7D"></td>
-<td>강수 증강이 거의 없음</td>
-</tr>
-<tr class="even">
-<td>약 <img src="https://latex.codecogs.com/png.latex?0.5%5C%20%5Cmathrm%7Bmm%7D"> 이상</td>
-<td>5% 안팎의 유의미한 증강이 가능해짐</td>
-</tr>
-<tr class="odd">
-<td><img src="https://latex.codecogs.com/png.latex?%3E1.0%5C%20%5Cmathrm%7Bmm%7D"></td>
-<td>성장 시간이 확보되면 더 뚜렷한 증강 가능</td>
-</tr>
-</tbody>
-</table>
-<p>이 수치는 보편적인 임계값이라기보다 네 사례에서 얻은 경험적 진단 기준이다. 그럼에도 “구름에 액체수가 있다”는 정성적 설명을 “플룸이 따라가는 경로에 성장 가능한 물이 얼마나 있는가”라는 검증 가능한 질문으로 바꿔 준다.</p>
-</section>
-<section id="미세물리-사슬을-따라-읽기" class="level2">
-<h2 class="anchored" data-anchor-id="미세물리-사슬을-따라-읽기">미세물리 사슬을 따라 읽기</h2>
-<p>SEED 실험에서는 먼저 pristine ice가 늘고 수증기 증착이 강해졌다. 이후 응집과 착빙이 작동하면서 눈 입자가 커졌다. 지상 강수 증가와 가장 일관되게 연결된 과정은 눈의 확산 성장과 착빙이었다.</p>
-<p>하지만 초기에 새 빙정이 너무 많은 액체수를 빠르게 소모하면 이후 성장에 필요한 물이 부족해질 수 있다. “빙정 수 증가” 자체는 성공 지표가 아니다. 최종적으로 큰 입자가 되어 지표에 도달했는지, 그리고 그 과정에서 구름의 물 수지가 어떻게 바뀌었는지를 함께 봐야 한다.</p>
-</section>
-<section id="이-논문이-보여준-것과-보여주지-못한-것" class="level2">
-<h2 class="anchored" data-anchor-id="이-논문이-보여준-것과-보여주지-못한-것">이 논문이 보여준 것과 보여주지 못한 것</h2>
-<p><strong>보여준 것</strong>은 실제 지형, 플룸 수송, 과냉각 액체수, 미세물리 성장 과정이 하나의 연쇄로 연결되어야 한다는 점이다. 발생기 재배치만으로 효과가 달라진 사례도 있어 공간적 겹침의 중요성이 분명하다.</p>
-<p><strong>아직 보여주지 못한 것</strong>은 통계적으로 일반화 가능한 효과 크기다. 사례가 네 개뿐이고 결과가 사례별 구름 구조에 민감하다. 모형의 자연 강수 오차와 빙정핵 활성화 가정도 CTRL–SEED 차이에 영향을 준다. 이 논문은 “몇 퍼센트 늘어난다”는 보편식을 주기보다, 성공과 실패를 판별할 물리적 체크리스트를 준다.</p>
-</section>
-<section id="pysdmwrf-실험으로-가져갈-질문" class="level2">
-<h2 class="anchored" data-anchor-id="pysdmwrf-실험으로-가져갈-질문">PySDM·WRF 실험으로 가져갈 질문</h2>
-<ol type="1">
-<li>투입 입자 수를 고정하고 액체수 경로와 체류시간만 바꾸면 성장 스펙트럼은 어떻게 달라지는가?</li>
-<li>AgI 플룸과 과냉각 액체수의 겹침을 하나의 지표로 만들 수 있는가?</li>
-<li>빙정 수 증가, 눈 질량 증가, 지상 강수 증가 사이의 시간 지연을 어떻게 추적할 것인가?</li>
-<li>2차원과 3차원 수송 차이가 씨뿌리기 효율을 얼마나 과대평가하게 만드는가?</li>
-</ol>
-<p>가장 중요한 교훈은 효과량보다 과정의 폐쇄성이다. 씨뿌리기 물질이 구름에 들어갔다는 사실과 지상 강수가 늘었다는 결론 사이를, 수송–핵생성–성장–낙하의 증거로 채워야 한다.</p>
-</section>
-<section id="참고문헌" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
-<div id="ref-Geresdi2020Orographic" class="csl-entry">
-Geresdi, István, Lulin Xue, Noémi Sarkadi, 와/과 Roy Rasmussen. 2020년. <span>“Evaluation of Orographic Cloud Seeding Using a Bin Microphysics Scheme: Three-Dimensional Simulation of Real Cases”</span>. <em>Journal of Applied Meteorology and Climatology</em> 59 (9): 1537–53. <a href="https://doi.org/10.1175/JAMC-D-19-0278.1">https://doi.org/10.1175/JAMC-D-19-0278.1</a>.
-</div>
-</div>
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
-  author = {, Jinu},
-  title = {산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다},
-  date = {2026-04-08},
-  url = {https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/},
-  langid = {ko}
-}
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
-Jinu. 2026. <span>“산악 구름 씨뿌리기에서 중요한 것은 투입량보다
-‘겹침’이다.”</span> April 8. <a href="https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/">https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/</a>.
-</div></div></section></div> ]]></description>
-  <category>Article Review</category>
-  <category>glaciogenic seeding</category>
-  <category>WRF</category>
-  <category>bin microphysics</category>
-  <guid>https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/</guid>
   <pubDate>Wed, 08 Apr 2026 00:00:00 GMT</pubDate>
 </item>
 </channel>

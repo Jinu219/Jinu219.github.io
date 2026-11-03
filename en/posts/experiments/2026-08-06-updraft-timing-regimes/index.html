@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-08-06">
+<meta name="description" content="When does the same hygroscopic seeding increase rain and when does it reduce it? 760 recipe runs and 810 environment runs compare updraft, injection timing, and seed size.">
+
+<title>Experiment 5. Updraft and Injection Timing Decide Enhancement or Suppression – Jinu’s Cloud Seeding Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e7c2b2337504f807b65bdb21917a461.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="Experiment 5. Updraft and Injection Timing Decide Enhancement or Suppression – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="When does the same hygroscopic seeding increase rain and when does it reduce it? 760 recipe runs and 810 environment runs compare updraft, injection timing, and seed size.">
+<meta property="og:image" content="https://jinu219.github.io/en/posts/experiments/2026-08-06-updraft-timing-regimes/images/regime-interactions.png">
+<meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
+<meta property="og:image:height" content="1771">
+<meta property="og:image:width" content="2509">
+<meta name="twitter:title" content="Experiment 5. Updraft and Injection Timing Decide Enhancement or Suppression – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="When does the same hygroscopic seeding increase rain and when does it reduce it? 760 recipe runs and 810 environment runs compare updraft, injection timing, and seed size.">
+<meta name="twitter:image" content="https://jinu219.github.io/en/posts/experiments/2026-08-06-updraft-timing-regimes/images/regime-interactions.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../pysdm.html"> 
+<span class="menu-text">PySDM</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../wrf.html"> 
+<span class="menu-text">WRF</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../article-review.html"> 
+<span class="menu-text">Article Review</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../study-notes.html"> 
+<span class="menu-text">Study Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../en/index.html"> 
+<span class="menu-text">EN</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Jinu219"> <i class="bi bi-github" role="img" aria-label="Jinu219 GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/experiments/2026-08-06-updraft-timing-regimes/index.html">5. Updraft × timing</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Section">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/pysdm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">PySDM overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Learn PySDM</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+      </div>
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/learn-pysdm/2026-07-15-first-steps/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting started</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../../en/build-the-lab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">Build the Lab</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section: Build the Lab">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/build-the-lab/2026-07-13-scenario-workflow/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">From scripts to a lab</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/build-the-lab/2026-07-14-research-quality/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Making results trustworthy</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/build-the-lab/2026-07-16-rain-server-execution/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Rain qualification &amp; server</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/build-the-lab/2026-07-21-v1-research-workflow/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">From code to research workflow</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../../../../en/experiments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Experiments</span></a>
+            <button type="button" class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section: Experiments">
+              <i class="bi bi-chevron-right ms-2" aria-hidden="true"></i>
+            </button> 
+      </div>
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/experiments/2026-06-30-numerical-representation/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1. Numerical representation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/experiments/2026-07-03-parameter-sensitivity/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">2. Seeding sensitivity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/experiments/2026-07-06-realistic-warm-seeding/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">3. Realistic backgrounds</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">4. Response surface</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/experiments/2026-08-06-updraft-timing-regimes/index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">5. Updraft × timing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">6. Terminal velocity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../en/posts/experiments/2026-09-07-ren2025-parcel-replication/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7. Ren (2025) replication</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="https://github.com/Jinu219/PySDM-Seeding-Lab" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Seeding Lab code ↗</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#question-why-does-the-same-seeding-reduce-rain-in-some-clouds" id="toc-question-why-does-the-same-seeding-reduce-rain-in-some-clouds" class="nav-link active" data-scroll-target="#question-why-does-the-same-seeding-reduce-rain-in-some-clouds">Question: why does the same seeding reduce rain in some clouds?</a></li>
+  <li><a href="#design-one-experiment-varies-the-recipe-the-other-varies-the-environment" id="toc-design-one-experiment-varies-the-recipe-the-other-varies-the-environment" class="nav-link" data-scroll-target="#design-one-experiment-varies-the-recipe-the-other-varies-the-environment">Design: one experiment varies the recipe, the other varies the environment</a>
+  <ul class="collapse">
+  <li><a href="#dose-was-matched-by-dry-volume" id="toc-dose-was-matched-by-dry-volume" class="nav-link" data-scroll-target="#dose-was-matched-by-dry-volume">Dose was matched by dry volume</a></li>
+  <li><a href="#the-updraft-is-a-12.5-minute-pulse" id="toc-the-updraft-is-a-12.5-minute-pulse" class="nav-link" data-scroll-target="#the-updraft-is-a-12.5-minute-pulse">The updraft is a 12.5-minute pulse</a></li>
+  <li><a href="#metric-maximum-rain-water-before-6-mm" id="toc-metric-maximum-rain-water-before-6-mm" class="nav-link" data-scroll-target="#metric-maximum-rain-water-before-6-mm">Metric: maximum rain water before 6 mm</a></li>
+  </ul></li>
+  <li><a href="#result-1.-updraft-sets-the-amount-of-rain" id="toc-result-1.-updraft-sets-the-amount-of-rain" class="nav-link" data-scroll-target="#result-1.-updraft-sets-the-amount-of-rain">Result 1. Updraft sets the amount of rain</a></li>
+  <li><a href="#result-2.-updraft-injection-timing-decided-the-sign" id="toc-result-2.-updraft-injection-timing-decided-the-sign" class="nav-link" data-scroll-target="#result-2.-updraft-injection-timing-decided-the-sign">Result 2. Updraft × injection timing decided the sign</a></li>
+  <li><a href="#result-3.-with-the-recipe-fixed-the-updraft-almost-alone-set-the-sign" id="toc-result-3.-with-the-recipe-fixed-the-updraft-almost-alone-set-the-sign" class="nav-link" data-scroll-target="#result-3.-with-the-recipe-fixed-the-updraft-almost-alone-set-the-sign">Result 3. With the recipe fixed, the updraft almost alone set the sign</a></li>
+  <li><a href="#clean-clouds-start-rain-earlier" id="toc-clean-clouds-start-rain-earlier" class="nav-link" data-scroll-target="#clean-clouds-start-rain-earlier">Clean clouds start rain earlier</a></li>
+  <li><a href="#one-pair-on-a-skew-t-seeding-barely-touched-the-thermodynamics" id="toc-one-pair-on-a-skew-t-seeding-barely-touched-the-thermodynamics" class="nav-link" data-scroll-target="#one-pair-on-a-skew-t-seeding-barely-touched-the-thermodynamics">One pair on a Skew-T: seeding barely touched the thermodynamics</a></li>
+  <li><a href="#what-can-and-cannot-be-said" id="toc-what-can-and-cannot-be-said" class="nav-link" data-scroll-target="#what-can-and-cannot-be-said">What can and cannot be said</a></li>
+  <li><a href="#next-question" id="toc-next-question" class="nav-link" data-scroll-target="#next-question">Next question</a></li>
+  <li><a href="#related-material" id="toc-related-material" class="nav-link" data-scroll-target="#related-material">Related material</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/experiments/2026-08-06-updraft-timing-regimes/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../en/experiments.html">Experiments</a></li><li class="breadcrumb-item"><a href="../../../../en/posts/experiments/2026-08-06-updraft-timing-regimes/index.html">5. Updraft × timing</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Experiment 5. Updraft and Injection Timing Decide Enhancement or Suppression</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Experiments</div>
+    <div class="quarto-category">PySDM</div>
+    <div class="quarto-category">updraft</div>
+    <div class="quarto-category">injection timing</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    When does the same hygroscopic seeding increase rain and when does it reduce it? 760 recipe runs and 810 environment runs compare updraft, injection timing, and seed size.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-08-06</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Provenance
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This experiment was performed <strong>outside PySDM-Seeding-Lab</strong>. Separate PySDM parcel scripts written in Visual Studio Code were run in parallel with 20 workers on the laboratory server. These are not Seeding Lab results.</p>
+</div>
+</div>
+<section id="question-why-does-the-same-seeding-reduce-rain-in-some-clouds" class="level2">
+<h2 class="anchored" data-anchor-id="question-why-does-the-same-seeding-reduce-rain-in-some-clouds">Question: why does the same seeding reduce rain in some clouds?</h2>
+<p><a href="../../../../en/posts/experiments/2026-07-08-efficiency-response-surface/index.html">Experiment 4</a> found a monotonic picture for one background and one updraft: larger κ, larger dry radius, and later injection gave a stronger response. It ended with three open items: a fair dose definition, background aerosol, and an injection coordinate tied to cloud state instead of absolute time. This experiment takes them up together with <strong>updraft strength</strong>.</p>
+<ol type="1">
+<li>What sets the <strong>sign</strong> of the seeding effect (enhancement or suppression): seed size, updraft, or injection timing?</li>
+<li>Does “suppression” under a strong updraft mean little rain?</li>
+<li>If the seed recipe is fixed and only the environment changes, what does the sign map look like?</li>
+</ol>
+</section>
+<section id="design-one-experiment-varies-the-recipe-the-other-varies-the-environment" class="level2">
+<h2 class="anchored" data-anchor-id="design-one-experiment-varies-the-recipe-the-other-varies-the-environment">Design: one experiment varies the recipe, the other varies the environment</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Recipe experiment</th>
+<th>Environment experiment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Varied</td>
+<td>background × updraft × injection timing × seed dry radius × dose</td>
+<td>initial RH × updraft × background × thermodynamic state</td>
+</tr>
+<tr class="even">
+<td>Levels</td>
+<td>clean 50 / polluted 1,000 mg⁻¹; peak 0.5 / 5 m s⁻¹; 2–4 / 15–20 min; 0.1 / 1 / 5 µm; low / medium / high</td>
+<td>90 / 95 / 99%; 0.5 / 2 / 5 m s⁻¹; 50 / 200 / 1,000 mg⁻¹; 300 K·1000 hPa / 290 K·900 hPa / 280 K·800 hPa</td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td>300 K, 1000 hPa, water vapour 22.2 g kg⁻¹</td>
+<td>seed dry radius 1 µm, κ 0.8, medium dose, injection at 2–4 min</td>
+</tr>
+<tr class="even">
+<td>Scenarios</td>
+<td>72 seeded + 4 controls</td>
+<td>81 environments × (seeded + control)</td>
+</tr>
+<tr class="odd">
+<td>Repetitions × scenarios</td>
+<td>10 × 76 = <strong>760 runs</strong></td>
+<td>5 × 162 = <strong>810 runs</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Common settings: a PySDM 0-D adiabatic parcel <span class="citation" data-cites="Bartman2022PySDM">(<a href="#ref-Bartman2022PySDM" role="doc-biblioref">Bartman et al. 2022</a>)</span>, condensation + coalescence (geometric kernel; every collision coalesces), Rogers–Yau terminal velocity, Δt 10 s, 40-min integration, 4,096 background + 2,048 seed super-droplets. The background aerosol is lognormal with mode dry radius 75 nm, σg 1.6, κ 0.5; seeds use σg 1.2, κ 0.8. <strong>There is no sedimentation and no breakup.</strong> Each seeded run is paired with a control through the same random seed.</p>
+<section id="dose-was-matched-by-dry-volume" class="level3">
+<h3 class="anchored" data-anchor-id="dose-was-matched-by-dry-volume">Dose was matched by dry volume</h3>
+<p><span class="math display">\[
+N_{seed}(r_d)=N_{ref}\left(\frac{1\ \mu\text{m}}{r_d}\right)^{3},\qquad N_{ref}=1,\ 10,\ 100\ \text{mg}^{-1}
+\]</span></p>
+<p><span class="math inline">\(N_{seed}\)</span> is the number of seed particles per mg of dry air, <span class="math inline">\(r_d\)</span> the seed median dry radius, and <span class="math inline">\(N_{ref}\)</span> the number at the 1 µm reference (low/medium/high). One particle’s volume scales with <span class="math inline">\(r_d^3\)</span>, so reducing the number as <span class="math inline">\(r_d^{-3}\)</span> keeps <strong>the total dry volume (the amount of material) the same for every size</strong>. Fine seeds (0.1 µm) are therefore 1,000 times more numerous than coarse seeds (1 µm), and giant seeds (5 µm) are 1/125 as numerous. This avoids the fixed-number confusion where size and dose change together.</p>
+</section>
+<section id="the-updraft-is-a-12.5-minute-pulse" class="level3">
+<h3 class="anchored" data-anchor-id="the-updraft-is-a-12.5-minute-pulse">The updraft is a 12.5-minute pulse</h3>
+<p><span class="math display">\[
+w(t)=w_{min}+\left(w_{peak}-w_{min}\right)\sin^{2}\!\left(\frac{\pi t}{T}\right)\quad(0\le t\le T=12.5\ \text{min}),\qquad w=w_{min}\ \ (t&gt;T)
+\]</span></p>
+<p><span class="math inline">\(w_{peak}\)</span> is the peak updraft and <span class="math inline">\(w_{min}=0.025\)</span> m s⁻¹ the very weak ascent left after the pulse. The <span class="math inline">\(\sin^2\)</span> term makes the updraft start from the minimum, peak at 6.25 min, and return to the minimum at 12.5 min. Over 40 min the parcel rises about 0.24 km at 0.5 m s⁻¹ and about 1.9 km at 5 m s⁻¹. <strong>Early active</strong> (2–4 min) injects while the updraft is growing; <strong>late quiescent</strong> (15–20 min) injects into an almost stationary parcel after the pulse.</p>
+</section>
+<section id="metric-maximum-rain-water-before-6-mm" class="level3">
+<h3 class="anchored" data-anchor-id="metric-maximum-rain-water-before-6-mm">Metric: maximum rain water before 6 mm</h3>
+<p>Rain means drops with wet radius ≥ 40 µm. The main metric is the <strong>difference in maximum rain-water mixing ratio before 6 mm</strong>, <span class="math inline">\(\Delta RWC_{max}\)</span>, between seeded and control runs. Without sedimentation or breakup, a large drop never leaves the parcel and keeps collecting others. All 380 strong-updraft runs of the recipe experiment saw their largest drop exceed 6 mm radius between 16 and 27 min, and by 40 min it had grown to about 3 cm radius. No weak-updraft run crossed 6 mm. Where the 6 mm number comes from is the subject of <a href="../../../../en/posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html">Experiment 6</a>. Using the whole-run maximum instead of the 6 mm cut kept the sign in 71 of 72 recipes.</p>
+<p>The two experiments classify sign slightly differently. The recipe experiment uses the sign of the 10-member mean <span class="math inline">\(\Delta RWC_{max}\)</span>; “neutral” only means neither seeded nor control produced rain. The environment experiment scores each pair +1 (enhancement), −1 (suppression), or 0 (no rain in either), and calls the 5-member mean enhancement above +0.2 and suppression below −0.2.</p>
+</section>
+</section>
+<section id="result-1.-updraft-sets-the-amount-of-rain" class="level2">
+<h2 class="anchored" data-anchor-id="result-1.-updraft-sets-the-amount-of-rain">Result 1. Updraft sets the amount of rain</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/absolute-vs-relative.png" class="img-fluid figure-img" alt="Bar chart of control maximum rain water before 6 mm by updraft and background, with seeded values as markers, for the fixed-recipe and recipe experiments"></p>
+<figcaption>Control maximum rain water (bars) and seeded values (markers) in both experiments. Strong-updraft controls hold two orders of magnitude more rain water than weak-updraft controls.</figcaption>
+</figure>
+</div>
+<p>In the environment experiment, the clean-background control’s maximum rain water before 6 mm grew from 0.04 → 1.39 → 3.73 g kg⁻¹ as the updraft went from 0.5 → 2 → 5 m s⁻¹. A parcel that rises higher simply condenses more water. “Suppression” under a strong updraft therefore does not mean a dry cloud. It means the seeded run is <strong>slightly</strong> below a control that already makes more than 4 g kg⁻¹ of rain water. In the recipe experiment, strong-updraft seeded − control differences ranged from −5.5% to +1.4% of the control.</p>
+</section>
+<section id="result-2.-updraft-injection-timing-decided-the-sign" class="level2">
+<h2 class="anchored" data-anchor-id="result-2.-updraft-injection-timing-decided-the-sign">Result 2. Updraft × injection timing decided the sign</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 20%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Updraft</th>
+<th>Injection</th>
+<th style="text-align: right;">Mean <span class="math inline">\(\Delta RWC_{max}\)</span> (g kg⁻¹)</th>
+<th style="text-align: center;">Enhance / neutral / suppress</th>
+<th style="text-align: center;">≥ 9 of 10 runs share the sign</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>weak 0.5 m s⁻¹</td>
+<td>early 2–4 min</td>
+<td style="text-align: right;">+0.136</td>
+<td style="text-align: center;">12 / 3 / 3</td>
+<td style="text-align: center;">15 / 15</td>
+</tr>
+<tr class="even">
+<td>weak 0.5 m s⁻¹</td>
+<td>late 15–20 min</td>
+<td style="text-align: right;">+0.059</td>
+<td style="text-align: center;">9 / 3 / 6</td>
+<td style="text-align: center;">10 / 15</td>
+</tr>
+<tr class="odd">
+<td>strong 5 m s⁻¹</td>
+<td>early 2–4 min</td>
+<td style="text-align: right;">−0.044</td>
+<td style="text-align: center;">2 / 0 / 16</td>
+<td style="text-align: center;">15 / 18</td>
+</tr>
+<tr class="even">
+<td>strong 5 m s⁻¹</td>
+<td>late 15–20 min</td>
+<td style="text-align: right;">+0.024</td>
+<td style="text-align: center;">18 / 0 / 0</td>
+<td style="text-align: center;">14 / 18</td>
+</tr>
+</tbody>
+</table>
+<p>The last column counts, among scenarios with a non-zero mean, those in which at least 9 of 10 repetitions had the same sign as the mean.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/regime-interactions.png" class="img-fluid figure-img" alt="Four panels of seeded minus control pre-6-mm rain water versus dose for weak and strong updraft and early and late injection, coloured by seed size"></p>
+<figcaption>Seeded − control difference by dose and seed size in the four updraft × timing panels. Colour is seed size (fine 0.1, coarse 1, giant 5 µm dry radius); small circles are the clean and small squares the polluted background; large dots and lines are the mean of the two.</figcaption>
+</figure>
+</div>
+<ul>
+<li><strong>Strong + early:</strong> 16 of 18 were suppression. The only exceptions were the two low-dose fine-seed cases (clean +0.035, polluted +0.003 g kg⁻¹). Fine seeds delayed rain onset by 0.7–7.8 min (Δonset &gt; 0 = later), while giant seeds advanced onset by 1.7–5.7 min yet still ended slightly below the control maximum.</li>
+<li><strong>Strong + late:</strong> all 18 were enhancement, but no larger than 1.4% of the control. Read the warning below.</li>
+<li><strong>Weak + early:</strong> all 12 coarse and giant cases were enhancement. The polluted control produced no rain at all, but coarse and giant seeds did. Fine seeds removed even the weak rain of the clean control (3 suppression) and left the polluted case rainless on both sides (3 neutral).</li>
+<li><strong>Weak + late:</strong> all 6 giant cases were enhancement; coarse and fine were small suppression or neutral.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Reading the strong + late “all enhancement”
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>The analysis window is short.</strong> The pre-6-mm window of the controls ends at about 18 min (clean) and 21 min (polluted), so seeds injected from 15 min have only a few minutes to affect the metric.</li>
+<li><strong>Runs already differed before injection.</strong> Despite the shared random seed, seeded runs were not identical to the control before injection (rain-water difference at 14.5 min: clean +0.0035, polluted −0.0006 g kg⁻¹; cause not identified). The clean giant-seed low and medium doses (+0.0035, +0.0046 g kg⁻¹) are about that size, so their sign is not trustworthy.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="result-3.-with-the-recipe-fixed-the-updraft-almost-alone-set-the-sign" class="level2">
+<h2 class="anchored" data-anchor-id="result-3.-with-the-recipe-fixed-the-updraft-almost-alone-set-the-sign">Result 3. With the recipe fixed, the updraft almost alone set the sign</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/environment-sign-map.png" class="img-fluid figure-img" alt="Grid of effect-direction maps for 81 environments: suppression in red, neutral in grey, enhancement in blue, by relative humidity and updraft"></p>
+<figcaption>Sign map of the 81 environments. Rows are thermodynamic states, columns are background aerosol, each panel is RH × updraft, and the numbers are mean direction scores.</figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Initial RH</th>
+<th>0.5 m s⁻¹</th>
+<th>2 m s⁻¹</th>
+<th>5 m s⁻¹</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>90%</td>
+<td>neutral 9</td>
+<td>enhance 3 / suppress 6</td>
+<td>suppress 9</td>
+</tr>
+<tr class="even">
+<td>95%</td>
+<td>enhance 9</td>
+<td>enhance 1 / suppress 8</td>
+<td>suppress 9</td>
+</tr>
+<tr class="odd">
+<td>99%</td>
+<td>enhance 9</td>
+<td>suppress 9</td>
+<td>suppress 9</td>
+</tr>
+</tbody>
+</table>
+<p>Of 81 environments, 22 were enhancement, 50 suppression, and 9 neutral. The 9 neutral cases are not cancelling effects: at RH 90% and 0.5 m s⁻¹ neither seeded nor control runs produced rain. The four enhancement cases at 2 m s⁻¹ all occurred at RH 90–95% with moderate or polluted backgrounds and thermodynamic states of 290 K or cooler. Changing only the background, at fixed RH and thermodynamic state, never flipped the sign at 0.5 or 5 m s⁻¹. Background aerosol adjusted the size of the effect rather than its sign.</p>
+<p>This experiment used <strong>early injection (2–4 min) only</strong>. “Strong updraft = suppression” is therefore the same statement as strong + early in the recipe experiment, not a claim about late injection.</p>
+</section>
+<section id="clean-clouds-start-rain-earlier" class="level2">
+<h2 class="anchored" data-anchor-id="clean-clouds-start-rain-earlier">Clean clouds start rain earlier</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Environment-experiment controls</th>
+<th style="text-align: right;">clean 50 mg⁻¹</th>
+<th style="text-align: right;">moderate 200 mg⁻¹</th>
+<th style="text-align: right;">polluted 1,000 mg⁻¹</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.5 m s⁻¹: environments with any rain</td>
+<td style="text-align: right;">3 / 9</td>
+<td style="text-align: right;">2 / 9 (some runs)</td>
+<td style="text-align: right;">0 / 9</td>
+</tr>
+<tr class="even">
+<td>2 m s⁻¹: mean rain onset</td>
+<td style="text-align: right;">11.3 min</td>
+<td style="text-align: right;">16.2 min</td>
+<td style="text-align: right;">23.5 min</td>
+</tr>
+<tr class="odd">
+<td>5 m s⁻¹: mean rain onset</td>
+<td style="text-align: right;">7.4 min</td>
+<td style="text-align: right;">9.4 min</td>
+<td style="text-align: right;">12.1 min</td>
+</tr>
+<tr class="even">
+<td>5 m s⁻¹: mean maximum rain water</td>
+<td style="text-align: right;">3.73 g kg⁻¹</td>
+<td style="text-align: right;">3.74 g kg⁻¹</td>
+<td style="text-align: right;">3.75 g kg⁻¹</td>
+</tr>
+</tbody>
+</table>
+<p>Fewer background particles → fewer cloud droplets (recipe-experiment control maximum at 5 m s⁻¹: about 56 vs 990 cm⁻³) → the same water is shared by fewer drops, which grow faster → collision–coalescence starts earlier. At 0.5 m s⁻¹, rain formed only at RH 99%. At 5 m s⁻¹, however, the maximum rain water was nearly identical. In this parcel, a clean background made rain <strong>sooner</strong>, not <strong>more</strong>. Rain onset here is the first time rain water exceeds 10⁻⁵ g kg⁻¹, not the start of surface rainfall.</p>
+</section>
+<section id="one-pair-on-a-skew-t-seeding-barely-touched-the-thermodynamics" class="level2">
+<h2 class="anchored" data-anchor-id="one-pair-on-a-skew-t-seeding-barely-touched-the-thermodynamics">One pair on a Skew-T: seeding barely touched the thermodynamics</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/skewt-pair.png" class="img-fluid figure-img" alt="Skew-T log-p diagram of one paired parcel trajectory and the seeded minus control temperature and dew-point differences in millikelvin"></p>
+<figcaption>One control–seeded pair at 300 K·1000 hPa, RH 95%, moderate background, 5 m s⁻¹, fixed recipe. Left: parcel path; right: seeded − control temperature and dew-point differences in mK.</figcaption>
+</figure>
+</div>
+<p>The parcel rose from 1000 hPa to about 794 hPa (about 1.93 km), mostly during the updraft pulse. The seeded − control temperature difference stayed between −21 and +2 mK, only thousandths of a degree. The seeding response lives in the <strong>drop size distribution</strong>, not in parcel thermodynamics. Because the updraft is prescribed, even this tiny difference cannot feed back into buoyancy or ascent. In this pair the seeded run started rain one minute earlier (8.0 vs 9.0 min) but reached a 0.15% lower maximum rain water, so it sits in a “suppression” cell of the sign map. Onset time and maximum answer different questions. The diagram shows a parcel path, not an environmental sounding, so it cannot diagnose CAPE or CIN.</p>
+</section>
+<section id="what-can-and-cannot-be-said" class="level2">
+<h2 class="anchored" data-anchor-id="what-can-and-cannot-be-said">What can and cannot be said</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Category</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Supported (sign, consistent across repetitions)</td>
+<td>Updraft × timing sets the sign (strong + early suppression 16/18, weak + early enhancement 12/18) · with a fixed early recipe, 50 of 54 environments at 2–5 m s⁻¹ were suppression · absolute rain water is controlled by the updraft · clean backgrounds start rain earlier</td>
+</tr>
+<tr class="even">
+<td>Descriptive (magnitude)</td>
+<td><span class="math inline">\(\Delta RWC_{max}\)</span> values, relative changes, rankings of “strongest” conditions — convergence in super-droplet number and timestep was not checked</td>
+</tr>
+<tr class="odd">
+<td>Not shown</td>
+<td>Surface rainfall (no sedimentation) · cloud invigoration (prescribed updraft, so no latent heat → buoyancy → updraft feedback) · drops beyond 6 mm · results with collision efficiency or breakup · the suppression mechanism (vapour competition and similar ideas are hypotheses)</td>
+</tr>
+</tbody>
+</table>
+<div class="review-verdict">
+<p><strong>Conclusion.</strong> The sign of the seeding response was set first by the combination of updraft and injection timing, before seed size. Early injection into a strong updraft gave suppression in 16 of 18 recipes, late injection gave enhancement in all 18 (but at most 1.4% of the control), and coarse or giant seeds injected early into a weak updraft always enhanced. “Suppression” here does not mean little rain; it means slightly below a control that already rains a lot.</p>
+</div>
+</section>
+<section id="next-question" class="level2">
+<h2 class="anchored" data-anchor-id="next-question">Next question</h2>
+<p>Every conclusion above stands on the “before 6 mm” cut. That 6 mm comes from the upper limit of a terminal-velocity lookup table, and terminal velocity enters the collision kernel directly. Does the sign pattern survive if the terminal-velocity formula changes?</p>
+<p><a href="../../../../en/posts/experiments/2026-08-25-terminal-velocity-sensitivity/index.html">Continue to Experiment 6</a></p>
+</section>
+<section id="related-material" class="level2">
+<h2 class="anchored" data-anchor-id="related-material">Related material</h2>
+<ul>
+<li><a href="../../../../en/experiments.html">All experiments</a></li>
+</ul>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Bartman2022PySDM" class="csl-entry" role="listitem">
+Bartman, Piotr, Oleg Bulenok, Tomasz Gierczak, et al. 2022. <span>“<span>PySDM</span> V1: Particle-Based Cloud Modeling Package for Warm-Rain Microphysics and Aqueous Chemistry.”</span> <em>Journal of Open Source Software</em> 7 (72): 3219. <a href="https://doi.org/10.21105/joss.03219">https://doi.org/10.21105/joss.03219</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+(() => {
+  const localizeNavigation = () => {
+    const path = window.location.pathname;
+    const isEnglish = path === "/en" || path.startsWith("/en/");
+    const switchLink =
+      document.querySelector('a[aria-label="Switch language"]') ||
+      [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
+        ["EN", "KO"].includes(link.textContent.trim())
+      );
+
+    if (switchLink) {
+      const englishPath = path === "/" || path === "/index.html"
+        ? "/en/"
+        : `/en${path}`;
+      const koreanPath = path === "/en" || path === "/en/" || path === "/en/index.html"
+        ? "/"
+        : path.replace(/^\/en/, "");
+      const label = switchLink.querySelector(".menu-text") || switchLink;
+
+      label.textContent = isEnglish ? "KO" : "EN";
+      switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
+      switchLink.setAttribute(
+        "aria-label",
+        isEnglish ? "한국어로 전환" : "Switch to English"
+      );
+      switchLink.classList.remove("active");
+      switchLink.removeAttribute("aria-current");
+    }
+
+    if (!isEnglish) return;
+
+    const brand = document.querySelector(".navbar-brand");
+    if (brand) brand.href = "/en/";
+
+    const menu = [
+      ["PySDM", "PySDM", "/en/pysdm.html"],
+      ["WRF", "WRF", "/en/wrf.html"],
+      ["Article Review", "Article Review", "/en/article-review.html"],
+      ["Study Notes", "Study Notes", "/en/study-notes.html"]
+    ];
+
+    document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
+      const label = link.querySelector(".menu-text") || link;
+      const item = menu.find(([korean]) => label.textContent.trim() === korean);
+      if (!item) return;
+      label.textContent = item[1];
+      link.href = item[2];
+
+      const isCurrent = path === item[2] ||
+        (item[2] === "/en/" && ["/en", "/en/", "/en/index.html"].includes(path));
+      link.classList.toggle("active", isCurrent);
+      if (isCurrent) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".nav-footer a").forEach((link) => {
+      if (link.textContent.trim() === "소개") {
+        link.textContent = "About";
+        link.href = "/en/about.html";
+      }
+      if (link.textContent.trim() === "RSS") link.href = "/index.xml";
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", localizeNavigation);
+  } else {
+    localizeNavigation();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jinu219\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Jinu. Cloud seeding research notes.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/experiments/2026-08-06-updraft-timing-regimes/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../../../about.html">
+<p>소개</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../../../../index.xml">
+<p>RSS</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/Jinu219">
+<p>GitHub</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

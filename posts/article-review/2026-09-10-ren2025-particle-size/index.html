@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-09-10">
+<meta name="description" content="Ren et al.&nbsp;(2025)의 2D bin 미세물리 등질량 시딩 실험으로, 입자 직경이 강수 반응의 부호를 가르는 임계 크기와 그 배경 에어로졸 의존성을 검토합니다.">
+
+<title>같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제 늘리나 – Jinu’s Cloud Seeding Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../">
+<script src="../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e7c2b2337504f807b65bdb21917a461.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "일치 없음",
+    "search-matching-documents-text": "일치된 문서",
+    "search-copy-link-title": "검색 링크 복사",
+    "search-hide-matches-text": "추가 검색 결과 숨기기",
+    "search-more-match-text": "추가 검색결과",
+    "search-more-matches-text": "추가 검색결과",
+    "search-clear-button-title": "제거",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "취소",
+    "search-submit-button-title": "검색",
+    "search-label": "검색"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제 늘리나 – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="Ren et al.&nbsp;(2025)의 2D bin 미세물리 등질량 시딩 실험으로, 입자 직경이 강수 반응의 부호를 가르는 임계 크기와 그 배경 에어로졸 의존성을 검토합니다.">
+<meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
+<meta name="twitter:title" content="같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제 늘리나 – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="Ren et al.&nbsp;(2025)의 2D bin 미세물리 등질량 시딩 실험으로, 입자 직경이 강수 반응의 부호를 가르는 임계 크기와 그 배경 에어로졸 의존성을 검토합니다.">
+<meta name="twitter:card" content="summary">
+</head>
+
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="웹사이트">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../index.html">
+    <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="탐색 전환" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../pysdm.html"> 
+<span class="menu-text">PySDM</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../wrf.html"> 
+<span class="menu-text">WRF</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../article-review.html"> 
+<span class="menu-text">Article Review</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../study-notes.html"> 
+<span class="menu-text">Study Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../en/index.html"> 
+<span class="menu-text">EN</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Jinu219"> <i class="bi bi-github" role="img" aria-label="Jinu219 GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="다크 모드 전환" aria-label="다크 모드 전환"><i class="bi"></i></button>
+</div>
+            <div id="quarto-search" class="" title="검색"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">목차</h2>
+   
+  <ul>
+  <li><a href="#질문-크기-효과만-보려면-무엇을-고정할까" id="toc-질문-크기-효과만-보려면-무엇을-고정할까" class="nav-link active" data-scroll-target="#질문-크기-효과만-보려면-무엇을-고정할까">질문: 크기 효과만 보려면 무엇을 고정할까</a></li>
+  <li><a href="#모형과-실험-설계" id="toc-모형과-실험-설계" class="nav-link" data-scroll-target="#모형과-실험-설계">모형과 실험 설계</a></li>
+  <li><a href="#결과-1-크기가-부호를-정한다" id="toc-결과-1-크기가-부호를-정한다" class="nav-link" data-scroll-target="#결과-1-크기가-부호를-정한다">결과 1: 크기가 부호를 정한다</a></li>
+  <li><a href="#결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁" id="toc-결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁" class="nav-link" data-scroll-target="#결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁">결과 2: 수증기 나눠 갖기와 큰 collector 만들기의 경쟁</a></li>
+  <li><a href="#결과-3-오염될수록-임계-직경이-작아진다" id="toc-결과-3-오염될수록-임계-직경이-작아진다" class="nav-link" data-scroll-target="#결과-3-오염될수록-임계-직경이-작아진다">결과 3: 오염될수록 임계 직경이 작아진다</a></li>
+  <li><a href="#내-연구에-왜-중요한가" id="toc-내-연구에-왜-중요한가" class="nav-link" data-scroll-target="#내-연구에-왜-중요한가">내 연구에 왜 중요한가</a></li>
+  <li><a href="#한계-무엇이-어디까지-보였나" id="toc-한계-무엇이-어디까지-보였나" class="nav-link" data-scroll-target="#한계-무엇이-어디까지-보였나">한계: 무엇이 어디까지 보였나</a></li>
+  <li><a href="#재현으로-이어지는-질문" id="toc-재현으로-이어지는-질문" class="nav-link" data-scroll-target="#재현으로-이어지는-질문">재현으로 이어지는 질문</a></li>
+  <li><a href="#참고문헌" id="toc-참고문헌" class="nav-link" data-scroll-target="#참고문헌">참고문헌</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/article-review/2026-09-10-ren2025-particle-size/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제 늘리나</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Article Review</div>
+    <div class="quarto-category">hygroscopic seeding</div>
+    <div class="quarto-category">particle size</div>
+    <div class="quarto-category">bin microphysics</div>
+    <div class="quarto-category">warm rain</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Ren et al.&nbsp;(2025)의 2D bin 미세물리 등질량 시딩 실험으로, 입자 직경이 강수 반응의 부호를 가르는 임계 크기와 그 배경 에어로졸 의존성을 검토합니다.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">저자</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">공개</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-09-10</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Ren et al.&nbsp;(2025)은 Tel Aviv University의 2차원 slab-symmetric bin 미세물리 모형으로 2024년 5월 11일 중국 하이난 싼야(Sanya)의 온난 대류운을 모의하고, <strong>총 시딩 질량을 같게 둔 채</strong> 단일 직경의 KCl 입자를 0.1–90 µm 범위에서 바꿔 넣었다 <span class="citation" data-cites="Ren2025ParticleSize">(<a href="#ref-Ren2025ParticleSize" role="doc-biblioref">Ren 기타 2025년</a>)</span>. 같은 양의 물질을 뿌려도 입자 크기만으로 비가 줄 수도, 늘 수도 있는지, 그 경계가 어디인지를 묻는다. 2026년 9월 10일 랩미팅에서 발표한 논문이다.</p>
+<div class="review-verdict">
+<p><strong>한 문장 결론.</strong> 같은 질량이면 직경 1 µm 이하의 시딩은 비를 줄이고 2 µm 이상은 늘렸으며, 부호가 바뀌는 임계 직경은 배경 에어로졸이 많을수록 작아졌다(해양성 약 6, 대륙성 약 3, 도시성 약 2 µm). 단일 사례·조건당 1회 적분이므로 믿을 수 있는 것은 <strong>부호와 경향</strong>이고, −82%나 +192% 같은 크기는 이 사례의 서술값이다.</p>
+</div>
+<p><a href="https://doi.org/10.3390/atmos16121340">원문 보기</a></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>크기 표기
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 글의 시딩 입자 크기는 모두 논문을 따라 <strong>직경(diameter)</strong>이다. 내 PySDM 실험은 <strong>dry radius</strong>로 크기를 적으므로 비교할 때 2배를 먼저 맞춰야 한다. 예를 들어 이 논문의 직경 2 µm는 반지름 1 µm다.</p>
+</div>
+</div>
+<section id="질문-크기-효과만-보려면-무엇을-고정할까" class="level2">
+<h2 class="anchored" data-anchor-id="질문-크기-효과만-보려면-무엇을-고정할까">질문: 크기 효과만 보려면 무엇을 고정할까</h2>
+<p>선행 연구가 제시한 “최적 시딩 크기”는 0.5–6 µm, 1.5–2.5 µm, 10 µm 이상 등으로 제각각이다. 저자들은 실험마다 배경 에어로졸과 시딩 입자 분포가 달랐고, CCN에 대한 강수 반응이 본질적으로 비선형이기 때문이라고 본다. 그래서 배경을 고정하고 크기만 훑는다. 질문은 세 가지다.</p>
+<ol type="1">
+<li>총 시딩 질량이 같을 때, 시딩 직경에 따라 강수가 억제되는가 증대되는가?</li>
+<li>부호가 바뀌는 임계 직경이 있는가?</li>
+<li>그 임계 직경은 배경 에어로졸에 따라 어떻게 움직이는가?</li>
+</ol>
+<p>핵심 장치는 <strong>등질량(mass-conserved) 단분산 시딩</strong>이다. 남아공 hygroscopic flare 실험의 시딩 스펙트럼을 총 질량 기준으로만 쓰고, 목표 직경마다 그 질량이 되도록 입자 수를 역산했다.</p>
+<p><span class="math display">\[
+N(D)=\frac{M_{\mathrm{seed}}}{\rho_{\mathrm{s}}\,\frac{\pi}{6}D^{3}}
+\quad\Rightarrow\quad
+N(D)=N(0.1\,\mu\mathrm{m})\left(\frac{0.1\,\mu\mathrm{m}}{D}\right)^{3}
+\]</span></p>
+<p>말로 읽으면 “시딩 입자 수는 총 질량을 입자 하나의 질량으로 나눈 값”이다. <span class="math inline">\(M_{\mathrm{seed}}\)</span>는 고정된 총 시딩 질량, <span class="math inline">\(\rho_{\mathrm{s}}\)</span>는 KCl 밀도, <span class="math inline">\(\frac{\pi}{6}D^3\)</span>는 직경 <span class="math inline">\(D\)</span>인 구의 부피다. 입자 하나의 질량이 <span class="math inline">\(D^3\)</span>에 비례하므로 개수는 <span class="math inline">\(D^{-3}\)</span>으로 줄어든다. 논문 Table 2의 시딩 수농도도 정확히 이 비율을 따른다. 0.1 µm에서 <span class="math inline">\(5.45\times10^{5}\ \mathrm{cm^{-3}}\)</span>, 1 µm에서 <span class="math inline">\(5.45\times10^{2}\)</span>, 10 µm에서 <span class="math inline">\(5.45\times10^{-1}\)</span>, 90 µm에서 <span class="math inline">\(7.48\times10^{-4}\ \mathrm{cm^{-3}}\)</span>이다. <strong>직경이 10배 커지면 개수는 1000배 줄어든다.</strong> 이 크기–개수 맞교환이 뒤의 모든 결과를 읽는 열쇠다.</p>
+</section>
+<section id="모형과-실험-설계" class="level2">
+<h2 class="anchored" data-anchor-id="모형과-실험-설계">모형과 실험 설계</h2>
+<table class="review-data caption-top table">
+<caption>모형 설정 (논문 2절)</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>모형</td>
+<td>Tel Aviv University 2D slab-symmetric spectral bin 미세물리 모형(Yin et al., 2000), 바람은 vorticity–stream function으로 계산</td>
+</tr>
+<tr class="even">
+<td>격자·영역</td>
+<td><span class="math inline">\(\Delta x=\Delta z=300\)</span> m, 수평 30 km, 모형 상단 12 km</td>
+</tr>
+<tr class="odd">
+<td>시간</td>
+<td>응결·증발 2.5 s, 그 밖의 과정 5 s, 적분 40분</td>
+</tr>
+<tr class="even">
+<td>수상체 bin</td>
+<td>cloud drop·ice crystal·graupel·snow 각 34개 질량 bin(인접 bin 질량 2배), 액체 bin 직경 3.125–8064 µm</td>
+</tr>
+<tr class="odd">
+<td>CCN bin</td>
+<td>자연 CCN 67 bin(최소 반지름 <span class="math inline">\(4.1\times10^{-3}\)</span> µm) + 별도의 시딩 스펙트럼과 예측 방정식</td>
+</tr>
+<tr class="even">
+<td>물질</td>
+<td>자연 CCN = (NH₄)₂SO₄, seed = KCl</td>
+</tr>
+<tr class="odd">
+<td>사례·초기장</td>
+<td>2024-05-11 14시(베이징 시) 무렵 싼야 온난 대류운, 12시 싼야 라디오존데(WMO 59948), 지표 약 980 hPa, LCL 약 900 m, 0 °C 고도 약 5.5 km</td>
+</tr>
+<tr class="even">
+<td>대류 유발</td>
+<td>영역 중앙 900 m 고도의 thermal bubble, 최대 +3 °C</td>
+</tr>
+</tbody>
+</table>
+<table class="review-data caption-top table">
+<caption>시딩 설계 (논문 3.2절, 4.5절)</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>시점·위치</td>
+<td>모의 10분, 운저 900 m의 한 층, 수평 중앙 3개 격자열(900 m)</td>
+</tr>
+<tr class="even">
+<td>방식</td>
+<td>60 s마다 1회(각 1 dynamic step = 5 s), 5분 동안 5회, 제어 체적 900 m × 300 m × 300 m(모형 면에 수직한 폭 300 m 가정)</td>
+</tr>
+<tr class="odd">
+<td>크기 실험</td>
+<td>C00(무시딩) + 27개: 0.1–0.9 µm(C01–C09), 1–9 µm(C11–C19), 10–90 µm(C21–C29)</td>
+</tr>
+<tr class="even">
+<td>배경 에어로졸</td>
+<td>Jaenicke 3-mode 해양성·대륙성·도시성, 최대 구름방울 수농도 약 140·400·1400 cm⁻³(2.2절)</td>
+</tr>
+</tbody>
+</table>
+<p>무시딩 C00은 약 15분에 비가 시작되어 23–24분에 단일 최대를 찍고 약 35분에 그치는, 약 20분짜리 단일 피크 강수를 만든다. 구름은 주로 1–4 km에 있고 0 °C 고도보다 아래이므로, 모형에 얼음 범주가 있어도 이 사례에서는 사실상 <strong>온난 과정만</strong> 작동한다.</p>
+</section>
+<section id="결과-1-크기가-부호를-정한다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-1-크기가-부호를-정한다">결과 1: 크기가 부호를 정한다</h2>
+<table class="review-data caption-top table">
+<caption>논문 Table 2를 실험군별로 요약</caption>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>실험군</th>
+<th style="text-align: right;">직경</th>
+<th style="text-align: right;">시딩 수농도 (cm⁻³)</th>
+<th style="text-align: right;">강수 변화 (C00 대비)</th>
+<th>양상</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sub-micrometer (C01–C09)</td>
+<td style="text-align: right;">0.1–0.9 µm</td>
+<td style="text-align: right;"><span class="math inline">\(5.45\times10^{5}\)</span> → <span class="math inline">\(7.48\times10^{2}\)</span></td>
+<td style="text-align: right;">−82.00% → −7.99%</td>
+<td>9개 모두 억제, 작을수록 강함</td>
+</tr>
+<tr class="even">
+<td>Giant (C11–C19)</td>
+<td style="text-align: right;">1–9 µm</td>
+<td style="text-align: right;"><span class="math inline">\(5.45\times10^{2}\)</span> → <span class="math inline">\(7.48\times10^{-1}\)</span></td>
+<td style="text-align: right;">−4.78% → +94.32%</td>
+<td>1 µm(−4.78%)와 2 µm(+0.72%) 사이에서 부호 전환</td>
+</tr>
+<tr class="odd">
+<td>Ultra-giant (C21–C29)</td>
+<td style="text-align: right;">10–90 µm</td>
+<td style="text-align: right;"><span class="math inline">\(5.45\times10^{-1}\)</span> → <span class="math inline">\(7.48\times10^{-4}\)</span></td>
+<td style="text-align: right;">+110.59% ~ +192.34%</td>
+<td>9개 모두 증대, 60 µm에서 최대, 강수 개시가 빨라짐</td>
+</tr>
+</tbody>
+</table>
+<p>하나의 곡선으로 읽으면, 0.1 µm에서 깊게 억제 → 1 µm로 갈수록 억제가 얕아짐 → 1–2 µm 사이에서 0을 통과 → 증대가 커지다가 60 µm에서 최대 → 그 뒤 약 +160% 수준으로 평평해진다.</p>
+</section>
+<section id="결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁" class="level2">
+<h2 class="anchored" data-anchor-id="결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁">결과 2: 수증기 나눠 갖기와 큰 collector 만들기의 경쟁</h2>
+<p>흡습성 seed는 두 방향으로 작용한다. 활성화된 seed가 수증기를 가져가 자연 CCN의 활성화와 성장을 억누르는 <strong>수증기 경쟁</strong>, 그리고 크게 자란 seed 방울이 주변 구름방울을 쓸어 모으는 <strong>collector 효과</strong>다. 등질량 조건에서는 직경이 둘 중 어느 쪽이 이길지를 정한다.</p>
+<p><strong>Sub-micrometer (0.1–0.9 µm).</strong> 작은 seed가 대량 활성화 → 많은 방울이 수증기를 나눠 가짐 → 수농도 스펙트럼 peak가 작은 직경 쪽으로 이동하고 20–40 µm 방울과 10 µm 초과 질량이 감소 → 구름 핵심부의 최대 충돌–병합률은 오히려 <strong>더 이르고 더 큼</strong> → 그러나 빗방울 크기까지 자라지 못해 지표 강수 감소. 강수 개시·종료 시각은 C00과 거의 같고 피크 크기만 줄었다. 충돌은 잦지만 질량 성장이 막힌, 사실상 오염 공기를 주입한 것과 같은 결과다.</p>
+<p><strong>Giant (1–9 µm).</strong> seed 수가 적어 10 µm 미만 스펙트럼은 C00과 거의 같음 → 2 µm(C12)부터 10 µm 초과 방울의 수·질량이 늘고 7–9 µm에서 가장 큼 → 18–21분 동안 30 µm 미만 질량이 큰 쪽으로 이동 → 충돌–병합률 피크가 강수 피크보다 3–4분 앞서 커짐 → 지표 강수 증가. 1 µm(C11)는 큰 방울이 C00보다 약간 적어 여전히 억제 쪽이다.</p>
+<p><strong>Ultra-giant (10–90 µm).</strong> seed 하나하나가 곧바로 큰 collector → 충돌–병합률 피크가 C00보다 3–5분 이르고 훨씬 큼 → 강수 개시와 피크가 앞당겨짐(직경이 클수록 더 빨리). 하지만 60 µm를 넘으면 개수가 너무 적다 → collector 부족 → 증대 폭 감소. 20 µm에서 90 µm로 가면 개수는 약 91배 줄어든다. 스펙트럼에서도 40–1000 µm 방울은 작은 seed일수록, 1000 µm 초과 방울은 큰 seed일수록 많았다.</p>
+</section>
+<section id="결과-3-오염될수록-임계-직경이-작아진다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-3-오염될수록-임계-직경이-작아진다">결과 3: 오염될수록 임계 직경이 작아진다</h2>
+<p>저자들은 giant 범위 시딩을 세 배경 에어로졸에서 반복했다.</p>
+<table class="review-data caption-top table">
+<caption>배경 에어로졸별 임계 직경 (논문 4.5절, 결론)</caption>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>배경</th>
+<th style="text-align: right;">최대 구름방울 수농도 (cm⁻³)</th>
+<th style="text-align: right;">임계 직경</th>
+<th>반응</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>해양성 (M)</td>
+<td style="text-align: right;">140 (2.2절) / 120 (4.5절)</td>
+<td style="text-align: right;">약 6 µm</td>
+<td>1 µm에서만 뚜렷한 억제, 나머지는 작음</td>
+</tr>
+<tr class="even">
+<td>대륙성 (C)</td>
+<td style="text-align: right;">400 / 450</td>
+<td style="text-align: right;">약 3 µm</td>
+<td>해양성보다 뚜렷</td>
+</tr>
+<tr class="odd">
+<td>도시성 (U)</td>
+<td style="text-align: right;">1400</td>
+<td style="text-align: right;">약 2 µm</td>
+<td>가장 뚜렷, 전환 뒤 증대도 가장 강함</td>
+</tr>
+</tbody>
+</table>
+<p>저자들의 설명은 이렇다. 깨끗한 구름 → 자연 방울 수가 적고 응결만으로 이미 비교적 큰 방울이 생김 → seed가 수 µm는 되어야 차이를 만든다. 오염된 구름 → 방울이 많고 스펙트럼이 좁음 → 2 µm seed만으로도 충돌–병합을 빨리 시작한다. 내 식으로 정리하면, seed가 “큰 방울”로 의미를 가지려면 주변 방울보다 커야 하고 그 기준을 배경 에어로졸이 정한다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>읽으면서 발견한 표기 불일치
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>4.5절 본문은 임계값을 “radius 약 6·3 µm”라고 쓰지만, Figure 11 캡션과 결론은 같은 값을 <strong>diameter</strong>라 부른다. 실험 변수가 직경이므로 이 글은 직경으로 읽었다.</li>
+<li>Ultra-giant 최적 크기를 4.1절은 30 µm, Table 2·4.4절·결론·초록은 60 µm로 적는다. Table 2의 최대값(+192.34%)은 60 µm다.</li>
+<li>3.1절은 C00을 도시성 배경이라 하고 결론(2)도 “오염된 배경에서 약 2 µm”라 하지만, 4.5절은 같은 실험을 대륙성 C series(임계 약 3 µm)라 부른다. Table 2의 전환(1→2 µm)은 도시성 값과 맞는다. 최대 구름방울 수농도도 2.2절과 4.5절이 다르다.</li>
+<li>4.4절은 10→60 µm에서 개수가 “약 27배” 준다고 쓰지만, 등질량이면 <span class="math inline">\((60/10)^3=216\)</span>배이고 Table 2 값도 216배다. 27배는 10→30 µm에 해당한다.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="내-연구에-왜-중요한가" class="level2">
+<h2 class="anchored" data-anchor-id="내-연구에-왜-중요한가">내 연구에 왜 중요한가</h2>
+<p><strong>dose 교란을 없앤 설계.</strong> fixed-number 설계에서는 입자를 키우면 총 질량도 <span class="math inline">\(D^3\)</span>로 늘어서 “큰 입자가 좋다”가 “많이 뿌리면 좋다”와 섞인다. 등질량 설계는 이 교란을 없앤다. 대신 크기와 개수가 <span class="math inline">\(N\propto D^{-3}\)</span>로 묶이므로, 여기서 말하는 크기 효과는 <strong>같은 재료를 몇 개로 나눌 것인가</strong>의 효과다. 내 <a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html">Experiment 3</a>에서 fixed-number에서는 큰 입자가 강했지만 fixed-mass에서는 크기–개수 맞교환이 나타난 것과 같은 구조다.</p>
+<p><strong>κ와 크기의 결합.</strong> 논문은 KCl이 같은 크기에서 (NH₄)₂SO₄보다 낮은 과포화도에서 활성화된다는 Köhler 이론으로 seed의 경쟁 우위를 설명한다. <a href="../../../posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler 리뷰</a>의 언어로 쓰면 seed는 더 큰 dry size와 더 큰 <span class="math inline">\(\kappa\)</span>를 동시에 가진다 <span class="citation" data-cites="Petters2007Kappa">(<a href="#ref-Petters2007Kappa" role="doc-biblioref">Petters 와/과 Kreidenweis 2007년</a>)</span>. 이 논문은 물질을 KCl 하나로 고정했으므로 <span class="math inline">\(\kappa\)</span>와 크기의 상대 기여는 열린 질문이다.</p>
+<p><strong>accretion을 따로 봐야 한다.</strong> <a href="../../../posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html">Lin et al.&nbsp;(2023)</a>은 과정별 생성률로 강수 증가의 핵심 경로가 rain–cloud accretion임을 진단했다 <span class="citation" data-cites="Lin2023HygroscopicWRF">(<a href="#ref-Lin2023HygroscopicWRF" role="doc-biblioref">Lin 기타 2023년</a>)</span>. Ren은 총 충돌–병합률 하나만 보여 주므로 giant·ultra-giant seed가 autoconversion을 앞당긴 것인지 accretion을 키운 것인지 구분할 수 없다. 또 Lin의 “0.4 µm 이상”은 반지름 bin 위에서 삼봉형 flare 분포를 나눈 경계이고 Ren의 값은 단분산 직경이라, 숫자를 그대로 비교하면 안 된다.</p>
+<p><strong>물리 사슬.</strong> <a href="../../../posts/article-review/2026-05-20-cloud-seeding-review/index.html">Bruintjes (1999)</a>가 강조한 seed → 방울 스펙트럼 → 충돌–병합 → 지표 강수의 사슬을 이 논문은 모형 안에서 스펙트럼과 충돌률로 따라간다 <span class="citation" data-cites="Bruintjes1999Review">(<a href="#ref-Bruintjes1999Review" role="doc-biblioref">Bruintjes 1999년</a>)</span>. 마지막 고리인 관측 검증은 없다.</p>
+</section>
+<section id="한계-무엇이-어디까지-보였나" class="level2">
+<h2 class="anchored" data-anchor-id="한계-무엇이-어디까지-보였나">한계: 무엇이 어디까지 보였나</h2>
+<table class="review-data caption-top table">
+<caption>지지되는 것과 아닌 것</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>결과로 지지됨</td>
+<td>부호의 크기 의존성(0.1–0.9 µm 9/9 억제, 10–90 µm 9/9 증대), 임계 직경이 해양성 &gt; 대륙성 &gt; 도시성 순으로 작아지는 방향</td>
+</tr>
+<tr class="even">
+<td>서술값</td>
+<td>−82%, +192%, 60 µm 최적, 1–9 µm 구간의 들쭉날쭉한 크기</td>
+</tr>
+<tr class="odd">
+<td>저자 해석</td>
+<td>수증기 경쟁과 collector 부족 — 스펙트럼과 총 충돌–병합률에서 추론</td>
+</tr>
+<tr class="even">
+<td>보이지 않음</td>
+<td>autoconversion·accretion 분리, 과포화도·응결률 진단, 앙상블 spread, 관측 검증</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>단일 사례·2D·이상화.</strong> 싼야 사운딩 하나, 2D slab-symmetric, 균일한 하부 경계, thermal bubble, 40분 적분이다. 3D 구름이나 다른 구름 체계로의 일반화는 보이지 않았다.</li>
+<li><strong>조건당 1회 적분.</strong> 앙상블이 없어 1–9 µm 구간의 들쭉날쭉함(5 µm +24.11% → 6 µm +15.92% → 7 µm +74.70% → 8 µm +63.75%)이 물리 신호인지 수치 잡음인지 판단할 수 없다. 60 µm 최적도 30–90 µm의 다른 여섯 실험이 +157–163%에 모인 가운데 한 실험(+192.34%)만 튀어나온 것이라, “최적 크기”보다 “30 µm 이상에서 포화”로 읽는 편이 안전하다.</li>
+<li><strong>임계 직경의 해상도.</strong> 1–9 µm를 1 µm 간격으로 훑었고 2–4 µm의 반응이 +0.72·+0.53·+2.98%로 0에 가깝다. “약 2 µm”는 “1과 2 µm 사이에서 부호가 바뀌고 4 µm까지 거의 중립”에 가깝다.</li>
+<li><strong>단분산·단일 주입.</strong> 실제 flare는 넓은 분포다. 주입 시점(10분)·고도(운저)·위치도 하나씩만 시험했다.</li>
+<li><strong>빠진 과정.</strong> 저자들도 entrainment–mixing과 난류에 의한 충돌 강화가 빠져 정량 반응이 달라질 수 있다고 적었다. 구름이 0 °C 아래라 얼음 과정은 시험되지 않았다.</li>
+</ul>
+</section>
+<section id="재현으로-이어지는-질문" class="level2">
+<h2 class="anchored" data-anchor-id="재현으로-이어지는-질문">재현으로 이어지는 질문</h2>
+<p>이 논문을 고른 이유는 내 PySDM 시딩 실험과 질문이 거의 같았기 때문이다. 발표 준비와 함께 두 갈래의 재현을 시작했다.</p>
+<ul>
+<li><strong>0-D parcel 재현.</strong> <a href="../../../posts/experiments/2026-09-07-ren2025-parcel-replication/index.html">Experiment 7</a>에서 PySDM parcel로 같은 등질량 직경 스캔을 세 배경에서 다시 계산했다. parcel에는 지표 강수가 없어 강수 개시 시각의 변화로 비교했다. 임계 직경의 순서(해양성 &gt; 대륙성 &gt; 도시성)는 논문과 같았지만 값은 논문의 약 절반이었고, 반응 부호는 81개 조건 중 78개에서 일치했다(신뢰구간이 0을 배제하는 엄밀 기준으로는 71/81).</li>
+<li><strong>2D 재현.</strong> 논문과 같은 2D bin 미세물리 틀을 WRF로 만들기 위해 <a href="../../../posts/wrf/2026-09-29-microphysics-fsbm/index.html">미세물리 스킴과 fast SBM</a>부터 튜토리얼을 이어 가고 있다.</li>
+</ul>
+<p>남은 질문은 네 가지다.</p>
+<ol type="1">
+<li>초기 섭동만 바꾼 앙상블에서도 1–2 µm 부호 전환과 60 µm 최적이 유지되는가?</li>
+<li>단분산 대신 실제 flare처럼 넓은 분포를 넣으면 억제 모드와 증대 모드가 서로 상쇄되는가?</li>
+<li>충돌–병합률을 autoconversion과 accretion으로 나누면 ultra-giant의 증대는 어느 쪽에서 오는가?</li>
+<li>0-D에서 임계 직경이 절반으로 나온 차이는 침강·역학이 없는 parcel의 구조 때문인가, 미세물리 설정 때문인가?</li>
+</ol>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Bruintjes1999Review" class="csl-entry" role="listitem">
+Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects”</span>. <em>Bulletin of the American Meteorological Society</em> 80 (5): 805–20. <a href="https://doi.org/10.1175/1520-0477(1999)080<0805:AROCSE>2.0.CO;2">https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Lin2023HygroscopicWRF" class="csl-entry" role="listitem">
+Lin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, 기타. 2023년. <span>“Evaluation of Hygroscopic Cloud Seeding in Warm-Rain Processes by a Hybrid Microphysics Scheme Using a Weather Research and Forecasting (<span>WRF</span>) Model: A Real Case Study”</span>. <em>Atmospheric Chemistry and Physics</em> 23: 10423–38. <a href="https://doi.org/10.5194/acp-23-10423-2023">https://doi.org/10.5194/acp-23-10423-2023</a>.
+</div>
+<div id="ref-Petters2007Kappa" class="csl-entry" role="listitem">
+Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”</span>. <em>Atmospheric Chemistry and Physics</em> 7: 1961–71. <a href="https://doi.org/10.5194/acp-7-1961-2007">https://doi.org/10.5194/acp-7-1961-2007</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry" role="listitem">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제
+    늘리나},
+  date = {2026-09-10},
+  url = {https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/},
+  langid = {ko}
+}
+</code></pre><button title="클립보드 복사" class="code-copy-button"><i class="bi"></i></button></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Jinu. 2026. <span>“같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고
+언제 늘리나.”</span> September 10. <a href="https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/">https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/</a>.
+</div></div></section></div></main> <!-- /main -->
+<script>
+(() => {
+  const localizeNavigation = () => {
+    const path = window.location.pathname;
+    const isEnglish = path === "/en" || path.startsWith("/en/");
+    const switchLink =
+      document.querySelector('a[aria-label="Switch language"]') ||
+      [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
+        ["EN", "KO"].includes(link.textContent.trim())
+      );
+
+    if (switchLink) {
+      const englishPath = path === "/" || path === "/index.html"
+        ? "/en/"
+        : `/en${path}`;
+      const koreanPath = path === "/en" || path === "/en/" || path === "/en/index.html"
+        ? "/"
+        : path.replace(/^\/en/, "");
+      const label = switchLink.querySelector(".menu-text") || switchLink;
+
+      label.textContent = isEnglish ? "KO" : "EN";
+      switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
+      switchLink.setAttribute(
+        "aria-label",
+        isEnglish ? "한국어로 전환" : "Switch to English"
+      );
+      switchLink.classList.remove("active");
+      switchLink.removeAttribute("aria-current");
+    }
+
+    if (!isEnglish) return;
+
+    const brand = document.querySelector(".navbar-brand");
+    if (brand) brand.href = "/en/";
+
+    const menu = [
+      ["PySDM", "PySDM", "/en/pysdm.html"],
+      ["WRF", "WRF", "/en/wrf.html"],
+      ["Article Review", "Article Review", "/en/article-review.html"],
+      ["Study Notes", "Study Notes", "/en/study-notes.html"]
+    ];
+
+    document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
+      const label = link.querySelector(".menu-text") || link;
+      const item = menu.find(([korean]) => label.textContent.trim() === korean);
+      if (!item) return;
+      label.textContent = item[1];
+      link.href = item[2];
+
+      const isCurrent = path === item[2] ||
+        (item[2] === "/en/" && ["/en", "/en/", "/en/index.html"].includes(path));
+      link.classList.toggle("active", isCurrent);
+      if (isCurrent) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".nav-footer a").forEach((link) => {
+      if (link.textContent.trim() === "소개") {
+        link.textContent = "About";
+        link.href = "/en/about.html";
+      }
+      if (link.textContent.trim() === "RSS") link.href = "/index.xml";
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", localizeNavigation);
+  } else {
+    localizeNavigation();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "다크 모드 전환");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "다크 모드 전환");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "복사완료!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "복사완료!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jinu219\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"스크롤 가능한 코드","output":"스크롤 가능한 출력"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Jinu. Cloud seeding research notes.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/posts/article-review/2026-09-10-ren2025-particle-size/index.qmd" class="toc-action"><i class="bi bi-github"></i>소스코드 보기</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>이슈 보고</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../../about.html">
+<p>소개</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../../../index.xml">
+<p>RSS</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/Jinu219">
+<p>GitHub</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.11.9">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jinu">
+<meta name="dcterms.date" content="2026-03-11">
+<meta name="description" content="The cold-rain and warm-rain pathways, glaciogenic and hygroscopic seeding, the dry-ice and silver-iodide origins of the field, and why I chose warm-cloud hygroscopic seeding as my research topic.">
+
+<title>What Is Cloud Seeding? The Physics of Planting Seeds in a Cloud – Jinu’s Cloud Seeding Blog</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-dark-7e7c2b2337504f807b65bdb21917a461.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<meta property="og:title" content="What Is Cloud Seeding? The Physics of Planting Seeds in a Cloud – Jinu’s Cloud Seeding Blog">
+<meta property="og:description" content="The cold-rain and warm-rain pathways, glaciogenic and hygroscopic seeding, the dry-ice and silver-iodide origins of the field, and why I chose warm-cloud hygroscopic seeding as my research topic.">
+<meta property="og:image" content="https://jinu219.github.io/en/posts/study-notes/2026-03-11-what-is-cloud-seeding/images/ice-vs-water-saturation.png">
+<meta property="og:site_name" content="Jinu’s Cloud Seeding Blog">
+<meta property="og:image:height" content="672">
+<meta property="og:image:width" content="1152">
+<meta name="twitter:title" content="What Is Cloud Seeding? The Physics of Planting Seeds in a Cloud – Jinu’s Cloud Seeding Blog">
+<meta name="twitter:description" content="The cold-rain and warm-rain pathways, glaciogenic and hygroscopic seeding, the dry-ice and silver-iodide origins of the field, and why I chose warm-cloud hygroscopic seeding as my research topic.">
+<meta name="twitter:image" content="https://jinu219.github.io/en/posts/study-notes/2026-03-11-what-is-cloud-seeding/images/ice-vs-water-saturation.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          toggle.setAttribute("aria-checked", alternate ? "true" : "false");
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455).
+    // Not run on load: stylesheets are set before first paint there, and
+    // scrolling would undo the scroll to a URL fragment (#14973).
+    // The one pixel nudge keeps the reader where they were.
+    const refreshSafariScrollbar = () => {
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        const scrollY = window.scrollY;
+        window.scrollTo(0, scrollY > 0 ? scrollY - 1 : 1);
+        setTimeout(() => {
+          window.scrollTo(0, scrollY);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      refreshSafariScrollbar();
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark" aria-label="Site">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../../../index.html">
+    <span class="navbar-title">Jinu’s Cloud Seeding Blog</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../pysdm.html"> 
+<span class="menu-text">PySDM</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../wrf.html"> 
+<span class="menu-text">WRF</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../article-review.html"> 
+<span class="menu-text">Article Review</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../study-notes.html"> 
+<span class="menu-text">Study Notes</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../en/index.html"> 
+<span class="menu-text">EN</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/Jinu219"> <i class="bi bi-github" role="img" aria-label="Jinu219 GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <button type="button" role="switch" aria-checked="false" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode" aria-label="Toggle dark mode"><i class="bi"></i></button>
+</div>
+            <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#two-roads-to-rain" id="toc-two-roads-to-rain" class="nav-link active" data-scroll-target="#two-roads-to-rain">Two roads to rain</a></li>
+  <li><a href="#cold-clouds-droplets-do-not-freeze-at-0-c" id="toc-cold-clouds-droplets-do-not-freeze-at-0-c" class="nav-link" data-scroll-target="#cold-clouds-droplets-do-not-freeze-at-0-c">Cold clouds: droplets do not freeze at 0 °C</a></li>
+  <li><a href="#four-ways-ice-gets-started" id="toc-four-ways-ice-gets-started" class="nav-link" data-scroll-target="#four-ways-ice-gets-started">Four ways ice gets started</a></li>
+  <li><a href="#dry-ice-and-silver-iodide" id="toc-dry-ice-and-silver-iodide" class="nav-link" data-scroll-target="#dry-ice-and-silver-iodide">1946–1947: dry ice and silver iodide</a></li>
+  <li><a href="#three-seeding-concepts" id="toc-three-seeding-concepts" class="nav-link" data-scroll-target="#three-seeding-concepts">Three seeding concepts</a></li>
+  <li><a href="#what-gets-released" id="toc-what-gets-released" class="nav-link" data-scroll-target="#what-gets-released">What gets released</a></li>
+  <li><a href="#why-warm-cloud-hygroscopic-seeding" id="toc-why-warm-cloud-hygroscopic-seeding" class="nav-link" data-scroll-target="#why-warm-cloud-hygroscopic-seeding">Why warm-cloud hygroscopic seeding</a></li>
+  <li><a href="#addendum-suitability-by-cloud-type" id="toc-addendum-suitability-by-cloud-type" class="nav-link" data-scroll-target="#addendum-suitability-by-cloud-type">Addendum: suitability by cloud type</a></li>
+  <li><a href="#open-questions" id="toc-open-questions" class="nav-link" data-scroll-target="#open-questions">Open questions</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/study-notes/2026-03-11-what-is-cloud-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content" tabindex="-1">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">What Is Cloud Seeding? The Physics of Planting Seeds in a Cloud</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Study Notes</div>
+    <div class="quarto-category">cloud seeding</div>
+    <div class="quarto-category">ice nucleation</div>
+    <div class="quarto-category">hygroscopic seeding</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    The cold-rain and warm-rain pathways, glaciogenic and hygroscopic seeding, the dry-ice and silver-iodide origins of the field, and why I chose warm-cloud hygroscopic seeding as my research topic.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jinu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-03-11</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In my first lab meeting of March 2026 I gave a big-picture talk titled “What is Cloud Seeding?”. This note re-checks that slide deck and my Q&amp;A preparation notes against the original papers and the textbook, and keeps only what I could verify. The guiding question is simple: <strong>if we add something to a cloud, which link in the rain-making chain changes?</strong></p>
+<div class="review-verdict">
+<p><strong>Key takeaway.</strong> Cloud seeding does not make rain where there are no clouds. It picks the bottleneck that is holding back precipitation in an existing cloud, a <strong>shortage of ice nuclei</strong> in a cold cloud or <strong>slow collision–coalescence</strong> in a warm cloud, and adds particles that relieve that bottleneck. A cloud without such a bottleneck offers little to gain.</p>
+</div>
+<section id="two-roads-to-rain" class="level2">
+<h2 class="anchored" data-anchor-id="two-roads-to-rain">Two roads to rain</h2>
+<p>A cloud droplet of 10 µm radius and a raindrop of 1 mm radius differ in volume by a factor of about one million. A single cloud droplet barely falls, so the water of a great many droplets must end up in one particle before it can rain. There are two broad pathways <span class="citation" data-cites="Bruintjes1999Review Houze2014CloudMicrophysics">(<a href="#ref-Bruintjes1999Review" role="doc-biblioref">Bruintjes 1999</a>; <a href="#ref-Houze2014CloudMicrophysics" role="doc-biblioref">Houze 2014</a>)</span>.</p>
+<table class="review-data caption-top table">
+<caption>The two precipitation pathways and the matching seeding approach</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Warm rain</th>
+<th>Cold rain (ice process)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cloud</td>
+<td>warmer than 0 °C all the way to cloud top</td>
+<td>cloud top colder than 0 °C</td>
+</tr>
+<tr class="even">
+<td>Key processes</td>
+<td>condensation → collision–coalescence</td>
+<td>ice formation → deposition growth → riming and aggregation</td>
+</tr>
+<tr class="odd">
+<td>What starts it</td>
+<td>a droplet larger than its neighbours (collector)</td>
+<td>an ice nucleating particle (INP)</td>
+</tr>
+<tr class="even">
+<td>Typical bottleneck</td>
+<td>condensation yields small, similar droplets that rarely collide</td>
+<td>supercooled droplets that stay liquid below 0 °C and too few ice nuclei</td>
+</tr>
+<tr class="odd">
+<td>Matching seeding</td>
+<td>hygroscopic seeding</td>
+<td>glaciogenic seeding</td>
+</tr>
+</tbody>
+</table>
+<p>In real clouds the two pathways often operate together. Which one dominates at the time decides how a cloud responds to seeding, a point Bruintjes (1999) emphasizes.</p>
+</section>
+<section id="cold-clouds-droplets-do-not-freeze-at-0-c" class="level2">
+<h2 class="anchored" data-anchor-id="cold-clouds-droplets-do-not-freeze-at-0-c">Cold clouds: droplets do not freeze at 0 °C</h2>
+<p>Homogeneous freezing, where a pure droplet freezes without help, requires temperatures colder than about −35 to −40 °C. Clouds between 0 and about −38 °C therefore often contain unfrozen, supercooled droplets <span class="citation" data-cites="Houze2014CloudMicrophysics">(<a href="#ref-Houze2014CloudMicrophysics" role="doc-biblioref">Houze 2014</a>)</span>. In that range ice needs a particle whose surface resembles ice: an ice nucleus.</p>
+<p>Natural ice nuclei are scarcer than one might expect. According to Houze’s summary, clay-mineral dust works at roughly −10 to −37 °C, while at warm supercooling (−1 to −10 °C) only plant-derived bacteria make ice, and in very low concentrations. <strong>The shortage of ice nuclei at warm supercooling</strong> is the starting point for artificial ice nuclei.</p>
+<p>Once ice exists, it grows fast. At the same temperature the saturation vapour pressure over ice is lower than over water, so air that is saturated with respect to water is supersaturated with respect to ice. The crystals take up vapour and grow while the surrounding droplets evaporate: the Wegener–Bergeron–Findeisen (WBF) process. Schaefer (1946) explained his own observation that adding droplets only made the crystals grow in the same way <span class="citation" data-cites="Schaefer1946DryIce">(<a href="#ref-Schaefer1946DryIce" role="doc-biblioref">Schaefer 1946</a>)</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/ice-vs-water-saturation.png" class="img-fluid figure-img" alt="Line chart of ice supersaturation of water-saturated air versus temperature from 0 to minus 40 degrees Celsius, about 10 percent at minus 10 and 22 percent at minus 20, with shaded bands for AgI activation, the static seeding window, and homogeneous freezing"></p>
+<figcaption>Ice supersaturation of air that is saturated over liquid water, computed from the Murphy &amp; Koop (2005) vapour-pressure formulas. The blue band is the cloud-top temperature window for static seeding of convective clouds (Bruintjes 1999); the orange band is where AgI smoke began to act in Vonnegut (1947).</figcaption>
+</figure>
+</div>
+<p>The difference is about 10% at −10 °C and about 22% at −20 °C <span class="citation" data-cites="Murphy2005VapourPressure">(<a href="#ref-Murphy2005VapourPressure" role="doc-biblioref">Murphy and Koop 2005</a>)</span>. Since supersaturation over water in clouds rarely exceeds 1%, ice crystals grow under overwhelmingly favourable conditions compared with droplets.</p>
+</section>
+<section id="four-ways-ice-gets-started" class="level2">
+<h2 class="anchored" data-anchor-id="four-ways-ice-gets-started">Four ways ice gets started</h2>
+<p>How an ice nucleus triggers ice depends on where the particle sits <span class="citation" data-cites="Houze2014CloudMicrophysics">(<a href="#ref-Houze2014CloudMicrophysics" role="doc-biblioref">Houze 2014</a>)</span>.</p>
+<table class="review-data caption-top table">
+<caption>Four modes of heterogeneous ice nucleation</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mode</th>
+<th>What happens</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Deposition nucleation</td>
+<td>vapour deposits directly as ice on the particle surface, skipping the liquid phase</td>
+</tr>
+<tr class="even">
+<td>Condensation (-freezing) nucleation</td>
+<td>the ice nucleus also serves as the CCN, and the droplet that forms on it freezes when cooled</td>
+</tr>
+<tr class="odd">
+<td>Immersion freezing</td>
+<td>another particle already inside a droplet starts freezing as the temperature drops</td>
+</tr>
+<tr class="even">
+<td>Contact nucleation</td>
+<td>an airborne ice nucleus hits a supercooled droplet, which freezes on contact</td>
+</tr>
+</tbody>
+</table>
+<p>In every mode the key is <strong>lattice similarity</strong>. Ice is a highly ordered crystal; the more a substrate’s lattice misfits that of ice, the more strain and dislocation the interface carries and the lower the nucleating efficiency.</p>
+</section>
+<section id="dry-ice-and-silver-iodide" class="level2">
+<h2 class="anchored" data-anchor-id="dry-ice-and-silver-iodide">1946–1947: dry ice and silver iodide</h2>
+<p><strong>Schaefer (1946).</strong> He made a supercooled cloud in a cold chamber (−10 °C at the top, −20 °C at the bottom, about −15 °C in the middle) and added carbon, volcanic dust, talc and many other dusts, but the cloud never froze. A piece of dry ice, however, turned the whole cloud into ice crystals in less than 10 seconds <span class="citation" data-cites="Schaefer1946DryIce">(<a href="#ref-Schaefer1946DryIce" role="doc-biblioref">Schaefer 1946</a>)</span>. A rod cooled in liquid air, or a copper rod at −35 °C placed in a −12 °C cloud, also released streams of ice crystals. Dry ice is thus not an ice nucleus but a <strong>coolant</strong>: it chills the surrounding air below the homogeneous-freezing limit and produces ice particles in huge numbers. Schaefer closed the paper by announcing a large-scale test of dropping dry ice from an aircraft, and the first cloud was seeded that same year <span class="citation" data-cites="Bruintjes1999Review">(<a href="#ref-Bruintjes1999Review" role="doc-biblioref">Bruintjes 1999</a>)</span>.</p>
+<p><strong>Vonnegut (1947).</strong> Working in the same laboratory, Vonnegut searched crystallographic data for the substance most similar to ice <span class="citation" data-cites="Vonnegut1947AgI">(<a href="#ref-Vonnegut1947AgI" role="doc-biblioref">Vonnegut 1947</a>)</span>.</p>
+<table class="review-data caption-top table">
+<caption>Lattice constants from Vonnegut (1947), Table I</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Ice</th>
+<th style="text-align: right;">Silver iodide (AgI)</th>
+<th style="text-align: right;">Difference</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Crystal system</td>
+<td style="text-align: right;">hexagonal</td>
+<td style="text-align: right;">hexagonal</td>
+<td style="text-align: right;">—</td>
+</tr>
+<tr class="even">
+<td>Lattice constant a</td>
+<td style="text-align: right;">4.535 Å</td>
+<td style="text-align: right;">4.585 Å</td>
+<td style="text-align: right;">about 1.1%</td>
+</tr>
+<tr class="odd">
+<td>Lattice constant c</td>
+<td style="text-align: right;">7.41 Å</td>
+<td style="text-align: right;">7.490 Å</td>
+<td style="text-align: right;">about 1.1%</td>
+</tr>
+</tbody>
+</table>
+<p>Both dimensions agree to within about 1%. The first AgI powder he tried did nothing; the sample later turned out to be contaminated with soluble salts. AgI vaporized in a flame or on a hot filament then produced a fine smoke with enormous numbers of ice nuclei. Smoke of about 1 µm diameter was effective from −4 °C, and smoke of about 0.01 µm (100 Å) diameter from −8 °C. His generator consumed 1 mg of AgI per second and produced about <span class="math inline">\(10^{13}\)</span> effective nuclei per second. Released into a thin supercooled fog at −4 °C, the smoke turned the fog into ice crystals for at least 150 ft (about 46 m) from the generator.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The figure of <span class="math inline">\(10^{13}\)</span> nuclei per second is a 1947 measurement on one laboratory generator. The same paper estimates that 1 mg should in theory yield about <span class="math inline">\(3\times10^{14}\)</span> particles and acknowledges the gap of more than an order of magnitude. How much AgI actually activates in the real atmosphere is a separate question that this note does not address. Lattice constants are quoted slightly differently across sources, so the table uses Vonnegut’s original values.</p>
+</div>
+</div>
+</section>
+<section id="three-seeding-concepts" class="level2">
+<h2 class="anchored" data-anchor-id="three-seeding-concepts">Three seeding concepts</h2>
+<table class="review-data caption-top table">
+<caption>Bottlenecks and limits of the seeding concepts <span class="citation" data-cites="Bruintjes1999Review Houze2014CloudMicrophysics">(<a href="#ref-Bruintjes1999Review" role="doc-biblioref">Bruintjes 1999</a>; <a href="#ref-Houze2014CloudMicrophysics" role="doc-biblioref">Houze 2014</a>)</span></caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Concept</th>
+<th>Target bottleneck</th>
+<th>Expected causal chain</th>
+<th>Caveat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Static (glaciogenic)</td>
+<td>too few ice nuclei</td>
+<td>AgI or dry ice → more ice crystals → deposition and riming growth → precipitation</td>
+<td>narrow window: for convective clouds, limited to continental cold-based clouds with tops near −10 to −20 °C while ample supercooled liquid water is present</td>
+</tr>
+<tr class="even">
+<td>Dynamic (glaciogenic)</td>
+<td>weak updraft</td>
+<td>massive freezing → release of latent heat of fusion → buoyancy and stronger updraft → larger cloud</td>
+<td>long chain, large natural variability of convection; Houze notes the effect has never been proven in cumuliform clouds</td>
+</tr>
+<tr class="odd">
+<td>Hygroscopic (warm)</td>
+<td>slow collision–coalescence</td>
+<td>large hygroscopic particles → broader droplet spectrum → earlier collision–coalescence</td>
+<td>no effect in clouds where coalescence is already efficient, such as maritime clouds</td>
+</tr>
+</tbody>
+</table>
+<p>The history and evaluation of these concepts are covered separately in my <a href="../../../../en/posts/article-review/2026-05-20-cloud-seeding-review/index.html">review of Bruintjes (1999)</a>.</p>
+</section>
+<section id="what-gets-released" class="level2">
+<h2 class="anchored" data-anchor-id="what-gets-released">What gets released</h2>
+<table class="review-data caption-top table">
+<caption>Representative seeding materials</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Material</th>
+<th>Target cloud</th>
+<th>How it works</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Dry ice (solid CO₂)</td>
+<td>supercooled cloud</td>
+<td>a coolant, not a nucleus: chills the air locally and creates ice crystals in huge numbers</td>
+<td>Schaefer (1946)</td>
+</tr>
+<tr class="even">
+<td>Silver iodide (AgI)</td>
+<td>supercooled cloud</td>
+<td>ice-like lattice acts as an ice nucleus; burned or vaporized into a fine smoke</td>
+<td>Vonnegut (1947), Houze (2014)</td>
+</tr>
+<tr class="odd">
+<td>Hygroscopic salts (e.g., NaCl)</td>
+<td>warm cloud</td>
+<td>attract water, grow into large drops and start collision–coalescence</td>
+<td>Bruintjes (1999)</td>
+</tr>
+</tbody>
+</table>
+<p>The talk also introduced research-stage materials such as BiI₃, TiO₂-coated NaCl (core–shell) and charged water droplets, but I could not trace the original source of their performance figures, so they are left out of the table. Charge-based seeding is discussed in my <a href="../../../../en/posts/article-review/2026-05-20-negative-ion-seeding/index.html">review of negative-ion seeding</a>.</p>
+</section>
+<section id="why-warm-cloud-hygroscopic-seeding" class="level2">
+<h2 class="anchored" data-anchor-id="why-warm-cloud-hygroscopic-seeding">Why warm-cloud hygroscopic seeding</h2>
+<p>The bottleneck of warm rain is a <strong>size gap</strong>. Condensation makes many small droplets of similar size, while collision–coalescence needs a collector that is clearly larger than its neighbours. Bruintjes (1999) describes two ways hygroscopic seeding tries to bridge that gap.</p>
+<ul>
+<li><strong>Raindrop-embryo approach:</strong> salt particles larger than 10 µm in diameter skip the CCN stage and start collision–coalescence directly. It needs large amounts of salt, and spreading it evenly through a cloud is hard.</li>
+<li><strong>Flare approach:</strong> burning flares release salt particles of about 0.5 µm diameter below cloud base. The large artificial CCN activate first and take up vapour, fewer natural CCN activate, and fewer droplets grow larger, broadening the spectrum. In a randomized experiment in South Africa (1991–1996, 127 storms), seeded storms produced significantly more rain than control storms at the 95% confidence level. Bruintjes adds that fundamental problems such as dispersion and transport of the material remain.</li>
+</ul>
+<p>I chose this pathway for three reasons. First, the causal chain <strong>closes with condensation and collision–coalescence alone, without ice processes</strong>, so a zero-dimensional parcel model can test it one link at a time. Second, the same material can give different results depending on particle size, hygroscopicity (κ), dose and injection timing as well as background aerosol and updraft, which makes for a clear sensitivity question. Third, if competition for vapour is the key, I also need to ask whether the wrong conditions might delay rain instead. These questions continue in my <a href="../../../../en/posts/study-notes/2026-04-08-warm-rain-microphysics/index.html">note on warm-cloud microphysics</a> and the <a href="../../../../en/experiments.html">PySDM experiments</a>.</p>
+</section>
+<section id="addendum-suitability-by-cloud-type" class="level2">
+<h2 class="anchored" data-anchor-id="addendum-suitability-by-cloud-type">Addendum: suitability by cloud type</h2>
+<p>Later (September 2026) I revisited how well each cloud type suits research on warm-cloud hygroscopic seeding. This is <strong>my own qualitative judgment</strong> based on the typical phase and main precipitation process, not a quantitative criterion from the literature.</p>
+<table class="review-data caption-top table">
+<caption>Suitability of cloud types for warm hygroscopic seeding research (qualitative)</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Cloud type</th>
+<th>Typical phase</th>
+<th>Main precipitation process</th>
+<th>Suitability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Cumulus</td>
+<td>liquid, sometimes mixed</td>
+<td>condensation → collision–coalescence</td>
+<td>highly suitable</td>
+</tr>
+<tr class="even">
+<td>Stratocumulus</td>
+<td>mostly liquid, mixed when cold</td>
+<td>autoconversion + accretion → drizzle</td>
+<td>potentially suitable</td>
+</tr>
+<tr class="odd">
+<td>Stratus</td>
+<td>mostly liquid</td>
+<td>weak collision–coalescence → drizzle</td>
+<td>limited</td>
+</tr>
+<tr class="even">
+<td>Altocumulus</td>
+<td>liquid / supercooled / mixed</td>
+<td>liquid coalescence or ice process</td>
+<td>limited</td>
+</tr>
+<tr class="odd">
+<td>Nimbostratus, Altostratus</td>
+<td>mostly mixed / ice</td>
+<td>deposition, aggregation, melting</td>
+<td>generally unsuitable</td>
+</tr>
+<tr class="even">
+<td>Cirrus family</td>
+<td>ice</td>
+<td>ice nucleation, deposition</td>
+<td>generally unsuitable</td>
+</tr>
+</tbody>
+</table>
+<p>“Unsuitable” does not mean the cloud cannot be modified; it means it is not a fitting target for studying the warm hygroscopic pathway.</p>
+</section>
+<section id="open-questions" class="level2">
+<h2 class="anchored" data-anchor-id="open-questions">Open questions</h2>
+<ul>
+<li>How much of the ice-nucleating activity measured in the laboratory survives turbulence, competition with natural ice nuclei and particle removal in a real cloud?</li>
+<li>How can one confirm that the released material actually reached the target volume of the target cloud?</li>
+<li>What must be measured to close both the statistical signal and the physical evidence against the large natural variability of precipitation?</li>
+</ul>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Bruintjes1999Review" class="csl-entry" role="listitem">
+Bruintjes, Roelof T. 1999. <span>“A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects.”</span> <em>Bulletin of the American Meteorological Society</em> 80 (5): 805–20. <a href="https://doi.org/10.1175/1520-0477(1999)080<0805:AROCSE>2.0.CO;2">https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Houze2014CloudMicrophysics" class="csl-entry" role="listitem">
+Houze, Robert A., Jr. 2014. <span>“Cloud Microphysics.”</span> In <em>Cloud Dynamics</em>, 2nd ed., vol. 104. International Geophysics. Elsevier. <a href="https://doi.org/10.1016/B978-0-12-374266-7.00003-2">https://doi.org/10.1016/B978-0-12-374266-7.00003-2</a>.
+</div>
+<div id="ref-Murphy2005VapourPressure" class="csl-entry" role="listitem">
+Murphy, D. M., and T. Koop. 2005. <span>“Review of the Vapour Pressures of Ice and Supercooled Water for Atmospheric Applications.”</span> <em>Quarterly Journal of the Royal Meteorological Society</em> 131 (608): 1539–65. <a href="https://doi.org/10.1256/qj.04.94">https://doi.org/10.1256/qj.04.94</a>.
+</div>
+<div id="ref-Schaefer1946DryIce" class="csl-entry" role="listitem">
+Schaefer, Vincent J. 1946. <span>“The Production of Ice Crystals in a Cloud of Supercooled Water Droplets.”</span> <em>Science</em> 104 (2707): 457–59. <a href="https://doi.org/10.1126/science.104.2707.457">https://doi.org/10.1126/science.104.2707.457</a>.
+</div>
+<div id="ref-Vonnegut1947AgI" class="csl-entry" role="listitem">
+Vonnegut, Bernard. 1947. <span>“The Nucleation of Ice Formation by Silver Iodide.”</span> <em>Journal of Applied Physics</em> 18 (7): 593–95. <a href="https://doi.org/10.1063/1.1697813">https://doi.org/10.1063/1.1697813</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script>
+(() => {
+  const localizeNavigation = () => {
+    const path = window.location.pathname;
+    const isEnglish = path === "/en" || path.startsWith("/en/");
+    const switchLink =
+      document.querySelector('a[aria-label="Switch language"]') ||
+      [...document.querySelectorAll(".navbar-nav .nav-link")].find((link) =>
+        ["EN", "KO"].includes(link.textContent.trim())
+      );
+
+    if (switchLink) {
+      const englishPath = path === "/" || path === "/index.html"
+        ? "/en/"
+        : `/en${path}`;
+      const koreanPath = path === "/en" || path === "/en/" || path === "/en/index.html"
+        ? "/"
+        : path.replace(/^\/en/, "");
+      const label = switchLink.querySelector(".menu-text") || switchLink;
+
+      label.textContent = isEnglish ? "KO" : "EN";
+      switchLink.href = `${isEnglish ? koreanPath : englishPath}${window.location.search}${window.location.hash}`;
+      switchLink.setAttribute(
+        "aria-label",
+        isEnglish ? "한국어로 전환" : "Switch to English"
+      );
+      switchLink.classList.remove("active");
+      switchLink.removeAttribute("aria-current");
+    }
+
+    if (!isEnglish) return;
+
+    const brand = document.querySelector(".navbar-brand");
+    if (brand) brand.href = "/en/";
+
+    const menu = [
+      ["PySDM", "PySDM", "/en/pysdm.html"],
+      ["WRF", "WRF", "/en/wrf.html"],
+      ["Article Review", "Article Review", "/en/article-review.html"],
+      ["Study Notes", "Study Notes", "/en/study-notes.html"]
+    ];
+
+    document.querySelectorAll(".navbar-nav .nav-link").forEach((link) => {
+      const label = link.querySelector(".menu-text") || link;
+      const item = menu.find(([korean]) => label.textContent.trim() === korean);
+      if (!item) return;
+      label.textContent = item[1];
+      link.href = item[2];
+
+      const isCurrent = path === item[2] ||
+        (item[2] === "/en/" && ["/en", "/en/", "/en/index.html"].includes(path));
+      link.classList.toggle("active", isCurrent);
+      if (isCurrent) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+
+    document.querySelectorAll(".nav-footer a").forEach((link) => {
+      if (link.textContent.trim() === "소개") {
+        link.textContent = "About";
+        link.href = "/en/about.html";
+      }
+      if (link.textContent.trim() === "RSS") link.href = "/index.xml";
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", localizeNavigation);
+  } else {
+    localizeNavigation();
+  }
+})();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const toggle = window.document.createElement('button');
+      toggle.type = "button";
+      toggle.setAttribute("role", "switch");
+      toggle.setAttribute("aria-checked", "false");
+      toggle.classList.add('top-right');
+      toggle.classList.add('quarto-color-scheme-toggle');
+      toggle.setAttribute("aria-label", "Toggle dark mode");
+      toggle.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      toggle.appendChild(i);
+      // Put the toggle in a landmark of its own, so that landmark navigation
+      // can reach it.
+      //
+      // The container is always a fresh direct child of body, and the toggle is
+      // never moved into page furniture that the theme or the author controls.
+      // The toggle is positioned against the page, so any ancestor that
+      // establishes a containing block captures it: a positioned element or a
+      // grid for position: absolute, and transform, filter, will-change or
+      // contain for position: fixed. A direct child of body has none of these
+      // to inherit, and the shift when one appears is silent and visual.
+      //
+      // ARIA says a document should have at most one banner, and axe reports a
+      // duplicate whether or not the banners carry distinct labels. So use a
+      // header when the page has no banner yet, and a named region otherwise.
+      //
+      // A header is a banner wherever it sits, unless it is inside sectioning
+      // content, so this cannot just look at the children of body: a custom
+      // page layout wraps the title block header in a plain div. An explicit
+      // role="banner" always counts.
+      const sectioning = 'article, aside, main, nav, section, [role="article"], [role="complementary"], [role="main"], [role="navigation"], [role="region"]';
+      const hasBanner = Array.from(
+        window.document.querySelectorAll('header:not([role]), [role="banner"]')
+      ).some(function(el) {
+        return el.hasAttribute("role") || el.closest(sectioning) === null;
+      });
+      const container = window.document.createElement(hasBanner ? "div" : "header");
+      if (hasBanner) {
+        container.setAttribute("role", "region");
+        container.setAttribute("aria-label", "Toggle dark mode");
+      }
+      container.classList.add('quarto-color-scheme-toggle-container');
+      container.appendChild(toggle);
+      window.document.body.appendChild(container);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/jinu219\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+          if (!link.classList.contains('no-external-icon')) {
+          }
+        }
+      }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
+          if (lineIds.length > 0) {
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            placeBand(gutterDiv, el, lastEl);
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Jinu. Cloud seeding research notes.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jinu219/Jinu219.github.io/blob/main/en/posts/study-notes/2026-03-11-what-is-cloud-seeding/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/Jinu219/Jinu219.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+    <a class="nav-link" href="../../../../about.html">
+<p>소개</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="../../../../index.xml">
+<p>RSS</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/Jinu219">
+<p>GitHub</p>
+</a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

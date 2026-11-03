@@ -9,8 +9,346 @@
 <link>https://jinu219.github.io/article-review.html</link>
 <atom:link href="https://jinu219.github.io/article-review.xml" rel="self" type="application/rss+xml"/>
 <description>구름 씨뿌리기와 구름 미세물리 논문을 실험 관점에서 읽는 기록</description>
-<generator>quarto-1.9.38</generator>
-<lastBuildDate>Wed, 15 Jul 2026 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.11.9</generator>
+<lastBuildDate>Thu, 10 Sep 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제 늘리나</title>
+  <dc:creator>Jinu </dc:creator>
+  <link>https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Ren et al.&nbsp;(2025)은 Tel Aviv University의 2차원 slab-symmetric bin 미세물리 모형으로 2024년 5월 11일 중국 하이난 싼야(Sanya)의 온난 대류운을 모의하고, <strong>총 시딩 질량을 같게 둔 채</strong> 단일 직경의 KCl 입자를 0.1–90 µm 범위에서 바꿔 넣었다 <span class="citation" data-cites="Ren2025ParticleSize">(Ren 기타 2025년)</span>. 같은 양의 물질을 뿌려도 입자 크기만으로 비가 줄 수도, 늘 수도 있는지, 그 경계가 어디인지를 묻는다. 2026년 9월 10일 랩미팅에서 발표한 논문이다.</p>
+<div class="review-verdict">
+<p><strong>한 문장 결론.</strong> 같은 질량이면 직경 1 µm 이하의 시딩은 비를 줄이고 2 µm 이상은 늘렸으며, 부호가 바뀌는 임계 직경은 배경 에어로졸이 많을수록 작아졌다(해양성 약 6, 대륙성 약 3, 도시성 약 2 µm). 단일 사례·조건당 1회 적분이므로 믿을 수 있는 것은 <strong>부호와 경향</strong>이고, −82%나 +192% 같은 크기는 이 사례의 서술값이다.</p>
+</div>
+<p><a href="https://doi.org/10.3390/atmos16121340">원문 보기</a></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">노트</span>크기 표기
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>이 글의 시딩 입자 크기는 모두 논문을 따라 <strong>직경(diameter)</strong>이다. 내 PySDM 실험은 <strong>dry radius</strong>로 크기를 적으므로 비교할 때 2배를 먼저 맞춰야 한다. 예를 들어 이 논문의 직경 2 µm는 반지름 1 µm다.</p>
+</div>
+</div>
+<section id="질문-크기-효과만-보려면-무엇을-고정할까" class="level2">
+<h2 class="anchored" data-anchor-id="질문-크기-효과만-보려면-무엇을-고정할까">질문: 크기 효과만 보려면 무엇을 고정할까</h2>
+<p>선행 연구가 제시한 “최적 시딩 크기”는 0.5–6 µm, 1.5–2.5 µm, 10 µm 이상 등으로 제각각이다. 저자들은 실험마다 배경 에어로졸과 시딩 입자 분포가 달랐고, CCN에 대한 강수 반응이 본질적으로 비선형이기 때문이라고 본다. 그래서 배경을 고정하고 크기만 훑는다. 질문은 세 가지다.</p>
+<ol type="1">
+<li>총 시딩 질량이 같을 때, 시딩 직경에 따라 강수가 억제되는가 증대되는가?</li>
+<li>부호가 바뀌는 임계 직경이 있는가?</li>
+<li>그 임계 직경은 배경 에어로졸에 따라 어떻게 움직이는가?</li>
+</ol>
+<p>핵심 장치는 <strong>등질량(mass-conserved) 단분산 시딩</strong>이다. 남아공 hygroscopic flare 실험의 시딩 스펙트럼을 총 질량 기준으로만 쓰고, 목표 직경마다 그 질량이 되도록 입자 수를 역산했다.</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0AN(D)=%5Cfrac%7BM_%7B%5Cmathrm%7Bseed%7D%7D%7D%7B%5Crho_%7B%5Cmathrm%7Bs%7D%7D%5C,%5Cfrac%7B%5Cpi%7D%7B6%7DD%5E%7B3%7D%7D%0A%5Cquad%5CRightarrow%5Cquad%0AN(D)=N(0.1%5C,%5Cmu%5Cmathrm%7Bm%7D)%5Cleft(%5Cfrac%7B0.1%5C,%5Cmu%5Cmathrm%7Bm%7D%7D%7BD%7D%5Cright)%5E%7B3%7D%0A"></p>
+<p>말로 읽으면 “시딩 입자 수는 총 질량을 입자 하나의 질량으로 나눈 값”이다. <img src="https://latex.codecogs.com/png.latex?M_%7B%5Cmathrm%7Bseed%7D%7D">는 고정된 총 시딩 질량, <img src="https://latex.codecogs.com/png.latex?%5Crho_%7B%5Cmathrm%7Bs%7D%7D">는 KCl 밀도, <img src="https://latex.codecogs.com/png.latex?%5Cfrac%7B%5Cpi%7D%7B6%7DD%5E3">는 직경 <img src="https://latex.codecogs.com/png.latex?D">인 구의 부피다. 입자 하나의 질량이 <img src="https://latex.codecogs.com/png.latex?D%5E3">에 비례하므로 개수는 <img src="https://latex.codecogs.com/png.latex?D%5E%7B-3%7D">으로 줄어든다. 논문 Table 2의 시딩 수농도도 정확히 이 비율을 따른다. 0.1 µm에서 <img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B5%7D%5C%20%5Cmathrm%7Bcm%5E%7B-3%7D%7D">, 1 µm에서 <img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B2%7D">, 10 µm에서 <img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B-1%7D">, 90 µm에서 <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B-4%7D%5C%20%5Cmathrm%7Bcm%5E%7B-3%7D%7D">이다. <strong>직경이 10배 커지면 개수는 1000배 줄어든다.</strong> 이 크기–개수 맞교환이 뒤의 모든 결과를 읽는 열쇠다.</p>
+</section>
+<section id="모형과-실험-설계" class="level2">
+<h2 class="anchored" data-anchor-id="모형과-실험-설계">모형과 실험 설계</h2>
+<table class="review-data caption-top table">
+<caption>모형 설정 (논문 2절)</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>모형</td>
+<td>Tel Aviv University 2D slab-symmetric spectral bin 미세물리 모형(Yin et al., 2000), 바람은 vorticity–stream function으로 계산</td>
+</tr>
+<tr class="even">
+<td>격자·영역</td>
+<td><img src="https://latex.codecogs.com/png.latex?%5CDelta%20x=%5CDelta%20z=300"> m, 수평 30 km, 모형 상단 12 km</td>
+</tr>
+<tr class="odd">
+<td>시간</td>
+<td>응결·증발 2.5 s, 그 밖의 과정 5 s, 적분 40분</td>
+</tr>
+<tr class="even">
+<td>수상체 bin</td>
+<td>cloud drop·ice crystal·graupel·snow 각 34개 질량 bin(인접 bin 질량 2배), 액체 bin 직경 3.125–8064 µm</td>
+</tr>
+<tr class="odd">
+<td>CCN bin</td>
+<td>자연 CCN 67 bin(최소 반지름 <img src="https://latex.codecogs.com/png.latex?4.1%5Ctimes10%5E%7B-3%7D"> µm) + 별도의 시딩 스펙트럼과 예측 방정식</td>
+</tr>
+<tr class="even">
+<td>물질</td>
+<td>자연 CCN = (NH₄)₂SO₄, seed = KCl</td>
+</tr>
+<tr class="odd">
+<td>사례·초기장</td>
+<td>2024-05-11 14시(베이징 시) 무렵 싼야 온난 대류운, 12시 싼야 라디오존데(WMO 59948), 지표 약 980 hPa, LCL 약 900 m, 0 °C 고도 약 5.5 km</td>
+</tr>
+<tr class="even">
+<td>대류 유발</td>
+<td>영역 중앙 900 m 고도의 thermal bubble, 최대 +3 °C</td>
+</tr>
+</tbody>
+</table>
+<table class="review-data caption-top table">
+<caption>시딩 설계 (논문 3.2절, 4.5절)</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>시점·위치</td>
+<td>모의 10분, 운저 900 m의 한 층, 수평 중앙 3개 격자열(900 m)</td>
+</tr>
+<tr class="even">
+<td>방식</td>
+<td>60 s마다 1회(각 1 dynamic step = 5 s), 5분 동안 5회, 제어 체적 900 m × 300 m × 300 m(모형 면에 수직한 폭 300 m 가정)</td>
+</tr>
+<tr class="odd">
+<td>크기 실험</td>
+<td>C00(무시딩) + 27개: 0.1–0.9 µm(C01–C09), 1–9 µm(C11–C19), 10–90 µm(C21–C29)</td>
+</tr>
+<tr class="even">
+<td>배경 에어로졸</td>
+<td>Jaenicke 3-mode 해양성·대륙성·도시성, 최대 구름방울 수농도 약 140·400·1400 cm⁻³(2.2절)</td>
+</tr>
+</tbody>
+</table>
+<p>무시딩 C00은 약 15분에 비가 시작되어 23–24분에 단일 최대를 찍고 약 35분에 그치는, 약 20분짜리 단일 피크 강수를 만든다. 구름은 주로 1–4 km에 있고 0 °C 고도보다 아래이므로, 모형에 얼음 범주가 있어도 이 사례에서는 사실상 <strong>온난 과정만</strong> 작동한다.</p>
+</section>
+<section id="결과-1-크기가-부호를-정한다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-1-크기가-부호를-정한다">결과 1: 크기가 부호를 정한다</h2>
+<table class="review-data caption-top table">
+<caption>논문 Table 2를 실험군별로 요약</caption>
+<colgroup>
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 16%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>실험군</th>
+<th style="text-align: right;">직경</th>
+<th style="text-align: right;">시딩 수농도 (cm⁻³)</th>
+<th style="text-align: right;">강수 변화 (C00 대비)</th>
+<th>양상</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sub-micrometer (C01–C09)</td>
+<td style="text-align: right;">0.1–0.9 µm</td>
+<td style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B5%7D"> → <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B2%7D"></td>
+<td style="text-align: right;">−82.00% → −7.99%</td>
+<td>9개 모두 억제, 작을수록 강함</td>
+</tr>
+<tr class="even">
+<td>Giant (C11–C19)</td>
+<td style="text-align: right;">1–9 µm</td>
+<td style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B2%7D"> → <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B-1%7D"></td>
+<td style="text-align: right;">−4.78% → +94.32%</td>
+<td>1 µm(−4.78%)와 2 µm(+0.72%) 사이에서 부호 전환</td>
+</tr>
+<tr class="odd">
+<td>Ultra-giant (C21–C29)</td>
+<td style="text-align: right;">10–90 µm</td>
+<td style="text-align: right;"><img src="https://latex.codecogs.com/png.latex?5.45%5Ctimes10%5E%7B-1%7D"> → <img src="https://latex.codecogs.com/png.latex?7.48%5Ctimes10%5E%7B-4%7D"></td>
+<td style="text-align: right;">+110.59% ~ +192.34%</td>
+<td>9개 모두 증대, 60 µm에서 최대, 강수 개시가 빨라짐</td>
+</tr>
+</tbody>
+</table>
+<p>하나의 곡선으로 읽으면, 0.1 µm에서 깊게 억제 → 1 µm로 갈수록 억제가 얕아짐 → 1–2 µm 사이에서 0을 통과 → 증대가 커지다가 60 µm에서 최대 → 그 뒤 약 +160% 수준으로 평평해진다.</p>
+</section>
+<section id="결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁" class="level2">
+<h2 class="anchored" data-anchor-id="결과-2-수증기-나눠-갖기와-큰-collector-만들기의-경쟁">결과 2: 수증기 나눠 갖기와 큰 collector 만들기의 경쟁</h2>
+<p>흡습성 seed는 두 방향으로 작용한다. 활성화된 seed가 수증기를 가져가 자연 CCN의 활성화와 성장을 억누르는 <strong>수증기 경쟁</strong>, 그리고 크게 자란 seed 방울이 주변 구름방울을 쓸어 모으는 <strong>collector 효과</strong>다. 등질량 조건에서는 직경이 둘 중 어느 쪽이 이길지를 정한다.</p>
+<p><strong>Sub-micrometer (0.1–0.9 µm).</strong> 작은 seed가 대량 활성화 → 많은 방울이 수증기를 나눠 가짐 → 수농도 스펙트럼 peak가 작은 직경 쪽으로 이동하고 20–40 µm 방울과 10 µm 초과 질량이 감소 → 구름 핵심부의 최대 충돌–병합률은 오히려 <strong>더 이르고 더 큼</strong> → 그러나 빗방울 크기까지 자라지 못해 지표 강수 감소. 강수 개시·종료 시각은 C00과 거의 같고 피크 크기만 줄었다. 충돌은 잦지만 질량 성장이 막힌, 사실상 오염 공기를 주입한 것과 같은 결과다.</p>
+<p><strong>Giant (1–9 µm).</strong> seed 수가 적어 10 µm 미만 스펙트럼은 C00과 거의 같음 → 2 µm(C12)부터 10 µm 초과 방울의 수·질량이 늘고 7–9 µm에서 가장 큼 → 18–21분 동안 30 µm 미만 질량이 큰 쪽으로 이동 → 충돌–병합률 피크가 강수 피크보다 3–4분 앞서 커짐 → 지표 강수 증가. 1 µm(C11)는 큰 방울이 C00보다 약간 적어 여전히 억제 쪽이다.</p>
+<p><strong>Ultra-giant (10–90 µm).</strong> seed 하나하나가 곧바로 큰 collector → 충돌–병합률 피크가 C00보다 3–5분 이르고 훨씬 큼 → 강수 개시와 피크가 앞당겨짐(직경이 클수록 더 빨리). 하지만 60 µm를 넘으면 개수가 너무 적다 → collector 부족 → 증대 폭 감소. 20 µm에서 90 µm로 가면 개수는 약 91배 줄어든다. 스펙트럼에서도 40–1000 µm 방울은 작은 seed일수록, 1000 µm 초과 방울은 큰 seed일수록 많았다.</p>
+</section>
+<section id="결과-3-오염될수록-임계-직경이-작아진다" class="level2">
+<h2 class="anchored" data-anchor-id="결과-3-오염될수록-임계-직경이-작아진다">결과 3: 오염될수록 임계 직경이 작아진다</h2>
+<p>저자들은 giant 범위 시딩을 세 배경 에어로졸에서 반복했다.</p>
+<table class="review-data caption-top table">
+<caption>배경 에어로졸별 임계 직경 (논문 4.5절, 결론)</caption>
+<colgroup>
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 28%">
+<col style="width: 21%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>배경</th>
+<th style="text-align: right;">최대 구름방울 수농도 (cm⁻³)</th>
+<th style="text-align: right;">임계 직경</th>
+<th>반응</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>해양성 (M)</td>
+<td style="text-align: right;">140 (2.2절) / 120 (4.5절)</td>
+<td style="text-align: right;">약 6 µm</td>
+<td>1 µm에서만 뚜렷한 억제, 나머지는 작음</td>
+</tr>
+<tr class="even">
+<td>대륙성 (C)</td>
+<td style="text-align: right;">400 / 450</td>
+<td style="text-align: right;">약 3 µm</td>
+<td>해양성보다 뚜렷</td>
+</tr>
+<tr class="odd">
+<td>도시성 (U)</td>
+<td style="text-align: right;">1400</td>
+<td style="text-align: right;">약 2 µm</td>
+<td>가장 뚜렷, 전환 뒤 증대도 가장 강함</td>
+</tr>
+</tbody>
+</table>
+<p>저자들의 설명은 이렇다. 깨끗한 구름 → 자연 방울 수가 적고 응결만으로 이미 비교적 큰 방울이 생김 → seed가 수 µm는 되어야 차이를 만든다. 오염된 구름 → 방울이 많고 스펙트럼이 좁음 → 2 µm seed만으로도 충돌–병합을 빨리 시작한다. 내 식으로 정리하면, seed가 “큰 방울”로 의미를 가지려면 주변 방울보다 커야 하고 그 기준을 배경 에어로졸이 정한다.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">경고</span>읽으면서 발견한 표기 불일치
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>4.5절 본문은 임계값을 “radius 약 6·3 µm”라고 쓰지만, Figure 11 캡션과 결론은 같은 값을 <strong>diameter</strong>라 부른다. 실험 변수가 직경이므로 이 글은 직경으로 읽었다.</li>
+<li>Ultra-giant 최적 크기를 4.1절은 30 µm, Table 2·4.4절·결론·초록은 60 µm로 적는다. Table 2의 최대값(+192.34%)은 60 µm다.</li>
+<li>3.1절은 C00을 도시성 배경이라 하고 결론(2)도 “오염된 배경에서 약 2 µm”라 하지만, 4.5절은 같은 실험을 대륙성 C series(임계 약 3 µm)라 부른다. Table 2의 전환(1→2 µm)은 도시성 값과 맞는다. 최대 구름방울 수농도도 2.2절과 4.5절이 다르다.</li>
+<li>4.4절은 10→60 µm에서 개수가 “약 27배” 준다고 쓰지만, 등질량이면 <img src="https://latex.codecogs.com/png.latex?(60/10)%5E3=216">배이고 Table 2 값도 216배다. 27배는 10→30 µm에 해당한다.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="내-연구에-왜-중요한가" class="level2">
+<h2 class="anchored" data-anchor-id="내-연구에-왜-중요한가">내 연구에 왜 중요한가</h2>
+<p><strong>dose 교란을 없앤 설계.</strong> fixed-number 설계에서는 입자를 키우면 총 질량도 <img src="https://latex.codecogs.com/png.latex?D%5E3">로 늘어서 “큰 입자가 좋다”가 “많이 뿌리면 좋다”와 섞인다. 등질량 설계는 이 교란을 없앤다. 대신 크기와 개수가 <img src="https://latex.codecogs.com/png.latex?N%5Cpropto%20D%5E%7B-3%7D">로 묶이므로, 여기서 말하는 크기 효과는 <strong>같은 재료를 몇 개로 나눌 것인가</strong>의 효과다. 내 <a href="../../../posts/experiments/2026-07-06-realistic-warm-seeding/index.html">Experiment 3</a>에서 fixed-number에서는 큰 입자가 강했지만 fixed-mass에서는 크기–개수 맞교환이 나타난 것과 같은 구조다.</p>
+<p><strong>κ와 크기의 결합.</strong> 논문은 KCl이 같은 크기에서 (NH₄)₂SO₄보다 낮은 과포화도에서 활성화된다는 Köhler 이론으로 seed의 경쟁 우위를 설명한다. <a href="../../../posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler 리뷰</a>의 언어로 쓰면 seed는 더 큰 dry size와 더 큰 <img src="https://latex.codecogs.com/png.latex?%5Ckappa">를 동시에 가진다 <span class="citation" data-cites="Petters2007Kappa">(Petters 와/과 Kreidenweis 2007년)</span>. 이 논문은 물질을 KCl 하나로 고정했으므로 <img src="https://latex.codecogs.com/png.latex?%5Ckappa">와 크기의 상대 기여는 열린 질문이다.</p>
+<p><strong>accretion을 따로 봐야 한다.</strong> <a href="../../../posts/article-review/2026-07-15-wrf-hygroscopic-seeding/index.html">Lin et al.&nbsp;(2023)</a>은 과정별 생성률로 강수 증가의 핵심 경로가 rain–cloud accretion임을 진단했다 <span class="citation" data-cites="Lin2023HygroscopicWRF">(Lin 기타 2023년)</span>. Ren은 총 충돌–병합률 하나만 보여 주므로 giant·ultra-giant seed가 autoconversion을 앞당긴 것인지 accretion을 키운 것인지 구분할 수 없다. 또 Lin의 “0.4 µm 이상”은 반지름 bin 위에서 삼봉형 flare 분포를 나눈 경계이고 Ren의 값은 단분산 직경이라, 숫자를 그대로 비교하면 안 된다.</p>
+<p><strong>물리 사슬.</strong> <a href="../../../posts/article-review/2026-05-20-cloud-seeding-review/index.html">Bruintjes (1999)</a>가 강조한 seed → 방울 스펙트럼 → 충돌–병합 → 지표 강수의 사슬을 이 논문은 모형 안에서 스펙트럼과 충돌률로 따라간다 <span class="citation" data-cites="Bruintjes1999Review">(Bruintjes 1999년)</span>. 마지막 고리인 관측 검증은 없다.</p>
+</section>
+<section id="한계-무엇이-어디까지-보였나" class="level2">
+<h2 class="anchored" data-anchor-id="한계-무엇이-어디까지-보였나">한계: 무엇이 어디까지 보였나</h2>
+<table class="review-data caption-top table">
+<caption>지지되는 것과 아닌 것</caption>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>결과로 지지됨</td>
+<td>부호의 크기 의존성(0.1–0.9 µm 9/9 억제, 10–90 µm 9/9 증대), 임계 직경이 해양성 &gt; 대륙성 &gt; 도시성 순으로 작아지는 방향</td>
+</tr>
+<tr class="even">
+<td>서술값</td>
+<td>−82%, +192%, 60 µm 최적, 1–9 µm 구간의 들쭉날쭉한 크기</td>
+</tr>
+<tr class="odd">
+<td>저자 해석</td>
+<td>수증기 경쟁과 collector 부족 — 스펙트럼과 총 충돌–병합률에서 추론</td>
+</tr>
+<tr class="even">
+<td>보이지 않음</td>
+<td>autoconversion·accretion 분리, 과포화도·응결률 진단, 앙상블 spread, 관측 검증</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>단일 사례·2D·이상화.</strong> 싼야 사운딩 하나, 2D slab-symmetric, 균일한 하부 경계, thermal bubble, 40분 적분이다. 3D 구름이나 다른 구름 체계로의 일반화는 보이지 않았다.</li>
+<li><strong>조건당 1회 적분.</strong> 앙상블이 없어 1–9 µm 구간의 들쭉날쭉함(5 µm +24.11% → 6 µm +15.92% → 7 µm +74.70% → 8 µm +63.75%)이 물리 신호인지 수치 잡음인지 판단할 수 없다. 60 µm 최적도 30–90 µm의 다른 여섯 실험이 +157–163%에 모인 가운데 한 실험(+192.34%)만 튀어나온 것이라, “최적 크기”보다 “30 µm 이상에서 포화”로 읽는 편이 안전하다.</li>
+<li><strong>임계 직경의 해상도.</strong> 1–9 µm를 1 µm 간격으로 훑었고 2–4 µm의 반응이 +0.72·+0.53·+2.98%로 0에 가깝다. “약 2 µm”는 “1과 2 µm 사이에서 부호가 바뀌고 4 µm까지 거의 중립”에 가깝다.</li>
+<li><strong>단분산·단일 주입.</strong> 실제 flare는 넓은 분포다. 주입 시점(10분)·고도(운저)·위치도 하나씩만 시험했다.</li>
+<li><strong>빠진 과정.</strong> 저자들도 entrainment–mixing과 난류에 의한 충돌 강화가 빠져 정량 반응이 달라질 수 있다고 적었다. 구름이 0 °C 아래라 얼음 과정은 시험되지 않았다.</li>
+</ul>
+</section>
+<section id="재현으로-이어지는-질문" class="level2">
+<h2 class="anchored" data-anchor-id="재현으로-이어지는-질문">재현으로 이어지는 질문</h2>
+<p>이 논문을 고른 이유는 내 PySDM 시딩 실험과 질문이 거의 같았기 때문이다. 발표 준비와 함께 두 갈래의 재현을 시작했다.</p>
+<ul>
+<li><strong>0-D parcel 재현.</strong> <a href="../../../posts/experiments/2026-09-07-ren2025-parcel-replication/index.html">Experiment 7</a>에서 PySDM parcel로 같은 등질량 직경 스캔을 세 배경에서 다시 계산했다. parcel에는 지표 강수가 없어 강수 개시 시각의 변화로 비교했다. 임계 직경의 순서(해양성 &gt; 대륙성 &gt; 도시성)는 논문과 같았지만 값은 논문의 약 절반이었고, 반응 부호는 81개 조건 중 78개에서 일치했다(신뢰구간이 0을 배제하는 엄밀 기준으로는 71/81).</li>
+<li><strong>2D 재현.</strong> 논문과 같은 2D bin 미세물리 틀을 WRF로 만들기 위해 <a href="../../../posts/wrf/2026-09-29-microphysics-fsbm/index.html">미세물리 스킴과 fast SBM</a>부터 튜토리얼을 이어 가고 있다.</li>
+</ul>
+<p>남은 질문은 네 가지다.</p>
+<ol type="1">
+<li>초기 섭동만 바꾼 앙상블에서도 1–2 µm 부호 전환과 60 µm 최적이 유지되는가?</li>
+<li>단분산 대신 실제 flare처럼 넓은 분포를 넣으면 억제 모드와 증대 모드가 서로 상쇄되는가?</li>
+<li>충돌–병합률을 autoconversion과 accretion으로 나누면 ultra-giant의 증대는 어느 쪽에서 오는가?</li>
+<li>0-D에서 임계 직경이 절반으로 나온 차이는 침강·역학이 없는 parcel의 구조 때문인가, 미세물리 설정 때문인가?</li>
+</ol>
+</section>
+<section id="참고문헌" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="참고문헌">참고문헌</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Bruintjes1999Review" class="csl-entry">
+Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to Enhance Precipitation and Some New Prospects”</span>. <em>Bulletin of the American Meteorological Society</em> 80 (5): 805–20. <a href="https://doi.org/10.1175/1520-0477(1999)080<0805:AROCSE>2.0.CO;2">https://doi.org/10.1175/1520-0477(1999)080&lt;0805:AROCSE&gt;2.0.CO;2</a>.
+</div>
+<div id="ref-Lin2023HygroscopicWRF" class="csl-entry">
+Lin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, 기타. 2023년. <span>“Evaluation of Hygroscopic Cloud Seeding in Warm-Rain Processes by a Hybrid Microphysics Scheme Using a Weather Research and Forecasting (<span>WRF</span>) Model: A Real Case Study”</span>. <em>Atmospheric Chemistry and Physics</em> 23: 10423–38. <a href="https://doi.org/10.5194/acp-23-10423-2023">https://doi.org/10.5194/acp-23-10423-2023</a>.
+</div>
+<div id="ref-Petters2007Kappa" class="csl-entry">
+Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter Representation of Hygroscopic Growth and Cloud Condensation Nucleus Activity”</span>. <em>Atmospheric Chemistry and Physics</em> 7: 1961–71. <a href="https://doi.org/10.5194/acp-7-1961-2007">https://doi.org/10.5194/acp-7-1961-2007</a>.
+</div>
+<div id="ref-Ren2025ParticleSize" class="csl-entry">
+Ren, Xiantong, Yan Yin, Qian Chen, Shaofeng Hua, Yubao Liu, 와/과 Baojun Chen. 2025년. <span>“From Suppression to Enhancement: How Hygroscopic Seeding Particle Size Influences the Microphysical Processes and Precipitation Formation in Cumulus Clouds”</span>. <em>Atmosphere</em> 16 (12): 1340. <a href="https://doi.org/10.3390/atmos16121340">https://doi.org/10.3390/atmos16121340</a>.
+</div>
+</div>
+
+
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
+  author = {, Jinu},
+  title = {같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고 언제
+    늘리나},
+  date = {2026-09-10},
+  url = {https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/},
+  langid = {ko}
+}
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+Jinu. 2026. <span>“같은 질량, 다른 크기: 흡습성 시딩은 언제 비를 줄이고
+언제 늘리나.”</span> September 10. <a href="https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/">https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/</a>.
+</div></div></section></div> ]]></description>
+  <category>Article Review</category>
+  <category>hygroscopic seeding</category>
+  <category>particle size</category>
+  <category>bin microphysics</category>
+  <category>warm rain</category>
+  <guid>https://jinu219.github.io/posts/article-review/2026-09-10-ren2025-particle-size/</guid>
+  <pubDate>Thu, 10 Sep 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기</title>
   <dc:creator>Jinu </dc:creator>
@@ -110,14 +448,14 @@ Petters, M. D., 와/과 S. M. Kreidenweis. 2007년. <span>“A Single Parameter 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {κ 하나로 에어로졸의 흡습성과 CCN 활성을 연결하기},
   date = {2026-07-15},
   url = {https://jinu219.github.io/posts/article-review/2026-07-15-kappa-kohler/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“κ 하나로 에어로졸의 흡습성과 CCN 활성을
 연결하기.”</span> July 15. <a href="https://jinu219.github.io/posts/article-review/2026-07-15-kappa-kohler/">https://jinu219.github.io/posts/article-review/2026-07-15-kappa-kohler/</a>.
 </div></div></section></div> ]]></description>
@@ -209,14 +547,14 @@ Lin, Kai-I, Kao-Shen Chung, Sheng-Hsiang Wang, 기타. 2023년. <span>“Evaluat
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {WRF로 묻는 흡습성 씨뿌리기의 최적 고도와 면적},
   date = {2026-07-15},
   url = {https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“WRF로 묻는 흡습성 씨뿌리기의 최적 고도와
 면적.”</span> July 15. <a href="https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/">https://jinu219.github.io/posts/article-review/2026-07-15-wrf-hygroscopic-seeding/</a>.
 </div></div></section></div> ]]></description>
@@ -333,14 +671,14 @@ Bruintjes, Roelof T. 1999년. <span>“A Review of Cloud Seeding Experiments to 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저 물리 사슬},
   date = {2026-05-20},
   url = {https://jinu219.github.io/posts/article-review/2026-05-20-cloud-seeding-review/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“구름 씨뿌리기 50년을 관통하는 원칙: 통계보다 먼저
 물리 사슬.”</span> May 20. <a href="https://jinu219.github.io/posts/article-review/2026-05-20-cloud-seeding-review/">https://jinu219.github.io/posts/article-review/2026-05-20-cloud-seeding-review/</a>.
 </div></div></section></div> ]]></description>
@@ -433,14 +771,14 @@ Zheng, Wei, Hengben Ma, Ming Zhang, 기타. 2021년. <span>“Evaluation of the 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시 읽기},
   date = {2026-05-20},
   url = {https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“음이온으로 비를 늘릴 수 있을까: 중국 첫 현장시험 다시
 읽기.”</span> May 20. <a href="https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/">https://jinu219.github.io/posts/article-review/2026-05-20-negative-ion-seeding/</a>.
 </div></div></section></div> ]]></description>
@@ -545,14 +883,14 @@ Ro, Yonghun, Ki-Ho Chang, Sanghee Chae, Yun-Kyu Lim, Jung Mo Ku, 와/과 Woonseo
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {씨뿌리기로 늘어난 비의 총량은 어떻게 계산할까},
   date = {2026-04-08},
   url = {https://jinu219.github.io/posts/article-review/2026-04-08-enhanced-rainfall-accounting/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“씨뿌리기로 늘어난 비의 총량은 어떻게
 계산할까.”</span> April 8. <a href="https://jinu219.github.io/posts/article-review/2026-04-08-enhanced-rainfall-accounting/">https://jinu219.github.io/posts/article-review/2026-04-08-enhanced-rainfall-accounting/</a>.
 </div></div></section></div> ]]></description>
@@ -647,14 +985,14 @@ Geresdi, István, Lulin Xue, Noémi Sarkadi, 와/과 Roy Rasmussen. 2020년. <sp
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{2026,
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">인용</h2><div><div class="quarto-appendix-secondary-label">BibTeX 인용:</div><div class="code-copy-outer-scaffold"><pre class="sourceCode quarto-appendix-bibtex code-with-copy"><code class="sourceCode bibtex">@online{2026,
   author = {, Jinu},
   title = {산악 구름 씨뿌리기에서 중요한 것은 투입량보다 ‘겹침’이다},
   date = {2026-04-08},
   url = {https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/},
   langid = {ko}
 }
-</code></pre><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
+</code></pre></div><div class="quarto-appendix-secondary-label">인용방법</div><div id="ref-2026" class="csl-entry quarto-appendix-citeas">
 Jinu. 2026. <span>“산악 구름 씨뿌리기에서 중요한 것은 투입량보다
 ‘겹침’이다.”</span> April 8. <a href="https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/">https://jinu219.github.io/posts/article-review/2026-04-08-orographic-bin-seeding/</a>.
 </div></div></section></div> ]]></description>
