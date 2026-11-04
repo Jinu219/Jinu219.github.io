@@ -35,8 +35,10 @@ Bruintjes (1999)는 수십 년간 진행된 강수 증강 실험을 정적 빙�
 동적 방법은 많은 빙정을 빠르게 만들어 잠열 방출을 키우고 상승류와 구름 성장을 강화하려는 접근이다. 성공한다면 단순한 미세물리 변화보다 큰 동역학적 증폭을 기대할 수 있다. 그러나 인과 사슬이 길어진다.
 
 $$
-\text{seeding} \rightarrow \text{rapid glaciation} \rightarrow \text{latent heating}
+\begin{gathered}
+\text{seeding} \rightarrow \text{rapid glaciation} \rightarrow \text{latent heating} \\
 \rightarrow \text{stronger updraft} \rightarrow \text{larger cloud} \rightarrow \text{more rain}
+\end{gathered}
 $$
 
 각 화살표가 구름의 자연 변동보다 커야 한다. 대류운은 본래 수명, 병합, 조직화가 크게 달라져 소수 사례의 처리–비처리 차이를 씨뿌리기 효과로 분리하기 어렵다. 동적 방법의 매력은 큰 잠재효과지만, 바로 그 복잡성 때문에 증명이 더 어렵다.

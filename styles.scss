@@ -566,3 +566,13 @@ pre.sourceCode {
 [data-bs-theme="dark"] .navbar {
   background: rgba(23, 25, 23, 0.94) !important;
 }
+
+// Long display equations scroll inside the text column instead of running into the TOC.
+// MathJax puts an inline min-width on numbered (\tag) equations, so it has to be overridden.
+mjx-container[display="true"] {
+  min-width: 0 !important;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.15rem;
+}

@@ -46,7 +46,10 @@ $N_{seed}$ is the number of seed particles per mg of dry air, $r_d$ the seed med
 ### The updraft is a 12.5-minute pulse
 
 $$
-w(t)=w_{min}+\left(w_{peak}-w_{min}\right)\sin^{2}\!\left(\frac{\pi t}{T}\right)\quad(0\le t\le T=12.5\ \text{min}),\qquad w=w_{min}\ \ (t>T)
+w(t)=\begin{cases}
+w_{min}+\left(w_{peak}-w_{min}\right)\sin^{2}\!\left(\dfrac{\pi t}{T}\right) & 0\le t\le T=12.5\ \text{min} \\[4pt]
+w_{min} & t>T
+\end{cases}
 $$
 
 $w_{peak}$ is the peak updraft and $w_{min}=0.025$ m s⁻¹ the very weak ascent left after the pulse. The $\sin^2$ term makes the updraft start from the minimum, peak at 6.25 min, and return to the minimum at 12.5 min. Over 40 min the parcel rises about 0.24 km at 0.5 m s⁻¹ and about 1.9 km at 5 m s⁻¹. **Early active** (2–4 min) injects while the updraft is growing; **late quiescent** (15–20 min) injects into an almost stationary parcel after the pulse.

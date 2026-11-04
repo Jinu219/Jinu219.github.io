@@ -47,8 +47,10 @@ $K_{ij}$ is the collision kernel of drops $i$ and $j$: the volume the pair "swee
 The baseline Rogers–Yau formula uses a different power law in each radius range.
 
 $$
-V_{RY}(r)=\begin{cases}k_1 r^{2} & r<35\ \mu\text{m}\\ k_2\, r & 35\ \mu\text{m}\le r<0.6\ \text{mm}\\ k_3\, r^{1/2} & r\ge 0.6\ \text{mm}\end{cases}
-\qquad k_1=1.19\times10^{8}\ \text{m}^{-1}\text{s}^{-1},\ k_2=8\times10^{3}\ \text{s}^{-1},\ k_3=201\ \text{m}^{1/2}\text{s}^{-1}
+\begin{gathered}
+V_{RY}(r)=\begin{cases}k_1 r^{2} & r<35\ \mu\text{m}\\ k_2\, r & 35\ \mu\text{m}\le r<0.6\ \text{mm}\\ k_3\, r^{1/2} & r\ge 0.6\ \text{mm}\end{cases} \\[6pt]
+k_1=1.19\times10^{8}\ \text{m}^{-1}\text{s}^{-1},\quad k_2=8\times10^{3}\ \text{s}^{-1},\quad k_3=201\ \text{m}^{1/2}\text{s}^{-1}
+\end{gathered}
 $$
 
 Small drops are in the Stokes regime, so speed scales with $r^2$; medium drops scale with $r$; large drops with $\sqrt{r}$. The last branch has no upper bound and reaches 15.6 m s⁻¹ at 6 mm radius. In the Gunn–Kinzer measurements, by contrast, fall speed barely increases beyond 9.1–9.2 m s⁻¹ once the diameter exceeds 5 mm.

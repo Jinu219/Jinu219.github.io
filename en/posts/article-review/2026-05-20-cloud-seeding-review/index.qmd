@@ -25,8 +25,10 @@ Bruintjes (1999) reviews decades of precipitation-enhancement experiments across
 **Dynamic seeding** attempts rapid glaciation and latent-heating feedback:
 
 $$
-\text{seeding}\rightarrow\text{glaciation}\rightarrow\text{latent heat}
+\begin{gathered}
+\text{seeding}\rightarrow\text{glaciation}\rightarrow\text{latent heat} \\
 \rightarrow\text{updraft}\rightarrow\text{cloud growth}\rightarrow\text{rain}
+\end{gathered}
 $$
 
 The possible amplification is large, but every arrow must exceed the already large natural variability of convective clouds.

@@ -47,8 +47,10 @@ $K_{ij}$는 두 방울 $i$, $j$의 collision kernel, 즉 단위 시간에 두 �
 기준인 Rogers–Yau 식은 반지름 구간마다 다른 거듭제곱을 쓴다.
 
 $$
-V_{RY}(r)=\begin{cases}k_1 r^{2} & r<35\ \mu\text{m}\\ k_2\, r & 35\ \mu\text{m}\le r<0.6\ \text{mm}\\ k_3\, r^{1/2} & r\ge 0.6\ \text{mm}\end{cases}
-\qquad k_1=1.19\times10^{8}\ \text{m}^{-1}\text{s}^{-1},\ k_2=8\times10^{3}\ \text{s}^{-1},\ k_3=201\ \text{m}^{1/2}\text{s}^{-1}
+\begin{gathered}
+V_{RY}(r)=\begin{cases}k_1 r^{2} & r<35\ \mu\text{m}\\ k_2\, r & 35\ \mu\text{m}\le r<0.6\ \text{mm}\\ k_3\, r^{1/2} & r\ge 0.6\ \text{mm}\end{cases} \\[6pt]
+k_1=1.19\times10^{8}\ \text{m}^{-1}\text{s}^{-1},\quad k_2=8\times10^{3}\ \text{s}^{-1},\quad k_3=201\ \text{m}^{1/2}\text{s}^{-1}
+\end{gathered}
 $$
 
 작은 방울은 Stokes 영역이라 속도가 $r^2$에, 중간 방울은 $r$에, 큰 방울은 $\sqrt{r}$에 비례한다. 마지막 구간에는 상한이 없어서 반지름 6 mm에서 15.6 m s⁻¹까지 커진다. 반면 Gunn–Kinzer 측정에서는 지름 5 mm를 넘으면 낙하속도가 9.1–9.2 m s⁻¹에서 거의 늘지 않는다.
