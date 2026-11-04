@@ -69,9 +69,9 @@ div.csl-indent {
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-a69dbc6dfdd4050042d38eeea8e07964.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-4220700599d487db109a38d75722a2c3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-a69dbc6dfdd4050042d38eeea8e07964.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -645,7 +645,10 @@ N_{seed}(r_d)=N_{ref}\left(\frac{1\ \mu\text{m}}{r_d}\right)^{3},\qquad N_{ref}=
 <section id="the-updraft-is-a-12.5-minute-pulse" class="level3">
 <h3 class="anchored" data-anchor-id="the-updraft-is-a-12.5-minute-pulse">The updraft is a 12.5-minute pulse</h3>
 <p><span class="math display">\[
-w(t)=w_{min}+\left(w_{peak}-w_{min}\right)\sin^{2}\!\left(\frac{\pi t}{T}\right)\quad(0\le t\le T=12.5\ \text{min}),\qquad w=w_{min}\ \ (t&gt;T)
+w(t)=\begin{cases}
+w_{min}+\left(w_{peak}-w_{min}\right)\sin^{2}\!\left(\dfrac{\pi t}{T}\right) &amp; 0\le t\le T=12.5\ \text{min} \\[4pt]
+w_{min} &amp; t&gt;T
+\end{cases}
 \]</span></p>
 <p><span class="math inline">\(w_{peak}\)</span> is the peak updraft and <span class="math inline">\(w_{min}=0.025\)</span> m s⁻¹ the very weak ascent left after the pulse. The <span class="math inline">\(\sin^2\)</span> term makes the updraft start from the minimum, peak at 6.25 min, and return to the minimum at 12.5 min. Over 40 min the parcel rises about 0.24 km at 0.5 m s⁻¹ and about 1.9 km at 5 m s⁻¹. <strong>Early active</strong> (2–4 min) injects while the updraft is growing; <strong>late quiescent</strong> (15–20 min) injects into an almost stationary parcel after the pulse.</p>
 </section>

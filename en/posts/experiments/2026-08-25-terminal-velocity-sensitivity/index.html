@@ -69,9 +69,9 @@ div.csl-indent {
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-a69dbc6dfdd4050042d38eeea8e07964.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-4220700599d487db109a38d75722a2c3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-a69dbc6dfdd4050042d38eeea8e07964.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -614,8 +614,10 @@ K_{ij}=\pi\,(r_i+r_j)^{2}\,\left|V(r_i)-V(r_j)\right|\,E_{ij}
 <p><span class="math inline">\(K_{ij}\)</span> is the collision kernel of drops <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>: the volume the pair “sweeps out” per unit time. <span class="math inline">\(\pi(r_i+r_j)^2\)</span> is the collision cross-section, a circle whose radius is the sum of both radii; <span class="math inline">\(|V(r_i)-V(r_j)|\)</span> is the difference in fall speed (differential settling); and <span class="math inline">\(E_{ij}\)</span> is the collision efficiency, set to 1 here. A different <span class="math inline">\(V(r)\)</span> changes the speed difference between a large collector drop and small droplets, and therefore directly changes the rate of collision–coalescence.</p>
 <p>The baseline Rogers–Yau formula uses a different power law in each radius range.</p>
 <p><span class="math display">\[
-V_{RY}(r)=\begin{cases}k_1 r^{2} &amp; r&lt;35\ \mu\text{m}\\ k_2\, r &amp; 35\ \mu\text{m}\le r&lt;0.6\ \text{mm}\\ k_3\, r^{1/2} &amp; r\ge 0.6\ \text{mm}\end{cases}
-\qquad k_1=1.19\times10^{8}\ \text{m}^{-1}\text{s}^{-1},\ k_2=8\times10^{3}\ \text{s}^{-1},\ k_3=201\ \text{m}^{1/2}\text{s}^{-1}
+\begin{gathered}
+V_{RY}(r)=\begin{cases}k_1 r^{2} &amp; r&lt;35\ \mu\text{m}\\ k_2\, r &amp; 35\ \mu\text{m}\le r&lt;0.6\ \text{mm}\\ k_3\, r^{1/2} &amp; r\ge 0.6\ \text{mm}\end{cases} \\[6pt]
+k_1=1.19\times10^{8}\ \text{m}^{-1}\text{s}^{-1},\quad k_2=8\times10^{3}\ \text{s}^{-1},\quad k_3=201\ \text{m}^{1/2}\text{s}^{-1}
+\end{gathered}
 \]</span></p>
 <p>Small drops are in the Stokes regime, so speed scales with <span class="math inline">\(r^2\)</span>; medium drops scale with <span class="math inline">\(r\)</span>; large drops with <span class="math inline">\(\sqrt{r}\)</span>. The last branch has no upper bound and reaches 15.6 m s⁻¹ at 6 mm radius. In the Gunn–Kinzer measurements, by contrast, fall speed barely increases beyond 9.1–9.2 m s⁻¹ once the diameter exceeds 5 mm.</p>
 </section>

@@ -69,9 +69,9 @@ div.csl-indent {
 <link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-68c9ad2daa3b8dbd180a5f4668bca0bd.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../../../site_libs/bootstrap/bootstrap-dark-8b84374e263f328d66c75899aa0c4043.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../../../site_libs/bootstrap/bootstrap-c2b4dd3b756ae582140ef6f685a5201b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-a69dbc6dfdd4050042d38eeea8e07964.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../../../site_libs/bootstrap/bootstrap-dark-4220700599d487db109a38d75722a2c3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../../../site_libs/bootstrap/bootstrap-a69dbc6dfdd4050042d38eeea8e07964.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -514,7 +514,10 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="pure-droplets-cannot-form-on-their-own-the-kelvin-effect">1. Pure droplets cannot form on their own: the Kelvin effect</h2>
 <p>The net energy needed for vapour molecules to come together by chance into a pure-water embryo of radius <span class="math inline">\(R\)</span> is</p>
 <p><span class="math display">\[
-\Delta E = 4\pi R^2\sigma_{vl} - \tfrac{4}{3}\pi R^3 n_l\,(\mu_v-\mu_l), \qquad \mu_v-\mu_l = k_B T \ln S \tag{3.1–3.2}
+\begin{aligned}
+\Delta E &amp;= 4\pi R^2\sigma_{vl} - \tfrac{4}{3}\pi R^3 n_l\,(\mu_v-\mu_l) \\
+\mu_v-\mu_l &amp;= k_B T \ln S
+\end{aligned} \tag{3.1–3.2}
 \]</span></p>
 <p>In words: “net cost of the embryo = cost of creating new surface − gain from molecules entering the liquid.” <span class="math inline">\(\sigma_{vl}\)</span> is the work needed to create a unit area of vapour–liquid interface (surface tension), <span class="math inline">\(n_l\)</span> is the number of molecules per unit volume of the drop, and <span class="math inline">\(\mu_v-\mu_l\)</span> is the Gibbs free-energy difference for one molecule moving from vapour to liquid. If <span class="math inline">\(S&lt;1\)</span> both terms are costs and the embryo always evaporates. If <span class="math inline">\(S&gt;1\)</span>, the surface term (<span class="math inline">\(R^2\)</span>) wins at small <span class="math inline">\(R\)</span> and the volume term (<span class="math inline">\(R^3\)</span>) at large <span class="math inline">\(R\)</span>, creating an energy barrier. Locating its top with <span class="math inline">\(\partial(\Delta E)/\partial R=0\)</span> gives Kelvin’s formula:</p>
 <p><span class="math display">\[
@@ -572,7 +575,10 @@ R_c = \frac{2\sigma_{vl}}{n_l k_B T \ln S}
 <h2 class="anchored" data-anchor-id="aerosol-changes-the-starting-point-the-raoult-effect-and-the-köhler-curve">2. Aerosol changes the starting point: the Raoult effect and the Köhler curve</h2>
 <p>Real cloud droplets form by heterogeneous nucleation, as water collects on aerosol particles. On a wettable particle, the same number of molecules gives a larger radius of curvature, so the Kelvin barrier is easier to cross. If the particle dissolves, the equilibrium vapour pressure over the solution drops below that over pure water (the Raoult effect), which helps further. The textbook therefore concludes that <strong>the first droplets form on the largest and most soluble CCN</strong>. Combining both effects, the equilibrium vapour density at the drop surface is</p>
 <p><span class="math display">\[
-\rho_v(R)=\rho_{vs}[T(R)]\left(1+\frac{\hat a}{R}-\frac{\hat b}{R^3}\right), \qquad \hat a=\frac{2\sigma_{vl}}{\rho_L R_v T}, \qquad \hat b=\frac{3 i_{vH} m_s M_w}{4\pi\rho_L M_s} \tag{3.18–3.20}
+\begin{aligned}
+\rho_v(R) &amp;= \rho_{vs}[T(R)]\left(1+\frac{\hat a}{R}-\frac{\hat b}{R^3}\right) \\
+\hat a &amp;= \frac{2\sigma_{vl}}{\rho_L R_v T}, \qquad \hat b = \frac{3 i_{vH} m_s M_w}{4\pi\rho_L M_s}
+\end{aligned} \tag{3.18–3.20}
 \]</span></p>
 <p>In words: “vapour in equilibrium at the drop surface = saturation value over flat pure water × (1 + curvature correction − solute correction).” <span class="math inline">\(\hat a/R\)</span> is the Kelvin term, larger for smaller drops; <span class="math inline">\(\hat b/R^3\)</span> is the Raoult term, larger for more dissolved salt mass <span class="math inline">\(m_s\)</span>, more ions per molecule (van’t Hoff factor <span class="math inline">\(i_{vH}\)</span>) and lighter salt molecules (molecular weight <span class="math inline">\(M_s\)</span>). As the drop grows the solution dilutes and the term falls off as <span class="math inline">\(R^3\)</span>.</p>
 <p>Plotting the equilibrium saturation ratio <span class="math inline">\(S_{eq}(R)\approx 1+\hat a/R-\hat b/R^3\)</span> gives the Köhler curve. At small <span class="math inline">\(R\)</span> the solute term wins and the drop exists as a haze droplet with <span class="math inline">\(S_{eq}&lt;1\)</span>; at large <span class="math inline">\(R\)</span> the curvature term remains and <span class="math inline">\(S_{eq}\)</span> is slightly above 1. Setting <span class="math inline">\(dS_{eq}/dR=0\)</span> gives the maximum at <span class="math inline">\(R_c=\sqrt{3\hat b/\hat a}\)</span>, <span class="math inline">\(s_c=\sqrt{4\hat a^3/(27\hat b)}\)</span>. If the ambient supersaturation exceeds this critical supersaturation <span class="math inline">\(s_c\)</span>, the drop passes <span class="math inline">\(R_c\)</span> and keeps growing: this is <strong>activation</strong>. In κ-Köhler theory a dilute solution has <span class="math inline">\(\hat b\approx\kappa r_d^3\)</span>, so <span class="math inline">\(s_c \propto r_d^{-3/2}\kappa^{-1/2}\)</span>. The full form is in my <a href="../../../../en/posts/article-review/2026-07-15-kappa-kohler/index.html">κ-Köhler review</a> <span class="citation" data-cites="Petters2007Kappa">(<a href="#ref-Petters2007Kappa" role="doc-biblioref">Petters and Kreidenweis 2007</a>)</span>.</p>
@@ -631,7 +637,10 @@ R_c = \frac{2\sigma_{vl}}{n_l k_B T \ln S}
 <h2 class="anchored" data-anchor-id="condensational-growth-small-drops-grow-fast-large-drops-slowly">3. Condensational growth: small drops grow fast, large drops slowly</h2>
 <p>Activated drops grow by vapour diffusion (Fick’s law). Combining steady, spherically symmetric diffusion with a heat balance gives, for a near-saturated environment, the mass growth rate</p>
 <p><span class="math display">\[
-\dot m = \frac{4\pi R\, s}{F_\kappa + F_D}, \qquad F_\kappa=\frac{L^2}{\kappa_a R_v T^2}, \qquad F_D=\frac{R_v T}{D_v e_s} \tag{3.14–3.17}
+\begin{aligned}
+\dot m &amp;= \frac{4\pi R\, s}{F_\kappa + F_D} \\
+F_\kappa &amp;= \frac{L^2}{\kappa_a R_v T^2}, \qquad F_D = \frac{R_v T}{D_v e_s}
+\end{aligned} \tag{3.14–3.17}
 \]</span></p>
 <p>In words: “mass growth rate = <span class="math inline">\(4\pi R\)</span> × supersaturation ÷ (heat-conduction resistance + vapour-diffusion resistance).” <span class="math inline">\(s\)</span> is the driving force. <span class="math inline">\(F_\kappa\)</span> expresses that the latent heat (<span class="math inline">\(L\)</span>) released by condensation warms the drop and raises its surface saturation vapour pressure, so the heat must be conducted away through the air (<span class="math inline">\(\kappa_a\)</span>); <span class="math inline">\(F_D\)</span> expresses that vapour has to diffuse through the air (<span class="math inline">\(D_v\)</span>) to reach the drop. Switching from mass to radius (<span class="math inline">\(m=\tfrac43\pi R^3\rho_L\)</span>),</p>
 <p><span class="math display">\[
@@ -687,7 +696,10 @@ R\frac{dR}{dt}=\frac{s}{\rho_L(F_\kappa+F_D)}\equiv G\,s \quad\Longrightarrow\qu
 <h2 class="anchored" data-anchor-id="fall-speed-and-collisioncoalescence">4. Fall speed and collision–coalescence</h2>
 <p>Cloud droplets (under 100 µm in diameter) fall slower than 1 m s⁻¹. Fall speed grows almost linearly with radius up to 500 µm, then more slowly, and levels off near 3 mm radius as the drop flattens into a horizontal disc. Drops of different sizes fall at different speeds and overtake one another. For one large drop falling through cloud droplets, the continuous collection equation is</p>
 <p><span class="math display">\[
-\dot m_{col} = A_m\,\lvert V(m)-V(m')\rvert\,\rho q_{m'}\,\Sigma_c(m,m'), \qquad A_m=\pi(R+R')^2 \tag{3.24–3.25}
+\begin{aligned}
+\dot m_{col} &amp;= A_m\,\lvert V(m)-V(m')\rvert\,\rho q_{m'}\,\Sigma_c(m,m') \\
+A_m &amp;= \pi(R+R')^2
+\end{aligned} \tag{3.24–3.25}
 \]</span></p>
 <p>In words: “collection growth rate = volume swept per second (cross-section × relative fall speed) × cloud-water mass in that volume × fraction that actually sticks.” <span class="math inline">\(A_m\)</span> is the effective cross-section based on the sum of the radii, the absolute value reflects that only relative motion matters, and <span class="math inline">\(\rho q_{m'}\)</span> is the cloud liquid water content (g m⁻³). The collection efficiency <span class="math inline">\(\Sigma_c\)</span> is <strong>collision efficiency × coalescence efficiency</strong>. Collision efficiency is below 1 when the airflow around the large drop carries small droplets aside, and can exceed 1 when droplets are pulled into its wake. Coalescence efficiency is the fraction of colliding pairs that actually merge; models often set it to 1, but in heavy rain colliding drops may stay together only briefly.</p>
 <p>For <span class="math inline">\(R\gg R'\)</span>, <span class="math inline">\(A_m\approx\pi R^2\)</span> and <span class="math inline">\(m=\tfrac43\pi R^3\rho_L\)</span>, so <span class="math inline">\(dR/dt\approx\Sigma_c\lvert\Delta V\rvert\rho q_c/(4\rho_L)\)</span>. Unlike condensation, <strong>growth speeds up as the drop gets larger</strong>, because fall speed and collision efficiency both increase. The problem is getting started. Reading the textbook’s Fig. 3.5 (collision efficiencies from Wallace &amp; Hobbs) by eye, a 10 µm-radius collector reaches a collision efficiency of at most about 0.05, a 20 µm collector about 0.2, and only collectors of 40 µm or more approach 0.7–1. Real collection is not continuous but probabilistic, so drops starting at the same size diverge as some happen to collide first (stochastic collection, Eqs. 3.27–3.33). In the example calculation the textbook shows, after about 30 minutes cloud droplets near 10 µm radius still dominate by number, but a large part of the water mass has moved into raindrops near 1 mm radius.</p>
